@@ -1,0 +1,42 @@
+{% extends "base.html" %}
+{% block title %}Chat Detail{% endblock %}
+
+{% block content %}
+
+<div class="conversation">
+
+  <h2>Conversation Name</h2>
+
+  <!-- SCROLLABLE MESSAGES -->
+  <div id="messages"
+       class="chat-container"
+       hx-on="htmx:afterSwap: this.scrollTop = this.scrollHeight">
+
+    {% for message in messages %}
+      {% include "message.html" %}
+    {% endfor %}
+
+  </div>
+
+  <!-- FIXED INPUT -->
+  <form
+    class="chat-input"
+    hx-post="{% url 'chat-send' conversation.pk %}"
+    hx-target="#messages"
+    hx-swap="beforeend"
+    hx-on="htmx:afterRequest: this.reset()"
+  >
+    {% csrf_token %}
+    <input
+      type="text"
+      name="content"
+      required
+      autocomplete="off"
+      placeholder="Type your message..."
+    />
+    <button type="submit">Send</button>
+  </form>
+
+</div>
+
+{% endblock %}
