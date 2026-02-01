@@ -3,14 +3,13 @@
 
 {% block content %}
 
-<div class="conversation">
+<div class="conversation" id="conversation" hx-ext="ws" ws-connect="/ws/chat/{{ conversation.id }}/">
 
   <h2>Conversation Name</h2>
 
   <!-- SCROLLABLE MESSAGES -->
-  <div id="messages"
-       class="chat-container"
-       hx-on="htmx:afterSwap: this.scrollTop = this.scrollHeight">
+  <div id="messages" 
+       class="chat-container">
 
     {% for message in messages %}
       {% include "message.html" %}
@@ -22,8 +21,7 @@
   <form
     class="chat-input"
     hx-post="{% url 'chat-send' conversation.pk %}"
-    hx-target="#messages"
-    hx-swap="beforeend"
+    hx-swap="none"
     hx-on="htmx:afterRequest: this.reset()"
   >
     {% csrf_token %}
