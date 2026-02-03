@@ -1,4 +1,4 @@
-<div id="message" class="message {% if message.user.is_staff %}staff{% else %}user{% endif %}">
-  <strong>{{ message.user.username }}</strong>
+<div id="message" class="message {% if message.is_agent %}agent{% else %}user{% endif %}">
+  <strong>{% if message.is_agent %} Agent {% else %} {{user.first_name}} {% endif %}</strong>
   <span>{{ message.content }}</span>
 </div>
