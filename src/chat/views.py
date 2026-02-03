@@ -9,7 +9,9 @@ from channels.layers import get_channel_layer
 import uuid
 from django.contrib.auth import authenticate,login
 from django.contrib.auth.mixins import LoginRequiredMixin, UserPassesTestMixin
-
+import json
+from django.http import JsonResponse
+from django.views.decorators.csrf import csrf_exempt
 
 class HomeView(TemplateView):
     template_name = 'home.html'
@@ -94,3 +96,43 @@ class ChatSendMessageView(UpdateView):
         return HttpResponse("")
     
 
+
+
+@csrf_exempt
+def telegram_webhook(request):
+    print(request)
+    data = json.loads(request.body)
+    print(data)
+    message = data.get("message")
+    if message:
+        chat_id = message["chat"]["id"]
+        text = message.get("text")
+
+        print(f"Received message: {text} from chat: {chat_id}")
+
+        if text:
+            message =Message.objects.create(
+                conversation=Conversation.objects.get(pk=10),
+                content=text,
+                is_agent=True
+            )
+
+            html = render_to_string(
+                "message.html",
+                {"message": message, "request": request}
+            )
+
+            oob_html = (
+                '<div id="messages" hx-swap-oob="beforeend" class="chat-container">'
+                + html
+                + "</div>"
+            )
+
+            channel_layer = get_channel_layer()
+            async_to_sync(channel_layer.group_send)(
+                f"chatgroup_{'10'}",
+                {"type": "message_handler", "html_response": oob_html},
+            )
+
+
+    return JsonResponse({"ok": True})
