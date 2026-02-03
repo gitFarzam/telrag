@@ -25,7 +25,7 @@ SECRET_KEY = 'django-insecure-%tikckhl@8hyq3$m)aswe4avl+*x^=nc!e-8s0tdoicv-s!j1!
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = []
+ALLOWED_HOSTS = ['secluded-noncongregative-noelle.ngrok-free.dev','127.0.0.1']
 
 
 # Application definition
@@ -130,3 +130,7 @@ STATIC_URL = 'static/'
 
 # User settings
 AUTH_USER_MODEL = 'core.user'
+
+CSRF_TRUSTED_ORIGINS = [
+    'https://secluded-noncongregative-noelle.ngrok-free.dev',
+]
