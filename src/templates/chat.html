@@ -21,7 +21,6 @@
   <form
     class="chat-input"
     hx-post="{% url 'chat-send' conversation.pk %}"
-    hx-swap="none"
     hx-on="htmx:afterRequest: this.reset()"
   >
     {% csrf_token %}
