@@ -1,6 +1,5 @@
-from django.template.loader import render_to_string
 from django.shortcuts import render, redirect
-from .models import Conversation, Message
+from .models import Conversation, UserMessage, TelegramMessage
 from django.views.generic import DetailView, UpdateView,TemplateView
 from core.models import User
 from django.http import HttpResponse
@@ -12,6 +11,7 @@ from django.contrib.auth.mixins import LoginRequiredMixin, UserPassesTestMixin
 import json
 from django.http import JsonResponse
 from django.views.decorators.csrf import csrf_exempt
+from .services import message_sender, process_telegram_message
 
 class HomeView(TemplateView):
     template_name = 'home.html'
@@ -64,33 +64,9 @@ class ChatSendMessageView(UpdateView):
     def form_valid(self, form):
         conversation = self.get_object()
         content = self.request.POST.get("content")
-        is_agent = self.request.POST.get("is_agent" , False)
-        if is_agent in ["true" , "True" , "1"]:
-            is_agent = True
 
         if content:
-            message =Message.objects.create(
-                conversation=conversation,
-                content=content,
-                is_agent=is_agent
-            )
-            html = render_to_string(
-                "message.html",
-                {"message": message, "request": self.request}
-            )
-
-            oob_html = (
-                '<div id="messages" hx-swap-oob="beforeend" class="chat-container">'
-                + html
-                + "</div>"
-            )
-
-            channel_layer = get_channel_layer()
-            async_to_sync(channel_layer.group_send)(
-                f"chatgroup_{conversation.pk}",
-                {"type": "message_handler", "html_response": oob_html},
-            )
-
+            message_sender(conversation,content,False)
             return HttpResponse(status=204)
 
         return HttpResponse("")
@@ -100,39 +76,26 @@ class ChatSendMessageView(UpdateView):
 
 @csrf_exempt
 def telegram_webhook(request):
-    print(request)
-    data = json.loads(request.body)
-    print(data)
-    message = data.get("message")
-    if message:
-        chat_id = message["chat"]["id"]
-        text = message.get("text")
+    # print(request)
+    tg_object = TelegramMessage.objects.create(transaction_type=True) # True means receving (False is for sending)
+    tg_object.json_content = json.loads(request.body)
+    tg_object.save()
 
-        print(f"Received message: {text} from chat: {chat_id}")
+    # process_live_agent_message(data)
+    # print(data)
+    # message = data.get("message")
+    # if message:
+    #     chat_id = message["chat"]["id"]
+    #     text = message.get("text")
 
-        if text:
-            message =Message.objects.create(
-                conversation=Conversation.objects.get(pk=10),
-                content=text,
-                is_agent=True
-            )
+    #     print(f"Received message: {text} from chat: {chat_id}")
 
-            html = render_to_string(
-                "message.html",
-                {"message": message, "request": request}
-            )
-
-            oob_html = (
-                '<div id="messages" hx-swap-oob="beforeend" class="chat-container">'
-                + html
-                + "</div>"
-            )
-
-            channel_layer = get_channel_layer()
-            async_to_sync(channel_layer.group_send)(
-                f"chatgroup_{'10'}",
-                {"type": "message_handler", "html_response": oob_html},
-            )
-
+    #     if text:
+    #         message_sender(Conversation.objects.get(pk=4),text,True)
+    #         message =UserMessage.objects.create(
+    #             conversation=Conversation.objects.get(pk=4),
+    #             content=text,
+    #             is_agent=True
+    #         )
 
     return JsonResponse({"ok": True})
