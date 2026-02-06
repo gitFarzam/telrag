@@ -1,2 +1,7 @@
 realtime_chat
 .DS_Store
+sample
+src_cursor
+__pycache__/
+*.pyc
+db_sqlite3
