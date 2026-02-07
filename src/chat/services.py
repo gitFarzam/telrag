@@ -4,7 +4,7 @@ from channels.layers import get_channel_layer
 from django.template.loader import render_to_string
 from .utils.telegram import send_message,telegram_message_parser,telegram_downloader
 from .utils.agents import agent_detecting_context
-from rag.models import Document
+from .models import Document
 from django.core.files.base import ContentFile
 
 def message_operation( message):
