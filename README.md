@@ -34,3 +34,13 @@ docker run -d \
 uv add psycopg2-binary #install posrgres library
 uv add pgvector #pgvector library
 ```
+
+
+
+Steps:
+
+1. creating chat model
+2. using form for saving in the model
+3. using django channel
+4. including telegram
+5. creating rag models and eneabling pgvector
