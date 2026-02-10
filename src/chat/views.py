@@ -10,6 +10,7 @@ from django.contrib.auth import authenticate,login
 from django.contrib.auth.mixins import LoginRequiredMixin, UserPassesTestMixin
 import json
 from django.http import JsonResponse
+from django.core.exceptions import ValidationError
 from django.views.decorators.csrf import csrf_exempt
 from .services import message_sender, process_telegram_message
 
@@ -76,26 +77,29 @@ class ChatSendMessageView(UpdateView):
 
 @csrf_exempt
 def telegram_webhook(request):
-    # print(request)
-    tg_object = TelegramMessage.objects.create(transaction_type=True) # True means receving (False is for sending)
-    tg_object.json_content = json.loads(request.body)
-    tg_object.save()
+    if not request.body:
+        return JsonResponse(
+            {"error": "Request body is required"},
+            status=400
+        )
 
-    # process_live_agent_message(data)
-    # print(data)
-    # message = data.get("message")
-    # if message:
-    #     chat_id = message["chat"]["id"]
-    #     text = message.get("text")
+    try:
+        data = json.loads(request.body)
+    except json.JSONDecodeError:
+        return JsonResponse(
+            {"error": "Invalid JSON"},
+            status=400
+        )
 
-    #     print(f"Received message: {text} from chat: {chat_id}")
-
-    #     if text:
-    #         message_sender(Conversation.objects.get(pk=4),text,True)
-    #         message =UserMessage.objects.create(
-    #             conversation=Conversation.objects.get(pk=4),
-    #             content=text,
-    #             is_agent=True
-    #         )
+    if "message" not in data:
+        return JsonResponse(
+            {"error": "Missing required key: message"},
+            status=400
+        )
+    
+    try:
+        TelegramMessage.objects.create(transaction_type=True , json_content = json.loads(request.body)) # True means receving (False is for sending)
+    except ValidationError as e:
+        print(e.message_dict)
 
     return JsonResponse({"ok": True})

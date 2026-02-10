@@ -3,7 +3,6 @@ from pgvector.django import VectorField
 import json
 from django.conf import settings
 
-
 class Conversation(models.Model):
     created_at = models.DateTimeField(auto_now_add=True)
     user = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE)
@@ -46,10 +45,10 @@ class Document(models.Model):
     format = models.CharField(choices=FILE_TYPE_CHOICES,default='txt')
     text = models.TextField(null=True,blank=True)
     file = models.FileField(null=True,blank=True)
+    caption = models.TextField(null=True , blank=True)
     telegram_message = models.ForeignKey(TelegramMessage , on_delete=models.CASCADE)
+    user_message = models.ForeignKey(UserMessage , on_delete=models.PROTECT , null=True , blank=True)
     
-
-
     def __str__(self):
         return self.name
 
@@ -58,7 +57,6 @@ class Chunk(models.Model):
     overlap = models.PositiveIntegerField(default=0)
     text = models.TextField()
     document = models.ForeignKey(to=Document,on_delete=models.CASCADE)
-
 
 class Embedding(models.Model):
     chunk = models.ForeignKey(to=Chunk , on_delete=models.CASCADE)

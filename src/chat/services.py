@@ -4,6 +4,7 @@ from channels.layers import get_channel_layer
 from django.template.loader import render_to_string
 from .utils.telegram import send_message,telegram_message_parser,telegram_downloader
 from .utils.agents import agent_detecting_context
+from .utils.rag import TextSplitter
 from .models import Document
 from django.core.files.base import ContentFile
 
@@ -102,26 +103,49 @@ def process_telegram_message(instance:TelegramMessage):
     # check if it has `reply_to_message` use it for responsing to a specific question
     # check if the message is for data storage or it's just a context for this specific conversation (this part probably requires an agent for detecting this, it's not that much hard)
     # if it does not have it's for general rag
-    if agent_detecting_context:
-        # do not save something in the database and use the response for answering the current conversation and
-        pass
 
-    else:
 
-        data = instance.data()
-        contents = telegram_message_parser(data)
+    data = instance.data()
+    parsed_data = telegram_message_parser(data)
+    print('Parsed data: ',parsed_data)
 
-        for data in contents['data']:
-            if  data == 'text':
-                document = Document.objects.create()
-                document.text = data['text']
-                document.save()
+    doc_object = Document.objects.create(telegram_message=instance)
 
-            elif  data == 'voice':
-                # download using telegram
-                # if its not large use memory, if not use streaming.
-                file_data = telegram_downloader()
-                django_content_file = ContentFile(file_data)
-                document = Document.objects.create()
-                document.file.save(name=f"name",content=django_content_file)
+    metadata = parsed_data['metadata']
+    message_data = parsed_data['data']
 
+    for i in metadata:
+        if i == 'caption':
+            doc_object.caption = i
+            doc_object.save()
+        if i == 'message_id':
+            user_message = UserMessage.objects.filter(tg_id = i)
+            if user_message:
+                doc_object.user_message = user_message
+                doc_object.save()
+            else:
+                print('This telegram message is a reply to a message, but the message is not in the database, shows that it might be replying to a telegram client message or any other message')
+
+    for data in message_data:
+        if  data == 'text':
+            doc_object.text = data
+            doc_object.save()
+        if  data == 'voice':
+            # download using telegram
+            # if its not large use memory, if not use streaming.
+            file_data = telegram_downloader()
+            django_content_file = ContentFile(file_data)
+            document = Document.objects.create()
+            document.file.save(name=f"name",content=django_content_file)
+
+
+def process_document_object(instance:Document):
+
+    print('Data Ingestion Process has been started...')
+    text_splitter = TextSplitter()
+    chunks = text_splitter.split_text(instance.text)
+
+    print(f"Chunks: {chunks}")
+
+    if instance.user_message:
+        print('Sending this document directly as a context to agent')

@@ -31,45 +31,45 @@ def send_message(chat_id=None, text=None):
 
 
 
-def telegram_message_parser(data:dict):
-    message_file_types = ['text','photo','audio','video','file']
-    data_keys = data.keys()
+def telegram_message_parser(json_data_dict:dict):
+
+    message = json_data_dict.get('message',None)
+    # print('message data: ',message)
+    message_keys = message.keys()
+
+    parsed_data = {'metadata':{} , 'data':{}}
 
     # Define default variables
-    new_message = True
     user_message_id = None
 
-    if 'reply_to_message' in data_keys :
-        new_message = False
-        user_message_id = data['reply_to_message']['message_id']
-    
-    
-    data = data.get('message',None)
+    if 'caption' in message_keys :
+        parsed_data['metadata']['caption'] = message.get('caption')
 
-    contents = {
-        'message' : {
-            'caption' : data.get('caption',None),
-            'new_message' : new_message,
-            'user_message_id' : user_message_id
-        },
-        'data' : {
-            'text' : data.get('text',None),
-            'photo' : data.get('photo',None),
-            'voice' : data.get('voice',None),
-        }
-    }
+    if 'reply_to_message' in message_keys :
+        parsed_data['metadata']['message_id'] = message['reply_to_message']['message_id']
 
-    documents = [
-        doc for doc in contents if contents[doc] !=None
-    ]
+    if 'text' in message_keys :
+        parsed_data['data']['text'] = message.get('text')
 
-    if documents:
-        return documents
-    else:
-        return False
+    if 'photo' in message_keys :
+        parsed_data['data']['photo'] = message.get('photo')
 
+    if 'voice' in message_keys :
+        parsed_data['data']['voice'] = message.get('voice')
 
+    # parsed_data = {
+    #     'metadata' : {
+    #         'caption' : message.get('caption',None),
+    #         'user_message_id' : user_message_id 
+    #     },
+    #     'data' : {
+    #         'text' : message.get('text',None),
+    #         'photo' : message.get('photo',None),
+    #         'voice' : message.get('voice',None),
+    #     }
+    # }
 
+    return parsed_data
 
 
 
