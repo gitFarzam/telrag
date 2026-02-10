@@ -141,11 +141,23 @@ def process_telegram_message(instance:TelegramMessage):
 
 def process_document_object(instance:Document):
 
+    """
+    This function is for processing raw documents, it goes for creating chunks and embeddings, but before that it goes for managing the context for each document.
+
+    1. if it's not a reply : this is used for adding to the database as a source without any additional thing
+    2. if it's a reply : this main message (user question) will be merged to this input and all together will be considered for splitting, the answer part will be send as a context to agent.
+    
+    """
+
     print('Data Ingestion Process has been started...')
     text_splitter = TextSplitter()
-    chunks = text_splitter.split_text(instance.text)
 
-    print(f"Chunks: {chunks}")
 
     if instance.user_message:
+        print('Finding the question(s) related to this answer')
+        
+
+        chunks = text_splitter.split_text(instance.text)
+        print(f"Chunks: {chunks}")
+
         print('Sending this document directly as a context to agent')
