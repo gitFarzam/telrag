@@ -1,0 +1,39 @@
+{
+  "update_id": 472343951,
+  "message": {
+    "message_id": 51,
+    "date": 1770574680,
+    "text": "This is a reply",
+    "from": {
+      "id": 120358726,
+      "is_bot": false,
+      "first_name": "F",
+      "username": "Farzam91",
+      "language_code": "en"
+    },
+    "chat": {
+      "id": 120358726,
+      "type": "private",
+      "first_name": "F",
+      "username": "Farzam91"
+    },
+    "reply_to_message": {
+      "message_id": 49,
+      "date": 1770521006,
+      "text": "This is a test from my phone",
+      "from": {
+        "id": 120358726,
+        "is_bot": false,
+        "first_name": "F",
+        "username": "Farzam91",
+        "language_code": "en"
+      },
+      "chat": {
+        "id": 120358726,
+        "type": "private",
+        "first_name": "F",
+        "username": "Farzam91"
+      }
+    }
+  }
+}
