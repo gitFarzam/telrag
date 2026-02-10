@@ -80,8 +80,6 @@ class TestDocumentIngestion(TestCase):
         with open(text_file_dir, "r", encoding="utf-8") as f:
             text = f.read()
 
-        print('text from test: ->',text)
-
         self.doc_object = Document.objects.create(telegram_message=tg_object,text=text)
 
     def test_processing_document(self):

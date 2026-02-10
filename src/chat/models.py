@@ -8,11 +8,16 @@ class Conversation(models.Model):
     user = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE)
     def __str__(self):
         return self.pk.__str__() + " - " + self.created_at.__str__()
+    
+class MessageGroup(models.Model):
+    created_at = models.DateTimeField(auto_now_add=True)
+
 
 class UserMessage(models.Model):
     content = models.CharField(max_length=20000)
     created_at = models.DateTimeField(auto_now_add=True)
     conversation = models.ForeignKey(Conversation, on_delete=models.CASCADE,related_name='messages')
+    message_group = models.ForeignKey(MessageGroup , on_delete=models.CASCADE)
     tg_id = models.PositiveIntegerField(null=True,blank=True)
 
     def __str__(self):
@@ -57,6 +62,7 @@ class Chunk(models.Model):
     overlap = models.PositiveIntegerField(default=0)
     text = models.TextField()
     document = models.ForeignKey(to=Document,on_delete=models.CASCADE)
+
 
 class Embedding(models.Model):
     chunk = models.ForeignKey(to=Chunk , on_delete=models.CASCADE)
