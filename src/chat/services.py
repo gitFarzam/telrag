@@ -1,3 +1,4 @@
+from gettext import translation
 from .models import Conversation, UserMessage, AgenMessage , TelegramMessage,Document, Chunk, Embedding
 from asgiref.sync import async_to_sync
 from channels.layers import get_channel_layer
@@ -7,6 +8,43 @@ from .utils.agents import agent_detecting_context
 from .utils.rag import RAGToolKit
 from django.core.files.base import ContentFile
 from django.shortcuts import get_object_or_404
+from django.db import transaction
+from typing import List
+import json
+
+
+
+def ingestion_process(transaction_type , json_content):
+    
+    """
+    1. processing telegram message from webhook and save the result in the database
+    2. processing telegram object and save cleaned document in the database
+    3. processing document object and create chunks and saving chunks in the database
+    4. processing chunk objects, creating embedding and saving embedding from them
+    5. sending context to live agent if it's neccessary
+    
+    """
+    with transaction.atomic():
+        telegram_object = TelegramMessage.objects.create(transaction_type=transaction_type , json_content = json_content) # True means receving (False is for sending)
+
+        document_object = process_telegram_object(telegram_object)
+
+        chunk_objects = process_document_object(document_object)
+
+        embedding_result = proccess_chunk_objects(chunk_objects)
+
+        if embedding_result:
+            if document_object.user_message:
+                print('Sending Context to the user')
+
+            return True
+
+
+
+
+
+
+
 
 def message_group_creator(message:UserMessage):
     """
@@ -69,6 +107,8 @@ question_list = [
 ]
 
 def process_user_message(instance:UserMessage):
+
+
     content = instance.content
     print(f"New message: {instance.content}")
 
@@ -86,7 +126,7 @@ def process_user_message(instance:UserMessage):
     else:
         # this process should be executed through a worker, so user can continue sending messages
         
-        print("This is a unique question. Forwarding to human agent.")
+        print("There is no answer for this question. Forwarding to human agent.")
 
         # Short answer for waiting
         message_sender(
@@ -108,18 +148,19 @@ def process_user_message(instance:UserMessage):
         # a function for precessing telegram webhook message, parse the json and check conversation id and etc..
 
 
-def process_telegram_message(instance:TelegramMessage):
+def process_telegram_object(telegram_object:TelegramMessage):
 
     # check if it has `reply_to_message` use it for responsing to a specific question
     # check if the message is for data storage or it's just a context for this specific conversation (this part probably requires an agent for detecting this, it's not that much hard)
     # if it does not have it's for general rag
 
 
-    data = instance.data()
+
+    data = telegram_object.data()
     parsed_data = telegram_message_parser(data)
     print('Parsed data: ',parsed_data)
 
-    doc_object = Document.objects.create(telegram_message=instance)
+    doc_object = Document.objects.create(telegram_message=telegram_object)
 
     metadata = parsed_data['metadata']
     message_data = parsed_data['data']
@@ -140,16 +181,19 @@ def process_telegram_message(instance:TelegramMessage):
         if  data == 'text':
             doc_object.text = data
             doc_object.save()
-        if  data == 'voice':
-            # download using telegram
-            # if its not large use memory, if not use streaming.
-            file_data = telegram_downloader()
-            django_content_file = ContentFile(file_data)
-            document = Document.objects.create()
-            document.file.save(name=f"name",content=django_content_file)
+
+    return doc_object
+        
+    if  data == 'voice':
+        # download using telegram
+        # if its not large use memory, if not use streaming.
+        file_data = telegram_downloader()
+        django_content_file = ContentFile(file_data)
+        document = Document.objects.create()
+        document.file.save(name=f"name",content=django_content_file)
 
 
-def process_document_object(instance:Document):
+def process_document_object(document_object:Document) -> List[Chunk]:
 
     """
     This function is for processing raw documents, it goes for creating chunks and embeddings, but before that it goes for managing the context for each document.
@@ -161,19 +205,19 @@ def process_document_object(instance:Document):
 
     print('Data Ingestion Process has been started...')
     rag_toolkit = RAGToolKit()
-    chunks = rag_toolkit.split_text(text=instance.text)
-    print(f"Chunks: {chunks}")
+    chunks = rag_toolkit.split_text(text=document_object.text)
+    # print(f"Chunks: {chunks}")
 
     # Saving chunks into database
     objects = Chunk.objects.bulk_create(
         [
-            Chunk(chunk_id = i , text = chunk , document = instance) for i, chunk in enumerate(chunks)
+            Chunk(chunk_id = i , text = chunk , document = document_object) for i, chunk in enumerate(chunks)
         ] 
     )
 
-    
+    return objects
 
-    if instance.user_message:
+    if document_object.user_message:
         print('Sending now to the agent')
         
         
@@ -185,21 +229,21 @@ def process_document_object(instance:Document):
 
 
 
-def proccess_chunks(chunks):
+def proccess_chunk_objects(chunks):
     rag_toolkit = RAGToolKit()
 
     chunks_text = [chunk.text for chunk in chunks]
     embeddings = rag_toolkit.embedder(chunks=chunks_text)
 
-    _zip = zip(chunks,embeddings)
-
     objects = Embedding.objects.bulk_create(
         [
-            chunks, embeddings for (chunks, embeddings) in _zip
+            Embedding(chunk=chunk, vector=embedding)
+            for chunk, embedding in zip(chunks, embeddings)
         ]
     )
 
     return objects
+
 
 
 

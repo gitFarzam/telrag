@@ -12,7 +12,7 @@ import json
 from django.http import JsonResponse
 from django.core.exceptions import ValidationError
 from django.views.decorators.csrf import csrf_exempt
-from .services import message_sender, process_telegram_message
+from .services import message_sender, process_telegram_object,ingestion_process
 
 class HomeView(TemplateView):
     template_name = 'home.html'
@@ -98,7 +98,9 @@ def telegram_webhook(request):
         )
     
     try:
-        TelegramMessage.objects.create(transaction_type=True , json_content = json.loads(request.body)) # True means receving (False is for sending)
+        result = ingestion_process(transaction_type=True , json_content = json.loads(request.body))
+        return JsonResponse({"result": result})
+        
     except ValidationError as e:
         print(e.message_dict)
 

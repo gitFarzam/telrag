@@ -1,19 +1,17 @@
 from django.test import TestCase
-from .models import TelegramMessage, Document
+from .models import TelegramMessage, Document, Chunk
 import json
 from http import HTTPStatus
 import os
 from django.conf import settings
-from .services import process_telegram_message, process_document_object, proccess_chunks
+from .services import process_telegram_object, process_document_object, proccess_chunk_objects
 from .utils.rag import RAGToolKit
-
-# disabling telegram_message_signal signal temporary
-from django.db.models.signals import post_save
-from chat.signals import telegram_message_signal,document_parsing_signal
+from unittest.mock import patch
 
 class TestWebhook(TestCase):
 
-    def test_if_webhook_returns_200_response(self):
+    @patch('chat.views.ingestion_process', return_value=True)
+    def test_if_webhook_returns_true(self ,mock_ingestion):
         # Arrange
         file_relative_dir = "chat/sample_data/telegram_text.json"
         file_dir = os.path.join(settings.BASE_DIR , file_relative_dir)
@@ -48,22 +46,15 @@ class TestTelegramMessageParsing(TestCase):
         print("Fake telegram object has been created")
 
     def test_processing_telegram_message(self):
-        process_telegram_message(self.tg_object)
+        result = process_telegram_object(self.tg_object)
+
+        # if the output is a document instance or not
+        self.assertIsInstance(result,Document)
 
 
 class TestDocumentIngestion(TestCase):
 
     def setUp(self):
-        # Disconnecting a singal which triggers when a TelegramMessage and Document object has been created
-        post_save.disconnect(
-            receiver=telegram_message_signal,
-            sender=TelegramMessage,
-        )
-
-        post_save.disconnect(
-            receiver=document_parsing_signal,
-            sender=Document,
-        )
 
         # Creating telegram object
         json_file_relative_dir = "chat/sample_data/telegram_text.json"
@@ -83,18 +74,36 @@ class TestDocumentIngestion(TestCase):
 
         self.doc_object = Document.objects.create(telegram_message=tg_object,text=text)
 
+        chunk_1 = Chunk.objects.create(chunk_id=1,text="This part is for chunk 1", document=self.doc_object)
+        chunk_2 = Chunk.objects.create(chunk_id=2,text="This part is for chunk 2", document=self.doc_object)
+
+        self.chunks = [chunk_1, chunk_2]
+
     def test_processing_document(self):
-        process_document_object(self.doc_object)
+        result = process_document_object(self.doc_object)
+        self.assertIsInstance(result, list)
+
+
+    # test if the process of converting chunks to embedding works correctly
+    def test_proccess_chunks(self):
+        result = proccess_chunk_objects(chunks=self.chunks)
+        print(result)
+        self.assertIsInstance(result,list)
+
 
 
 class TestRAGToolKit(TestCase):
 
+    def setUp(self):
+        return super().setUp()
+
+    # Test if the embedder works correctly
     def test_embedding_function(self):
         ragtoolkit_instance = RAGToolKit()
-        embedding = ragtoolkit_instance.embedder(chunks=["Hello How Are You?"])
-        print(embedding)
+        result = ragtoolkit_instance.embedder(chunks=["Hello How Are You?"])
+        self.assertEqual(len(result[0]), 384)
 
 
-    def test_proccess_chunks(self):
-        proccess_chunks()
 
+
+ 

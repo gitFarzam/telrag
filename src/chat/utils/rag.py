@@ -18,4 +18,4 @@ class RAGToolKit(RecursiveCharacterTextSplitter):
     def embedder(self,chunks:list):
         client = InferenceClient(model="sentence-transformers/all-MiniLM-L6-v2" , token="hf_Gd3Gg0o75RfKG3IplnjVKC2tJulngVtKf5") 
         embedding = client.feature_extraction(text=chunks)
-        print(embedding)
+        return embedding

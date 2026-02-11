@@ -66,4 +66,4 @@ class Chunk(models.Model):
 
 class Embedding(models.Model):
     chunk = models.ForeignKey(to=Chunk , on_delete=models.CASCADE)
-    embedding = VectorField(dimensions=3)
+    vector = VectorField(dimensions=384)
