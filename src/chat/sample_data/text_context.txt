@@ -1,1 +1,43 @@
-First of all, this table is available in two sizes: 10 x 15 inches and 8 x 7 inches. Both sizes are currently in stock. The larger size (10 x 15 inches) is available only in black and white, while the smaller size (8 x 7 inches) is available only in red. The prices listed on the website are accurate and up to date.
+Track a package:
+
+To get tracking numbers and delivery updates:
+
+    Check Your Orders
+    Find the order that you want to track
+    Select Track package next to your order
+    Select All updates to get:
+        delivery updates
+        tracking numbers
+
+If you ordered more than one thing, they may have separate delivery dates and tracking info. Some packages, like standard international deliveries, might not be trackable.
+
+Track packages from third-party sellers:
+
+Third-party sellers at Amazon are independent businesses or individuals that sell their products on Amazon Marketplace. To check if you ordered from a third-party seller, refer to Your Orders and review the seller name.
+
+You can only access tracking information if:
+
+    the third-party seller shares this info with us
+    you chose a trackable shipping option
+
+To get help, refer to Contacting a third-party seller.
+
+Understanding delivery statuses:
+
+Your delivery status is in Your Orders:
+
+    Arriving: usually followed by a date. Your package is on its way to you
+    Out for delivery: your package will be delivered today
+    Delivered: your package has been delivered, and might be in your safe space
+    Undeliverable: your package couldn't be delivered, and will be returned to Amazon. When we receive it, we'll automatically issue you a refund. Visit the Undeliverable packages help page.
+
+Fix a delivery issue:
+
+Most issues can be fixed quickly. You can check what to do when:
+
+    Order hasn't shipped yet: if you're expecting the package today and there isn't a status update, that's normal. Depending on the carrier, items may ship the same day they're delivered.
+    Order is delayed: things like weather and traffic can cause delivery delays. Most late parcels arrive within 48 hours of the estimated delivery date. If the order has already been shipped, you can't cancel it.
+    Missing package: if your package shows as delivered but you haven't received it, check the Find a missing package that shows as delivered page.
+    Missing items: if you received a package that's missing an item, it may have been shipped separately. Check your orders, then refer to Find a missing item.
+
+To contact the company that's delivering your package, refer to Contact a carrier.
