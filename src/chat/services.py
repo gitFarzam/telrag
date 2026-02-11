@@ -1,12 +1,22 @@
-from .models import Conversation, UserMessage, AgenMessage , TelegramMessage
+from .models import Conversation, UserMessage, AgenMessage , TelegramMessage,Document, Chunk, Embedding
 from asgiref.sync import async_to_sync
 from channels.layers import get_channel_layer
 from django.template.loader import render_to_string
 from .utils.telegram import send_message,telegram_message_parser,telegram_downloader
 from .utils.agents import agent_detecting_context
-from .utils.rag import TextSplitter
-from .models import Document
+from .utils.rag import RAGToolKit
 from django.core.files.base import ContentFile
+from django.shortcuts import get_object_or_404
+
+def message_group_creator(message:UserMessage):
+    """
+    This function will have some logic to see how to group the messages.
+
+    1. wait for 2 seconds before answering to the customer, they may need to send another message
+    2. short messages which are not conisdered
+    """
+
+
 
 def message_operation( message):
     html = render_to_string(
@@ -150,14 +160,47 @@ def process_document_object(instance:Document):
     """
 
     print('Data Ingestion Process has been started...')
-    text_splitter = TextSplitter()
+    rag_toolkit = RAGToolKit()
+    chunks = rag_toolkit.split_text(text=instance.text)
+    print(f"Chunks: {chunks}")
 
+    # Saving chunks into database
+    objects = Chunk.objects.bulk_create(
+        [
+            Chunk(chunk_id = i , text = chunk , document = instance) for i, chunk in enumerate(chunks)
+        ] 
+    )
+
+    
 
     if instance.user_message:
-        print('Finding the question(s) related to this answer')
+        print('Sending now to the agent')
         
+        
+    else:
+        print('doesnt have a user message')
 
-        chunks = text_splitter.split_text(instance.text)
-        print(f"Chunks: {chunks}")
 
-        print('Sending this document directly as a context to agent')
+    print('number of created objects: ',objects)
+
+
+
+def proccess_chunks(chunks):
+    rag_toolkit = RAGToolKit()
+
+    chunks_text = [chunk.text for chunk in chunks]
+    embeddings = rag_toolkit.embedder(chunks=chunks_text)
+
+    _zip = zip(chunks,embeddings)
+
+    objects = Embedding.objects.bulk_create(
+        [
+            chunks, embeddings for (chunks, embeddings) in _zip
+        ]
+    )
+
+    return objects
+
+
+
+
