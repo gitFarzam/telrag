@@ -44,3 +44,25 @@ Steps:
 3. using django channel
 4. including telegram
 5. creating rag models and eneabling pgvector
+
+
+## Hugging face
+
+https://huggingface.co/docs/huggingface_hub/en/package_reference/hf_api
+https://huggingface.co/docs/huggingface_hub/en/package_reference/inference_client
+
+```shell
+pip install huggingface_hub
+```
+
+```python
+from huggingface_hub import InferenceClient
+
+# Set your API token as an environment variable (HF_API_TOKEN) 
+# or pass it directly: token="hf_YOUR_TOKEN"
+client = InferenceClient(token="hf_YOUR_TOKEN") 
+
+# Choose an embedding model (e.g., all-MiniLM-L6-v2, which is widely used)
+# A good resource for choosing models is the MTEB leaderboard: 
+client.feature_extraction("Hi, who are you?")
+```
