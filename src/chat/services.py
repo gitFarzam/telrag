@@ -40,6 +40,11 @@ def ingestion_process(transaction_type , json_content):
         if embedding_objects:
             if document_object.user_message:
                 print('Sending Context to the user')
+                message_sender(
+                    conversation=document_object.user_message.conversation,
+                    content=document_object.text,
+                    is_agent=True
+                )
 
             return True
 
