@@ -96,6 +96,8 @@ def message_sender(conversation:Conversation,content,is_agent):
         {"type": "message_handler", "html_response": oob_html},
     )
 
+    return message
+
 
 
 
@@ -248,6 +250,7 @@ def proccess_chunk_objects(chunks):
     return objects
 
 
-
+def message_history(conversation:Conversation):
+    Conversation
 
 
