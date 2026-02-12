@@ -5,7 +5,7 @@ from http import HTTPStatus
 import os
 from django.conf import settings
 from .services import process_telegram_object, process_document_object, proccess_chunk_objects
-from .utils.rag import RAGToolKit
+from .utils.rag import RAGToolKit,TextClassifier
 from unittest.mock import patch
 
 class TestWebhook(TestCase):
@@ -105,10 +105,27 @@ class TestRAGToolKit(TestCase):
 
     def test_text_generator_function(self):
         ragtoolkit_instance = RAGToolKit()
-        result = ragtoolkit_instance.text_generator(messages="talk about iran")
+        result = ragtoolkit_instance.text_generator(messages=[{'role':'user','content':'Talk about Iran'}])
         print(result)
 
 
+class TestTextClassifier(TestCase):
+
+    def setUp(self):
+        self.classifier_client = TextClassifier()
+
+    def test_greeting_text_classifier_function(self):
+        result = self.classifier_client.greeting_classifier(text="Hi I have a question")
+        print(result)
+
+    def test_related_text_classifier_function(self):
+        topics_file_dir_relative = "chat/sample_data/company.txt"
+        topics_file_dir = os.path.join(settings.BASE_DIR , topics_file_dir_relative)
+        with open(topics_file_dir,'r') as f:
+            topics = f.read()
+
+        result = self.classifier_client.relevance_classifier(text="hello",topics=topics)
+        print(result)
 
 
  

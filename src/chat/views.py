@@ -12,7 +12,7 @@ import json
 from django.http import JsonResponse
 from django.core.exceptions import ValidationError
 from django.views.decorators.csrf import csrf_exempt
-from .services import message_sender, process_telegram_object,ingestion_process
+from .services import message_sender, process_telegram_object,ingestion_process,process_user_message
 
 class HomeView(TemplateView):
     template_name = 'home.html'
@@ -67,7 +67,8 @@ class ChatSendMessageView(UpdateView):
         content = self.request.POST.get("content")
 
         if content:
-            message_sender(conversation,content,False)
+            message_object = message_sender(conversation,content,False)
+            process_user_message(message_object)
             return HttpResponse(status=204)
 
         return HttpResponse("")
