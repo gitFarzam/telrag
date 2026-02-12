@@ -17,7 +17,7 @@ class UserMessage(models.Model):
     content = models.CharField(max_length=20000)
     created_at = models.DateTimeField(auto_now_add=True)
     conversation = models.ForeignKey(Conversation, on_delete=models.CASCADE,related_name='messages')
-    message_group = models.ForeignKey(MessageGroup , on_delete=models.CASCADE)
+    message_group = models.ForeignKey(MessageGroup , on_delete=models.CASCADE, null=True, blank=True)
     tg_id = models.PositiveIntegerField(null=True,blank=True)
 
     def __str__(self):
@@ -36,7 +36,7 @@ class TelegramMessage(models.Model):
     json_content = models.JSONField()
 
     def data(self):
-        return json.loads(self.json_content)
+        return self.json_content
 
 
 class Document(models.Model):
@@ -54,8 +54,6 @@ class Document(models.Model):
     telegram_message = models.ForeignKey(TelegramMessage , on_delete=models.CASCADE)
     user_message = models.ForeignKey(UserMessage , on_delete=models.PROTECT , null=True , blank=True)
     
-    def __str__(self):
-        return self.name
 
 class Chunk(models.Model):
     chunk_id = models.PositiveSmallIntegerField()

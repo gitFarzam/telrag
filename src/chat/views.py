@@ -77,6 +77,7 @@ class ChatSendMessageView(UpdateView):
 
 @csrf_exempt
 def telegram_webhook(request):
+
     if not request.body:
         return JsonResponse(
             {"error": "Request body is required"},
@@ -98,8 +99,10 @@ def telegram_webhook(request):
         )
     
     try:
-        result = ingestion_process(transaction_type=True , json_content = json.loads(request.body))
-        return JsonResponse({"result": result})
+        data = json.loads(request.body.decode("utf-8"))
+        print(data)
+        result = ingestion_process(transaction_type=True , json_content = data)
+        # return JsonResponse({"result": result})
         
     except ValidationError as e:
         print(e.message_dict)

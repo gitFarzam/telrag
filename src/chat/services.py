@@ -26,24 +26,22 @@ def ingestion_process(transaction_type , json_content):
     """
     with transaction.atomic():
         telegram_object = TelegramMessage.objects.create(transaction_type=transaction_type , json_content = json_content) # True means receving (False is for sending)
+        # print('telegram object has been created' , telegram_object)
 
         document_object = process_telegram_object(telegram_object)
+        # print('document object has been created', document_object)
 
         chunk_objects = process_document_object(document_object)
+        # print('Chunk(s) jas been created' , chunk_objects)
 
-        embedding_result = proccess_chunk_objects(chunk_objects)
+        embedding_objects = proccess_chunk_objects(chunk_objects)
+        # print('Embeddings has been created' , embedding_objects)
 
-        if embedding_result:
+        if embedding_objects:
             if document_object.user_message:
                 print('Sending Context to the user')
 
             return True
-
-
-
-
-
-
 
 
 def message_group_creator(message:UserMessage):
@@ -167,10 +165,10 @@ def process_telegram_object(telegram_object:TelegramMessage):
 
     for i in metadata:
         if i == 'caption':
-            doc_object.caption = i
+            doc_object.caption = metadata[i]
             doc_object.save()
         if i == 'message_id':
-            user_message = UserMessage.objects.filter(tg_id = i)
+            user_message = UserMessage.objects.filter(tg_id = metadata[i]).first()
             if user_message:
                 doc_object.user_message = user_message
                 doc_object.save()
@@ -179,7 +177,7 @@ def process_telegram_object(telegram_object:TelegramMessage):
 
     for data in message_data:
         if  data == 'text':
-            doc_object.text = data
+            doc_object.text = message_data[data]
             doc_object.save()
 
     return doc_object
