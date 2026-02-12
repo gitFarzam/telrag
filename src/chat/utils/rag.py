@@ -1,7 +1,6 @@
 from langchain_text_splitters import RecursiveCharacterTextSplitter
 from typing import List
 from langchain_core.documents.base import Document
-
 from huggingface_hub import InferenceClient
 
 from dotenv import load_dotenv
@@ -19,3 +18,9 @@ class RAGToolKit(RecursiveCharacterTextSplitter):
         client = InferenceClient(model="sentence-transformers/all-MiniLM-L6-v2" , token="hf_Gd3Gg0o75RfKG3IplnjVKC2tJulngVtKf5") 
         embedding = client.feature_extraction(text=chunks)
         return embedding
+    
+
+    def text_generator(self,messages):
+        client = InferenceClient(model="openai/gpt-oss-20b" , token="hf_Gd3Gg0o75RfKG3IplnjVKC2tJulngVtKf5") 
+        return client.chat_completion(messages=[{'role':'user','content':messages}])
+

@@ -103,6 +103,11 @@ class TestRAGToolKit(TestCase):
         result = ragtoolkit_instance.embedder(chunks=["Hello How Are You?"])
         self.assertEqual(len(result[0]), 384)
 
+    def test_text_generator_function(self):
+        ragtoolkit_instance = RAGToolKit()
+        result = ragtoolkit_instance.text_generator(messages="talk about iran")
+        print(result)
+
 
 
 
