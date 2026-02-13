@@ -5,7 +5,7 @@ from channels.layers import get_channel_layer
 from django.template.loader import render_to_string
 from .utils.telegram import send_message,telegram_message_parser,telegram_downloader
 from .utils.agents import agent_detecting_context
-from .utils.rag import RAGToolKit
+from .utils.rag import RAGToolKit,RetirievalNavigator
 from django.core.files.base import ContentFile
 from django.shortcuts import get_object_or_404
 from django.db import transaction
@@ -113,8 +113,12 @@ question_list = [
 
 def process_user_message(instance:UserMessage):
 
+    retreival_instance = RetirievalNavigator(model="meta-llama/Llama-3.1-8B-Instruct",token="hf_Gd3Gg0o75RfKG3IplnjVKC2tJulngVtKf5")
 
     content = instance.content
+
+    retreival_instance.greeting_classifier
+
     print(f"New message: {instance.content}")
 
     if content in question_list:

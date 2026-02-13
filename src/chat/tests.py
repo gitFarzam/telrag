@@ -5,7 +5,7 @@ from http import HTTPStatus
 import os
 from django.conf import settings
 from .services import process_telegram_object, process_document_object, proccess_chunk_objects
-from .utils.rag import RAGToolKit,TextClassifier
+from .utils.rag import RAGToolKit,RetirievalNavigator
 from unittest.mock import patch
 
 class TestWebhook(TestCase):
@@ -111,20 +111,33 @@ class TestRAGToolKit(TestCase):
 
 class TestTextClassifier(TestCase):
 
-    def setUp(self):
-        self.classifier_client = TextClassifier()
-
     def test_greeting_text_classifier_function(self):
-        result = self.classifier_client.greeting_classifier(text="Hi I have a question")
+        classifier_instance = RetirievalNavigator(model="distilbert/distilbert-base-uncased-finetuned-sst-2-english", token="hf_Gd3Gg0o75RfKG3IplnjVKC2tJulngVtKf5")
+        result = classifier_instance.greeting_classifier(text="Hi I have a question")
         print(result)
 
-    def test_related_text_classifier_function(self):
+    def test_related_question_detector(self):
+
+        completion_instance = RetirievalNavigator(model="meta-llama/Llama-3.1-8B-Instruct", token="hf_Gd3Gg0o75RfKG3IplnjVKC2tJulngVtKf5")
+
         topics_file_dir_relative = "chat/sample_data/company.txt"
         topics_file_dir = os.path.join(settings.BASE_DIR , topics_file_dir_relative)
         with open(topics_file_dir,'r') as f:
             topics = f.read()
 
-        result = self.classifier_client.relevance_classifier(text="hello",topics=topics)
+        result = completion_instance.related_question_detector(content="Hey how are you" , relavance_contents=topics)
+
+        print(result)
+
+
+    def test_enough_context_to_answer_detector(self):
+
+        completion_instance = RetirievalNavigator(model="meta-llama/Llama-3.1-8B-Instruct", token="hf_Gd3Gg0o75RfKG3IplnjVKC2tJulngVtKf5")
+
+        relavance_contents = "you can return up to 6 month,we have refund"
+
+        result = completion_instance.related_question_detector(content="What is you refund policy?" , relavance_contents=relavance_contents)
+
         print(result)
 
 
