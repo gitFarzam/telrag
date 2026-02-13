@@ -13,11 +13,13 @@ class RAGToolKit(RecursiveCharacterTextSplitter):
         super().__init__(separators, keep_separator, is_separator_regex,  chunk_size = 4000,
         chunk_overlap = 200,**kwargs)
 
+
     def embedder(self,chunks:list):
         client = InferenceClient(model="sentence-transformers/all-MiniLM-L6-v2" , token="hf_Gd3Gg0o75RfKG3IplnjVKC2tJulngVtKf5") 
         embedding = client.feature_extraction(text=chunks)
         return embedding
-    
+
+
     def text_generator(self,messages_history,new_messages:dict):
         system_guideline = "You are a live agent which answers the questions based on the provided context"
         messages = [{'role':'system','content':system_guideline}]

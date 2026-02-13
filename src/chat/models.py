@@ -1,4 +1,6 @@
 from django.db import models
+from django.contrib.contenttypes.models import ContentType
+from django.contrib.contenttypes.fields import GenericForeignKey
 from pgvector.django import VectorField
 import json
 from django.conf import settings
@@ -39,6 +41,13 @@ class TelegramMessage(models.Model):
         return self.json_content
 
 
+# class DocumentSource(models.Model):
+#     name = models.CharField(choices=[('direct','Direct') , ('telegram','Telegram')])
+#     content_type = models.ForeignKey(ContentType, on_delete=models.PROTECT)
+#     object_id = models.PositiveIntegerField()
+#     content_object = GenericForeignKey()
+
+
 class Document(models.Model):
     CONTENT_TYPE_CHOICES = [
         ('photo','Photo'), ('audio', 'Audio') , ('text','Text') , ('video','Video')
@@ -54,6 +63,7 @@ class Document(models.Model):
     telegram_message = models.ForeignKey(TelegramMessage , on_delete=models.CASCADE)
     user_message = models.ForeignKey(UserMessage , on_delete=models.PROTECT , null=True , blank=True)
     
+
 
 class Chunk(models.Model):
     chunk_id = models.PositiveSmallIntegerField()
