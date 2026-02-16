@@ -1,5 +1,5 @@
-from gettext import translation
-from .models import Conversation, UserMessage, AgenMessage , TelegramMessage,Document, Chunk, Embedding
+from django.contrib.contenttypes.models import ContentType
+from .models import Conversation, UserMessage, AgenMessage,DocumentSource , TelegramMessage,Document, Chunk, Embedding, TextContent
 from asgiref.sync import async_to_sync
 from channels.layers import get_channel_layer
 from django.template.loader import render_to_string
@@ -31,10 +31,10 @@ def ingestion_process(transaction_type , json_content):
         document_object = process_telegram_object(telegram_object)
         # print('document object has been created', document_object)
 
-        chunk_objects = process_document_object(document_object)
+        chunk_objects = creating_chunk_objects(document_object)
         # print('Chunk(s) jas been created' , chunk_objects)
 
-        embedding_objects = proccess_chunk_objects(chunk_objects)
+        embedding_objects = creating_embedding_objects(chunk_objects)
         # print('Embeddings has been created' , embedding_objects)
 
         if embedding_objects:
@@ -157,19 +157,55 @@ def process_user_message(instance:UserMessage):
         # a function for precessing telegram webhook message, parse the json and check conversation id and etc..
 
 
+
+def creating_text_content_object(content:str):
+    model_object = TextContent.objects.create(content = content)
+    model_object.save()
+
+    return model_object
+
+
+def creating_document_source(model_object):
+    content_type_obj = ContentType.objects.get_for_model(model_object.__class__)
+
+    doc_source_obj = DocumentSource.objects.create(
+        content_type = content_type_obj, # content type object, which is linked to the actual object
+        object_id = model_object.pk # the specfific id of the that actual object (not content type object)
+    )
+
+    return doc_source_obj
+
+
+def creating_document_object(document_source, caption=None,user_message=None,telegram_message=None) -> Document:
+    doc_object = Document.objects.create(document_source = document_source)
+
+    if caption:
+        doc_object.caption = caption
+    
+    if user_message:
+        doc_object.user_message = user_message
+
+    if telegram_message:
+        doc_object.telegram_message = telegram_message
+
+    doc_object.save()
+
+    return doc_object
+
+    
+
+
 def process_telegram_object(telegram_object:TelegramMessage):
 
     # check if it has `reply_to_message` use it for responsing to a specific question
     # check if the message is for data storage or it's just a context for this specific conversation (this part probably requires an agent for detecting this, it's not that much hard)
     # if it does not have it's for general rag
 
-
-
+    doc_object = Document.objects.create(telegram_message=telegram_object)
+    
     data = telegram_object.data()
     parsed_data = telegram_message_parser(data)
     print('Parsed data: ',parsed_data)
-
-    doc_object = Document.objects.create(telegram_message=telegram_object)
 
     metadata = parsed_data['metadata']
     message_data = parsed_data['data']
@@ -188,7 +224,9 @@ def process_telegram_object(telegram_object:TelegramMessage):
 
     for data in message_data:
         if  data == 'text':
-            doc_object.text = message_data[data]
+            model_object = creating_text_content_object(content = message_data[data])
+            doc_source_obj = creating_document_source(model_object)
+            doc_object.document_source = doc_source_obj
             doc_object.save()
 
     return doc_object
@@ -202,43 +240,26 @@ def process_telegram_object(telegram_object:TelegramMessage):
         document.file.save(name=f"name",content=django_content_file)
 
 
-def process_document_object(document_object:Document) -> List[Chunk]:
-
-    """
-    This function is for processing raw documents, it goes for creating chunks and embeddings, but before that it goes for managing the context for each document.
-
-    1. if it's not a reply : this is used for adding to the database as a source without any additional thing
-    2. if it's a reply : this main message (user question) will be merged to this input and all together will be considered for splitting, the answer part will be send as a context to agent.
-    
-    """
-
-    print('Data Ingestion Process has been started...')
+def creating_chunk_objects(document_object:Document) -> List[Chunk]:
     rag_toolkit = RAGToolKit()
-    chunks = rag_toolkit.split_text(text=document_object.text)
-    # print(f"Chunks: {chunks}")
 
-    # Saving chunks into database
-    objects = Chunk.objects.bulk_create(
-        [
-            Chunk(chunk_id = i , text = chunk , document = document_object) for i, chunk in enumerate(chunks)
-        ] 
-    )
+    if type(document_object.document_source.content_object) is TextContent:
 
-    return objects
+        chunks = rag_toolkit.split_text(text=document_object.document_source.content_object.content)
 
-    if document_object.user_message:
-        print('Sending now to the agent')
-        
-        
+        objects = Chunk.objects.bulk_create(
+            [
+                Chunk(chunk_id = i , text = chunk , document = document_object) for i, chunk in enumerate(chunks)
+            ] 
+        )
+        return objects
     else:
-        print('doesnt have a user message')
-
-
-    print('number of created objects: ',objects)
+        print('Content type is not compatible, just TexContent object is supported')
 
 
 
-def proccess_chunk_objects(chunks):
+
+def creating_embedding_objects(chunks):
     rag_toolkit = RAGToolKit()
 
     chunks_text = [chunk.text for chunk in chunks]
