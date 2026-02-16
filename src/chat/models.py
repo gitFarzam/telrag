@@ -41,29 +41,30 @@ class TelegramMessage(models.Model):
         return self.json_content
 
 
-# class DocumentSource(models.Model):
-#     name = models.CharField(choices=[('direct','Direct') , ('telegram','Telegram')])
-#     content_type = models.ForeignKey(ContentType, on_delete=models.PROTECT)
-#     object_id = models.PositiveIntegerField()
-#     content_object = GenericForeignKey()
+class DocumentSource(models.Model):
+    content_type = models.ForeignKey(ContentType, on_delete=models.PROTECT)
+    object_id = models.PositiveIntegerField()
+    content_object = GenericForeignKey()
+
+
+class AudioContent(models.Model):
+    AUDIO_EXTENSIONS = [
+        ('mp3','MP3') , ('wav','WAVE') , ('oge','OGE')
+    ]
+    format = models.CharField(choices=AUDIO_EXTENSIONS,default='oge')
+    file = models.FileField()
+
+
+class TextContent(models.Model):
+    content = models.TextField(null=True,blank=True)
 
 
 class Document(models.Model):
-    CONTENT_TYPE_CHOICES = [
-        ('photo','Photo'), ('audio', 'Audio') , ('text','Text') , ('video','Video')
-    ]
-    FILE_TYPE_CHOICES = [
-        ('pdf','PDF') , ('jpg','JPG') , ('png','PNG') , ('gif','GIF') , ('txt','TXT')
-    ]
-    name = models.CharField(null=True,blank=True)
-    format = models.CharField(choices=FILE_TYPE_CHOICES,default='txt')
-    text = models.TextField(null=True,blank=True)
-    file = models.FileField(null=True,blank=True)
     caption = models.TextField(null=True , blank=True)
-    telegram_message = models.ForeignKey(TelegramMessage , on_delete=models.CASCADE)
+    document_source = models.ForeignKey(DocumentSource , on_delete=models.CASCADE,null=True)
     user_message = models.ForeignKey(UserMessage , on_delete=models.PROTECT , null=True , blank=True)
+    telegram_message = models.ForeignKey(TelegramMessage,on_delete=models.PROTECT,null=True)
     
-
 
 class Chunk(models.Model):
     chunk_id = models.PositiveSmallIntegerField()
