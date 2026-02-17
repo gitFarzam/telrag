@@ -12,6 +12,28 @@ from django.db import transaction
 from typing import List
 import json
 
+def similarity_search(input_text,num):
+    """
+    This function search for top num of similar text to input text
+    
+    """
+    from pgvector.django import L2Distance
+
+    rag_toolkit = RAGToolKit()
+    text_embedding = rag_toolkit.embedder([input_text])[0]
+    print(text_embedding)
+
+    similar_embeddings = Embedding.objects.order_by(L2Distance('vector', text_embedding))[:num]
+    # results = (
+    #     Embedding.objects
+    #     .annotate(distance=L2Distance("vector", text_embedding))
+    #     .order_by("-distance") 
+    # )
+
+    # print('distance: ' , results[0].distance , 'similarty: ',1 / (1 + results[0].distance))
+
+    # print('similars: ',similar_embeddings)
+    return similar_embeddings
 
 
 def ingestion_process(transaction_type , json_content):
@@ -113,50 +135,69 @@ question_list = [
 
 def process_user_message(instance:UserMessage):
 
-    retreival_instance = RetirievalNavigator(model="meta-llama/Llama-3.1-8B-Instruct",token="hf_Gd3Gg0o75RfKG3IplnjVKC2tJulngVtKf5")
+
+
+
+
 
     content = instance.content
 
-    retreival_instance.greeting_classifier
+    # Check if the question is related
+    retreival_instance = RetirievalNavigator(model="meta-llama/Llama-3.1-8B-Instruct",token="hf_Gd3Gg0o75RfKG3IplnjVKC2tJulngVtKf5")
 
-    print(f"New message: {instance.content}")
+    context_code = retreival_instance.enough_context_to_answer_detector(content)
 
-    if content in question_list:
-        for q in question_list:
-            if content == q[0]:
-                response = q[1]
-                message_sender(
-                    conversation=instance.conversation.pk,
-                    content=response,
-                    is_agent=True
-                    )
-                break
-        # Here you can add logic to send an automated response
-    else:
-        # this process should be executed through a worker, so user can continue sending messages
-        
-        print("There is no answer for this question. Forwarding to human agent.")
+    print(context_code)
 
-        # Short answer for waiting
-        message_sender(
-                    conversation=instance.conversation,
-                    content="Oh, let me find somebody from our team and provide you a better answer!",
-                    is_agent=True
-                    )
+
+    # if enough_context:
+
+    #     print(f"New message: {instance.content}")
+
+    #     # this process should be executed through a worker, so user can continue sending messages
+    #     print("AI Can asnwer!!!!!")
+
+    #     # Short answer for waiting
+    #     message_sender(
+    #                 conversation=instance.conversation,
+    #                 content=instance.content,
+    #                 is_agent=True
+    #                 )
         # telegram process
 
-        # sending message to user
-        telegram_message_id = send_message(text=f"{content}")
+        # # sending message to user
+        # telegram_message_id = send_message(text=f"{content}")
 
-        # Updating instance (message object) with telegram id
-        instance.tg_id = telegram_message_id
-        instance.save()
-        print(telegram_message_id) 
+        # # Updating instance (message object) with telegram id
+        # instance.tg_id = telegram_message_id
+        # instance.save()
+        # print(telegram_message_id) 
 
         # receving message from webhook
         # a function for precessing telegram webhook message, parse the json and check conversation id and etc..
 
+    # else:
+        
+    #     print('More context is required')
 
+        # similar_embeddings = similarity_search(input_text=instance.content , num=5)
+        # similar_text = "\n".join([
+        #     embedding_obj.chunk.text for embedding_obj in similar_embeddings
+        # ])
+
+        # ragtoolkit = RAGToolKit()
+        # messages_history = {'role':'user','content':'hi how are you'}
+        # new_messages = {'role':'user','content':f"having this information:{similar_text}, answer this:\n {content}"}
+
+        # result = ragtoolkit.text_generator(messages_history,new_messages)
+
+
+        # print('Sorry, but your request is out of scope of this chat')
+        # message_sender(
+        #     conversation=instance.conversation,
+        #     content="'Sorry, but your request is out of scope of this chat'",
+        #     is_agent=True
+        #     )
 
 def creating_text_content_object(content:str):
     model_object = TextContent.objects.create(content = content)
