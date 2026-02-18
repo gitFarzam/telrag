@@ -41,6 +41,7 @@ INSTALLED_APPS = [
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
+    'markdown',
     'core',
     'chat',
 ]
@@ -144,3 +145,10 @@ AUTH_USER_MODEL = 'core.user'
 CSRF_TRUSTED_ORIGINS = [
     'https://secluded-noncongregative-noelle.ngrok-free.dev',
 ]
+
+
+# Source - https://stackoverflow.com/a/7061358
+# Posted by Stu, modified by community. See post 'Timeline' for change history
+# Retrieved 2026-02-18, License - CC BY-SA 4.0
+
+LOGIN_REDIRECT_URL = 'home'

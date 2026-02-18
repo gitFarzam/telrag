@@ -1,5 +1,5 @@
 from django.shortcuts import render, redirect
-from .models import Conversation, UserMessage, TelegramMessage
+from .models import Conversation
 from django.views.generic import DetailView, UpdateView,TemplateView
 from core.models import User
 from django.http import HttpResponse
