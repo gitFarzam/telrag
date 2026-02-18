@@ -44,3 +44,5 @@ class Command(BaseCommand):
         self.stdout.write(
             self.style.SUCCESS(f"Document number: {document_indices}")
         )
+
+        # uv run manage.py insert_data 0

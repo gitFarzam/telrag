@@ -22,15 +22,17 @@ class RAGToolKit(RecursiveCharacterTextSplitter):
         return embedding
 
 
-    def text_generator(self,messages_history,new_messages:dict):
-        system_guideline = "You are a live agent which answers the questions based on the provided context"
-        messages = [{'role':'system','content':system_guideline}]
+    def text_generator(self,messages_history:list,new_messages:dict):
+        system_guideline = "You are a live agent customer service from Lumiere Beauty, which is a full-service online beauty retailer dedicated to providing high-quality skincare, makeup, haircare, and wellness products to customers across the United States and selected international markets."
 
-        messages.append(messages_history)
-        messages.append(new_messages)
+        system_message = {'role':'system','content':system_guideline}
+        messages_history.insert(0,system_message)
+        messages_history.append(new_messages)
+
+        # print(f'------\n\n {messages_history} \n\n---------')
 
         client = InferenceClient(model="openai/gpt-oss-20b" , token="hf_Gd3Gg0o75RfKG3IplnjVKC2tJulngVtKf5") 
-        return client.chat_completion(messages=messages).choices[0].message.content
+        return client.chat_completion(messages=messages_history).choices[0].message.content
     
 
 

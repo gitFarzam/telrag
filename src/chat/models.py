@@ -11,27 +11,17 @@ class Conversation(models.Model):
     def __str__(self):
         return self.pk.__str__() + " - " + self.created_at.__str__()
     
-class MessageGroup(models.Model):
-    created_at = models.DateTimeField(auto_now_add=True)
 
-
-class UserMessage(models.Model):
+class Message(models.Model):
     content = models.CharField(max_length=20000)
     created_at = models.DateTimeField(auto_now_add=True)
     conversation = models.ForeignKey(Conversation, on_delete=models.CASCADE,related_name='messages')
-    message_group = models.ForeignKey(MessageGroup , on_delete=models.CASCADE, null=True, blank=True)
+    is_agent = models.BooleanField(default=False)
     tg_id = models.PositiveIntegerField(null=True,blank=True)
 
     def __str__(self):
         return self.content[:50]
 
-class AgenMessage(models.Model):
-    content = models.CharField(max_length=20000)
-    created_at = models.DateTimeField(auto_now_add=True)
-    conversation = models.ForeignKey(Conversation, on_delete=models.CASCADE,related_name='agent_messages')
-
-    def __str__(self):
-        return self.content[:50]
 
 class TelegramMessage(models.Model):
     transaction_type = models.BooleanField(default=False) # Send -> False , Receive -> True
@@ -62,7 +52,7 @@ class TextContent(models.Model):
 class Document(models.Model):
     caption = models.TextField(null=True , blank=True)
     document_source = models.ForeignKey(DocumentSource , on_delete=models.CASCADE,null=True)
-    user_message = models.ForeignKey(UserMessage , on_delete=models.PROTECT , null=True , blank=True)
+    user_message = models.ForeignKey(Message , on_delete=models.PROTECT , null=True , blank=True)
     telegram_message = models.ForeignKey(TelegramMessage,on_delete=models.PROTECT,null=True)
     
 

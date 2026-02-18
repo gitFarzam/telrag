@@ -1,5 +1,5 @@
 from django.contrib.contenttypes.models import ContentType
-from .models import Conversation, UserMessage, AgenMessage,DocumentSource , TelegramMessage,Document, Chunk, Embedding, TextContent
+from .models import Conversation, Message,DocumentSource , TelegramMessage,Document, Chunk, Embedding, TextContent
 from asgiref.sync import async_to_sync
 from channels.layers import get_channel_layer
 from django.template.loader import render_to_string
@@ -10,7 +10,9 @@ from django.core.files.base import ContentFile
 from django.shortcuts import get_object_or_404
 from django.db import transaction
 from typing import List
+from django.db.models import QuerySet,Case, When, Value, CharField
 import json
+import numpy as np
 
 def similarity_search(input_text,num):
     """
@@ -20,10 +22,9 @@ def similarity_search(input_text,num):
     from pgvector.django import L2Distance
 
     rag_toolkit = RAGToolKit()
-    text_embedding = rag_toolkit.embedder([input_text])[0]
-    print(text_embedding)
+    input_text_embedding = rag_toolkit.embedder([input_text])[0]
 
-    similar_embeddings = Embedding.objects.order_by(L2Distance('vector', text_embedding))[:num]
+    similar_embeddings = Embedding.objects.order_by(L2Distance('vector', input_text_embedding))[:num]
     # results = (
     #     Embedding.objects
     #     .annotate(distance=L2Distance("vector", text_embedding))
@@ -33,7 +34,18 @@ def similarity_search(input_text,num):
     # print('distance: ' , results[0].distance , 'similarty: ',1 / (1 + results[0].distance))
 
     # print('similars: ',similar_embeddings)
-    return similar_embeddings
+    return input_text_embedding,similar_embeddings
+
+
+
+
+
+def similarity_score(input_embedding : np , similar_embeddings : List[Embedding]):
+
+    embeddings = np.array([embedding.vector for embedding in similar_embeddings])
+
+    return np.dot(input_embedding.reshape(1,384),embeddings.T)
+
 
 
 def ingestion_process(transaction_type , json_content):
@@ -71,7 +83,7 @@ def ingestion_process(transaction_type , json_content):
             return True
 
 
-def message_group_creator(message:UserMessage):
+def message_group_creator(message:Message):
     """
     This function will have some logic to see how to group the messages.
 
@@ -97,17 +109,14 @@ def message_operation( message):
 
 
 def message_sender(conversation:Conversation,content,is_agent):
-    if is_agent:
-        message =AgenMessage.objects.create(
-            conversation=conversation,
-            content=content
-        )
-    else:
-        message =UserMessage.objects.create(
+    message = Message.objects.create(
             conversation=conversation,
             content=content
         )
 
+    if is_agent:
+        message.is_agent = True
+        message.save()
         # Here content should be sent to another bot to get a response, through signals
 
     oob_html = message_operation(message)
@@ -133,21 +142,51 @@ question_list = [
     ['What payment methods do you accept?','We accept all major credit cards, PayPal, and bank transfers.'],
 ]
 
-def process_user_message(instance:UserMessage):
-
-
-
-
+def process_user_message(instance:Message):
 
 
     content = instance.content
 
-    # Check if the question is related
-    retreival_instance = RetirievalNavigator(model="meta-llama/Llama-3.1-8B-Instruct",token="hf_Gd3Gg0o75RfKG3IplnjVKC2tJulngVtKf5")
+    message_history = list(
+        (
+        instance.conversation.messages
+        .annotate(
+            role=Case(
+                When(is_agent=True, then=Value("assistant")),
+                default=Value("user"),
+                output_field=CharField(),
+            )
+        )
+        .values("role", "content")
+    )
+    )
 
-    context_code = retreival_instance.enough_context_to_answer_detector(content)
+    # print(message_history)
 
-    print(context_code)
+    input_text_embedding, similar_embeddings = similarity_search(input_text=instance.content , num=5)
+    similar_text = "\n".join([embedding_obj.chunk.text for embedding_obj in similar_embeddings])
+
+    score = similarity_score(input_text_embedding, similar_embeddings)
+    print(score)
+
+    ragtoolkit = RAGToolKit()
+    new_messages = {'role':'user','content':f"{content} \n\n available information:{similar_text}"}
+
+    result = ragtoolkit.text_generator(message_history,new_messages)
+
+    message_sender(
+                conversation=instance.conversation,
+                content=result,
+                is_agent=True
+                )
+
+
+    # # Check if the question is related
+    # retreival_instance = RetirievalNavigator(model="meta-llama/Llama-3.1-8B-Instruct",token="hf_Gd3Gg0o75RfKG3IplnjVKC2tJulngVtKf5")
+
+    # context_code = retreival_instance.enough_context_to_answer_detector(content)
+
+    # print(context_code)
 
 
     # if enough_context:
@@ -158,11 +197,7 @@ def process_user_message(instance:UserMessage):
     #     print("AI Can asnwer!!!!!")
 
     #     # Short answer for waiting
-    #     message_sender(
-    #                 conversation=instance.conversation,
-    #                 content=instance.content,
-    #                 is_agent=True
-    #                 )
+
         # telegram process
 
         # # sending message to user
@@ -180,16 +215,7 @@ def process_user_message(instance:UserMessage):
         
     #     print('More context is required')
 
-        # similar_embeddings = similarity_search(input_text=instance.content , num=5)
-        # similar_text = "\n".join([
-        #     embedding_obj.chunk.text for embedding_obj in similar_embeddings
-        # ])
 
-        # ragtoolkit = RAGToolKit()
-        # messages_history = {'role':'user','content':'hi how are you'}
-        # new_messages = {'role':'user','content':f"having this information:{similar_text}, answer this:\n {content}"}
-
-        # result = ragtoolkit.text_generator(messages_history,new_messages)
 
 
         # print('Sorry, but your request is out of scope of this chat')
@@ -256,7 +282,7 @@ def process_telegram_object(telegram_object:TelegramMessage):
             doc_object.caption = metadata[i]
             doc_object.save()
         if i == 'message_id':
-            user_message = UserMessage.objects.filter(tg_id = metadata[i]).first()
+            user_message = Message.objects.filter(tg_id = metadata[i]).first()
             if user_message:
                 doc_object.user_message = user_message
                 doc_object.save()
@@ -315,8 +341,5 @@ def creating_embedding_objects(chunks):
 
     return objects
 
-
-def message_history(conversation:Conversation):
-    Conversation
 
 
