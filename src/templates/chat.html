@@ -4,14 +4,13 @@
 
 {% block content %}
 
-<div class="conversation" id="conversation" hx-ext="ws" ws-connect="/ws/chat/{{ conversation.id }}/">
+<div class="conversation" id="conversation" hx-ext="ws" ws-connect="/ws/chat/{{ conversation.id }}/" >
 
   <h2>Chat with {{user.first_name}}</h2>
 
   <!-- SCROLLABLE MESSAGES -->
   <div id="messages" 
        class="chat-container">
-
     {% for message in messages %}
       {% include "message.html" %}
     {% endfor %}
@@ -37,6 +36,21 @@
 
     <button type="submit">Send</button>
   </form>
+
+<script>
+document.body.addEventListener('htmx:wsAfterMessage', function() {
+  setTimeout(function() {
+    var el = document.getElementById('messages');
+    if (el) {
+      el.scrollTo({
+        top: el.scrollHeight,
+        behavior: 'smooth'
+      });
+    }
+  }, 0);
+});
+</script>
+
 
 </div>
 
