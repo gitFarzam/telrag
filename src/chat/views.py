@@ -103,7 +103,7 @@ def telegram_webhook(request):
         data = json.loads(request.body.decode("utf-8"))
         print(data)
         result = ingestion_process(transaction_type=True , json_content = data)
-        # return JsonResponse({"result": result})
+        return JsonResponse({"result": result})
         
     except ValidationError as e:
         print(e.message_dict)

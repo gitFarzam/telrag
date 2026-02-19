@@ -2,11 +2,12 @@ from langchain_text_splitters import RecursiveCharacterTextSplitter
 from typing import List
 from langchain_core.documents.base import Document
 from huggingface_hub import InferenceClient
+from openai import OpenAI
 from pydantic import BaseModel
 from typing import Literal
 from dotenv import load_dotenv
 from enum import IntEnum
-
+import os
 load_dotenv()
 
 class RAGToolKit(RecursiveCharacterTextSplitter):
@@ -35,12 +36,34 @@ class RAGToolKit(RecursiveCharacterTextSplitter):
         return client.chat_completion(messages=messages_history).choices[0].message.content
     
 
+    def openai_text_generator(self,messages_history:list,new_messages:dict):
+        
+
+        client = OpenAI()
+
+        system_guideline = "You are a live agent customer service from Lumiere Beauty, which is a full-service online beauty retailer dedicated to providing high-quality skincare, makeup, haircare, and wellness products to customers across the United States and selected international markets."
+
+        system_message = {'role':'system','content':system_guideline}
+        messages_history.insert(0,system_message)
+        messages_history.append(new_messages)
+
+
+        return client.chat.completions.create(
+            model="gpt-4.1-mini",  # or another supported model
+            messages=messages_history
+        ).choices[0].message.content
+
+        
+
+
+
+
 
 class TrueFalseModel(BaseModel):
     result : bool
 
 
-class IntegerModel(BaseModel):
+class CategorzingModel(BaseModel):
     result: Literal[0, 1, 2, 3]
 
 
@@ -108,17 +131,63 @@ class RetirievalNavigator():
                 "json_schema": {
                     "name": "TrueFalseResponse",
                     "strict": True,
-                    "schema": IntegerModel.model_json_schema()
+                    "schema": CategorzingModel.model_json_schema()
                 }
             }
     )
-        return IntegerModel.model_validate_json(completion.choices[0].message.content).result
+        return CategorzingModel.model_validate_json(completion.choices[0].message.content).result
+
+
+
+    def setUp_openai_detector(self,system_prompt,user_prompt):
+        client = OpenAI()
+
+        completion = client.chat.completions.create(
+            model="gpt-4.1-mini",
+            messages=[
+                {"role": "system", "content": system_prompt},
+                {"role": "user", "content": user_prompt}
+            ],
+            response_format={
+                "type": "json_schema",
+                "json_schema": {
+                    "name": "CategorizingResponse",
+                    "schema": CategorzingModel.model_json_schema()
+                }
+            },
+            temperature=0
+        )
+
+        content = completion.choices[0].message.content
+        
+        return CategorzingModel.model_validate_json(content).result
+
+
+
+
+
 
     def related_question_detector(self,content,relevant_contents)-> int:
         system_prompt = f"You are a detector, you job is check a content and if it is related to {relevant_contents} or no, if yes you will return True, if no you will return False"
         return self.setUp_detector(system_prompt, content)
 
-    def enough_context_to_answer_detector(self,content) -> int:
+    def enough_context_to_answer_detector(self,content) -> bool:
+        system_prompt = f"""
+            You are an AI tasked with evaluating how well a user's question can be answered using a set of provided information.
+            Your job is to compare the user's question with the provided information and classify it into one of four categories:
+            Category 0: The provided information is directly related to the question, and the question can be fully answered using it.
+            Category 1: The provided information is not required to answer the question (for example, greetings, general questions, or requests unrelated to the information). The question can be answered without it.
+            Category 2: The provided information is somewhat related, but insufficient to confidently answer the question.
+            Category 3: The question is completely outside the scope of the provided information; the information is unrelated or irrelevant.
+            Rules:
+            Do not use any external knowledge beyond what is explicitly provided.
+            Always classify strictly based on the comparison between the provided information and the user's question.
+            Do not provide explanations or reasoning.
+            Return only the category number: 0, 1, 2, or 3.
+        """
+        return self.setUp_openai_detector(system_prompt, content)
+    
+    def categorizer(self,content) -> int:
         system_prompt = f"""
         You are an agent for a beauty shop, You job is detecting the type of user entry and categorize it, you have to return the corrosponded cateogry with it's number which is provided for you in a mapping below:\n
 
@@ -141,4 +210,4 @@ class RetirievalNavigator():
 
         BEST way is negative prompt, abusing, sex, requests regarding writing codes and etc..
         """
-        return self.setUp_detector(system_prompt, content)
+        return self.setUp_openai_detector(system_prompt, content)

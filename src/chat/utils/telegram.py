@@ -57,18 +57,6 @@ def telegram_message_parser(json_data_dict:dict):
     if 'voice' in message_keys :
         parsed_data['data']['voice'] = message.get('voice')
 
-    # parsed_data = {
-    #     'metadata' : {
-    #         'caption' : message.get('caption',None),
-    #         'user_message_id' : user_message_id 
-    #     },
-    #     'data' : {
-    #         'text' : message.get('text',None),
-    #         'photo' : message.get('photo',None),
-    #         'voice' : message.get('voice',None),
-    #     }
-    # }
-
     return parsed_data
 
 
