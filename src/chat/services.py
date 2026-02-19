@@ -73,10 +73,21 @@ def ingestion_process(transaction_type , json_content):
 
         if embedding_objects:
             if document_object.user_message:
-                print('Sending Context to the user')
+                print('Sending Context to AI to answer to the question')
+                message_history = fetch_message_history(document_object.user_message)
+
+                print('-- user question --' , document_object.user_message.content)
+                context = "\n ".join([chunk.text for chunk in chunk_objects])
+                print('-- context --' , context)
+
+                ragtoolkit = RAGToolKit()
+                new_messages = {'role':'user','content':f"{document_object.user_message.content} \n\n available information:{context}"}
+
+                response = ragtoolkit.openai_text_generator(message_history,new_messages)
+
                 message_sender(
                     conversation=document_object.user_message.conversation,
-                    content=document_object.text,
+                    content=response,
                     is_agent=True
                 )
 
@@ -132,22 +143,8 @@ def message_sender(conversation:Conversation,content,is_agent):
 
 
 
-question_list = [
-    ['I have a question about my order.','Sure, please provide your order number.'],
-    ['I need to cancel my order','Sure, please provide your order number.'],
-    ['Is there any discount available?','Yes, we offer a %10 discount for first-time customers.'],
-    ['What is the status of my shipment?','Your shipment is currently in transit and will be delivered within 2-3 business days.'],
-    ['Can I change my delivery address?','Yes, you can change your delivery address before the shipment is dispatched. Please contact our support team.'],
-    ['How do I return a product?','You can return a product within 30 days of purchase by contacting our support team with your order number.'],
-    ['What payment methods do you accept?','We accept all major credit cards, PayPal, and bank transfers.'],
-]
-
-def process_user_message(instance:Message):
-
-
-    content = instance.content
-
-    message_history = list(
+def fetch_message_history(instance:Message):
+    return list(
         (
         instance.conversation.messages
         .annotate(
@@ -161,69 +158,84 @@ def process_user_message(instance:Message):
     )
     )
 
-    # print(message_history)
 
+
+
+def process_user_message(instance:Message):
+
+    content = instance.content
+
+    # Fetch message history
+    message_history = fetch_message_history(instance)
+
+    # Fetch Context
     input_text_embedding, similar_embeddings = similarity_search(input_text=instance.content , num=5)
     similar_text = "\n".join([embedding_obj.chunk.text for embedding_obj in similar_embeddings])
 
+    # Fetch similarity scores
     score = similarity_score(input_text_embedding, similar_embeddings)
     print(score)
 
-    ragtoolkit = RAGToolKit()
-    new_messages = {'role':'user','content':f"{content} \n\n available information:{similar_text}"}
 
-    result = ragtoolkit.text_generator(message_history,new_messages)
 
-    message_sender(
+
+
+
+    # Check if the question is related
+    retreival_instance = RetirievalNavigator(model="meta-llama/Llama-3.1-8B-Instruct",token="hf_Gd3Gg0o75RfKG3IplnjVKC2tJulngVtKf5")
+
+    user_prompt = f"""
+        user question/reqeust : {content} \n\n
+        available information: {similar_text}
+
+    """
+
+    result = retreival_instance.enough_context_to_answer_detector(user_prompt)
+
+
+    if result in [0,1]:
+        # Enough context / context not required to answer
+
+        ragtoolkit = RAGToolKit()
+        new_messages = {'role':'user','content':f"{content} \n\n available information:{similar_text}"}
+
+        response = ragtoolkit.openai_text_generator(message_history,new_messages)
+
+        message_sender(
                 conversation=instance.conversation,
-                content=result,
+                content=response,
                 is_agent=True
                 )
-
-
-    # # Check if the question is related
-    # retreival_instance = RetirievalNavigator(model="meta-llama/Llama-3.1-8B-Instruct",token="hf_Gd3Gg0o75RfKG3IplnjVKC2tJulngVtKf5")
-
-    # context_code = retreival_instance.enough_context_to_answer_detector(content)
-
-    # print(context_code)
-
-
-    # if enough_context:
-
-    #     print(f"New message: {instance.content}")
-
-    #     # this process should be executed through a worker, so user can continue sending messages
-    #     print("AI Can asnwer!!!!!")
-
-    #     # Short answer for waiting
-
-        # telegram process
-
-        # # sending message to user
-        # telegram_message_id = send_message(text=f"{content}")
-
-        # # Updating instance (message object) with telegram id
-        # instance.tg_id = telegram_message_id
-        # instance.save()
-        # print(telegram_message_id) 
-
-        # receving message from webhook
-        # a function for precessing telegram webhook message, parse the json and check conversation id and etc..
-
-    # else:
         
-    #     print('More context is required')
+    elif result in [2,3]:
+        # Sending to telegram
+
+        # Temporary message 1 : waiting for sending message to the user
+        message_sender(
+                conversation=instance.conversation,
+                content="Oops! let me find somebody and ask from them!",
+                is_agent=True
+                )
+        
+
+        # sending message to user
+        telegram_message_id = send_message(text=f"{content}")
+
+        # Updating instance (message object) with telegram id
+        instance.tg_id = telegram_message_id
+        instance.save()
+        print(telegram_message_id) 
 
 
+    # elif result == 3:
+    #     # send and aswer which you can not respond to this matter
+    #     message_sender(
+    #             conversation=instance.conversation,
+    #             content="Sorry! I can't answer to this question!",
+    #             is_agent=True
+    #             )
 
 
-        # print('Sorry, but your request is out of scope of this chat')
-        # message_sender(
-        #     conversation=instance.conversation,
-        #     content="'Sorry, but your request is out of scope of this chat'",
-        #     is_agent=True
-        #     )
 
 def creating_text_content_object(content:str):
     model_object = TextContent.objects.create(content = content)

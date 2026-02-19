@@ -66,3 +66,10 @@ client = InferenceClient(token="hf_YOUR_TOKEN")
 # A good resource for choosing models is the MTEB leaderboard: 
 client.feature_extraction("Hi, who are you?")
 ```
+
+## Bugs
+
+Async and background tasks
+change ai model
+access to manage documents from telegram
+voice parser
