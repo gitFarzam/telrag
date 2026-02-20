@@ -4,8 +4,9 @@ import json
 from http import HTTPStatus
 import os
 from django.conf import settings
-from .services import process_telegram_object, process_document_object, proccess_chunk_objects
+from .services import process_telegram_object
 from .utils.rag import RAGToolKit,RetirievalNavigator
+from .utils.telegram import telegram_downloader
 from unittest.mock import patch
 
 class TestWebhook(TestCase):
@@ -45,7 +46,7 @@ class TestTelegramMessageParsing(TestCase):
         self.tg_object = TelegramMessage.objects.create(transaction_type=True , json_content = json_text)
         print("Fake telegram object has been created")
 
-    def test_processing_telegram_message(self):
+    def test_processing_text_telegram_message(self):
         result = process_telegram_object(self.tg_object)
 
         # if the output is a document instance or not
@@ -95,17 +96,23 @@ class TestDocumentIngestion(TestCase):
 class TestRAGToolKit(TestCase):
 
     def setUp(self):
-        return super().setUp()
+        # Creating telegram object
+        audio_file_relative_dir = "chat/sample_data/sample.oga"
+        self.audio_file_dir = os.path.join(settings.BASE_DIR , audio_file_relative_dir)
+
+        self.rt = RAGToolKit()
 
     # Test if the embedder works correctly
     def test_embedding_function(self):
-        ragtoolkit_instance = RAGToolKit()
-        result = ragtoolkit_instance.embedder(chunks=["Hello How Are You?"])
+        result = self.rt.embedder(chunks=["Hello How Are You?"])
         self.assertEqual(len(result[0]), 384)
 
     def test_text_generator_function(self):
-        ragtoolkit_instance = RAGToolKit()
-        result = ragtoolkit_instance.text_generator(messages=[{'role':'user','content':'Talk about Iran'}])
+        result = self.rt.text_generator(messages=[{'role':'user','content':'Talk about Iran'}])
+        print(result)
+
+    def audio_transcriber(self):
+        result = self.rt.audio_to_text(file_path=self.audio_file_dir)
         print(result)
 
 
@@ -141,4 +148,12 @@ class TestTextClassifier(TestCase):
         print(result)
 
 
- 
+class TestTelegramFileDownload(TestCase):
+    def setUp(self):
+        self.voice_data = {'metadata': {'message_id': 156}, 'data': {'voice': {'duration': 14, 'mime_type': 'audio/ogg', 'file_id': 'AwACAgQAAxkBAAOdaZdP1djkwwcaUVeL1uCDW47FPAMAAmQfAAKYurlQLte1tVjyxvI6BA', 'file_unique_id': 'AgADZB8AApi6uVA', 'file_size': 57264}}}
+
+    def test_downloading_file(self):
+        result = telegram_downloader(self.voice_data['data']['voice']['file_id'])
+
+        self.assertTrue(result,"An output for the file is existed")
+

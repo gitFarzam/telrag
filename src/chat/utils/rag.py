@@ -53,9 +53,18 @@ class RAGToolKit(RecursiveCharacterTextSplitter):
             messages=messages_history
         ).choices[0].message.content
 
+
+    def audio_to_text(self,file_path: str, model: str = "whisper-1") -> str:
+        client = OpenAI()  # Make sure OPENAI_API_KEY is set in env
+
+        with open(file_path, "rb") as audio_file:
+            response = client.audio.transcriptions.create(
+                model=model,
+                file=audio_file
+            )
         
-
-
+        # response.text contains the transcription
+        return response.text
 
 
 
@@ -159,7 +168,7 @@ class RetirievalNavigator():
         )
 
         content = completion.choices[0].message.content
-        
+
         return CategorzingModel.model_validate_json(content).result
 
 

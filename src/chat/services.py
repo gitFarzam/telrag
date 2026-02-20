@@ -1,5 +1,5 @@
 from django.contrib.contenttypes.models import ContentType
-from .models import Conversation, Message,DocumentSource , TelegramMessage,Document, Chunk, Embedding, TextContent
+from .models import Conversation, Message,DocumentSource , TelegramMessage,Document, Chunk, Embedding, TextContent,AudioContent
 from asgiref.sync import async_to_sync
 from channels.layers import get_channel_layer
 from django.template.loader import render_to_string
@@ -308,35 +308,58 @@ def process_telegram_object(telegram_object:TelegramMessage):
             doc_object.document_source = doc_source_obj
             doc_object.save()
 
+        elif data == 'voice':
+            """
+            sample of parsed data:
+
+            {'metadata': {}, 'data': {'voice': {'duration': 8, 'mime_type': 'audio/ogg', 'file_id': 'AwACAgQAAxkBAAOgaZe-d0yP3eul-peB6j1HGdD3pssAAlsaAAKYusFQlwt-Nvvor0M6BA', 'file_unique_id': 'AgADWxoAApi6wVA', 'file_size': 33935}}}
+            
+            """
+            # download using telegram
+            # (note: if its not large use memory, if not use streaming.)
+            print('data: ',message_data['voice']['file_id'])
+            file_data = telegram_downloader(message_data['voice']['file_id'])
+            django_content_file = ContentFile(file_data)
+            audio_obj = AudioContent()
+            audio_obj.file.save(name=f"name.oga",content=django_content_file)
+            doc_source_obj = creating_document_source(audio_obj)
+            doc_object.document_source = doc_source_obj
+            doc_object.save()
+
+
     return doc_object
-        
-    if  data == 'voice':
-        # download using telegram
-        # if its not large use memory, if not use streaming.
-        file_data = telegram_downloader()
-        django_content_file = ContentFile(file_data)
-        document = Document.objects.create()
-        document.file.save(name=f"name",content=django_content_file)
+
+
 
 
 def creating_chunk_objects(document_object:Document) -> List[Chunk]:
     rag_toolkit = RAGToolKit()
 
     if type(document_object.document_source.content_object) is TextContent:
+        content_for_chunk = document_object.document_source.content_object.content
+    elif type(document_object.document_source.content_object) is AudioContent:
+        # trascribing
+        print('-- path ---',document_object.document_source.content_object.file.path)
+        trascription = rag_toolkit.audio_to_text(document_object.document_source.content_object.file.path)
+        print('transcription: \n\n\n', trascription)
+        # storing
+        document_object.document_source.content_object.trascription = trascription
+        document_object.save()
+        # creting chunks
+        content_for_chunk = document_object.document_source.content_object.trascription
+        pass
 
-        chunks = rag_toolkit.split_text(text=document_object.document_source.content_object.content)
-
-        objects = Chunk.objects.bulk_create(
-            [
-                Chunk(chunk_id = i , text = chunk , document = document_object) for i, chunk in enumerate(chunks)
-            ] 
-        )
-        return objects
     else:
         print('Content type is not compatible, just TexContent object is supported')
 
+    chunks = rag_toolkit.split_text(text=content_for_chunk)
 
-
+    objects = Chunk.objects.bulk_create(
+        [
+            Chunk(chunk_id = i , text = chunk , document = document_object) for i, chunk in enumerate(chunks)
+        ] 
+    )
+    return objects
 
 def creating_embedding_objects(chunks):
     rag_toolkit = RAGToolKit()
