@@ -102,8 +102,12 @@ def telegram_webhook(request):
     try:
         data = json.loads(request.body.decode("utf-8"))
         print(data)
+        # try:
         result = ingestion_process(transaction_type=True , json_content = data)
         return JsonResponse({"result": result})
+        # except Exception as e:
+        #     print('Error in webhook')
+        #     return JsonResponse({"result": 'ok'})
         
     except ValidationError as e:
         print(e.message_dict)

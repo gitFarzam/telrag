@@ -37,17 +37,20 @@ class DocumentSource(models.Model):
     content_object = GenericForeignKey()
 
 
-class AudioContent(models.Model):
-    AUDIO_EXTENSIONS = [
-        ('mp3','MP3') , ('wav','WAVE') , ('oge','OGE')
-    ]
-    format = models.CharField(choices=AUDIO_EXTENSIONS,default='oge')
-    file = models.FileField()
+# class AudioContent(models.Model):
+#     AUDIO_EXTENSIONS = [
+#         ('mp3','MP3') , ('wav','WAVE') , ('oge','OGE')
+#     ]
+#     format = models.CharField(choices=AUDIO_EXTENSIONS,default='oge')
+#     file = models.FileField()
 
 
 class TextContent(models.Model):
     content = models.TextField(null=True,blank=True)
 
+class AudioContent(models.Model):
+    file = models.FileField(upload_to='voices')
+    trascription = models.TextField(null=True,blank=True)
 
 class Document(models.Model):
     caption = models.TextField(null=True , blank=True)

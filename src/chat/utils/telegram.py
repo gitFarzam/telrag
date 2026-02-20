@@ -73,12 +73,15 @@ def telegram_downloader(file_id):
     file_url = f"https://api.telegram.org/file/bot{telegram_api_key}/{file_path}"
     file_data = requests.get(file_url).content
 
-    return file_data
-    # with open("sample.oga", "wb") as f:
-    #     f.write(file_data)
+    with open("sample.oga", "wb") as f:
+        f.write(file_data)
 
-if __name__ == "__main__":
-    telegram_downloader()
+
+    return file_data
+
+
+
+
 
 
 """
