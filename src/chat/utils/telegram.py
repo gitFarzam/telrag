@@ -11,6 +11,21 @@ load_dotenv()
 telegram_api_key = os.getenv('telegram_api')
 
 
+def set_telegram_webhook_secret():
+    tg_secret_key = os.getenv('TELEGRAM_WEBHOOK_SECRET')
+    url_host = "https://<your-ngrok-subdomain>.ngrok-free.dev/webhook/"
+    url = f"https://api.telegram.org/bot{telegram_api_key}/setWebhook?url={url_host}&secret_token={tg_secret_key}"
+    """
+    in case a domain (url) is also required
+
+    https://api.telegram.org/bot<YOUR_TOKEN>/setWebhook?url=https://yourserver.com/hook&secret_token=YOUR_SECRET_STRING
+    
+    """
+    response = requests.post(url)
+    print(response.content, response.status_code)
+
+# set_telegram_webhook_secret()
+
 def send_message(chat_id=None, text=None):
     chat_id = 120358726
     url = f"https://api.telegram.org/bot{telegram_api_key}/sendMessage"
@@ -78,10 +93,6 @@ def telegram_downloader(file_id):
 
 
     return file_data
-
-
-
-
 
 
 """

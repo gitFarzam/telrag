@@ -73,3 +73,12 @@ Async and background tasks
 change ai model
 access to manage documents from telegram
 voice parser
+webhook line of requests when stack at the top of each other
+integration of functions, seprating some others
+uploading in github
+
+
+## Telegram
+Submit webhook
+Submit secret (posting through set_telegram_webhook_secret function)
+-> note: probably just the set_telegram_webhook_secret functions do both

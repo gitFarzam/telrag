@@ -152,3 +152,24 @@ CSRF_TRUSTED_ORIGINS = [
 # Retrieved 2026-02-18, License - CC BY-SA 4.0
 
 LOGIN_REDIRECT_URL = 'home'
+
+
+# Telegram settings
+
+# Telegram webhook security
+# Set in .env: strong random string (1–256 chars, A-Za-z0-9_-). When setting webhook
+# via setWebhook, pass this as secret_token so Telegram sends it in every request.
+TELEGRAM_WEBHOOK_SECRET = os.getenv('TELEGRAM_WEBHOOK_SECRET', '')
+
+# Comma-separated Telegram user IDs allowed to use the bot (e.g. "120358726,123456789").
+# If empty, all Telegram users are allowed; set this to restrict to admins only.
+def allowed_telegram_ids():
+    ids = []
+    for x in os.getenv('TELEGRAM_ALLOWED_USER_IDS', '').split(','):
+        if x.strip().isdigit():
+            ids.append(int(x.strip()))
+    return ids
+
+TELEGRAM_ALLOWED_USER_IDS = allowed_telegram_ids()
+
+# https://api.telegram.org/bot<YOUR_TOKEN>/setWebhook?url=https://yourserver.com/hook&secret_token=YOUR_SECRET_STRING
