@@ -17,4 +17,7 @@ uv run manage.py test chat.tests.TestTextClassifier.test_greeting_text_classifie
 uv run manage.py test chat.tests.TestTextClassifier.test_related_text_classifier_function
 uv run manage.py test chat.tests.TestTextClassifier.test_related_question_detector
 uv run manage.py test chat.tests.TestTextClassifier.test_enough_context_to_answer_detector
+
+uv run manage.py test chat.tests.TestTelegramFileDownload.test_downloading_file
+uv run manage.py test chat.tests.TestRAGToolKit.audio_transcriber
 ```

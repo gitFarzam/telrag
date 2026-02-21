@@ -13,6 +13,8 @@ from django.http import JsonResponse
 from django.core.exceptions import ValidationError
 from django.views.decorators.csrf import csrf_exempt
 from .services import message_sender, process_telegram_object,ingestion_process,process_user_message
+from django.conf import settings
+import hmac
 
 class HomeView(TemplateView):
     template_name = 'home.html'
@@ -85,8 +87,20 @@ def telegram_webhook(request):
             status=400
         )
 
+    # 1) Verify request is from Telegram (rejects random POSTs to your webhook URL)
+    secret = settings.TELEGRAM_WEBHOOK_SECRET
+    print(f"secret: {secret}")
+    if secret:
+        token = request.headers.get("X-Telegram-Bot-Api-Secret-Token", "")
+        print(f"token: {token} | secret: {secret}")
+        if not hmac.compare_digest(secret, token):
+            return JsonResponse({"error": "Forbidden"}, status=403)
+
+
+
     try:
         data = json.loads(request.body)
+        print(data)
     except json.JSONDecodeError:
         return JsonResponse(
             {"error": "Invalid JSON"},
@@ -99,6 +113,20 @@ def telegram_webhook(request):
             status=400
         )
     
+
+    # 2) Restrict which Telegram users can use the bot (e.g. admins only)
+    allowed_ids = settings.TELEGRAM_ALLOWED_USER_IDS
+    if allowed_ids:
+        from_id = data.get("message", {}).get("from", {}).get("id")
+        print(f'From ID: {from_id}')
+        if from_id is None or from_id not in allowed_ids:
+            print('Access Denied!!!!')
+            return JsonResponse({"error": "Forbidden"}, status=403)
+        else:
+            print('Access Allowed!')
+
+
+
     try:
         data = json.loads(request.body.decode("utf-8"))
         print(data)
