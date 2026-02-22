@@ -82,20 +82,21 @@ class ChatSendMessageView(UpdateView):
 def telegram_webhook(request):
 
     if not request.body:
+        error = "Request body is required"
+        print(error)
         return JsonResponse(
-            {"error": "Request body is required"},
-            status=400
+            {"error": error},
+            status=200
         )
+        
 
     # 1) Verify request is from Telegram (rejects random POSTs to your webhook URL)
     secret = settings.TELEGRAM_WEBHOOK_SECRET
-    print(f"secret: {secret}")
     if secret:
         token = request.headers.get("X-Telegram-Bot-Api-Secret-Token", "")
-        print(f"token: {token} | secret: {secret}")
         if not hmac.compare_digest(secret, token):
-            return JsonResponse({"error": "Forbidden"}, status=403)
-
+            print("Request im webhook is not from telegram!")
+            return JsonResponse({"error": "Forbidden"}, status=200)
 
 
     try:
@@ -104,13 +105,13 @@ def telegram_webhook(request):
     except json.JSONDecodeError:
         return JsonResponse(
             {"error": "Invalid JSON"},
-            status=400
+            status=200
         )
 
     if "message" not in data:
         return JsonResponse(
             {"error": "Missing required key: message"},
-            status=400
+            status=200
         )
     
 
@@ -121,23 +122,15 @@ def telegram_webhook(request):
         print(f'From ID: {from_id}')
         if from_id is None or from_id not in allowed_ids:
             print('Access Denied!!!!')
-            return JsonResponse({"error": "Forbidden"}, status=403)
-        else:
-            print('Access Allowed!')
-
+            return JsonResponse({"error": "Forbidden"}, status=200) # returning 200 is crucial, otherwise requests will repeadedly be send through webhook again and again!
 
 
     try:
         data = json.loads(request.body.decode("utf-8"))
-        print(data)
-        # try:
         result = ingestion_process(transaction_type=True , json_content = data)
-        return JsonResponse({"result": result})
-        # except Exception as e:
-        #     print('Error in webhook')
-        #     return JsonResponse({"result": 'ok'})
+        return JsonResponse({"result": result},status=200)
+    
+    except Exception as e:
+            print(f'Error in ingestion process: {e}')
+            return JsonResponse({"result": 'ok'} , status=200)
         
-    except ValidationError as e:
-        print(e.message_dict)
-
-    return JsonResponse({"ok": True})
