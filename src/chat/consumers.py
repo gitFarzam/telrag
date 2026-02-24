@@ -1,3 +1,4 @@
+from .models import Conversation
 from channels.generic.websocket import WebsocketConsumer
 from asgiref.sync import async_to_sync
 
@@ -19,6 +20,10 @@ class ChatConsumer(WebsocketConsumer):
             self.group_name,
             self.channel_name,
         )
+        conversation_obj = Conversation.objects.get(pk=int(self.conversation_id))
+        print(f"Deleting conversation object: {conversation_obj}")
+        conversation_obj.delete()
+
 
     def message_handler(self, event):
         # Send raw HTML for htmx OOB swap (id + hx-swap-oob="beforeend")

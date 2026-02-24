@@ -43,7 +43,7 @@ Steps:
 2. using form for saving in the model
 3. using django channel
 4. including telegram
-5. creating rag models and eneabling pgvector
+5. creating rag models and enabling pgvector
 
 
 ## Hugging face
@@ -68,7 +68,6 @@ client.feature_extraction("Hi, who are you?")
 ```
 
 ## Bugs
-
 Async and background tasks
 change ai model
 access to manage documents from telegram

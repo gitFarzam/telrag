@@ -1,5 +1,10 @@
  {% load markdown_extras %}
 <div id="message" class="message {% if message.is_agent %}agent{% else %}user{% endif %}">
   <strong>{% if message.is_agent %} Agent {% else %} {{user.first_name}} {% endif %}</strong>
-  <span>{{ message.content|convert_markdown|safe }}</span>
+
+  {% if message %}
+    <span>{{ message.content|convert_markdown|safe }}</span>
+  {% elif chat_id_request %}
+    <span>{{ chat_id_request|safe }}</span>
+  {% endif %}
 </div>
