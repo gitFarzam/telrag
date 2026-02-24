@@ -1,5 +1,5 @@
 from django.shortcuts import render, redirect
-from .models import Conversation
+from .models import Conversation,TelegramChatID
 from django.views.generic import DetailView, UpdateView,TemplateView
 from core.models import User
 from django.http import HttpResponse
@@ -15,6 +15,7 @@ from django.views.decorators.csrf import csrf_exempt
 from .services import message_sender, process_telegram_object,ingestion_process,process_user_message
 from django.conf import settings
 import hmac
+from .utils.telegram import send_message
 
 class HomeView(TemplateView):
     template_name = 'home.html'
@@ -116,13 +117,36 @@ def telegram_webhook(request):
     
 
     # 2) Restrict which Telegram users can use the bot (e.g. admins only)
-    allowed_ids = settings.TELEGRAM_ALLOWED_USER_IDS
+    chat_ids = list(TelegramChatID.objects.exclude(chat_id__isnull=True).values_list('chat_id', flat=True))
+    allowed_ids = settings.TELEGRAM_ALLOWED_USER_IDS + chat_ids
+    print('allowed_ids: ',allowed_ids)
     if allowed_ids:
         from_id = data.get("message", {}).get("from", {}).get("id")
         print(f'From ID: {from_id}')
         if from_id is None or from_id not in allowed_ids:
-            print('Access Denied!!!!')
-            return JsonResponse({"error": "Forbidden"}, status=200) # returning 200 is crucial, otherwise requests will repeadedly be send through webhook again and again!
+            import re
+
+            text = data.get("message", {}).get("text", {})
+            numbers = re.findall(r"\b[1-9]\d*\b", text)
+            numbers = [int(n) for n in numbers]
+
+            for number in numbers:
+                if str(number) in data.get("message", {}).get("text", {}):
+                    tg_chatid = TelegramChatID.objects.filter(code=number).first()
+                    print(f"TG chat_id: {tg_chatid}")
+                    if tg_chatid:
+                        tg_chatid.chat_id = from_id
+                        tg_chatid.is_verified = True
+                        # also it should get conversation model from somewhere
+                        tg_chatid.save()
+                        send_message(chat_id=tg_chatid.chat_id,text="✅ verification code has been detected in your message, You are verified now")
+                        return JsonResponse({"result": "ok"}, status=200)
+                    else:
+                        send_message(chat_id=from_id,text="Wrong code! Please check chat window and just send the code you are seeing on the window!")
+            else:
+                print('Access Denied!!!!')
+                # it should be checked if user telegram account is verified or no
+                return JsonResponse({"error": "Forbidden"}, status=200) # returning 200 is crucial, otherwise requests will repeadedly be send through webhook again and again!
 
 
     try:

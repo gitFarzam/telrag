@@ -37,14 +37,6 @@ class DocumentSource(models.Model):
     content_object = GenericForeignKey()
 
 
-# class AudioContent(models.Model):
-#     AUDIO_EXTENSIONS = [
-#         ('mp3','MP3') , ('wav','WAVE') , ('oge','OGE')
-#     ]
-#     format = models.CharField(choices=AUDIO_EXTENSIONS,default='oge')
-#     file = models.FileField()
-
-
 class TextContent(models.Model):
     content = models.TextField(null=True,blank=True)
 
@@ -69,3 +61,10 @@ class Chunk(models.Model):
 class Embedding(models.Model):
     chunk = models.ForeignKey(to=Chunk , on_delete=models.CASCADE)
     vector = VectorField(dimensions=384)
+
+
+class TelegramChatID(models.Model):
+    chat_id = models.PositiveIntegerField(null=True,unique=True)
+    conversation = models.OneToOneField(to=Conversation,on_delete=models.CASCADE)
+    code = models.PositiveIntegerField(null=True)
+    is_verified = models.BooleanField(default=False)

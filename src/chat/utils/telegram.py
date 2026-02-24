@@ -26,8 +26,7 @@ def set_telegram_webhook_secret():
 
 # set_telegram_webhook_secret()
 
-def send_message(chat_id=None, text=None):
-    chat_id = 120358726
+def send_message(chat_id=120358726, text=None):
     url = f"https://api.telegram.org/bot{telegram_api_key}/sendMessage"
     payload = {
         "chat_id": chat_id,
@@ -48,6 +47,9 @@ def send_message(chat_id=None, text=None):
 
 def telegram_message_parser(json_data_dict:dict):
 
+
+
+
     message = json_data_dict.get('message',None)
     # print('message data: ',message)
     message_keys = message.keys()
@@ -56,6 +58,8 @@ def telegram_message_parser(json_data_dict:dict):
 
     # Define default variables
     user_message_id = None
+
+    parsed_data['metadata']['chat_id'] = message.get('from',{}).get('id')
 
     if 'caption' in message_keys :
         parsed_data['metadata']['caption'] = message.get('caption')
@@ -71,6 +75,11 @@ def telegram_message_parser(json_data_dict:dict):
 
     if 'voice' in message_keys :
         parsed_data['data']['voice'] = message.get('voice')
+
+    if 'entities' in message_keys:
+        parsed_data['data']['entities'] = message.get('entities')
+
+    {'update_id': 472344065, 'message': {'message_id': 221, 'from': {'id': 120358726, 'is_bot': False, 'first_name': 'F', 'username': 'Farzam91', 'language_code': 'en'}, 'chat': {'id': 120358726, 'first_name': 'F', 'username': 'Farzam91', 'type': 'private'}, 'date': 1771890593, 'text': 'This is /com1 this is /com2', 'entities': [{'offset': 8, 'length': 5, 'type': 'bot_command'}, {'offset': 22, 'length': 5, 'type': 'bot_command'}]}}
 
     return parsed_data
 
@@ -238,5 +247,13 @@ without reply
              'text': 'Gooz'},
 'update_id': 472343940}
     
+"""
+
+
+"""
+telegram command
+
+{'update_id': 472344065, 'message': {'message_id': 221, 'from': {'id': 120358726, 'is_bot': False, 'first_name': 'F', 'username': 'Farzam91', 'language_code': 'en'}, 'chat': {'id': 120358726, 'first_name': 'F', 'username': 'Farzam91', 'type': 'private'}, 'date': 1771890593, 'text': 'This is /com1 this is /com2', 'entities': [{'offset': 8, 'length': 5, 'type': 'bot_command'}, {'offset': 22, 'length': 5, 'type': 'bot_command'}]}}
+
 """
     

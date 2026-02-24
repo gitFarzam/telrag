@@ -173,3 +173,7 @@ def allowed_telegram_ids():
 TELEGRAM_ALLOWED_USER_IDS = allowed_telegram_ids()
 
 # https://api.telegram.org/bot<YOUR_TOKEN>/setWebhook?url=https://yourserver.com/hook&secret_token=YOUR_SECRET_STRING
+
+
+# Demo Settings
+DEMO = os.getenv('DEMO')

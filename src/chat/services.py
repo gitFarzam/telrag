@@ -1,5 +1,5 @@
 from django.contrib.contenttypes.models import ContentType
-from .models import Conversation, Message,DocumentSource , TelegramMessage,Document, Chunk, Embedding, TextContent,AudioContent
+from .models import Conversation, Message,DocumentSource , TelegramMessage,Document, Chunk, Embedding, TextContent,AudioContent, TelegramChatID
 from asgiref.sync import async_to_sync
 from channels.layers import get_channel_layer
 from django.template.loader import render_to_string
@@ -11,8 +11,10 @@ from django.shortcuts import get_object_or_404
 from django.db import transaction
 from typing import List
 from django.db.models import QuerySet,Case, When, Value, CharField
+from django.conf import settings
 import json
 import numpy as np
+import time
 
 def similarity_search(input_text,num):
     """
@@ -59,6 +61,7 @@ def ingestion_process(transaction_type , json_content):
     
     """
     with transaction.atomic():
+
         telegram_object = TelegramMessage.objects.create(transaction_type=transaction_type , json_content = json_content) # True means receving (False is for sending)
         # print('telegram object has been created' , telegram_object)
 
@@ -159,6 +162,39 @@ def fetch_message_history(instance:Message):
     )
 
 
+def ask_user_telegram_chatid(conversation:Conversation,code):
+    message = f"""
+    Please send verify your telegram account to be able to work as an context provider.\n<br><br>
+    1. open your telegram application\n<br>
+    2. search for this chatbot in search feild: <b>@telrag_bot</b>\n<br>
+    3. tap/click <b>verify</b>\n<br>
+    4. send this code to the bot: {code}\n<br>
+    5. wait for the bot to verify your account\n\n<br><br>
+
+    -> After verification this window will be disapeared.
+    """
+
+    channel_layer = get_channel_layer()
+
+
+    html = render_to_string(
+        "message.html",
+        {"chat_id_request": message}
+    )
+
+    oob_html = (
+        '<div id="messages" hx-swap-oob="beforeend" class="chat-container">'
+        + html
+        + "</div>"
+    )
+
+
+    async_to_sync(channel_layer.group_send)(
+        f"chatgroup_{conversation.pk}",
+        {"type": "message_handler", "html_response": oob_html},
+    )
+
+    return True
 
 
 def process_user_message(instance:Message):
@@ -170,30 +206,30 @@ def process_user_message(instance:Message):
 
     # Fetch Context
     input_text_embedding, similar_embeddings = similarity_search(input_text=instance.content , num=5)
-    similar_text = "\n".join([embedding_obj.chunk.text for embedding_obj in similar_embeddings])
 
-    # Fetch similarity scores
-    score = similarity_score(input_text_embedding, similar_embeddings)
-    print(score)
+    context =''
+    if similar_embeddings:
+        similar_text = "\n".join([embedding_obj.chunk.text for embedding_obj in similar_embeddings])
 
-
-
-
+        # Fetch similarity scores
+        score = similarity_score(input_text_embedding, similar_embeddings)
+        print(score)
+        context = f" \n\n available information: {similar_text}"
+        
 
 
     # Check if the question is related
     retreival_instance = RetirievalNavigator(model="meta-llama/Llama-3.1-8B-Instruct",token="hf_Gd3Gg0o75RfKG3IplnjVKC2tJulngVtKf5")
 
     user_prompt = f"""
-        user question/reqeust : {content} \n\n
-        available information: {similar_text}
+        user question/reqeust : {content}{context}
 
     """
 
     result = retreival_instance.enough_context_to_answer_detector(user_prompt)
 
 
-    if result in [0,1]:
+    if result in [5]:
         # Enough context / context not required to answer
 
         ragtoolkit = RAGToolKit()
@@ -207,7 +243,7 @@ def process_user_message(instance:Message):
                 is_agent=True
                 )
         
-    elif result in [2,3]:
+    elif result in [0,1,2,3]:
         # Sending to telegram
 
         # Temporary message 1 : waiting for sending message to the user
@@ -219,12 +255,33 @@ def process_user_message(instance:Message):
         
 
         # sending message to user
-        telegram_message_id = send_message(text=f"{content}")
 
-        # Updating instance (message object) with telegram id
-        instance.tg_id = telegram_message_id
-        instance.save()
-        print(telegram_message_id) 
+
+        # get chat id
+        obj,created = TelegramChatID.objects.get_or_create(conversation = instance.conversation)
+        if created:
+            print('lets go for finding chat id')
+            code = obj.pk # use pk as code for authentication!
+            obj.code = code
+            obj.save()
+            ask_user_telegram_chatid(conversation=instance.conversation,code=code)
+        else:
+            if obj.chat_id:
+                chat_id = obj.chat_id
+                print('chat id: ',chat_id)
+                telegram_message_id = send_message(chat_id=chat_id,text=f"{content}")
+
+                # Updating instance (message object) with telegram id
+                instance.tg_id = telegram_message_id
+                instance.save()
+                print(telegram_message_id) 
+            else:
+                print('Object is existed but it doesnt have a chat id value')
+                ask_user_telegram_chatid(conversation=instance.conversation,code=obj.code)
+
+        
+        
+
 
 
     # elif result == 3:
@@ -289,6 +346,14 @@ def process_telegram_object(telegram_object:TelegramMessage):
     metadata = parsed_data['metadata']
     message_data = parsed_data['data']
 
+
+    chat_id = metadata['chat_id']
+    print('Chat_id: ', chat_id)
+    tg_chatid = TelegramChatID(chat_id=chat_id)
+    
+
+
+
     for i in metadata:
         if i == 'caption':
             doc_object.caption = metadata[i]
@@ -308,6 +373,7 @@ def process_telegram_object(telegram_object:TelegramMessage):
             doc_object.document_source = doc_source_obj
             doc_object.save()
 
+
         elif data == 'voice':
             """
             sample of parsed data:
@@ -325,6 +391,25 @@ def process_telegram_object(telegram_object:TelegramMessage):
             doc_source_obj = creating_document_source(audio_obj)
             doc_object.document_source = doc_source_obj
             doc_object.save()
+
+    if message_data['entities']:
+        for entity in message_data['entities']:
+            if entity['type'] == 'bot_command':
+                command = message_data['text'][entity['offset']:entity['length']]
+                if command == '/verify':
+                    # get chat id and sending message to user in telegram and asking for verification
+                    chat_id = metadata['chat_id']
+                    print('Chat_id: ', chat_id)
+
+                    # now using chat check if user is verified or no
+                    tg_chatid = TelegramChatID(chat_id=chat_id)
+                    is_verified = tg_chatid.is_verified
+
+                    if is_verified:
+                        send_message(chat_id,text="You are already verified!")
+                    else:
+                        print('This command is for verification')
+                        send_message(chat_id,text="Please send the 4 digit code in the chat")
 
 
     return doc_object
