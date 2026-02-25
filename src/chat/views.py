@@ -102,7 +102,7 @@ def telegram_webhook(request):
 
     try:
         data = json.loads(request.body)
-        print(data)
+        print(f"**********\n{data}\n*************")
     except json.JSONDecodeError:
         return JsonResponse(
             {"error": "Invalid JSON"},
@@ -110,6 +110,7 @@ def telegram_webhook(request):
         )
 
     if "message" not in data:
+        print(f"message key is not detected in the json body! keys are: {data.keys()}")
         return JsonResponse(
             {"error": "Missing required key: message"},
             status=200
@@ -149,12 +150,12 @@ def telegram_webhook(request):
                 return JsonResponse({"error": "Forbidden"}, status=200) # returning 200 is crucial, otherwise requests will repeadedly be send through webhook again and again!
 
 
-    try:
-        data = json.loads(request.body.decode("utf-8"))
-        result = ingestion_process(transaction_type=True , json_content = data)
-        return JsonResponse({"result": result},status=200)
-    
-    except Exception as e:
-            print(f'Error in ingestion process: {e}')
-            return JsonResponse({"result": 'ok'} , status=200)
+    # try: 
+    data = json.loads(request.body.decode("utf-8"))
+    result = ingestion_process(transaction_type=True , json_content = data)
+    return JsonResponse({"result": result},status=200)
+
+    # except Exception as e:
+    #         print(f'Error in ingestion process: {e}')
+    #         return JsonResponse({"result": 'ok'} , status=200)
         

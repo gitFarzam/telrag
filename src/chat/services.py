@@ -161,6 +161,26 @@ def fetch_message_history(instance:Message):
     )
     )
 
+def fetch_conversation_documents(instance:Conversation):
+    all_messages: QuerySet[Message] = instance.messages.all()
+
+    documents = []
+
+    for message in all_messages:
+        if message.documents.all():
+            documents.append(message.documents.all())
+
+
+    if documents:
+        documents_flatten = []
+        for doc in documents:
+            for i in doc:
+                documents_flatten.append(i)
+        return documents_flatten
+    else:
+        return False
+    
+
 
 def ask_user_telegram_chatid(conversation:Conversation,code):
     message = f"""
@@ -345,6 +365,9 @@ def process_telegram_object(telegram_object:TelegramMessage):
 
     metadata = parsed_data['metadata']
     message_data = parsed_data['data']
+    entities = message_data.get('entities')
+    del_document_id = message_data.get('del_document_id')
+    print('Del Doc ID: ',del_document_id)
 
 
     chat_id = metadata['chat_id']
@@ -392,7 +415,8 @@ def process_telegram_object(telegram_object:TelegramMessage):
             doc_object.document_source = doc_source_obj
             doc_object.save()
 
-    if message_data['entities']:
+    if entities:
+        print('entities: ',message_data['entities'])
         for entity in message_data['entities']:
             if entity['type'] == 'bot_command':
                 command = message_data['text'][entity['offset']:entity['length']]
@@ -410,42 +434,61 @@ def process_telegram_object(telegram_object:TelegramMessage):
                     else:
                         print('This command is for verification')
                         send_message(chat_id,text="Please send the 4 digit code in the chat")
-                elif command == 'getdocs':
-                    Document.objects.filter()
+                elif command == '/getdocs':
+                    tg_chatid = TelegramChatID.objects.get(chat_id=chat_id)
+                    docs = fetch_conversation_documents(instance=tg_chatid.conversation)
+                    print(docs)
+
+                    for i,doc in enumerate(docs):
+                        text = f"<strong>Document {str(i)}:</strong>\nunique_id: <code>{doc.pk}</code> {fetch_content_from_document(doc)}" 
+                        send_message(chat_id=chat_id,text=text , document_id=doc.pk)
+    if del_document_id:
+        response = Document.objects.delete(pk=del_document_id)
+        send_message(chat_id=chat_id,text=f"Document has been deleted: {response}")
 
     return doc_object
 
 
+def transcriber(document_object:Document):
+    rag_toolkit = RAGToolKit()
+    return rag_toolkit.audio_to_text(document_object.document_source.content_object.file.path)
+
+
+def fetch_content_from_document(document_object:Document):
+    if type(document_object.document_source.content_object) is TextContent:
+        return document_object.document_source.content_object.content
+    elif type(document_object.document_source.content_object) is AudioContent:
+        # trascribing
+        if not document_object.document_source.content_object.trascription:
+            print('-- path ---',document_object.document_source.content_object.file.path)
+            trascription = transcriber(document_object)
+            print('transcription: \n\n\n', trascription)
+            # storing
+            document_object.document_source.content_object.trascription = trascription
+            document_object.save()
+            # creting chunks
+        return document_object.document_source.content_object.trascription
+    else:
+        print('Document object class is not supported')
+        return False
+
 
 
 def creating_chunk_objects(document_object:Document) -> List[Chunk]:
-    rag_toolkit = RAGToolKit()
 
-    if type(document_object.document_source.content_object) is TextContent:
-        content_for_chunk = document_object.document_source.content_object.content
-    elif type(document_object.document_source.content_object) is AudioContent:
-        # trascribing
-        print('-- path ---',document_object.document_source.content_object.file.path)
-        trascription = rag_toolkit.audio_to_text(document_object.document_source.content_object.file.path)
-        print('transcription: \n\n\n', trascription)
-        # storing
-        document_object.document_source.content_object.trascription = trascription
-        document_object.save()
-        # creting chunks
-        content_for_chunk = document_object.document_source.content_object.trascription
-        pass
+    content_for_chunk = fetch_content_from_document(document_object)
 
-    else:
-        print('Content type is not compatible, just TexContent object is supported')
+    if content_for_chunk:
 
-    chunks = rag_toolkit.split_text(text=content_for_chunk)
+        rag_toolkit = RAGToolKit()
+        chunks = rag_toolkit.split_text(text=content_for_chunk)
 
-    objects = Chunk.objects.bulk_create(
-        [
-            Chunk(chunk_id = i , text = chunk , document = document_object) for i, chunk in enumerate(chunks)
-        ] 
-    )
-    return objects
+        objects = Chunk.objects.bulk_create(
+            [
+                Chunk(chunk_id = i , text = chunk , document = document_object) for i, chunk in enumerate(chunks)
+            ] 
+        )
+        return objects
 
 def creating_embedding_objects(chunks):
     rag_toolkit = RAGToolKit()

@@ -26,13 +26,21 @@ def set_telegram_webhook_secret():
 
 # set_telegram_webhook_secret()
 
-def send_message(chat_id=120358726, text=None):
+def send_message(chat_id=120358726, text=None,document_id=None):
     url = f"https://api.telegram.org/bot{telegram_api_key}/sendMessage"
+
+    reply_markup = {}
+    if document_id:
+        reply_markup = document_markup_for_telegram(document_id)
+
     payload = {
         "chat_id": chat_id,
         "text": text,
-        "message_id" : 5 
+        "message_id" : 5 ,
+        "parse_mode": "HTML",
+        "reply_markup" : reply_markup,
     }
+
     response = requests.post(url, json=payload)
     telegram_message_id = response.json()['result']['message_id']
     """
@@ -41,6 +49,16 @@ def send_message(chat_id=120358726, text=None):
 
     return telegram_message_id
 
+
+
+def document_markup_for_telegram(document_id:int):
+    return {
+        "inline_keyboard": [
+            [
+                { "text": "❌ Delete", "callback_data": str(document_id) },
+            ],
+        ]
+    }
 
 
 
@@ -53,7 +71,7 @@ def telegram_message_parser(json_data_dict:dict):
     message = json_data_dict.get('message',None)
     # print('message data: ',message)
     message_keys = message.keys()
-
+    print('message keys: ', message_keys)
     parsed_data = {'metadata':{} , 'data':{}}
 
     # Define default variables
@@ -78,6 +96,15 @@ def telegram_message_parser(json_data_dict:dict):
 
     if 'entities' in message_keys:
         parsed_data['data']['entities'] = message.get('entities')
+
+    if 'reply_markup' in message_keys:
+        reply_markup = message.get('reply_markup')
+        print(reply_markup)
+        if 'inline_keyboard' in reply_markup:
+            # [[ {'text': '❌ Delete', 'callback_data': '246'}]]}}, 'chat_instance': '-5702004449068403665', 'data': '246'}
+            document_id = int(reply_markup['inline_keyboard']['data'])
+            parsed_data['data']['del_document_id'] = document_id
+
 
     {'update_id': 472344065, 'message': {'message_id': 221, 'from': {'id': 120358726, 'is_bot': False, 'first_name': 'F', 'username': 'Farzam91', 'language_code': 'en'}, 'chat': {'id': 120358726, 'first_name': 'F', 'username': 'Farzam91', 'type': 'private'}, 'date': 1771890593, 'text': 'This is /com1 this is /com2', 'entities': [{'offset': 8, 'length': 5, 'type': 'bot_command'}, {'offset': 22, 'length': 5, 'type': 'bot_command'}]}}
 
@@ -257,3 +284,10 @@ telegram command
 
 """
     
+
+"""
+telegram button
+
+{'update_id': 472344185, 'callback_query': {'id': '507291191113931062', 'from': {'id': 120358726, 'is_bot': False, 'first_name': 'F', 'username': 'Farzam91', 'language_code': 'en'}, 'message': {'message_id': 358, 'from': {'id': 8176918185, 'is_bot': True, 'first_name': 'telrag', 'username': 'telrag_bot'}, 'chat': {'id': 120358726, 'first_name': 'F', 'username': 'Farzam91', 'type': 'private'}, 'date': 1772053861, 'text': 'Document 0:\nunique_id: 246 Kha intra re rec kon', 'entities': [{'offset': 0, 'length': 11, 'type': 'bold'}, {'offset': 23, 'length': 3, 'type': 'code'}], 'reply_markup': {'inline_keyboard': [[{'text': '❌ Delete', 'callback_data': '246'}]]}}, 'chat_instance': '-5702004449068403665', 'data': '246'}}
+
+"""

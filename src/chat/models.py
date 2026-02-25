@@ -65,6 +65,6 @@ class Embedding(models.Model):
 
 class TelegramChatID(models.Model):
     chat_id = models.PositiveIntegerField(null=True,unique=True)
-    conversation = models.OneToOneField(to=Conversation,on_delete=models.CASCADE,unique=True)
+    conversation = models.OneToOneField(to=Conversation,on_delete=models.CASCADE)
     code = models.PositiveIntegerField(null=True)
     is_verified = models.BooleanField(default=False)
