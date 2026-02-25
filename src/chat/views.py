@@ -142,7 +142,7 @@ def telegram_webhook(request):
                         send_message(chat_id=tg_chatid.chat_id,text="✅ verification code has been detected in your message, You are verified now")
                         return JsonResponse({"result": "ok"}, status=200)
                     else:
-                        send_message(chat_id=from_id,text="Wrong code! Please check chat window and just send the code you are seeing on the window!")
+                        send_message(chat_id=from_id ,text="Wrong code! Please check chat window and just send the code you are seeing on the window!")
             else:
                 print('Access Denied!!!!')
                 # it should be checked if user telegram account is verified or no

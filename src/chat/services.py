@@ -410,7 +410,8 @@ def process_telegram_object(telegram_object:TelegramMessage):
                     else:
                         print('This command is for verification')
                         send_message(chat_id,text="Please send the 4 digit code in the chat")
-
+                elif command == 'getdocs':
+                    Document.objects.filter()
 
     return doc_object
 
