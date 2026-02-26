@@ -68,3 +68,4 @@ class TelegramChatID(models.Model):
     conversation = models.OneToOneField(to=Conversation,on_delete=models.CASCADE)
     code = models.PositiveIntegerField(null=True)
     is_verified = models.BooleanField(default=False)
+    is_active = models.BooleanField(default=False)

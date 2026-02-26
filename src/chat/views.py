@@ -111,10 +111,12 @@ def telegram_webhook(request):
 
     if "message" not in data:
         print(f"message key is not detected in the json body! keys are: {data.keys()}")
-        return JsonResponse(
-            {"error": "Missing required key: message"},
-            status=200
-        )
+        if "callback_query" not in data:
+            print('->>>>>> Yes there is callback_query')
+            return JsonResponse(
+                {"error": "Missing required key: message"},
+                status=200
+            )
     
 
     # 2) Restrict which Telegram users can use the bot (e.g. admins only)
@@ -123,10 +125,12 @@ def telegram_webhook(request):
     print('allowed_ids: ',allowed_ids)
     if allowed_ids:
         from_id = data.get("message", {}).get("from", {}).get("id")
+        if from_id is None:
+            from_id = data.get("callback_query", {}).get("from", {}).get("id")
         print(f'From ID: {from_id}')
+
         if from_id is None or from_id not in allowed_ids:
             import re
-
             text = data.get("message", {}).get("text", {})
             numbers = re.findall(r"\b[1-9]\d*\b", text)
             numbers = [int(n) for n in numbers]
@@ -148,14 +152,19 @@ def telegram_webhook(request):
                 print('Access Denied!!!!')
                 # it should be checked if user telegram account is verified or no
                 return JsonResponse({"error": "Forbidden"}, status=200) # returning 200 is crucial, otherwise requests will repeadedly be send through webhook again and again!
+            
+    tg_chatid = TelegramChatID.objects.filter(chat_id=from_id).first()
+    if tg_chatid.is_active:
+        print('Port is busy! Try later!')
+        return JsonResponse({"error": "Forbidden"}, status=200) 
 
+    try: 
+        
+        data = json.loads(request.body.decode("utf-8"))
+        result = ingestion_process(transaction_type=True , json_content = data , tg_chatid = tg_chatid)
+        return JsonResponse({"result": result},status=200)
 
-    # try: 
-    data = json.loads(request.body.decode("utf-8"))
-    result = ingestion_process(transaction_type=True , json_content = data)
-    return JsonResponse({"result": result},status=200)
-
-    # except Exception as e:
-    #         print(f'Error in ingestion process: {e}')
-    #         return JsonResponse({"result": 'ok'} , status=200)
+    except Exception as e:
+            print(f'Error in ingestion process: {e}')
+            return JsonResponse({"result": 'ok'} , status=200)
         
