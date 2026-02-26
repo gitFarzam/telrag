@@ -180,7 +180,7 @@ class RetirievalNavigator():
         system_prompt = f"You are a detector, you job is check a content and if it is related to {relevant_contents} or no, if yes you will return True, if no you will return False"
         return self.setUp_detector(system_prompt, content)
 
-    def enough_context_to_answer_detector(self,content) -> bool:
+    def enough_context_to_answer_detector(self,content) -> int:
         system_prompt = f"""
             You are an AI tasked with evaluating how well a user's question can be answered using a set of provided information.
             Your job is to compare the user's question with the provided information and classify it into one of four categories:

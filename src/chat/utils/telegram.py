@@ -67,43 +67,44 @@ def telegram_message_parser(json_data_dict:dict):
 
 
 
-
-    message = json_data_dict.get('message',None)
-    # print('message data: ',message)
-    message_keys = message.keys()
-    print('message keys: ', message_keys)
     parsed_data = {'metadata':{} , 'data':{}}
+    message = json_data_dict.get('message',None)
+    if message:
+        # print('message data: ',message)
+        message_keys = message.keys()
+        print('message keys: ', message_keys)
+        
+        # Define default variables
+        user_message_id = None
 
-    # Define default variables
-    user_message_id = None
+        parsed_data['metadata']['chat_id'] = message.get('from',{}).get('id')
 
-    parsed_data['metadata']['chat_id'] = message.get('from',{}).get('id')
+        if 'caption' in message_keys :
+            parsed_data['metadata']['caption'] = message.get('caption')
 
-    if 'caption' in message_keys :
-        parsed_data['metadata']['caption'] = message.get('caption')
+        if 'reply_to_message' in message_keys :
+            parsed_data['metadata']['message_id'] = message['reply_to_message']['message_id']
 
-    if 'reply_to_message' in message_keys :
-        parsed_data['metadata']['message_id'] = message['reply_to_message']['message_id']
+        if 'text' in message_keys :
+            parsed_data['data']['text'] = message.get('text')
 
-    if 'text' in message_keys :
-        parsed_data['data']['text'] = message.get('text')
+        if 'photo' in message_keys :
+            parsed_data['data']['photo'] = message.get('photo')
 
-    if 'photo' in message_keys :
-        parsed_data['data']['photo'] = message.get('photo')
+        if 'voice' in message_keys :
+            parsed_data['data']['voice'] = message.get('voice')
 
-    if 'voice' in message_keys :
-        parsed_data['data']['voice'] = message.get('voice')
+        if 'entities' in message_keys:
+            parsed_data['data']['entities'] = message.get('entities')
 
-    if 'entities' in message_keys:
-        parsed_data['data']['entities'] = message.get('entities')
-
-    if 'reply_markup' in message_keys:
-        reply_markup = message.get('reply_markup')
-        print(reply_markup)
-        if 'inline_keyboard' in reply_markup:
-            # [[ {'text': '❌ Delete', 'callback_data': '246'}]]}}, 'chat_instance': '-5702004449068403665', 'data': '246'}
-            document_id = int(reply_markup['inline_keyboard']['data'])
-            parsed_data['data']['del_document_id'] = document_id
+    callback_query = json_data_dict.get('callback_query',None)
+    
+    if callback_query:
+        parsed_data['metadata']['chat_id'] = callback_query.get('from',{}).get('id')
+    # Callback Query
+        document_id = json_data_dict.get('callback_query',None).get('data',{})
+        if document_id:
+                parsed_data['data']['del_document_id'] = document_id
 
 
     {'update_id': 472344065, 'message': {'message_id': 221, 'from': {'id': 120358726, 'is_bot': False, 'first_name': 'F', 'username': 'Farzam91', 'language_code': 'en'}, 'chat': {'id': 120358726, 'first_name': 'F', 'username': 'Farzam91', 'type': 'private'}, 'date': 1771890593, 'text': 'This is /com1 this is /com2', 'entities': [{'offset': 8, 'length': 5, 'type': 'bot_command'}, {'offset': 22, 'length': 5, 'type': 'bot_command'}]}}
