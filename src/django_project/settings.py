@@ -176,4 +176,4 @@ TELEGRAM_ALLOWED_USER_IDS = allowed_telegram_ids()
 
 
 # Demo Settings
-DEMO = os.getenv('DEMO')
+DEMO = False

@@ -15,6 +15,7 @@ from django.conf import settings
 import json
 import numpy as np
 import time
+from django.http import JsonResponse
 
 def similarity_search(input_text,num):
     """
@@ -25,32 +26,15 @@ def similarity_search(input_text,num):
 
     rag_toolkit = RAGToolKit()
     input_text_embedding = rag_toolkit.embedder([input_text])[0]
-
     similar_embeddings = Embedding.objects.order_by(L2Distance('vector', input_text_embedding))[:num]
-    # results = (
-    #     Embedding.objects
-    #     .annotate(distance=L2Distance("vector", text_embedding))
-    #     .order_by("-distance") 
-    # )
-
-    # print('distance: ' , results[0].distance , 'similarty: ',1 / (1 + results[0].distance))
-
-    # print('similars: ',similar_embeddings)
     return input_text_embedding,similar_embeddings
 
 
-
-
-
 def similarity_score(input_embedding : np , similar_embeddings : List[Embedding]):
-
     embeddings = np.array([embedding.vector for embedding in similar_embeddings])
-
     return np.dot(input_embedding.reshape(1,384),embeddings.T)
 
-
-
-def ingestion_process(transaction_type , json_content , tg_chatid:TelegramChatID):
+def ingestion_process(transaction_type , json_content):
     
     """
     1. processing telegram message from webhook and save the result in the database
@@ -61,11 +45,6 @@ def ingestion_process(transaction_type , json_content , tg_chatid:TelegramChatID
     
     """
     with transaction.atomic():
-
-        tg_chatid.is_active = True
-        tg_chatid.save()
-        time.sleep(1)
-
         telegram_object = TelegramMessage.objects.create(transaction_type=transaction_type , json_content = json_content) # True means receving (False is for sending)
         # print('telegram object has been created' , telegram_object)
 
@@ -99,17 +78,11 @@ def ingestion_process(transaction_type , json_content , tg_chatid:TelegramChatID
                         content=response,
                         is_agent=True
                     )
-
-                tg_chatid.is_active = False
-                tg_chatid.save()
-
                 return True
         
         else:
             print("There is not document object for deletion")
 
-            tg_chatid.is_active = False
-            tg_chatid.save()
 
 def message_group_creator(message:Message):
     """
@@ -118,8 +91,6 @@ def message_group_creator(message:Message):
     1. wait for 2 seconds before answering to the customer, they may need to send another message
     2. short messages which are not conisdered
     """
-
-
 
 def message_operation( message):
     html = render_to_string(
@@ -156,8 +127,6 @@ def message_sender(conversation:Conversation,content,is_agent):
     )
 
     return message
-
-
 
 
 def fetch_message_history(instance:Message):
@@ -260,14 +229,14 @@ def process_user_message(instance:Message):
 
     """
 
-    result = retreival_instance.enough_context_to_answer_detector(user_prompt)
+    result = retreival_instance.message_categorizer(user_prompt)
 
 
-    if result in [1]:
+    if result in [0,1]:
         # Enough context / context not required to answer
 
         ragtoolkit = RAGToolKit()
-        new_messages = {'role':'user','content':f"{content} \n\n available information:{similar_text}"}
+        new_messages = {'role':'user','content':f"{content} \n\n{context}"}
 
         response = ragtoolkit.openai_text_generator(message_history,new_messages)
 
@@ -277,7 +246,7 @@ def process_user_message(instance:Message):
                 is_agent=True
                 )
         
-    elif result in [3]:
+    elif result in [2]:
         # Sending to telegram
 
         # Temporary message 1 : waiting for sending message to the user
@@ -287,38 +256,40 @@ def process_user_message(instance:Message):
                 is_agent=True
                 )
         
-
         # sending message to user
-
-
-        # get chat id
-        obj,created = TelegramChatID.objects.get_or_create(conversation = instance.conversation)
-        if created:
-            print('lets go for finding chat id')
-            code = obj.pk # use pk as code for authentication!
-            obj.code = code
-            obj.save()
-            ask_user_telegram_chatid(conversation=instance.conversation,code=code)
-        else:
-            if obj.chat_id:
-                chat_id = obj.chat_id
-                print('chat id: ',chat_id)
-                telegram_message_id = send_message(chat_id=chat_id,text=f"{content}")
-
-                # Updating instance (message object) with telegram id
-                instance.tg_id = telegram_message_id
-                instance.save()
-                print(telegram_message_id) 
+        # check demo
+        if settings.DEMO:
+            # get chat id
+            obj,created = TelegramChatID.objects.get_or_create(conversation = instance.conversation)
+            if created:
+                print('lets go for finding chat id')
+                code = obj.pk # use pk as code for authentication!
+                obj.code = code
+                obj.save()
+                ask_user_telegram_chatid(conversation=instance.conversation,code=code)
             else:
-                print('Object is existed but it doesnt have a chat id value')
-                ask_user_telegram_chatid(conversation=instance.conversation,code=obj.code)
+                if obj.chat_id:
+                    chat_id = obj.chat_id
+                    print('chat id: ',chat_id)
+                    telegram_message_id = send_message(chat_id=chat_id,text=f"{content}")
 
-        
-        
+                    # Updating instance (message object) with telegram id
+                    instance.tg_id = telegram_message_id
+                    instance.save()
+                    print(telegram_message_id) 
+                else:
+                    print('Object is existed but it doesnt have a chat id value')
+                    ask_user_telegram_chatid(conversation=instance.conversation,code=obj.code)
+        else:
+            telegram_message_id = send_message(text=f"{content}")
+            # Updating instance (message object) with telegram id
+            instance.tg_id = telegram_message_id
+            instance.save()
+            print(telegram_message_id) 
 
 
 
-    elif result == 3:
+    elif result == 4:
         # send and aswer which you can not respond to this matter
         message_sender(
                 conversation=instance.conversation,
@@ -385,15 +356,10 @@ def process_telegram_object(telegram_object:TelegramMessage):
     del_document_id = message_data.get('del_document_id')
     print('Del Doc ID: ',del_document_id)
 
-
     chat_id = metadata['chat_id']
     print('Chat_id: ', chat_id)
     tg_chatid = TelegramChatID(chat_id=chat_id)
     
-
-
-
-
 
     if entities:
         print('entities: ',message_data['entities'])
@@ -534,4 +500,28 @@ def creating_embedding_objects(chunks):
     return objects
 
 
+def regex_for_get_verification_code(data:dict , from_id):
+    import re
+    text = data.get("message", {}).get("text", {})
+    numbers = re.findall(r"\b[1-9]\d*\b", text)
+    numbers = [int(n) for n in numbers]
 
+    for number in numbers:
+        if str(number) in data.get("message", {}).get("text", {}):
+            tg_chatid = TelegramChatID.objects.filter(code=number).first()
+            print(f"TG chat_id: {tg_chatid}")
+            if tg_chatid:
+                tg_chatid.chat_id = from_id
+                tg_chatid.is_verified = True
+                # also it should get conversation model from somewhere
+                tg_chatid.save()
+                send_message(chat_id=tg_chatid.chat_id,text="✅ verification code has been detected in your message, You are verified now")
+                return JsonResponse({"result": "ok"}, status=200)
+            else:
+                send_message(chat_id=from_id ,text="Wrong code! Please check chat window and just send the code you are seeing on the window!")
+                return JsonResponse({"result": "ok"}, status=200)
+            
+        else:
+            print('Access Denied!!!!')
+            # it should be checked if user telegram account is verified or no
+            return JsonResponse({"error": "Forbidden"}, status=200) # returning 200 is crucial, otherwise requests will repeadedly be send through webhook again and again!
