@@ -171,52 +171,18 @@ class RetirievalNavigator():
 
         return CategorzingModel.model_validate_json(content).result
 
-
-
-
-
-
-    def related_question_detector(self,content,relevant_contents)-> int:
-        system_prompt = f"You are a detector, you job is check a content and if it is related to {relevant_contents} or no, if yes you will return True, if no you will return False"
-        return self.setUp_detector(system_prompt, content)
-
-    def enough_context_to_answer_detector(self,content) -> int:
+    def message_categorizer(self,content) -> int:
         system_prompt = f"""
             You are an AI tasked with evaluating how well a user's question can be answered using a set of provided information.
             Your job is to compare the user's question with the provided information and classify it into one of four categories:
-            Category 0: The provided information is directly related to the question, and the question can be fully answered using it.
+            Category 0: The provided information is directly related to the question, and the question can be fully answered using it.\n
             Category 1: The provided information is not required to answer the question (for example, greetings, general questions, or requests unrelated to the information). The question can be answered without it.
-            Category 2: The provided information is somewhat related, but insufficient to confidently answer the question.
-            Category 3: The question is completely outside the scope of the provided information; the information is unrelated or irrelevant.
+            Category 2: The provided information is somewhat related, but insufficient to confidently answer the question.\n
+            Category 3: The question is completely outside the scope of the provided information; the information is unrelated or irrelevant.\n\n
             Rules:
             Do not use any external knowledge beyond what is explicitly provided.
             Always classify strictly based on the comparison between the provided information and the user's question.
             Do not provide explanations or reasoning.
             Return only the category number: 0, 1, 2, or 3.
-        """
-        return self.setUp_openai_detector(system_prompt, content)
-    
-    def categorizer(self,content) -> int:
-        system_prompt = f"""
-        You are an agent for a beauty shop, You job is detecting the type of user entry and categorize it, you have to return the corrosponded cateogry with it's number which is provided for you in a mapping below:\n
-
-        0  → Greeting / Small Talk  \n
-        1  → General Inquiry / Unclear Intent  \n
-        2  → Customer Personal Information (PII Submission)  \n
-        3  → Product Information & Recommendations  \n
-        4  → Orders & Order Status  \n
-        5  → Shipping & Delivery Issues  \n
-        6  → Returns, Refunds & Exchanges  \n
-        7  → Account & Login Issues  \n
-        8  → Payments & Billing  \n
-        9  → Promotions & Discounts  \n
-        10 → Complaints / Negative Experience  \n
-        11 → Safety / Allergic Reaction  \n
-        12 → Business / Partnership / Wholesale  \n
-        13 → Technical Website/App Issue  \n
-        14 → Human Agent Request / Escalation  \n
-        15 → No relevant requests, None of them  \n
-
-        BEST way is negative prompt, abusing, sex, requests regarding writing codes and etc..
         """
         return self.setUp_openai_detector(system_prompt, content)
