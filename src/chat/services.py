@@ -29,12 +29,112 @@ def similarity_search(input_text,num):
     similar_embeddings = Embedding.objects.order_by(L2Distance('vector', input_text_embedding))[:num]
     return input_text_embedding,similar_embeddings
 
-
 def similarity_score(input_embedding : np , similar_embeddings : List[Embedding]):
     embeddings = np.array([embedding.vector for embedding in similar_embeddings])
     return np.dot(input_embedding.reshape(1,384),embeddings.T)
 
-def ingestion_process(transaction_type , json_content):
+def telegram_message_processor(transaction_type , json_content):
+    print(telegram_message_processor.__name__)
+    parsed_data = telegram_message_parser(json_content)
+
+    message_type = parsed_data['type']
+    metadata = parsed_data['metadata']
+    message_data = parsed_data['data']
+
+    if message_type == 'new':
+        # Sending to ingestion process - BG
+        # Return back the result to telegram
+        doc_id = ingestion_process(transaction_type,json_content,is_new=True)
+        if doc_id:
+            send_message(text=f"Document has been created, ID: {doc_id}")
+        else:
+            send_message(text=f"Creating Document was unsuccessfull")
+    elif message_type == 'reply':
+        # Sending to AI for response
+        # Sending to ingestion process - BG
+        # Return back the result to telegram
+        pass
+    elif message_type == 'entities':
+        # /verify /getdocs
+        pass
+
+    elif message_type == 'button':
+        # Deleting documents button
+        pass
+
+
+
+def ingestion_process(transaction_type , json_content,is_new):
+    with transaction.atomic():
+        telegram_object = TelegramMessage.objects.create(transaction_type=transaction_type , json_content = json_content) # True means receving (False is for sending)
+        # print('telegram object has been created' , telegram_object)
+
+        document_object = process_telegram_object(telegram_object,is_new)
+        # print('document object has been created', document_object)
+
+        if document_object:
+            chunk_objects = creating_chunk_objects(document_object)
+            # print('Chunk(s) jas been created' , chunk_objects)
+
+            creating_embedding_objects(chunk_objects)
+            # print('Embeddings has been created' , embedding_objects)
+
+            return document_object.pk
+        else:
+            return False
+    
+
+def process_telegram_object(telegram_object:TelegramMessage,is_new=True):
+    print(process_telegram_object.__name__)
+
+    doc_object = Document.objects.create(telegram_message=telegram_object)
+    data = telegram_object.data()
+    parsed_data = telegram_message_parser(data)
+    metadata = parsed_data['metadata']
+    message_data = parsed_data['data']
+
+    for i in metadata:
+        if i == 'caption':
+            doc_object.caption = metadata[i]
+            doc_object.save()
+        if is_new:
+            if i == 'message_id':
+                user_message = Message.objects.filter(tg_id = metadata[i]).first()
+                if user_message:
+                    doc_object.user_message = user_message
+                    doc_object.save()
+                else:
+                    print('This telegram message is a reply to a message, but the message is not in the database, shows that it might be replying to a telegram client message or any other message')
+    for data in message_data:
+        if  data == 'text':
+            model_object = creating_text_content_object(content = message_data[data])
+            doc_source_obj = creating_document_source(model_object)
+            doc_object.document_source = doc_source_obj
+            doc_object.save()
+            return doc_object
+
+        elif data == 'voice':
+            """
+            sample of parsed data:
+
+            {'metadata': {}, 'data': {'voice': {'duration': 8, 'mime_type': 'audio/ogg', 'file_id': 'AwACAgQAAxkBAAOgaZe-d0yP3eul-peB6j1HGdD3pssAAlsaAAKYusFQlwt-Nvvor0M6BA', 'file_unique_id': 'AgADWxoAApi6wVA', 'file_size': 33935}}}
+            
+            """
+            # download using telegram
+            # (note: if its not large use memory, if not use streaming.)
+            # print('data: ',message_data['voice']['file_id'])
+            file_data = telegram_downloader(message_data['voice']['file_id'])
+            django_content_file = ContentFile(file_data)
+            audio_obj = AudioContent()
+            audio_obj.file.save(name=f"name.oga",content=django_content_file)
+            doc_source_obj = creating_document_source(audio_obj)
+            doc_object.document_source = doc_source_obj
+            doc_object.save()
+            return doc_object
+    
+
+
+def ingestion_processـ(transaction_type , json_content):
     
     """
     1. processing telegram message from webhook and save the result in the database
@@ -44,6 +144,7 @@ def ingestion_process(transaction_type , json_content):
     5. sending context to live agent if it's neccessary
     
     """
+
     with transaction.atomic():
         telegram_object = TelegramMessage.objects.create(transaction_type=transaction_type , json_content = json_content) # True means receving (False is for sending)
         # print('telegram object has been created' , telegram_object)
@@ -108,6 +209,7 @@ def message_operation( message):
 
 
 def message_sender(conversation:Conversation,content,is_agent):
+    print(message_sender.__name__)
     message = Message.objects.create(
             conversation=conversation,
             content=content
@@ -130,6 +232,7 @@ def message_sender(conversation:Conversation,content,is_agent):
 
 
 def fetch_message_history(instance:Message):
+    print(fetch_message_history.__name__)
     return list(
         (
         instance.conversation.messages
@@ -231,6 +334,8 @@ def process_user_message(instance:Message):
 
     result = retreival_instance.message_categorizer(user_prompt)
 
+    print('result: ',result)
+
 
     if result in [0,1]:
         # Enough context / context not required to answer
@@ -289,7 +394,7 @@ def process_user_message(instance:Message):
 
 
 
-    elif result == 4:
+    elif result in [3]:
         # send and aswer which you can not respond to this matter
         message_sender(
                 conversation=instance.conversation,
@@ -307,6 +412,7 @@ def creating_text_content_object(content:str):
 
 
 def creating_document_source(model_object):
+    print(creating_document_source.__name__)
     content_type_obj = ContentType.objects.get_for_model(model_object.__class__)
 
     doc_source_obj = DocumentSource.objects.create(
@@ -335,8 +441,7 @@ def creating_document_object(document_source, caption=None,user_message=None,tel
 
     
 
-
-def process_telegram_object(telegram_object:TelegramMessage):
+def _process_telegram_object(telegram_object:TelegramMessage):
 
     # check if it has `reply_to_message` use it for responsing to a specific question
     # check if the message is for data storage or it's just a context for this specific conversation (this part probably requires an agent for detecting this, it's not that much hard)

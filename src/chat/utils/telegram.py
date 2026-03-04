@@ -65,25 +65,24 @@ def document_markup_for_telegram(document_id:int):
 
 def telegram_message_parser(json_data_dict:dict):
 
-
-
     parsed_data = {'metadata':{} , 'data':{}}
     message = json_data_dict.get('message',None)
+    callback_query = json_data_dict.get('callback_query',None)
+
     if message:
         # print('message data: ',message)
         message_keys = message.keys()
-        print('message keys: ', message_keys)
-        
-        # Define default variables
-        user_message_id = None
+        # print('message keys: ', message_keys)
 
         parsed_data['metadata']['chat_id'] = message.get('from',{}).get('id')
+        parsed_data['type'] = "new" # new | reply | command
+
+        if 'reply_to_message' in message_keys:
+            parsed_data['metadata']['message_id'] = message['reply_to_message']['message_id']
+            parsed_data['type'] = "reply" # new | reply | command 
 
         if 'caption' in message_keys :
             parsed_data['metadata']['caption'] = message.get('caption')
-
-        if 'reply_to_message' in message_keys :
-            parsed_data['metadata']['message_id'] = message['reply_to_message']['message_id']
 
         if 'text' in message_keys :
             parsed_data['data']['text'] = message.get('text')
@@ -95,18 +94,21 @@ def telegram_message_parser(json_data_dict:dict):
             parsed_data['data']['voice'] = message.get('voice')
 
         if 'entities' in message_keys:
+            parsed_data['type'] = "entities"
             parsed_data['data']['entities'] = message.get('entities')
 
-    callback_query = json_data_dict.get('callback_query',None)
     
     if callback_query:
+        parsed_data['type'] = "button"
         parsed_data['metadata']['chat_id'] = callback_query.get('from',{}).get('id')
     # Callback Query
         document_id = json_data_dict.get('callback_query',None).get('data',{})
         if document_id:
                 parsed_data['data']['del_document_id'] = document_id
 
+    {'type' :'new|reply|entities|button','metadata': {'chat_id': 120358726}, 'data': {'text': 'Farzam is a good boy'}}
 
+    
     {'update_id': 472344065, 'message': {'message_id': 221, 'from': {'id': 120358726, 'is_bot': False, 'first_name': 'F', 'username': 'Farzam91', 'language_code': 'en'}, 'chat': {'id': 120358726, 'first_name': 'F', 'username': 'Farzam91', 'type': 'private'}, 'date': 1771890593, 'text': 'This is /com1 this is /com2', 'entities': [{'offset': 8, 'length': 5, 'type': 'bot_command'}, {'offset': 22, 'length': 5, 'type': 'bot_command'}]}}
 
     return parsed_data
