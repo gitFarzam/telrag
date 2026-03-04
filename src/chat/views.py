@@ -12,7 +12,7 @@ import json
 from django.http import JsonResponse
 from django.core.exceptions import ValidationError
 from django.views.decorators.csrf import csrf_exempt
-from .services import message_sender, process_telegram_object,ingestion_process,process_user_message,regex_for_get_verification_code
+from .services import message_sender, telegram_message_processor,ingestion_process,process_user_message,regex_for_get_verification_code
 from django.conf import settings
 import hmac
 from .utils.telegram import send_message
@@ -83,7 +83,7 @@ class ChatSendMessageView(UpdateView):
 @csrf_exempt
 
 def telegram_webhook(request):
-    
+    print(telegram_webhook.__name__)
     if not request.body:
         error = "Request body is required"
         print(error)
@@ -104,7 +104,7 @@ def telegram_webhook(request):
 
     try:
         data = json.loads(request.body)
-        print(f"**********\n{data}\n*************")
+        # print(f"**********\n{data}\n*************")
     except json.JSONDecodeError:
         return JsonResponse(
             {"error": "Invalid JSON"},
@@ -139,12 +139,12 @@ def telegram_webhook(request):
                 print("-> Regex for detecting verificatin code")
                 regex_for_get_verification_code(data,from_id)
     
-    try: 
-        data = json.loads(request.body.decode("utf-8"))
-        result = ingestion_process(transaction_type=True , json_content = data)
-        return JsonResponse({"result": result},status=200)
+    # try: 
+    data = json.loads(request.body.decode("utf-8"))
+    result = telegram_message_processor(transaction_type=True , json_content = data)
+    return JsonResponse({"result": result},status=200)
 
-    except Exception as e:
-            print(f'Error in ingestion process: {e}')
-            return JsonResponse({"result": 'ok'} , status=200)
+    # except Exception as e:
+    #         print(f'Error in ingestion process: {e}')
+    #         return JsonResponse({"result": 'ok'} , status=200)
 
