@@ -36,7 +36,7 @@ def similarity_score(input_embedding : np , similar_embeddings : List[Embedding]
 def telegram_message_processor(transaction_type , json_content):
     print(telegram_message_processor.__name__)
     parsed_data = telegram_message_parser(json_content)
-
+    print(parsed_data)
     message_type = parsed_data['type']
     metadata = parsed_data['metadata']
     message_data = parsed_data['data']
@@ -61,13 +61,22 @@ def telegram_message_processor(transaction_type , json_content):
 
         pass
     elif message_type == 'entities':
-
-        tg_chatid , created = TelegramChatID.objects.get_or_create(chat_id=chat_id)
-        entities_handling(message_data,tg_chatid,chat_id)
+        # getting document in normal mode, is for all docs, in demo mode is just for a specific hat
+        result = entities_handling(message_data,chat_id)
+        if result:
+            print('Document has been sent to you in telegram!')
 
     elif message_type == 'button':
         # Deleting documents button
-        pass
+        del_document_id = message_data.get('del_document_id')
+        obj = Document.objects.filter(pk=del_document_id).first()
+        
+        if obj:
+            obj_pk = obj.pk
+            obj.delete()
+            send_message(chat_id=chat_id,text=f"Document {obj_pk} has been deleted: ",command=True)
+        else:
+            send_message(chat_id=chat_id,text=f"Document does not exist!",command=True)
 
 
 
@@ -330,34 +339,48 @@ def ask_user_telegram_chatid(conversation:Conversation,code):
 
 
 
-def entities_handling(message_data,tg_chatid:TelegramChatID,chat_id):
-
+def entities_handling(message_data,chat_id):
+    print(entities_handling.__name__)
     for entity in message_data['entities']:
         if entity['type'] == 'bot_command':
             command = message_data['text'][entity['offset']:entity['length']]
-            if command == '/verify':
+            if settings.DEMO:
                 # get chat id and sending message to user in telegram and asking for verification
+                tg_chatid , created = TelegramChatID.objects.get_or_create(chat_id=chat_id)
+
+                if command == '/verify':
+                    print('Chat_id: ', chat_id)
+
+                    # now using chat check if user is verified or no
+                    is_verified = tg_chatid.is_verified
+
+                    if is_verified:
+                        send_message(chat_id,text="You are already verified!",command=True)
+                    else:
+                        print('This command is for verification')
+                        send_message(chat_id,text="Please send the 4 digit code in the chat",command=True)
+                    return True
                 
-                print('Chat_id: ', chat_id)
+                elif command == '/getdocs':
+                    docs = fetch_conversation_documents(instance=tg_chatid.conversation)
+                    print(docs)
 
-                # now using chat check if user is verified or no
-                is_verified = tg_chatid.is_verified
+                    for i,doc in enumerate(docs):
+                        text = f"<strong>Document {str(i)}:</strong>\nunique_id: <code>{doc.pk}</code> {fetch_content_from_document(doc)}" 
+                        send_message(chat_id=chat_id,text=text , document_id=doc.pk,command=True)
+                    return True
+            else:
+                if command == '/verify':
+                    send_message(settings.TELEGRAM_DEFAULT_CHAT_ID,text="No Verification is Required!",command=True)
+                    return True
+                
+                elif command =="/getdocs":
+                    docs = Document.objects.all()
+                    for i,doc in enumerate(docs):
+                        text = f"<strong>Document {str(i)}:</strong>\nunique_id: <code>{doc.pk}</code> {fetch_content_from_document(doc)}" 
+                        return send_message(chat_id=chat_id,text=text , document_id=doc.pk,command=True)          
 
-                if is_verified:
-                    send_message(chat_id,text="You are already verified!")
-                else:
-                    print('This command is for verification')
-                    send_message(chat_id,text="Please send the 4 digit code in the chat")
-            elif command == '/getdocs':
-                docs = fetch_conversation_documents(instance=tg_chatid.conversation)
-                print(docs)
-
-                for i,doc in enumerate(docs):
-                    text = f"<strong>Document {str(i)}:</strong>\nunique_id: <code>{doc.pk}</code> {fetch_content_from_document(doc)}" 
-                    send_message(chat_id=chat_id,text=text , document_id=doc.pk)
-
-
-
+                    return True
 def process_user_message(instance:Message):
 
     content = instance.content
