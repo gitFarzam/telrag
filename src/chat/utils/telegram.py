@@ -26,7 +26,7 @@ def set_telegram_webhook_secret():
 
 # set_telegram_webhook_secret()
 
-def send_message(chat_id=120358726, text=None,document_id=None,reply_to_message_id=None):
+def send_message(chat_id=120358726, text=None,document_id=None,reply_to_message_id=None,command=False):
     url = f"https://api.telegram.org/bot{telegram_api_key}/sendMessage"
 
     reply_markup = {}
@@ -44,13 +44,17 @@ def send_message(chat_id=120358726, text=None,document_id=None,reply_to_message_
         payload["reply_to_message_id"] = reply_to_message_id
 
     response = requests.post(url, json=payload)
-    telegram_message_id = response.json()['result']['message_id']
-    """
-        {'ok': True, 'result': {'message_id': 34, 'from': {'id': 8176918185, 'is_bot': True, 'first_name': 'telrag', 'username': 'telrag_bot'}, 'chat': {'id': 120358726, 'first_name': 'F', 'username': 'Farzam91', 'type': 'private'}, 'date': 1770237370, 'text': 'Hey! Somebody have a question:\nU'}}
-    """
 
-    return telegram_message_id
+    if not command:
+        # when there is a command, telegram doesnt send back a message id, so I can not get anything!
+        telegram_message_id = response.json()['result']['message_id']
+        """
+            {'ok': True, 'result': {'message_id': 34, 'from': {'id': 8176918185, 'is_bot': True, 'first_name': 'telrag', 'username': 'telrag_bot'}, 'chat': {'id': 120358726, 'first_name': 'F', 'username': 'Farzam91', 'type': 'private'}, 'date': 1770237370, 'text': 'Hey! Somebody have a question:\nU'}}
+        """
 
+        return telegram_message_id
+    
+    return None
 
 
 def document_markup_for_telegram(document_id:int):
@@ -104,6 +108,7 @@ def telegram_message_parser(json_data_dict:dict):
     if callback_query:
         parsed_data['type'] = "button"
         parsed_data['metadata']['chat_id'] = callback_query.get('from',{}).get('id')
+        parsed_data['metadata']['message_id'] = callback_query.get('message_id',{})
     # Callback Query
         document_id = json_data_dict.get('callback_query',None).get('data',{})
         if document_id:

@@ -174,6 +174,7 @@ TELEGRAM_ALLOWED_USER_IDS = allowed_telegram_ids()
 
 # https://api.telegram.org/bot<YOUR_TOKEN>/setWebhook?url=https://yourserver.com/hook&secret_token=YOUR_SECRET_STRING
 
+TELEGRAM_DEFAULT_CHAT_ID=120358726
 
 # Demo Settings
 DEMO = False
