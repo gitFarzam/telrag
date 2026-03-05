@@ -40,19 +40,24 @@ def telegram_message_processor(transaction_type , json_content):
     message_type = parsed_data['type']
     metadata = parsed_data['metadata']
     message_data = parsed_data['data']
+    message_id = parsed_data['metadata']['message_id']
 
     if message_type == 'new':
         # Sending to ingestion process - BG
         # Return back the result to telegram
-        doc_id = ingestion_process(transaction_type,json_content,is_new=True)
-        if doc_id:
-            send_message(text=f"Document has been created, ID: {doc_id}")
+        document_object = ingestion_process(transaction_type,json_content,is_new=True)
+        if document_object:
+            send_message(text=f"Document has been created, ID: {document_object.pk}",reply_to_message_id=message_id)
         else:
-            send_message(text=f"Creating Document was unsuccessfull")
+            send_message(text=f"Creating Document was unsuccessfull",reply_to_message_id=message_id)
     elif message_type == 'reply':
-        # Sending to AI for response
-        # Sending to ingestion process - BG
-        # Return back the result to telegram
+        document_object = ingestion_process(transaction_type,json_content,is_new=False)
+        if document_object:
+            send_message(text=f"Document has been created, ID: {document_object.pk}",reply_to_message_id=message_id)
+            agent_message_sender(document_object.user_message,context=fetch_content_from_document(document_object))
+        else:
+            send_message(text=f"Creating Document was unsuccessfull",reply_to_message_id=message_id)
+
         pass
     elif message_type == 'entities':
         # /verify /getdocs
@@ -64,7 +69,7 @@ def telegram_message_processor(transaction_type , json_content):
 
 
 
-def ingestion_process(transaction_type , json_content,is_new):
+def ingestion_process(transaction_type , json_content,is_new) -> Document:
     with transaction.atomic():
         telegram_object = TelegramMessage.objects.create(transaction_type=transaction_type , json_content = json_content) # True means receving (False is for sending)
         # print('telegram object has been created' , telegram_object)
@@ -79,7 +84,7 @@ def ingestion_process(transaction_type , json_content,is_new):
             creating_embedding_objects(chunk_objects)
             # print('Embeddings has been created' , embedding_objects)
 
-            return document_object.pk
+            return document_object
         else:
             return False
     
@@ -97,8 +102,8 @@ def process_telegram_object(telegram_object:TelegramMessage,is_new=True):
         if i == 'caption':
             doc_object.caption = metadata[i]
             doc_object.save()
-        if is_new:
-            if i == 'message_id':
+        if not is_new:
+            if i == 'reply_message_id':
                 user_message = Message.objects.filter(tg_id = metadata[i]).first()
                 if user_message:
                     doc_object.user_message = user_message
@@ -246,6 +251,25 @@ def fetch_message_history(instance:Message):
         .values("role", "content")
     )
     )
+
+def agent_message_sender(user_message:Message,context):
+    print('Sending Context to AI to answer to the question')
+    message_history = fetch_message_history(user_message)
+
+    print('-- user question --' , user_message.content)
+    print('-- context --' , context)
+
+    ragtoolkit = RAGToolKit()
+    new_messages = {'role':'user','content':f"{user_message.content} \n\n available information:{context}"}
+
+    response = ragtoolkit.openai_text_generator(message_history,new_messages)
+
+    message_sender(
+        conversation=user_message.conversation,
+        content=response,
+        is_agent=True
+    )
+
 
 def fetch_conversation_documents(instance:Conversation):
     all_messages: QuerySet[Message] = instance.messages.all()
@@ -542,11 +566,6 @@ def _process_telegram_object(telegram_object:TelegramMessage):
             return doc_object
 
     
-
-
-
-    
-
 
 def transcriber(document_object:Document):
     rag_toolkit = RAGToolKit()

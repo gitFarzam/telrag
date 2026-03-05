@@ -26,7 +26,7 @@ def set_telegram_webhook_secret():
 
 # set_telegram_webhook_secret()
 
-def send_message(chat_id=120358726, text=None,document_id=None):
+def send_message(chat_id=120358726, text=None,document_id=None,reply_to_message_id=None):
     url = f"https://api.telegram.org/bot{telegram_api_key}/sendMessage"
 
     reply_markup = {}
@@ -40,6 +40,8 @@ def send_message(chat_id=120358726, text=None,document_id=None):
         "parse_mode": "HTML",
         "reply_markup" : reply_markup,
     }
+    if reply_to_message_id:
+        payload["reply_to_message_id"] = reply_to_message_id
 
     response = requests.post(url, json=payload)
     telegram_message_id = response.json()['result']['message_id']
@@ -75,10 +77,11 @@ def telegram_message_parser(json_data_dict:dict):
         # print('message keys: ', message_keys)
 
         parsed_data['metadata']['chat_id'] = message.get('from',{}).get('id')
+        parsed_data['metadata']['message_id'] = message.get('message_id',{})
         parsed_data['type'] = "new" # new | reply | command
 
         if 'reply_to_message' in message_keys:
-            parsed_data['metadata']['message_id'] = message['reply_to_message']['message_id']
+            parsed_data['metadata']['reply_message_id'] = message['reply_to_message']['message_id']
             parsed_data['type'] = "reply" # new | reply | command 
 
         if 'caption' in message_keys :
