@@ -49,7 +49,7 @@ class Document(models.Model):
     document_source = models.ForeignKey(DocumentSource , on_delete=models.CASCADE,null=True)
     user_message = models.ForeignKey(Message , on_delete=models.PROTECT , null=True , blank=True, related_name='documents')
     telegram_message = models.ForeignKey(TelegramMessage,on_delete=models.PROTECT,null=True)
-    
+
 
 class Chunk(models.Model):
     chunk_id = models.PositiveSmallIntegerField()

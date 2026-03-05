@@ -41,6 +41,7 @@ def telegram_message_processor(transaction_type , json_content):
     metadata = parsed_data['metadata']
     message_data = parsed_data['data']
     message_id = parsed_data['metadata']['message_id']
+    chat_id = metadata['chat_id']
 
     if message_type == 'new':
         # Sending to ingestion process - BG
@@ -60,8 +61,9 @@ def telegram_message_processor(transaction_type , json_content):
 
         pass
     elif message_type == 'entities':
-        # /verify /getdocs
-        pass
+
+        tg_chatid , created = TelegramChatID.objects.get_or_create(chat_id=chat_id)
+        entities_handling(message_data,tg_chatid,chat_id)
 
     elif message_type == 'button':
         # Deleting documents button
@@ -102,9 +104,9 @@ def process_telegram_object(telegram_object:TelegramMessage,is_new=True):
         if i == 'caption':
             doc_object.caption = metadata[i]
             doc_object.save()
-        if not is_new:
+        if not is_new: # it means that it is a reply message from telegram
             if i == 'reply_message_id':
-                user_message = Message.objects.filter(tg_id = metadata[i]).first()
+                user_message = Message.objects.filter(tg_id = metadata[i]).first() # it will get the message which is related to the original message which contains user question (the question we actually are going to answer)
                 if user_message:
                     doc_object.user_message = user_message
                     doc_object.save()
@@ -325,6 +327,35 @@ def ask_user_telegram_chatid(conversation:Conversation,code):
     )
 
     return True
+
+
+
+def entities_handling(message_data,tg_chatid:TelegramChatID,chat_id):
+
+    for entity in message_data['entities']:
+        if entity['type'] == 'bot_command':
+            command = message_data['text'][entity['offset']:entity['length']]
+            if command == '/verify':
+                # get chat id and sending message to user in telegram and asking for verification
+                
+                print('Chat_id: ', chat_id)
+
+                # now using chat check if user is verified or no
+                is_verified = tg_chatid.is_verified
+
+                if is_verified:
+                    send_message(chat_id,text="You are already verified!")
+                else:
+                    print('This command is for verification')
+                    send_message(chat_id,text="Please send the 4 digit code in the chat")
+            elif command == '/getdocs':
+                docs = fetch_conversation_documents(instance=tg_chatid.conversation)
+                print(docs)
+
+                for i,doc in enumerate(docs):
+                    text = f"<strong>Document {str(i)}:</strong>\nunique_id: <code>{doc.pk}</code> {fetch_content_from_document(doc)}" 
+                    send_message(chat_id=chat_id,text=text , document_id=doc.pk)
+
 
 
 def process_user_message(instance:Message):

@@ -147,4 +147,3 @@ def telegram_webhook(request):
     # except Exception as e:
     #         print(f'Error in ingestion process: {e}')
     #         return JsonResponse({"result": 'ok'} , status=200)
-
