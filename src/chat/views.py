@@ -1,5 +1,5 @@
 from django.shortcuts import render, redirect
-from .models import Conversation,TelegramChatID
+from .models import Conversation,TelegramChatID,TelegramMessage
 from django.views.generic import DetailView, UpdateView,TemplateView
 from core.models import User
 from django.http import HttpResponse
@@ -17,6 +17,7 @@ from django.conf import settings
 import hmac
 from .utils.telegram import send_message
 from django.db import transaction
+import time
 
 class HomeView(TemplateView):
     template_name = 'home.html'
@@ -84,6 +85,10 @@ class ChatSendMessageView(UpdateView):
 
 def telegram_webhook(request):
     print(telegram_webhook.__name__)
+
+    sending_permission = True
+
+
     if not request.body:
         error = "Request body is required"
         print(error)
@@ -100,6 +105,7 @@ def telegram_webhook(request):
         if not hmac.compare_digest(secret, token):
             print("Request im webhook is not from telegram!")
             return JsonResponse({"error": "Forbidden"}, status=200)
+
 
 
     try:
@@ -121,6 +127,9 @@ def telegram_webhook(request):
             )
     
 
+
+
+
     # 2) Restrict which Telegram users can use the bot (e.g. admins only)
     
     allowed_ids = settings.TELEGRAM_ALLOWED_USER_IDS 
@@ -138,8 +147,31 @@ def telegram_webhook(request):
             if from_id is None or from_id not in allowed_ids:
                 print("-> Regex for detecting verificatin code")
                 regex_for_get_verification_code(data,from_id)
+                return JsonResponse({"result": "ok"},status=200)
+            
+            last_message = TelegramMessage.objects.filter(chat_id=from_id).last()
+            if last_message:
+                last_time = last_message.created_at.timestamp()
+                now_time = time.time()
+                if now_time - last_time < 3:
+                    send_message(text="Your message has been rejected, please send it again 3 seconds later..")
+                    sending_permission = False
+                    return JsonResponse({"result": "ok"},status=200)
+    
+
+    else:
+        # Restrict time
+        last_message = TelegramMessage.objects.last()
+        if last_message:
+            last_time = last_message.created_at.timestamp()
+            now_time = time.time()
+            if now_time - last_time < 3:
+                send_message(text="Your message has been rejected, please send it again 3 seconds later..")
+                sending_permission = False
+                return JsonResponse({"result": "ok"},status=200)
     
     # try: 
+
     data = json.loads(request.body.decode("utf-8"))
     result = telegram_message_processor(transaction_type=True , json_content = data)
     return JsonResponse({"result": result},status=200)

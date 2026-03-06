@@ -177,4 +177,4 @@ TELEGRAM_ALLOWED_USER_IDS = allowed_telegram_ids()
 TELEGRAM_DEFAULT_CHAT_ID=120358726
 
 # Demo Settings
-DEMO = False
+DEMO = True

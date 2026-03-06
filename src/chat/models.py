@@ -26,6 +26,8 @@ class Message(models.Model):
 class TelegramMessage(models.Model):
     transaction_type = models.BooleanField(default=False) # Send -> False , Receive -> True
     json_content = models.JSONField()
+    created_at = models.DateTimeField(auto_now_add=True,null=True)
+    chat_id = models.PositiveIntegerField(default=0)
 
     def data(self):
         return self.json_content
@@ -47,7 +49,7 @@ class AudioContent(models.Model):
 class Document(models.Model):
     caption = models.TextField(null=True , blank=True)
     document_source = models.ForeignKey(DocumentSource , on_delete=models.CASCADE,null=True)
-    user_message = models.ForeignKey(Message , on_delete=models.PROTECT , null=True , blank=True, related_name='documents')
+    user_message = models.ForeignKey(Message , on_delete=models.CASCADE , null=True , blank=True, related_name='documents')
     telegram_message = models.ForeignKey(TelegramMessage,on_delete=models.PROTECT,null=True)
 
 
