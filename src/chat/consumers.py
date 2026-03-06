@@ -1,7 +1,7 @@
 from .models import Conversation
 from channels.generic.websocket import WebsocketConsumer
 from asgiref.sync import async_to_sync
-
+from django.db.models import ProtectedError
 class ChatConsumer(WebsocketConsumer):
     def connect(self):
         self.user = self.scope["user"]
@@ -20,9 +20,13 @@ class ChatConsumer(WebsocketConsumer):
             self.group_name,
             self.channel_name,
         )
-        conversation_obj = Conversation.objects.get(pk=int(self.conversation_id))
-        print(f"Deleting conversation object: {conversation_obj}")
-        conversation_obj.delete()
+        try:
+            conversation_obj = Conversation.objects.filter(pk=int(self.conversation_id)).first()
+            if conversation_obj:
+                print(f"Deleting conversation object: {conversation_obj}")
+                conversation_obj.delete()
+        except ProtectedError as e:
+            print(e)
 
 
     def message_handler(self, event):

@@ -46,13 +46,13 @@ def telegram_message_processor(transaction_type , json_content):
     if message_type == 'new':
         # Sending to ingestion process - BG
         # Return back the result to telegram
-        document_object = ingestion_process(transaction_type,json_content,is_new=True)
+        document_object = ingestion_process(transaction_type,json_content,chat_id,is_new=True)
         if document_object:
             send_message(text=f"Document has been created, ID: {document_object.pk}",reply_to_message_id=message_id)
         else:
             send_message(text=f"Creating Document was unsuccessfull",reply_to_message_id=message_id)
     elif message_type == 'reply':
-        document_object = ingestion_process(transaction_type,json_content,is_new=False)
+        document_object = ingestion_process(transaction_type,json_content,chat_id,is_new=False)
         if document_object:
             send_message(text=f"Document has been created, ID: {document_object.pk}",reply_to_message_id=message_id)
             agent_message_sender(document_object.user_message,context=fetch_content_from_document(document_object))
@@ -80,10 +80,13 @@ def telegram_message_processor(transaction_type , json_content):
 
 
 
-def ingestion_process(transaction_type , json_content,is_new) -> Document:
+def ingestion_process(transaction_type , json_content,chat_id,is_new) -> Document:
     with transaction.atomic():
         telegram_object = TelegramMessage.objects.create(transaction_type=transaction_type , json_content = json_content) # True means receving (False is for sending)
         # print('telegram object has been created' , telegram_object)
+
+        telegram_object.chat_id = chat_id
+        telegram_object.save()
 
         document_object = process_telegram_object(telegram_object,is_new)
         # print('document object has been created', document_object)
@@ -375,10 +378,10 @@ def entities_handling(message_data,chat_id):
                     return True
                 
                 elif command =="/getdocs":
-                    docs = Document.objects.all()
+                    docs = Document.objects.all()[:10]
                     for i,doc in enumerate(docs):
                         text = f"<strong>Document {str(i)}:</strong>\nunique_id: <code>{doc.pk}</code> {fetch_content_from_document(doc)}" 
-                        return send_message(chat_id=chat_id,text=text , document_id=doc.pk,command=True)          
+                        send_message(chat_id=chat_id,text=text , document_id=doc.pk,command=True)          
 
                     return True
 def process_user_message(instance:Message):
@@ -429,9 +432,8 @@ def process_user_message(instance:Message):
                 is_agent=True
                 )
         
-    elif result in [2]:
+    elif result in [2,3]:
         # Sending to telegram
-
         # Temporary message 1 : waiting for sending message to the user
         message_sender(
                 conversation=instance.conversation,
@@ -472,7 +474,7 @@ def process_user_message(instance:Message):
 
 
 
-    elif result in [3]:
+    elif result in [4]:
         # send and aswer which you can not respond to this matter
         message_sender(
                 conversation=instance.conversation,
@@ -516,108 +518,6 @@ def creating_document_object(document_source, caption=None,user_message=None,tel
     doc_object.save()
 
     return doc_object
-
-    
-
-def _process_telegram_object(telegram_object:TelegramMessage):
-
-    # check if it has `reply_to_message` use it for responsing to a specific question
-    # check if the message is for data storage or it's just a context for this specific conversation (this part probably requires an agent for detecting this, it's not that much hard)
-    # if it does not have it's for general rag
-
-    doc_object = Document.objects.create(telegram_message=telegram_object)
-    
-    data = telegram_object.data()
-
-    print(f"Data from telegram object: {data.keys()}")
-    parsed_data = telegram_message_parser(data)
-    print('Parsed data: ',parsed_data)
-
-    metadata = parsed_data['metadata']
-    message_data = parsed_data['data']
-    entities = message_data.get('entities')
-    del_document_id = message_data.get('del_document_id')
-    print('Del Doc ID: ',del_document_id)
-
-    chat_id = metadata['chat_id']
-    print('Chat_id: ', chat_id)
-    tg_chatid = TelegramChatID(chat_id=chat_id)
-    
-
-    if entities:
-        print('entities: ',message_data['entities'])
-        for entity in message_data['entities']:
-            if entity['type'] == 'bot_command':
-                command = message_data['text'][entity['offset']:entity['length']]
-                if command == '/verify':
-                    # get chat id and sending message to user in telegram and asking for verification
-                    chat_id = metadata['chat_id']
-                    print('Chat_id: ', chat_id)
-
-                    # now using chat check if user is verified or no
-                    tg_chatid = TelegramChatID(chat_id=chat_id)
-                    is_verified = tg_chatid.is_verified
-
-                    if is_verified:
-                        send_message(chat_id,text="You are already verified!")
-                    else:
-                        print('This command is for verification')
-                        send_message(chat_id,text="Please send the 4 digit code in the chat")
-                elif command == '/getdocs':
-                    tg_chatid = TelegramChatID.objects.get(chat_id=chat_id)
-                    docs = fetch_conversation_documents(instance=tg_chatid.conversation)
-                    print(docs)
-
-                    for i,doc in enumerate(docs):
-                        text = f"<strong>Document {str(i)}:</strong>\nunique_id: <code>{doc.pk}</code> {fetch_content_from_document(doc)}" 
-                        send_message(chat_id=chat_id,text=text , document_id=doc.pk)
-    if del_document_id:
-        print('del_document_id: ',del_document_id)
-        obj = Document.objects.get(pk=del_document_id)
-        print(f"Object for deletion: {obj}")
-        if obj:
-            response = obj.delete()
-            send_message(chat_id=chat_id,text=f"Document has been deleted: {response}")
-
-
-    for i in metadata:
-        if i == 'caption':
-            doc_object.caption = metadata[i]
-            doc_object.save()
-        if i == 'message_id':
-            user_message = Message.objects.filter(tg_id = metadata[i]).first()
-            if user_message:
-                doc_object.user_message = user_message
-                doc_object.save()
-            else:
-                print('This telegram message is a reply to a message, but the message is not in the database, shows that it might be replying to a telegram client message or any other message')
-
-    for data in message_data:
-        if  data == 'text':
-            model_object = creating_text_content_object(content = message_data[data])
-            doc_source_obj = creating_document_source(model_object)
-            doc_object.document_source = doc_source_obj
-            doc_object.save()
-            return doc_object
-
-        elif data == 'voice':
-            """
-            sample of parsed data:
-
-            {'metadata': {}, 'data': {'voice': {'duration': 8, 'mime_type': 'audio/ogg', 'file_id': 'AwACAgQAAxkBAAOgaZe-d0yP3eul-peB6j1HGdD3pssAAlsaAAKYusFQlwt-Nvvor0M6BA', 'file_unique_id': 'AgADWxoAApi6wVA', 'file_size': 33935}}}
-            
-            """
-            # download using telegram
-            # (note: if its not large use memory, if not use streaming.)
-            print('data: ',message_data['voice']['file_id'])
-            file_data = telegram_downloader(message_data['voice']['file_id'])
-            django_content_file = ContentFile(file_data)
-            audio_obj = AudioContent()
-            audio_obj.file.save(name=f"name.oga",content=django_content_file)
-            doc_source_obj = creating_document_source(audio_obj)
-            doc_object.document_source = doc_source_obj
-            doc_object.save()
-            return doc_object
 
     
 
