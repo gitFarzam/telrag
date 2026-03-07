@@ -16,6 +16,7 @@ import json
 import numpy as np
 import time
 from django.http import JsonResponse
+from celery import shared_task
 
 def similarity_search(input_text,num):
     """
@@ -33,52 +34,10 @@ def similarity_score(input_embedding : np , similar_embeddings : List[Embedding]
     embeddings = np.array([embedding.vector for embedding in similar_embeddings])
     return np.dot(input_embedding.reshape(1,384),embeddings.T)
 
-def telegram_message_processor(transaction_type , json_content):
-    print(telegram_message_processor.__name__)
-    parsed_data = telegram_message_parser(json_content)
-    print(parsed_data)
-    message_type = parsed_data['type']
-    metadata = parsed_data['metadata']
-    message_data = parsed_data['data']
-    message_id = parsed_data['metadata']['message_id']
-    chat_id = metadata['chat_id']
-
-    if message_type == 'new':
-        # Sending to ingestion process - BG
-        # Return back the result to telegram
-        document_object = ingestion_process(transaction_type,json_content,chat_id,is_new=True)
-        if document_object:
-            send_message(text=f"Document has been created, ID: {document_object.pk}",reply_to_message_id=message_id)
-        else:
-            send_message(text=f"Creating Document was unsuccessfull",reply_to_message_id=message_id)
-    elif message_type == 'reply':
-        document_object = ingestion_process(transaction_type,json_content,chat_id,is_new=False)
-        if document_object:
-            send_message(text=f"Document has been created, ID: {document_object.pk}",reply_to_message_id=message_id)
-            agent_message_sender(document_object.user_message,context=fetch_content_from_document(document_object))
-        else:
-            send_message(text=f"Creating Document was unsuccessfull",reply_to_message_id=message_id)
-
-        pass
-    elif message_type == 'entities':
-        # getting document in normal mode, is for all docs, in demo mode is just for a specific hat
-        result = entities_handling(message_data,chat_id)
-        if result:
-            print('Document has been sent to you in telegram!')
-
-    elif message_type == 'button':
-        # Deleting documents button
-        del_document_id = message_data.get('del_document_id')
-        obj = Document.objects.filter(pk=del_document_id).first()
-        
-        if obj:
-            obj_pk = obj.pk
-            obj.delete()
-            send_message(chat_id=chat_id,text=f"Document {obj_pk} has been deleted: ",command=True)
-        else:
-            send_message(chat_id=chat_id,text=f"Document does not exist!",command=True)
 
 
+
+    
 
 def ingestion_process(transaction_type , json_content,chat_id,is_new) -> Document:
     with transaction.atomic():
@@ -242,6 +201,8 @@ def message_sender(conversation:Conversation,content,is_agent):
     oob_html = message_operation(message)
 
     channel_layer = get_channel_layer()
+
+    print("Sending to channel layer group")
     async_to_sync(channel_layer.group_send)(
         f"chatgroup_{conversation.pk}",
         {"type": "message_handler", "html_response": oob_html},

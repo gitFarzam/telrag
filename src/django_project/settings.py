@@ -177,4 +177,7 @@ TELEGRAM_ALLOWED_USER_IDS = allowed_telegram_ids()
 TELEGRAM_DEFAULT_CHAT_ID=120358726
 
 # Demo Settings
-DEMO = True
+DEMO = False
+
+# Celery
+CELERY_BROKER_URL = "redis://localhost:6379/1"
