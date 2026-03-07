@@ -81,3 +81,11 @@ uploading in github
 Submit webhook
 Submit secret (posting through set_telegram_webhook_secret function)
 -> note: probably just the set_telegram_webhook_secret functions do both
+
+-> time for sending messages
+-> in demo , time should be by detecting the telegram messages from chat id, so a chat id should be placed as a new field in the model
+-> later if there is a background task it should not process
+
+
+## Document
+-> filter for documents
