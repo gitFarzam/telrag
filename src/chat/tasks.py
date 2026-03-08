@@ -2,6 +2,7 @@ from celery import shared_task
 from .services import ingestion_process,fetch_content_from_document,agent_message_sender,entities_handling
 from .utils.telegram import send_message
 from .models import Document
+from asgiref.sync import async_to_sync
 
 @shared_task
 def task_new_message(transaction_type,json_content,chat_id,message_id):

@@ -79,9 +79,15 @@ ASGI_APPLICATION = 'django_project.asgi.application'
 
 
 CHANNEL_LAYERS = {
-    'default': {
-        'BACKEND': 'channels.layers.InMemoryChannelLayer',
-    }
+    # 'default': {
+    #     'BACKEND': 'channels.layers.InMemoryChannelLayer',
+    # },
+    "default": {
+        "BACKEND": "channels_redis.core.RedisChannelLayer",
+        "CONFIG": {
+            "hosts": [os.getenv("REDIS_URL", "redis://localhost:6379/0")],
+        },
+    },
 }
 
 # Database
