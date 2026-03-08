@@ -202,7 +202,7 @@ def message_sender(conversation:Conversation,content,is_agent):
 
     channel_layer = get_channel_layer()
 
-    print("Sending to channel layer group")
+    print("Sending to 222 channel layer group")
     async_to_sync(channel_layer.group_send)(
         f"chatgroup_{conversation.pk}",
         {"type": "message_handler", "html_response": oob_html},
