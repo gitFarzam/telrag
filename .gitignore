@@ -5,3 +5,4 @@ src_cursor
 __pycache__/
 *.pyc
 db_sqlite3
+/src/voices/
