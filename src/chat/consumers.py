@@ -20,13 +20,13 @@ class ChatConsumer(WebsocketConsumer):
             self.group_name,
             self.channel_name,
         )
-        try:
-            conversation_obj = Conversation.objects.filter(pk=int(self.conversation_id)).first()
-            if conversation_obj:
-                print(f"Deleting conversation object: {conversation_obj}")
-                conversation_obj.delete()
-        except ProtectedError as e:
-            print(e)
+        # try:
+        #     conversation_obj = Conversation.objects.filter(pk=int(self.conversation_id)).first()
+        #     if conversation_obj:
+        #         print(f"Deleting conversation object: {conversation_obj}")
+        #         conversation_obj.delete()
+        # except ProtectedError as e:
+        #     print(e)
 
 
     def message_handler(self, event):
