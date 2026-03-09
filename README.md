@@ -89,3 +89,15 @@ Submit secret (posting through set_telegram_webhook_secret function)
 
 ## Document
 -> filter for documents
+
+## Prmompts:
+
+async inside task: @src/chat/tasks.py:15-22 @src/chat/services.py:230 @src/chat/services.py:206-209  I have a celery task : task_reply_message ,, which contains multiple functions, all of them works , but there is a problem with of them, one of them is agent_message_sender function, inside that there is a function: message_sender , inside message_sender , there is a functinality: @services.py (206-209) this functoinality does not work, I need to keep celery task and I need this functionality which is for sending messsage to a channel layer works, to receive the message live in the front
+
+## UI
+blocking sending new message when there is a process underhood (I have to be notified when celery task is running so while running sending new messages should be blocked, and when is finished it should be open again)
+
+
+## Celery
+a cronjob for deleting conversations after 24h, also check at least is should spend 1 day from creation
+

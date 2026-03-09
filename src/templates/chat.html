@@ -22,6 +22,7 @@
     class="chat-input"
     hx-post="{% url 'chat-send' conversation.pk %}"
     hx-on="htmx:afterRequest: this.reset()"
+    hx-disabled-elt="input, button"
   >
     {% csrf_token %}
     <input
