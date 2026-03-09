@@ -328,10 +328,12 @@ def entities_handling(message_data,chat_id):
                 elif command == '/getdocs':
                     docs = fetch_conversation_documents(instance=tg_chatid.conversation)
                     print(docs)
-
-                    for i,doc in enumerate(docs):
-                        text = f"<strong>Document {str(i)}:</strong>\nunique_id: <code>{doc.pk}</code> {fetch_content_from_document(doc)}" 
-                        send_message(chat_id=chat_id,text=text , document_id=doc.pk,command=True)
+                    if docs:
+                        for i,doc in enumerate(docs):
+                            text = f"<strong>Document {str(i)}:</strong>\nunique_id: <code>{doc.pk}</code> {fetch_content_from_document(doc)}" 
+                            send_message(chat_id=chat_id,text=text , document_id=doc.pk,command=True)
+                    else:
+                        send_message(chat_id=chat_id,text="oOps! no document for this conversation!")
                     return True
             else:
                 if command == '/verify':
@@ -340,10 +342,12 @@ def entities_handling(message_data,chat_id):
                 
                 elif command =="/getdocs":
                     docs = Document.objects.all()[:10]
-                    for i,doc in enumerate(docs):
-                        text = f"<strong>Document {str(i)}:</strong>\nunique_id: <code>{doc.pk}</code> {fetch_content_from_document(doc)}" 
-                        send_message(chat_id=chat_id,text=text , document_id=doc.pk,command=True)          
-
+                    if docs:
+                        for i,doc in enumerate(docs):
+                            text = f"<strong>Document {str(i)}:</strong>\nunique_id: <code>{doc.pk}</code> {fetch_content_from_document(doc)}" 
+                            send_message(chat_id=chat_id,text=text , document_id=doc.pk,command=True)
+                    else:
+                        send_message(chat_id=chat_id,text="oOps! no document!")          
                     return True
 def process_user_message(instance:Message):
 
