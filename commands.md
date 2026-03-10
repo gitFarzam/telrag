@@ -35,3 +35,46 @@ uv run manage.py insert_data 0
 
 ## github
 git clone git@github.com-repo-telrag:gitfarzam/telrag.git
+
+
+
+
+## Docker Commands
+
+building containers
+```shell
+docker compose build
+```
+
+running containers 
+```shell
+docker compose up
+```
+
+running containers in background:
+
+```shell
+docker compose up -d
+```
+
+
+Stop containers
+
+```shell
+docker compose down
+```
+
+View logs
+
+```shell
+docker compose logs -f
+```
+
+Open shell in Django container
+
+```shell
+docker compose exec web bash
+```
+
+
+
