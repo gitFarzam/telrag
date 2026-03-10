@@ -1,6 +1,6 @@
 FROM python:3.12-slim
 
-WORKDIR /app
+WORKDIR /usr/src/app
 
 # install uv
 RUN pip install uv
@@ -11,7 +11,12 @@ COPY pyproject.toml uv.lock ./
 # install dependencies
 RUN uv sync --frozen
 
-# copy project
-COPY project /app
+# copy project (first dot in current dir in local:telrag/, second dot is current fir in container: /use/scr/app)
+COPY . .
 
 ENV PYTHONUNBUFFERED=1
+
+# providing execute permission inside the container (entrypoint.sh requires permission to be executed inside the container)
+RUN chmod +x /usr/src/app/entrypoint.sh
+
+ENTRYPOINT ["/usr/src/app/entrypoint.sh"]
