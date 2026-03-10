@@ -2,6 +2,11 @@
 uv run manage.py createsuperuser
 ```
 
+## UV update lock file
+```shell
+uv lock --upgrade
+```
+
 ## Tests
 
 ```shell
@@ -27,3 +32,6 @@ uv run manage.py test chat.tests.TestRAGToolKit.audio_transcriber
 ```shell
 uv run manage.py insert_data 0
 ```
+
+## github
+git clone git@github.com-repo-telrag:gitfarzam/telrag.git

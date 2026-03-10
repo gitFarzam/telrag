@@ -1,0 +1,39 @@
+version: "3.9"
+
+services:
+
+  postgres:
+    image: pgvector:15
+    container_name: telrag_pgvector
+    restart: always
+    volumes:
+      - telrag-pgvector-volume:/var/lib/postgresql/data
+    env_file:
+      - .env
+    ports:
+      - "5433:5432"
+
+  redis:
+    image: redis:7
+    container_name: telrag_redis
+    restart: always
+    ports:
+      - "6379:6379"
+
+  web:
+    build: ./ # the dir which DockerFile is located
+    container_name: telrag_app
+    restart: always
+    command: daphne -p 8000 django_project.asgi:application
+    volumes:
+      - ./:/app # optional: mounting project to container, so if you need to modify codes no longer is required shut down the container, you can just edit the files in the local host machine and changes will be applied to the container.
+    depends_on:
+      - postgres
+      - redis
+    env_file:
+      - .env
+    expose:
+      - "8006"
+
+volumes:
+  postgres_data:
