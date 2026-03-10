@@ -26,7 +26,7 @@ services:
     volumes:
       - ./:/app # optional: mounting project to container, so if you need to modify codes no longer is required shut down the container, you can just edit the files in the local host machine and changes will be applied to the container.
     depends_on:
-      - postgres
+      - pgvector
       - redis
     env_file:
       - .env
@@ -39,7 +39,7 @@ services:
     command: celery -A config worker -l info
     depends_on:
       - redis
-      - postgres
+      - pgvector
 
 
 volumes:
