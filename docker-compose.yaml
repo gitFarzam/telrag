@@ -35,5 +35,14 @@ services:
     expose:
       - "8006"
 
+
+  celery:
+    build: ./ # the same dir for the app, as celery uses the app for running and installed inside the django app
+    command: celery -A config worker -l info
+    depends_on:
+      - redis
+      - postgres
+
+
 volumes:
   postgres_data:
