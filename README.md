@@ -101,3 +101,10 @@ blocking sending new message when there is a process underhood (I have to be not
 ## Celery
 a cronjob for deleting conversations after 24h, also check at least is should spend 1 day from creation
 
+
+## Docker compose
+
+note that docker compose automatically creates a network, so we have to get the name of it and then connect caddy to it.
+```shell
+<project_name>_default
+```
