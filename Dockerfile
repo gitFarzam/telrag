@@ -16,6 +16,8 @@ COPY . .
 
 ENV PYTHONUNBUFFERED=1
 
-RUN chmod +x /entrypoint.sh
+# providing execute permission inside the container
+RUN chmod +x /usr/src/app/entrypoint.sh
 
-ENTRYPOINT ["/entrypoint.sh"]
+# Set the entrypoint
+ENTRYPOINT ["/usr/src/app/entrypoint.sh"]
