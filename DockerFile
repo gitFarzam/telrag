@@ -15,8 +15,3 @@ RUN uv sync --frozen
 COPY . .
 
 ENV PYTHONUNBUFFERED=1
-
-# place entrypoint outside the app volume so bind mounts don't override it
-RUN cp /usr/src/app/entrypoint.sh /entrypoint.sh && chmod +x /entrypoint.sh
-
-ENTRYPOINT ["/entrypoint.sh"]
