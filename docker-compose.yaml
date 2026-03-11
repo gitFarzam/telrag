@@ -19,12 +19,14 @@ services:
       - "6379:6379"
 
   web:
-    build: . # the dir which DockerFile is located
+    # the dir which DockerFile is located
+    build: . 
     container_name: telrag_app
     restart: always
     command: daphne -p 8000 django_project.asgi:application
     volumes:
-      - ./:/app # optional: mounting project to container, so if you need to modify codes no longer is required shut down the container, you can just edit the files in the local host machine and changes will be applied to the container.
+    # optional: mounting project to container, so if you need to modify codes no longer is required shut down the container, you can just edit the files in the local host machine and changes will be applied to the container.
+      - ./:/app 
     depends_on:
       - pgvector
       - redis
@@ -35,7 +37,8 @@ services:
 
 
   celery:
-    build: ./ # the same dir for the app, as celery uses the app for running and installed inside the django app
+  # the same dir for the app, as celery uses the app for running and installed inside the django app
+    build: .
     command: celery -A config worker -l info
     depends_on:
       - redis
