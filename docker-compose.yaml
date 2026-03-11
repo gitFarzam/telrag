@@ -1,7 +1,7 @@
 services:
 
   db:
-    image: pgvector:pg15
+    image: pgvector/pgvector:pg16
     container_name: telrag_pgvector
     restart: always
     volumes:
