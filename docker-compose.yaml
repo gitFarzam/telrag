@@ -19,7 +19,7 @@ services:
       - "6379:6379"
 
   web:
-    build: ./ # the dir which DockerFile is located
+    build: . # the dir which DockerFile is located
     container_name: telrag_app
     restart: always
     command: daphne -p 8000 django_project.asgi:application
