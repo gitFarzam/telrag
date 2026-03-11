@@ -3,9 +3,6 @@
 # Exit on error
 set -e
 
-# give permissions
-chmod +x /usr/src/app/entrypoint.sh
-
 echo "🧱 Collecting static files..."
 
 # Ensure we're in the Django project directory where manage.py lives
