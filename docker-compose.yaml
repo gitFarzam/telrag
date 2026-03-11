@@ -20,13 +20,15 @@ services:
 
   web:
     # the dir which DockerFile is located
-    build: . 
+    build: .
     container_name: telrag_app
+    working_dir: /usr/src/app
+    entrypoint: ["/usr/src/app/entrypoint.sh"]
     restart: always
-    command: daphne -p 8000 django_project.asgi:application
+    command: daphne -p 8006 django_project.asgi:application --chdir src
     volumes:
     # optional: mounting project to container, so if you need to modify codes no longer is required shut down the container, you can just edit the files in the local host machine and changes will be applied to the container.
-      - ./:/app 
+      - ./:/usr/src/app
     depends_on:
       - db
       - redis
@@ -39,10 +41,13 @@ services:
   celery:
   # the same dir for the app, as celery uses the app for running and installed inside the django app
     build: .
-    command: celery -A config worker -l info
+    container_name: telrag_celery
+    working_dir: /usr/src/app
+    command: celery -A config worker -l info --chdir src
     depends_on:
       - redis
       - db
+      - web
 
 
 volumes:
