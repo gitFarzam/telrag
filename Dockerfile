@@ -15,3 +15,7 @@ RUN uv sync --frozen
 COPY . .
 
 ENV PYTHONUNBUFFERED=1
+
+RUN chmod +x /entrypoint.sh
+
+ENTRYPOINT ["/entrypoint.sh"]
