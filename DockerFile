@@ -17,7 +17,6 @@ COPY . .
 ENV PYTHONUNBUFFERED=1
 
 # place entrypoint outside the app volume so bind mounts don't override it
-COPY entrypoint.sh /entrypoint.sh
-RUN chmod +x /entrypoint.sh
+RUN cp /usr/src/app/entrypoint.sh /entrypoint.sh && chmod +x /entrypoint.sh
 
 ENTRYPOINT ["/entrypoint.sh"]
