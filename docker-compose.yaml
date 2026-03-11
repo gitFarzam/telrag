@@ -23,7 +23,7 @@ services:
     build: .
     container_name: telrag_app
     working_dir: /usr/src/app
-    entrypoint: ["/entrypoint.sh"]
+    entrypoint: ["/usr/src/app/entrypoint.sh"]
     restart: always
     command: daphne -p 8006 django_project.asgi:application --chdir src
     volumes:
@@ -43,7 +43,7 @@ services:
     build: .
     container_name: telrag_celery
     working_dir: /usr/src/app
-    entrypoint: ["/entrypoint.sh"]
+    entrypoint: ["/usr/src/app/entrypoint.sh"]
     command: celery -A config worker -l info --chdir src
     depends_on:
       - redis
