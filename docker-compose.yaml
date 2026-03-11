@@ -40,7 +40,7 @@ services:
   # the same dir for the app, as celery uses the app for running and installed inside the django app
     build: .
     container_name: telrag_celery
-    command: celery -A config worker -l info
+    command: celery -A config worker -l info --chdir src
     depends_on:
       - redis
       - db
