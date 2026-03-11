@@ -1,7 +1,7 @@
 services:
 
-  pgvector:
-    image: pgvector:15
+  db:
+    image: pgvector:pg15
     container_name: telrag_pgvector
     restart: always
     volumes:
@@ -28,7 +28,7 @@ services:
     # optional: mounting project to container, so if you need to modify codes no longer is required shut down the container, you can just edit the files in the local host machine and changes will be applied to the container.
       - ./:/app 
     depends_on:
-      - pgvector
+      - db
       - redis
     env_file:
       - .env
@@ -42,7 +42,7 @@ services:
     command: celery -A config worker -l info
     depends_on:
       - redis
-      - pgvector
+      - db
 
 
 volumes:
