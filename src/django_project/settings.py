@@ -28,7 +28,7 @@ SECRET_KEY = 'django-insecure-%tikckhl@8hyq3$m)aswe4avl+*x^=nc!e-8s0tdoicv-s!j1!
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = ['secluded-noncongregative-noelle.ngrok-free.dev','127.0.0.1']
+ALLOWED_HOSTS = ['secluded-noncongregative-noelle.ngrok-free.dev','127.0.0.1','telrag.site','https://telrag.site']
 
 
 # Application definition
@@ -145,7 +145,7 @@ USE_TZ = True
 
 # Static files (CSS, JavaScript, Images)  
 STATIC_URL = '/static/'  
-STATIC_ROOT = BASE_DIR, 'static_cdn'  
+STATIC_ROOT = BASE_DIR/ 'static_cdn'  
 STATICFILES_DIRS = [BASE_DIR / "static"]  
   
 # Media files (Uploaded by users)  
