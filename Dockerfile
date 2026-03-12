@@ -9,7 +9,7 @@ RUN pip install uv
 COPY pyproject.toml uv.lock ./
 
 # install dependencies
-RUN uv sync --frozen
+RUN uv sync --frozen --no-dev
 
 # copy project (first dot in current dir in local:telrag/, second dot is current fir in container: /use/scr/app)
 COPY . .

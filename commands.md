@@ -43,7 +43,7 @@ git clone git@github.com-repo-telrag:gitfarzam/telrag.git
 
 building containers
 ```shell
-docker compose build
+docker compose build --no-cache
 ```
 
 running containers 
@@ -78,3 +78,4 @@ docker compose exec web bash
 
 
 
+chmod +x /usr/src/app/entrypoint.sh
