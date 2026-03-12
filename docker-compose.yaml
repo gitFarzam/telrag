@@ -43,11 +43,11 @@ services:
     build: .
     container_name: telrag_celery
     working_dir: /usr/src/app
-    entrypoint: ["/usr/src/app/entrypoint.sh"]
     command: celery -A config worker -l info --chdir src
     depends_on:
       - redis
       - db
+      - web
 
 
 volumes:
