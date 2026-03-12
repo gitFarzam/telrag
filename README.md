@@ -108,3 +108,8 @@ note that docker compose automatically creates a network, so we have to get the 
 ```shell
 <project_name>_default
 ```
+
+As repo is mounted, I can, or to say have to run this out of the run, a setup.sh file can fix the issue
+```shell
+chmod +x entrypoint.sh
+```
