@@ -28,7 +28,7 @@ SECRET_KEY = 'django-insecure-%tikckhl@8hyq3$m)aswe4avl+*x^=nc!e-8s0tdoicv-s!j1!
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = ['secluded-noncongregative-noelle.ngrok-free.dev','127.0.0.1']
+ALLOWED_HOSTS = ['secluded-noncongregative-noelle.ngrok-free.dev','127.0.0.1','telrag.site']
 
 
 # Application definition
