@@ -3,6 +3,7 @@ FROM python:3.12-slim
 WORKDIR /usr/src/app
 
 # --no-cache-dir avoids keeping pip's cache in the image
+COPY requirements.txt .
 RUN pip install --no-cache-dir -r requirements.txt
 
 # copy project (first dot in current dir in local:telrag/, second dot is current fir in container: /use/scr/app)
