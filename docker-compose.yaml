@@ -24,7 +24,7 @@ services:
     container_name: telrag_app
     working_dir: /usr/src/app/src
     restart: always
-    command: daphne -p 8006 django_project.asgi:application
+    command: daphne -b 0.0.0.0 -p 8006 django_project.asgi:application
     volumes:
     # optional: mounting project to container, so if you need to modify codes no longer is required shut down the container, you can just edit the files in the local host machine and changes will be applied to the container.
       - ./:/usr/src/app
