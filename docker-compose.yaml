@@ -18,7 +18,7 @@ services:
     ports:
       - "6379:6379"
 
-  web:
+  telrag_service:
     # the dir which DockerFile is located
     build: .
     container_name: telrag_app
@@ -41,12 +41,12 @@ services:
   # the same dir for the app, as celery uses the app for running and installed inside the django app
     build: .
     container_name: telrag_celery
-    working_dir: /usr/src/app
-    command: celery -A config worker -l info --chdir src
+    working_dir: /usr/src/app/src
+    command: celery -A config worker -l info 
     depends_on:
       - redis
       - db
-      - web
+      - telrag_service
 
 
 volumes:
