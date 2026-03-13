@@ -58,6 +58,7 @@ docker run $DFLAG \
   --env-file .env \
   -v $(pwd):/usr/src/app \
   -w /usr/src/app/src \
+  -p 8006:8006 \
   $IMAGE \
   daphne -b 0.0.0.0 -p 8006 django_project.asgi:application
 
