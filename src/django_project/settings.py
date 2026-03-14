@@ -198,3 +198,8 @@ DEMO = True
 
 # Celery
 CELERY_BROKER_URL = f"redis://{REDIS_HOST_NAME}:6379/1"
+
+
+# CSRF trusted origins for production 
+csrf_origins = os.getenv('CSRF_TRUSTED_ORIGINS', '')
+CSRF_TRUSTED_ORIGINS = [origin.strip() for origin in csrf_origins.split(',') if origin.strip()]
