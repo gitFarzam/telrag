@@ -16,3 +16,6 @@ RUN chmod +x /usr/src/app/entrypoint.sh
 
 # Set the entrypoint
 ENTRYPOINT ["/usr/src/app/entrypoint.sh"]
+
+WORKDIR /usr/src/app/src
+RUN daphne -b 0.0.0.0 -p 8006 django_project.asgi:application
