@@ -1,0 +1,2 @@
+docker stop telrag_celery telrag_app telrag_redis telrag_pgvector
+docker rm telrag_celery telrag_app telrag_redis telrag_pgvector

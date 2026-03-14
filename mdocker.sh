@@ -7,7 +7,7 @@ VOLUME="telrag-pgvector-volume"
 IMAGE="telrag_image"
 
 # detach mode (true / false)
-DETACH=true
+DETACH=false
 
 if [ "$DETACH" = true ]; then
     DFLAG="-d"
