@@ -14,3 +14,6 @@ echo "📦 Running migrations..."
 python manage.py makemigrations
 python manage.py migrate
 
+# Hand off to the container's main command (e.g. daphne, celery)
+echo "Running celery..."
+celery -A django_project worker -l info 

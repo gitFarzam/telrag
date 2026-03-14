@@ -82,27 +82,37 @@ chmod +x /usr/src/app/entrypoint.sh
 docker rm -f telrag_pgvector telrag_redis telrag_app telrag_celery 2>/dev/null || true
 
 
+
+
+
+```shell
+docker stop telrag 
+docker stop telrag_celery
+docker stop telrag_container_db
+docker stop telrag_redis
+docker remove telrag
+docker remove telrag_celery
+docker remove telrag_container_db
+docker remove telrag_redis
+docker builder prune --all
+docker image prune -a
+```
+
+
 django app image
 ```shell
 docker build -t telrag_image .
 ```
 django app container
 ```shell
-docker run \
-  -p 8006:8006 \
-  --name telrag \
-  --network telrag-network \
-  -v $(pwd)/staticfiles:/usr/src/app/staticfiles \
-  -v $(pwd)/media:/usr/src/app/media \
-  telrag_image
+docker run -d \
+    -p 8006:8006 \
+    --name telrag \
+    --network telrag-network \
+    -v $(pwd)/staticfiles:/usr/src/app/staticfiles \
+    -v $(pwd)/media:/usr/src/app/media \
+    telrag_image
 ```
-
-
-celery
-```shell
-celery -A django_project worker --loglevel=info
-```
-
 
 
 
@@ -123,6 +133,20 @@ Redis
 ```shell
 docker run -d \
 --name telrag_redis \
+--network telrag-network \
 -p 6379:6379 \
 redis:latest
+```
+
+
+celery app image
+```shell
+docker build -t telrag_celery_image -f CeleryDockerfile .
+```
+celery app container
+```shell
+docker run \
+  --name telrag_celery \
+  --network telrag-network \
+  telrag_celery_image
 ```

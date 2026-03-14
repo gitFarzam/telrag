@@ -87,9 +87,6 @@ class ChatSendMessageView(UpdateView):
 def telegram_webhook(request):
     print(telegram_webhook.__name__)
 
-    sending_permission = True
-
-
     if not request.body:
         error = "Request body is required"
         print(error)

@@ -3,7 +3,8 @@ import requests
 from dotenv import load_dotenv
 import os
 import json
-load_dotenv()
+from django.conf import settings
+load_dotenv(settings.ENV_PATH)
 
 
 
