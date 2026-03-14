@@ -81,18 +81,48 @@ docker compose exec web bash
 chmod +x /usr/src/app/entrypoint.sh
 docker rm -f telrag_pgvector telrag_redis telrag_app telrag_celery 2>/dev/null || true
 
+
+django app image
+```shell
+docker build -t telrag_image .
+```
+django app container
+```shell
+docker run -d \
+  -p 8006:8006 \
+  --name telrag \
+  --network telrag-network \
+  -v $(pwd)/staticfiles:/usr/src/app/staticfiles \
+  -v $(pwd)/media:/usr/src/app/media \
+  telrag_image
+```
+
+
 celery
 ```shell
 celery -A django_project worker --loglevel=info
 ```
 
 
+
+
+Pgvector
+```shell
+docker run -d \
+  --name telrag_container_db \
+  --network telrag-network \
+  --env-file .env \
+  -p 5433:5432 \
+  -v telrag-volume:/var/lib/postgresql/data \
+  pgvector/pgvector:pg15
+```
+
+
+
 Redis
 ```shell
-  redis:
-    image: redis:7
-    container_name: telrag_redis
-    restart: always
-    ports:
-      - "6379:6379"
+docker run -d \
+--name telrag_redis \
+-p 6379:6379 \
+redis:latest
 ```

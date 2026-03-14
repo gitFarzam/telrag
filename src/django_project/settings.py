@@ -77,6 +77,7 @@ TEMPLATES = [
 
 ASGI_APPLICATION = 'django_project.asgi.application'
 
+REDIS_HOST_NAME = os.getenv("REDIS_HOST_NAME") if DEBUG else "localhost"
 
 CHANNEL_LAYERS = {
     # 'default': {
@@ -85,7 +86,7 @@ CHANNEL_LAYERS = {
     "default": {
         "BACKEND": "channels_redis.core.RedisChannelLayer",
         "CONFIG": {
-            "hosts": [os.getenv("REDIS_URL", "redis://localhost:6379/0")],
+            "hosts": [f"redis://{REDIS_HOST_NAME}:6379/0"],
         },
     },
 }
@@ -196,4 +197,4 @@ TELEGRAM_DEFAULT_CHAT_ID=120358726
 DEMO = True
 
 # Celery
-CELERY_BROKER_URL = "redis://localhost:6379/1"
+CELERY_BROKER_URL = f"redis://{REDIS_HOST_NAME}:6379/1"
