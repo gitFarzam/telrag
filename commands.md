@@ -98,13 +98,6 @@ docker run \
 ```
 
 
-celery
-```shell
-celery -A django_project worker --loglevel=info
-```
-
-
-
 
 Pgvector
 ```shell
@@ -125,4 +118,17 @@ docker run -d \
 --name telrag_redis \
 -p 6379:6379 \
 redis:latest
+```
+
+
+celery app image
+```shell
+docker build -t telrag_celery_image CeleryDockerfile
+```
+celery app container
+```shell
+docker run \
+  --name telrag_celery \
+  --network telrag-network \
+  telrag_celery_image
 ```
