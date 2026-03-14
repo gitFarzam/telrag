@@ -79,3 +79,4 @@ docker compose exec web bash
 
 
 chmod +x /usr/src/app/entrypoint.sh
+docker rm -f telrag_pgvector telrag_redis telrag_app telrag_celery 2>/dev/null || true
