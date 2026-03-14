@@ -24,6 +24,7 @@ having variables in .env, running the container
 ```shell
 docker run -d \
   --name telrag_db \
+  --network telrag-network \
   --env-file .env \
   -p 5433:5432 \
   -v telrag-volume:/var/lib/postgresql/data \
