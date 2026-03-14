@@ -80,3 +80,19 @@ docker compose exec web bash
 
 chmod +x /usr/src/app/entrypoint.sh
 docker rm -f telrag_pgvector telrag_redis telrag_app telrag_celery 2>/dev/null || true
+
+celery
+```shell
+celery -A django_project worker --loglevel=info
+```
+
+
+Redis
+```shell
+  redis:
+    image: redis:7
+    container_name: telrag_redis
+    restart: always
+    ports:
+      - "6379:6379"
+```

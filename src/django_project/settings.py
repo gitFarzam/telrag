@@ -26,7 +26,7 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 SECRET_KEY = 'django-insecure-%tikckhl@8hyq3$m)aswe4avl+*x^=nc!e-8s0tdoicv-s!j1!'
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = True
+DEBUG = True if int(os.getenv("DEBUG")) == 1 else False
 
 ALLOWED_HOSTS = ['secluded-noncongregative-noelle.ngrok-free.dev','127.0.0.1','telrag.site','https://telrag.site']
 
@@ -93,6 +93,9 @@ CHANNEL_LAYERS = {
 # Database
 # https://docs.djangoproject.com/en/6.0/ref/settings/#databases
 
+POSTGRES_PORT =  5433 if DEBUG else os.getenv("POSTGRES_PORT",5432)
+HOST =  "localhost" if DEBUG else os.getenv("HOST")
+
 DATABASES = {
     'old': {
         'ENGINE': 'django.db.backends.sqlite3',
@@ -103,8 +106,8 @@ DATABASES = {
         'NAME': os.getenv("POSTGRES_DB"),
         'USER': os.getenv("POSTGRES_USER"),
         'PASSWORD': os.getenv("POSTGRES_PASSWORD"),
-        'HOST': os.getenv("HOST"),
-        'PORT': os.getenv("POSTGRES_PORT", 5432),
+        'HOST': HOST,
+        'PORT': POSTGRES_PORT,
 }
 }
 
