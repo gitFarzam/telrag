@@ -88,7 +88,7 @@ docker build -t telrag_image .
 ```
 django app container
 ```shell
-docker run -d \
+docker run \
   -p 8006:8006 \
   --name telrag \
   --network telrag-network \
