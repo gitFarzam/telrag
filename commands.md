@@ -82,19 +82,30 @@ chmod +x /usr/src/app/entrypoint.sh
 docker rm -f telrag_pgvector telrag_redis telrag_app telrag_celery 2>/dev/null || true
 
 
+
+```shell
+docker stop telrag 
+docker stop telrag_celery
+docker remove telrag
+docker remove telrag_celery
+docker builder prune --all
+docker image prune -a
+```
+
+
 django app image
 ```shell
 docker build -t telrag_image .
 ```
 django app container
 ```shell
-docker run \
-  -p 8006:8006 \
-  --name telrag \
-  --network telrag-network \
-  -v $(pwd)/staticfiles:/usr/src/app/staticfiles \
-  -v $(pwd)/media:/usr/src/app/media \
-  telrag_image
+docker run -d \
+    -p 8006:8006 \
+    --name telrag \
+    --network telrag-network \
+    -v $(pwd)/staticfiles:/usr/src/app/staticfiles \
+    -v $(pwd)/media:/usr/src/app/media \
+    telrag_image
 ```
 
 
@@ -123,7 +134,7 @@ redis:latest
 
 celery app image
 ```shell
-docker build -t telrag_celery_image CeleryDockerfile
+docker build -t telrag_celery_image -f CeleryDockerfile .
 ```
 celery app container
 ```shell

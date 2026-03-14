@@ -77,7 +77,7 @@ TEMPLATES = [
 
 ASGI_APPLICATION = 'django_project.asgi.application'
 
-REDIS_HOST_NAME = os.getenv("REDIS_HOST_NAME") if DEBUG else "localhost"
+REDIS_HOST_NAME = "localhost" if DEBUG else os.getenv("REDIS_HOST_NAME")
 
 CHANNEL_LAYERS = {
     # 'default': {
