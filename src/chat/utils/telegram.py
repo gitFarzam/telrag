@@ -4,7 +4,7 @@ from dotenv import load_dotenv
 import os
 import json
 from django.conf import settings
-load_dotenv(settings.ENV_PATH)
+load_dotenv()
 
 
 
@@ -23,6 +23,10 @@ def set_telegram_webhook_secret():
 
     https://api.telegram.org/bot<YOUR_TOKEN>/setWebhook?url=https://yourserver.com/hook&secret_token=YOUR_SECRET_STRING
     
+    """
+    #Delete webhook:
+    f"""
+    https://api.telegram.org/bot{telegram_api_key}/setWebhook
     """
     response = requests.post(url)
     print(response.content, response.status_code)

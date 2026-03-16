@@ -7,50 +7,61 @@ services:
     volumes:
       - telrag-pgvector-volume:/var/lib/postgresql/data
     env_file:
-      - ../.env/telrag.env
+      - .env
     ports:
       - "5433:5432"
-
+    networks:
+      - telrag-network
+      
   redis:
     image: redis:7
     container_name: telrag_redis
     restart: always
     ports:
       - "6379:6379"
+    networks:
+      - telrag-network
 
   app:
     # the dir which DockerFile is located
     build: .
     container_name: telrag_app
-    working_dir: /usr/src/app/src
+    working_dir: /usr/src/app
     restart: always
     entrypoint: ["/usr/src/app/entrypoint.sh"]
     command: daphne -b 0.0.0.0 -p 8006 django_project.asgi:application
     volumes:
     # optional: mounting project to container, so if you need to modify codes no longer is required shut down the container, you can just edit the files in the local host machine and changes will be applied to the container.
-      - ./:/usr/src/app/src
+      - ./src:/usr/src/app/src
+      - ./entrypoint.sh:/usr/src/app/entrypoint.sh
     depends_on:
       - db
       - redis
     env_file:
-      - ../.env/telrag.env
+      - .env
     expose:
       - "8006"
-
+    networks:
+      - caddy-network
+      - telrag-network
 
   celery:
   # the same dir for the app, as celery uses the app for running and installed inside the django app
     build: .
     container_name: telrag_celery
-    working_dir: /usr/src/app/src
+    working_dir: /usr/src/app
     entrypoint: ["/usr/src/app/entrypoint.sh"]
     command: celery -A django_project worker -l info 
     volumes:
-      - ./:/usr/src/app/src
+      - ./src:/usr/src/app/src
+      - ./entrypoint.sh:/usr/src/app/entrypoint.sh
     depends_on:
       - redis
       - db
       - app
+
+    networks:
+      - telrag-network
 
 
 volumes:
@@ -59,3 +70,5 @@ volumes:
 networks:
   caddy-network:
     external: true
+
+  telrag-network:

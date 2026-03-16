@@ -16,17 +16,20 @@ import json
 import numpy as np
 import time
 from django.http import JsonResponse
+from pgvector.django import L2Distance
 from celery import shared_task
 
-def similarity_search(input_text,num):
+def similarity_search(conversation,input_text,num):
     """
     This function search for top num of similar text to input text
-    
     """
-    from pgvector.django import L2Distance
 
     rag_toolkit = RAGToolKit()
     input_text_embedding = rag_toolkit.embedder([input_text])[0]
+
+    # if we are in demo we have to filter similar embeddings to just use default documents and the documents which are created for the current conversation
+    # each Chunk object has a document field, each Document model object may have a user_message field or not, if there is not user message it is considered a general document and its ok, if not it should check the Message object from user_message and get the conversation field, if Conversation model object was the same it's ok and can be passed.
+    #.filter(chunk__document__user_message__conversation = conversation)
     similar_embeddings = Embedding.objects.order_by(L2Distance('vector', input_text_embedding))[:num]
     return input_text_embedding,similar_embeddings
 
@@ -34,10 +37,6 @@ def similarity_score(input_embedding : np , similar_embeddings : List[Embedding]
     embeddings = np.array([embedding.vector for embedding in similar_embeddings])
     return np.dot(input_embedding.reshape(1,384),embeddings.T)
 
-
-
-
-    
 
 def ingestion_process(transaction_type , json_content,chat_id,is_new) -> Document:
     with transaction.atomic():
@@ -83,6 +82,8 @@ def process_telegram_object(telegram_object:TelegramMessage,is_new=True):
                     doc_object.save()
                 else:
                     print('This telegram message is a reply to a message, but the message is not in the database, shows that it might be replying to a telegram client message or any other message')
+
+
     for data in message_data:
         if  data == 'text':
             model_object = creating_text_content_object(content = message_data[data])
@@ -111,56 +112,6 @@ def process_telegram_object(telegram_object:TelegramMessage,is_new=True):
             return doc_object
     
 
-
-def ingestion_processـ(transaction_type , json_content):
-    
-    """
-    1. processing telegram message from webhook and save the result in the database
-    2. processing telegram object and save cleaned document in the database
-    3. processing document object and create chunks and saving chunks in the database
-    4. processing chunk objects, creating embedding and saving embedding from them
-    5. sending context to live agent if it's neccessary
-    
-    """
-
-    with transaction.atomic():
-        telegram_object = TelegramMessage.objects.create(transaction_type=transaction_type , json_content = json_content) # True means receving (False is for sending)
-        # print('telegram object has been created' , telegram_object)
-
-        document_object = process_telegram_object(telegram_object)
-        # print('document object has been created', document_object)
-
-        if document_object:
-
-            chunk_objects = creating_chunk_objects(document_object)
-            # print('Chunk(s) jas been created' , chunk_objects)
-
-            embedding_objects = creating_embedding_objects(chunk_objects)
-            # print('Embeddings has been created' , embedding_objects)
-
-            if embedding_objects:
-                if document_object.user_message:
-                    print('Sending Context to AI to answer to the question')
-                    message_history = fetch_message_history(document_object.user_message)
-
-                    print('-- user question --' , document_object.user_message.content)
-                    context = "\n ".join([chunk.text for chunk in chunk_objects])
-                    print('-- context --' , context)
-
-                    ragtoolkit = RAGToolKit()
-                    new_messages = {'role':'user','content':f"{document_object.user_message.content} \n\n available information:{context}"}
-
-                    response = ragtoolkit.openai_text_generator(message_history,new_messages)
-
-                    message_sender(
-                        conversation=document_object.user_message.conversation,
-                        content=response,
-                        is_agent=True
-                    )
-                return True
-        
-        else:
-            print("There is not document object for deletion")
 
 
 def message_group_creator(message:Message):
@@ -357,10 +308,11 @@ def process_user_message(instance:Message):
     message_history = fetch_message_history(instance)
 
     # Fetch Context
-    input_text_embedding, similar_embeddings = similarity_search(input_text=instance.content , num=5)
+    input_text_embedding, similar_embeddings = similarity_search(conversation=instance.conversation,input_text=instance.content , num=5)
 
     context =''
     if similar_embeddings:
+
         similar_text = "\n".join([embedding_obj.chunk.text for embedding_obj in similar_embeddings])
 
         # Fetch similarity scores

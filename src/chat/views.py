@@ -20,6 +20,8 @@ from .utils.telegram import send_message
 from django.db import transaction
 import time
 
+# First edit in demo branch
+
 class HomeView(TemplateView):
     template_name = 'home.html'
 
@@ -124,10 +126,6 @@ def telegram_webhook(request):
                 status=200
             )
     
-
-
-
-
     # 2) Restrict which Telegram users can use the bot (e.g. admins only)
     
     allowed_ids = settings.TELEGRAM_ALLOWED_USER_IDS 
@@ -152,9 +150,9 @@ def telegram_webhook(request):
                 last_time = last_message.created_at.timestamp()
                 now_time = time.time()
                 if now_time - last_time < 3:
-                    send_message(text="Your message has been rejected, please send it again 3 seconds later..")
+                    send_message(chat_id=last_message.chat_id,text="Your message has been rejected, please send it again 3 seconds later..")
                     return JsonResponse({"result": "ok"},status=200)
-    
+
 
     else:
         # Restrict time
@@ -163,7 +161,7 @@ def telegram_webhook(request):
             last_time = last_message.created_at.timestamp()
             now_time = time.time()
             if now_time - last_time < 3:
-                send_message(text="Your message has been rejected, please send it again 3 seconds later..")
+                send_message(chat_id=last_message.chat_id,text="Your message has been rejected, please send it again 3 seconds later..")
                 return JsonResponse({"result": "ok"},status=200)
     
     # try: 

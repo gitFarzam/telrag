@@ -42,6 +42,7 @@ class DocumentSource(models.Model):
 class TextContent(models.Model):
     content = models.TextField(null=True,blank=True)
 
+
 class AudioContent(models.Model):
     file = models.FileField(upload_to='voices')
     trascription = models.TextField(null=True,blank=True)

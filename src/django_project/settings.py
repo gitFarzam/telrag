@@ -15,11 +15,11 @@ import os
 from dotenv import load_dotenv
 
 APP_NAME = "telrag"
-ENV_PATH = f"../.env/{APP_NAME}.env"
+ENV_PATH = f".env"
 print(f'Envorimental Var Path: {ENV_PATH}')
 
 
-load_dotenv(ENV_PATH)
+load_dotenv()
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
@@ -197,11 +197,21 @@ TELEGRAM_ALLOWED_USER_IDS = allowed_telegram_ids()
 
 TELEGRAM_DEFAULT_CHAT_ID=120358726
 
+
 # Demo Settings
 DEMO = True
 
 # Celery
 CELERY_BROKER_URL = f"redis://{REDIS_HOST_NAME}:6379/1"
+# CELERY_BEAT_SCHEDULE = {
+#     "deleting" :{
+#         'task' : 'task_path',
+#         'schedule' : 5, #every 5 seconds
+#         'args' : ['arg_1','arg_2','...'], # function arguments
+#         'kwargs' : {'key_1':'value_1','...':'...'}
+
+#     }
+# }
 
 
 # CSRF trusted origins for production 
