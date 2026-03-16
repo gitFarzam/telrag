@@ -10,13 +10,17 @@ services:
       - .env
     ports:
       - "5433:5432"
-
+    networks:
+      - telrag-network
+      
   redis:
     image: redis:7
     container_name: telrag_redis
     restart: always
     ports:
       - "6379:6379"
+    networks:
+      - telrag-network
 
   app:
     # the dir which DockerFile is located
@@ -39,6 +43,7 @@ services:
       - "8006"
     networks:
       - caddy-network
+      - telrag-network
 
   celery:
   # the same dir for the app, as celery uses the app for running and installed inside the django app
@@ -55,6 +60,9 @@ services:
       - db
       - app
 
+    networks:
+      - telrag-network
+
 
 volumes:
   telrag-pgvector-volume:
@@ -62,3 +70,5 @@ volumes:
 networks:
   caddy-network:
     external: true
+
+  telrag-network:
