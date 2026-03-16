@@ -15,8 +15,8 @@ import os
 from dotenv import load_dotenv
 
 APP_NAME = "telrag"
-ENV_PATH = f"../../../.env/{APP_NAME}.env"
-
+ENV_PATH = f"../.env/{APP_NAME}.env"
+print(f'Envorimental Var Path: {ENV_PATH}')
 
 
 load_dotenv(ENV_PATH)
