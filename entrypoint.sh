@@ -9,7 +9,7 @@ pwd
 echo "🧱 Collecting static files..."
 
 # Ensure we're in the Django project directory where manage.py lives
-cd /usr/src/app/src
+# cd /usr/src/app/src
 
 echo "Current Directory After cd"
 pwd
