@@ -28,7 +28,7 @@ services:
     command: daphne -b 0.0.0.0 -p 8006 django_project.asgi:application
     volumes:
     # optional: mounting project to container, so if you need to modify codes no longer is required shut down the container, you can just edit the files in the local host machine and changes will be applied to the container.
-      - ./:/usr/src/app
+      - ./:/usr/src/app/src
     depends_on:
       - db
       - redis
@@ -45,6 +45,8 @@ services:
     working_dir: /usr/src/app/src
     entrypoint: ["/usr/src/app/entrypoint.sh"]
     command: celery -A django_project worker -l info 
+    volumes:
+      - ./:/usr/src/app/src
     depends_on:
       - redis
       - db
