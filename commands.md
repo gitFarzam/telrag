@@ -127,6 +127,7 @@ Redis
 ```shell
 docker run -d \
 --name telrag_redis \
+--network telrag-network \
 -p 6379:6379 \
 redis:latest
 ```
