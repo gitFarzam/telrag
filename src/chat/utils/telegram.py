@@ -4,7 +4,7 @@ from dotenv import load_dotenv
 import os
 import json
 from django.conf import settings
-load_dotenv(settings.ENV_PATH)
+load_dotenv()
 
 
 

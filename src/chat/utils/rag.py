@@ -9,7 +9,7 @@ from dotenv import load_dotenv
 from enum import IntEnum
 import os
 from django.conf import settings
-load_dotenv(settings.ENV_PATH)
+load_dotenv()
 
 class RAGToolKit(RecursiveCharacterTextSplitter):
 
