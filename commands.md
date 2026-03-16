@@ -83,11 +83,17 @@ docker rm -f telrag_pgvector telrag_redis telrag_app telrag_celery 2>/dev/null |
 
 
 
+
+
 ```shell
 docker stop telrag 
 docker stop telrag_celery
+docker stop telrag_container_db
+docker stop telrag_redis
 docker remove telrag
 docker remove telrag_celery
+docker remove telrag_container_db
+docker remove telrag_redis
 docker builder prune --all
 docker image prune -a
 ```
