@@ -13,7 +13,13 @@ https://docs.djangoproject.com/en/6.0/ref/settings/
 from pathlib import Path
 import os
 from dotenv import load_dotenv
-load_dotenv()
+
+APP_NAME = "telrag"
+ENV_PATH = f"../../.env/{APP_NAME}.env"
+ENV_PATH = "/Users/farzam/work/.env/telrag.env"
+
+
+load_dotenv(ENV_PATH)
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
@@ -159,9 +165,7 @@ MEDIA_ROOT = BASE_DIR / 'media_cdn'
 # User settings
 AUTH_USER_MODEL = 'core.user'
 
-CSRF_TRUSTED_ORIGINS = [
-    'https://secluded-noncongregative-noelle.ngrok-free.dev',
-]
+
 
 
 # Source - https://stackoverflow.com/a/7061358
@@ -201,5 +205,9 @@ CELERY_BROKER_URL = f"redis://{REDIS_HOST_NAME}:6379/1"
 
 
 # CSRF trusted origins for production 
+ngrok_csrf_trusted = 'https://secluded-noncongregative-noelle.ngrok-free.dev'
+
 csrf_origins = os.getenv('CSRF_TRUSTED_ORIGINS', '')
 CSRF_TRUSTED_ORIGINS = [origin.strip() for origin in csrf_origins.split(',') if origin.strip()]
+
+CSRF_TRUSTED_ORIGINS.append(ngrok_csrf_trusted)
