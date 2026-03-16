@@ -14,6 +14,8 @@ echo "🧱 Collecting static files..."
 echo "Current Directory After cd"
 pwd
 
+echo "-> ls"
+ls -a
 
 python manage.py collectstatic --noinput
 
