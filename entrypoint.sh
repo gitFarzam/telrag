@@ -14,6 +14,3 @@ echo "📦 Running migrations..."
 python manage.py makemigrations
 python manage.py migrate
 
-# Hand off to the container's main command (e.g. daphne, celery)
-echo "Running daphne"
-exec daphne -b 0.0.0.0 -p 8006 django_project.asgi:application
