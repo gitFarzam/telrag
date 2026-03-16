@@ -3,6 +3,9 @@
 # Exit on error
 set -e
 
+echo "-> ls"
+ls -a
+
 echo "Current Directory"
 pwd
 
