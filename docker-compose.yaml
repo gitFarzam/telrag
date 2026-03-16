@@ -28,7 +28,7 @@ services:
     command: daphne -b 0.0.0.0 -p 8006 django_project.asgi:application
     volumes:
     # optional: mounting project to container, so if you need to modify codes no longer is required shut down the container, you can just edit the files in the local host machine and changes will be applied to the container.
-      - ./:/usr/src/app/src
+      - ./:/usr/src/app
     depends_on:
       - db
       - redis
@@ -42,7 +42,7 @@ services:
   # the same dir for the app, as celery uses the app for running and installed inside the django app
     build: .
     container_name: telrag_celery
-    working_dir: /usr/src/app/src
+    working_dir: /usr/src/app
     entrypoint: ["/usr/src/app/entrypoint.sh"]
     command: celery -A django_project worker -l info 
     volumes:
