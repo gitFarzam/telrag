@@ -15,8 +15,8 @@ import os
 from dotenv import load_dotenv
 
 APP_NAME = "telrag"
-ENV_PATH = f"../../.env/{APP_NAME}.env"
-ENV_PATH = "/Users/farzam/work/.env/telrag.env"
+ENV_PATH = f"../../../.env/{APP_NAME}.env"
+
 
 
 load_dotenv(ENV_PATH)
