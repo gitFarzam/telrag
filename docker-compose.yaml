@@ -37,7 +37,8 @@ services:
       - .env
     expose:
       - "8006"
-
+    networks:
+      - caddy-network
 
   celery:
   # the same dir for the app, as celery uses the app for running and installed inside the django app
