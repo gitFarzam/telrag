@@ -27,3 +27,5 @@ python manage.py makemigrations
 python manage.py migrate
 
 echo "finighsing entrypint"
+
+exec "$@"  # executes CMD from Dockerfile or Compose
