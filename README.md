@@ -114,3 +114,13 @@ As repo is mounted, I can, or to say have to run this out of the run, a setup.sh
 ```shell
 chmod +x entrypoint.sh
 ```
+
+
+## Changes
+- adding an admin with a custome login address
+- adding demo guide
+- add loging
+- creating a dataset for demo
+- improve using openai
+- error handling
+- in demo mode, the initial context should be just related to each conversation, so it is a refreshed one each time

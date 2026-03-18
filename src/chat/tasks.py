@@ -40,3 +40,4 @@ def task_button_handling(message_data,chat_id):
         send_message(chat_id=chat_id,text=f"Document {obj_pk} has been deleted: ",command=True)
     else:
         send_message(chat_id=chat_id,text=f"Document does not exist!",command=True)
+
