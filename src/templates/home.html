@@ -4,7 +4,6 @@
   <div class="home-view">
     <div class="home-card">
       <h1>Please write your name</h1>
-      <h2>Test</h2>
       <form method="post" action="{% url 'new-conversation' %}">
         {% csrf_token %}
         <input
