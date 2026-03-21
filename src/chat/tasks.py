@@ -1,8 +1,9 @@
 from celery import shared_task
-from .services import ingestion_process,fetch_content_from_document,agent_message_sender,entities_handling
+from .services import ingestion_process,fetch_content_from_document,agent_message_sender,entities_handling,delete_unused_conversation
 from .utils.telegram import send_message
 from .models import Document
 from asgiref.sync import async_to_sync
+from .models import Conversation
 
 @shared_task
 def task_new_message(transaction_type,json_content,chat_id,message_id):
@@ -41,3 +42,8 @@ def task_button_handling(message_data,chat_id):
     else:
         send_message(chat_id=chat_id,text=f"Document does not exist!",command=True)
 
+
+@shared_task
+def task_delete_unused_conversation():
+    result = delete_unused_conversation()
+    print(result)

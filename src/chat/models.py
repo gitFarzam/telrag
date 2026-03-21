@@ -48,6 +48,7 @@ class AudioContent(models.Model):
     trascription = models.TextField(null=True,blank=True)
 
 class Document(models.Model):
+    conversation = models.ForeignKey(Conversation,on_delete=models.CASCADE)
     caption = models.TextField(null=True , blank=True)
     document_source = models.ForeignKey(DocumentSource , on_delete=models.CASCADE,null=True)
     user_message = models.ForeignKey(Message , on_delete=models.CASCADE , null=True , blank=True, related_name='documents')

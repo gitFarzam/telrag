@@ -12,7 +12,7 @@ import json
 from django.http import JsonResponse
 from django.core.exceptions import ValidationError
 from django.views.decorators.csrf import csrf_exempt
-from .services import message_sender,ingestion_process,process_user_message,regex_for_get_verification_code
+from .services import message_sender,ingestion_process,process_user_message,regex_for_get_verification_code,add_initial_documents
 from .operations import telegram_message_processor
 from django.conf import settings
 import hmac
@@ -38,8 +38,18 @@ class NewConversationView(TemplateView):
 
             login(self.request, user, backend="django.contrib.auth.backends.ModelBackend")
             
-            conversation = Conversation.objects.create(user=user)
-            return redirect('chat-detail', pk=conversation.pk)
+            try:
+                conversation = Conversation.objects.create(user=user)
+                TelegramChatID.objects.create(conversation=conversation)
+                result = add_initial_documents(conversation=conversation)
+                if not result:
+                    print("Couldnt add initial document")
+
+                return redirect('chat-detail', pk=conversation.pk)
+
+            except ValueError as e:
+                print(f"Database error in creation conversation or/and chat id object, error: {e}")
+            
         
         return HttpResponse("Name is required", status=400)
 
@@ -129,41 +139,27 @@ def telegram_webhook(request):
     # 2) Restrict which Telegram users can use the bot (e.g. admins only)
     
     allowed_ids = settings.TELEGRAM_ALLOWED_USER_IDS 
+    allowed_ids += list(TelegramChatID.objects.exclude(chat_id__isnull=True).values_list('chat_id', flat=True))
 
-    # Demo mode: get all chat ids, for all conversation and add it to all allowed
-    if settings.DEMO:
-        allowed_ids += list(TelegramChatID.objects.exclude(chat_id__isnull=True).values_list('chat_id', flat=True))
+    if allowed_ids:
+        from_id = data.get("message", {}).get("from", {}).get("id")
+        if from_id is None:
+            from_id = data.get("callback_query", {}).get("from", {}).get("id")
+        print(f'From ID: {from_id}')
 
-        if allowed_ids:
-            from_id = data.get("message", {}).get("from", {}).get("id")
-            if from_id is None:
-                from_id = data.get("callback_query", {}).get("from", {}).get("id")
-            print(f'From ID: {from_id}')
+        if from_id is None or from_id not in allowed_ids:
+            print("-> Regex for detecting verificatin code")
+            regex_for_get_verification_code(data,from_id)
+            return JsonResponse({"result": "ok"},status=200)
 
-            if from_id is None or from_id not in allowed_ids:
-                print("-> Regex for detecting verificatin code")
-                regex_for_get_verification_code(data,from_id)
-                return JsonResponse({"result": "ok"},status=200)
-
-            last_message = TelegramMessage.objects.filter(chat_id=from_id).last()
-            if last_message:
-                last_time = last_message.created_at.timestamp()
-                now_time = time.time()
-                if now_time - last_time < 3:
-                    send_message(chat_id=last_message.chat_id,text="Your message has been rejected, please send it again 3 seconds later..")
-                    return JsonResponse({"result": "ok"},status=200)
-
-
-    else:
-        # Restrict time
-        last_message = TelegramMessage.objects.last()
+        last_message = TelegramMessage.objects.filter(chat_id=from_id).last()
         if last_message:
             last_time = last_message.created_at.timestamp()
             now_time = time.time()
             if now_time - last_time < 3:
                 send_message(chat_id=last_message.chat_id,text="Your message has been rejected, please send it again 3 seconds later..")
                 return JsonResponse({"result": "ok"},status=200)
-    
+
     # try: 
 
     data = json.loads(request.body.decode("utf-8"))

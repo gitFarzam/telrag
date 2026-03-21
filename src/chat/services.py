@@ -18,6 +18,9 @@ import time
 from django.http import JsonResponse
 from pgvector.django import L2Distance
 from celery import shared_task
+from django.db.models import Max, Q, F
+from django.utils import timezone
+from datetime import timedelta
 
 def similarity_search(conversation,input_text,num):
     """
@@ -30,7 +33,7 @@ def similarity_search(conversation,input_text,num):
     # if we are in demo we have to filter similar embeddings to just use default documents and the documents which are created for the current conversation
     # each Chunk object has a document field, each Document model object may have a user_message field or not, if there is not user message it is considered a general document and its ok, if not it should check the Message object from user_message and get the conversation field, if Conversation model object was the same it's ok and can be passed.
     #.filter(chunk__document__user_message__conversation = conversation)
-    similar_embeddings = Embedding.objects.order_by(L2Distance('vector', input_text_embedding))[:num]
+    similar_embeddings = Embedding.objects.filter(chunk__document__conversation=conversation).order_by(L2Distance('vector', input_text_embedding))[:num]
     return input_text_embedding,similar_embeddings
 
 def similarity_score(input_embedding : np , similar_embeddings : List[Embedding]):
@@ -357,37 +360,26 @@ def process_user_message(instance:Message):
                 content="Oops! let me find somebody and ask from them!",
                 is_agent=True
                 )
-        
-        # sending message to user
-        # check demo
-        if settings.DEMO:
-            # get chat id
-            obj,created = TelegramChatID.objects.get_or_create(conversation = instance.conversation)
-            if created:
-                print('lets go for finding chat id')
-                code = obj.pk # use pk as code for authentication!
-                obj.code = code
-                obj.save()
-                ask_user_telegram_chatid(conversation=instance.conversation,code=code)
-            else:
-                if obj.chat_id:
-                    chat_id = obj.chat_id
-                    print('chat id: ',chat_id)
-                    telegram_message_id = send_message(chat_id=chat_id,text=f"{content}")
 
-                    # Updating instance (message object) with telegram id
-                    instance.tg_id = telegram_message_id
-                    instance.save()
-                    print(telegram_message_id) 
-                else:
-                    print('Object is existed but it doesnt have a chat id value')
-                    ask_user_telegram_chatid(conversation=instance.conversation,code=obj.code)
-        else:
-            telegram_message_id = send_message(text=f"{content}")
+
+        # get chat id
+        tg_chatid = TelegramChatID.objects.get(conversation = instance.conversation)
+
+        if tg_chatid.chat_id:
+            chat_id = tg_chatid.chat_id
+            print('chat id: ',chat_id)
+            telegram_message_id = send_message(chat_id=chat_id,text=f"{content}")
+
             # Updating instance (message object) with telegram id
             instance.tg_id = telegram_message_id
             instance.save()
             print(telegram_message_id) 
+        else:
+            tg_chatid.code = instance.conversation.pk
+            tg_chatid.save()
+            print('Object is existed but it doesnt have a chat id value')
+            ask_user_telegram_chatid(conversation=instance.conversation,code=tg_chatid.code)
+
 
 
 
@@ -420,8 +412,8 @@ def creating_document_source(model_object):
     return doc_source_obj
 
 
-def creating_document_object(document_source, caption=None,user_message=None,telegram_message=None) -> Document:
-    doc_object = Document.objects.create(document_source = document_source)
+def creating_document_object(conversation,document_source, caption=None,user_message=None,telegram_message=None) -> Document:
+    doc_object = Document.objects.create(conversation=conversation,document_source = document_source)
 
     if caption:
         doc_object.caption = caption
@@ -513,10 +505,45 @@ def regex_for_get_verification_code(data:dict , from_id):
                 send_message(chat_id=tg_chatid.chat_id,text="✅ verification code has been detected in your message, You are verified now")
                 return JsonResponse({"result": "ok"}, status=200)
             else:
-                send_message(chat_id=from_id ,text="Wrong code! Please check chat window and just send the code you are seeing on the window!")
+                send_message(chat_id=from_id ,text="Wrong input! Please check chat window and just send the code you are seeing on the window!")
                 return JsonResponse({"result": "ok"}, status=200)
             
         else:
             print('Access Denied!!!!')
             # it should be checked if user telegram account is verified or no
             return JsonResponse({"error": "Forbidden"}, status=200) # returning 200 is crucial, otherwise requests will repeadedly be send through webhook again and again!
+        
+
+
+def add_initial_documents(conversation):
+    import os
+    document_indices = ['0']
+    dir = os.path.join(settings.BASE_DIR,'chat/management/commands/initial_data')
+    for document_index in document_indices:
+        try:
+            file_path = os.path.join(dir,f'{document_index}.txt')
+            with open(file_path) as text_file:
+                text_string = text_file.read()
+                print(text_string)
+                with transaction.atomic():
+                    text_content_object = creating_text_content_object(content=text_string)
+                    doc_source_object = creating_document_source(model_object=text_content_object)
+                    doc_object = creating_document_object(conversation=conversation,document_source=doc_source_object)
+                    chunk_objects = creating_chunk_objects(document_object=doc_object)
+                    embedding_objects = creating_embedding_objects(chunks=chunk_objects)
+
+                    print(f"Embedding has been created: {embedding_objects}")
+                    return True
+
+        except FileNotFoundError as e:
+            raise FileNotFoundError('File %s.txt does not exist' % document_index)
+        
+
+def delete_unused_conversation():
+    threshold = timezone.now() - timedelta(hours=1)
+    return Conversation.objects.annotate(
+        last_msg_time=Max("messages__created_at")
+    ).filter(
+        Q(last_msg_time__lt=threshold) |
+        Q(last_msg_time__isnull=True, created_at__lt=threshold)
+    ).delete()

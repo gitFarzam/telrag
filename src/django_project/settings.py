@@ -203,15 +203,13 @@ DEMO = True
 
 # Celery
 CELERY_BROKER_URL = f"redis://{REDIS_HOST_NAME}:6379/1"
-# CELERY_BEAT_SCHEDULE = {
-#     "deleting" :{
-#         'task' : 'task_path',
-#         'schedule' : 5, #every 5 seconds
-#         'args' : ['arg_1','arg_2','...'], # function arguments
-#         'kwargs' : {'key_1':'value_1','...':'...'}
+CELERY_BEAT_SCHEDULE = {
+    "task_delete_unused_conversation" :{
+        'task' : 'chat.tasks.task_delete_unused_conversation',
+        'schedule' : 5, #every 5 seconds
+    }
+}
 
-#     }
-# }
 
 
 # CSRF trusted origins for production 
