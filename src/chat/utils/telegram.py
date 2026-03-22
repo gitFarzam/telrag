@@ -32,6 +32,11 @@ def set_telegram_webhook_secret():
     print(f"Setting New Webhook on: {address}",response.content, response.status_code)
 
 
+set_telegram_webhook_secret()
+
+
+
+
 def send_message(chat_id=120358726, text=None,document_id=None,reply_to_message_id=None,command=False):
     url = f"https://api.telegram.org/bot{telegram_api_key}/sendMessage"
 

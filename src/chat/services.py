@@ -1,5 +1,5 @@
 from django.contrib.contenttypes.models import ContentType
-from .models import Conversation, Message,DocumentSource , TelegramMessage,Document, Chunk, Embedding, TextContent,AudioContent, TelegramChatID
+from .models import Conversation, Message,DocumentSource , TelegramMessage,Document, Chunk, Embedding, TextContent,AudioContent
 from asgiref.sync import async_to_sync
 from channels.layers import get_channel_layer
 from django.template.loader import render_to_string
@@ -67,7 +67,8 @@ def ingestion_process(transaction_type , json_content,chat_id,is_new) -> Documen
 def process_telegram_object(telegram_object:TelegramMessage,is_new=True):
     print(process_telegram_object.__name__)
 
-    doc_object = Document.objects.create(telegram_message=telegram_object)
+    conversation = Conversation.objects.get(chat_id=telegram_object.chat_id )
+    doc_object = Document.objects.create(conversation=conversation,telegram_message=telegram_object)
     data = telegram_object.data()
     parsed_data = telegram_message_parser(data)
     metadata = parsed_data['metadata']
@@ -306,12 +307,13 @@ def entities_handling(message_data,chat_id):
 def process_user_message(instance:Message):
 
     content = instance.content
+    conversation=instance.conversation
 
     # Fetch message history
     message_history = fetch_message_history(instance)
 
     # Fetch Context
-    input_text_embedding, similar_embeddings = similarity_search(conversation=instance.conversation,input_text=instance.content , num=5)
+    input_text_embedding, similar_embeddings = similarity_search(conversation=conversation,input_text=instance.content , num=5)
 
     context =''
     if similar_embeddings:
@@ -347,7 +349,7 @@ def process_user_message(instance:Message):
         response = ragtoolkit.openai_text_generator(message_history,new_messages)
 
         message_sender(
-                conversation=instance.conversation,
+                conversation=conversation,
                 content=response,
                 is_agent=True
                 )
@@ -356,17 +358,15 @@ def process_user_message(instance:Message):
         # Sending to telegram
         # Temporary message 1 : waiting for sending message to the user
         message_sender(
-                conversation=instance.conversation,
+                conversation=conversation,
                 content="Oops! let me find somebody and ask from them!",
                 is_agent=True
                 )
 
 
-        # get chat id
-        tg_chatid = TelegramChatID.objects.get(conversation = instance.conversation)
 
-        if tg_chatid.chat_id:
-            chat_id = tg_chatid.chat_id
+        if conversation.chat_id:
+            chat_id = conversation.chat_id
             print('chat id: ',chat_id)
             telegram_message_id = send_message(chat_id=chat_id,text=f"{content}")
 
@@ -375,11 +375,10 @@ def process_user_message(instance:Message):
             instance.save()
             print(telegram_message_id) 
         else:
-            tg_chatid.code = instance.conversation.pk
-            tg_chatid.save()
+            conversation.code = instance.conversation.pk
+            conversation.save()
             print('Object is existed but it doesnt have a chat id value')
-            ask_user_telegram_chatid(conversation=instance.conversation,code=tg_chatid.code)
-
+            ask_user_telegram_chatid(conversation=instance.conversation,code=conversation.code)
 
 
 
@@ -495,14 +494,14 @@ def regex_for_get_verification_code(data:dict , from_id):
 
     for number in numbers:
         if str(number) in data.get("message", {}).get("text", {}):
-            tg_chatid = TelegramChatID.objects.filter(code=number).first()
-            print(f"TG chat_id: {tg_chatid}")
-            if tg_chatid:
-                tg_chatid.chat_id = from_id
-                tg_chatid.is_verified = True
+            conversation = Conversation.objects.filter(code=number).first()
+            print(f"Conversation: {conversation}")
+            if conversation:
+                conversation.chat_id = from_id
+                conversation.is_verified = True
                 # also it should get conversation model from somewhere
-                tg_chatid.save()
-                send_message(chat_id=tg_chatid.chat_id,text="✅ verification code has been detected in your message, You are verified now")
+                conversation.save()
+                send_message(chat_id=conversation.chat_id,text="✅ verification code has been detected in your message, You are verified now")
                 return JsonResponse({"result": "ok"}, status=200)
             else:
                 send_message(chat_id=from_id ,text="Wrong input! Please check chat window and just send the code you are seeing on the window!")

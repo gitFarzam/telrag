@@ -8,8 +8,15 @@ from django.conf import settings
 class Conversation(models.Model):
     created_at = models.DateTimeField(auto_now_add=True)
     user = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE)
+
+    chat_id = models.PositiveIntegerField(null=True,unique=True)
+    code = models.PositiveIntegerField(null=True)
+    is_verified = models.BooleanField(default=False)
+    is_active = models.BooleanField(default=False)
+
+
     def __str__(self):
-        return self.pk.__str__() + " - " + self.created_at.__str__()
+        return self.pk.__str__()
     
 
 class Message(models.Model):
@@ -65,11 +72,3 @@ class Chunk(models.Model):
 class Embedding(models.Model):
     chunk = models.ForeignKey(to=Chunk , on_delete=models.CASCADE)
     vector = VectorField(dimensions=384)
-
-
-class TelegramChatID(models.Model):
-    chat_id = models.PositiveIntegerField(null=True,unique=True)
-    conversation = models.OneToOneField(to=Conversation,on_delete=models.CASCADE)
-    code = models.PositiveIntegerField(null=True)
-    is_verified = models.BooleanField(default=False)
-    is_active = models.BooleanField(default=False)

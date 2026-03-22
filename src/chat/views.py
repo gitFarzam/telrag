@@ -1,5 +1,5 @@
 from django.shortcuts import render, redirect
-from .models import Conversation,TelegramChatID,TelegramMessage
+from .models import Conversation,TelegramMessage
 from django.views.generic import DetailView, UpdateView,TemplateView
 from core.models import User
 from django.http import HttpResponse
@@ -40,7 +40,6 @@ class NewConversationView(TemplateView):
             
             try:
                 conversation = Conversation.objects.create(user=user)
-                TelegramChatID.objects.create(conversation=conversation)
                 result = add_initial_documents(conversation=conversation)
                 if not result:
                     print("Couldnt add initial document")
@@ -139,7 +138,7 @@ def telegram_webhook(request):
     # 2) Restrict which Telegram users can use the bot (e.g. admins only)
     
     allowed_ids = settings.TELEGRAM_ALLOWED_USER_IDS 
-    allowed_ids += list(TelegramChatID.objects.exclude(chat_id__isnull=True).values_list('chat_id', flat=True))
+    allowed_ids += list(Conversation.objects.exclude(chat_id__isnull=True).values_list('chat_id', flat=True))
 
     if allowed_ids:
         from_id = data.get("message", {}).get("from", {}).get("id")
@@ -160,12 +159,11 @@ def telegram_webhook(request):
                 send_message(chat_id=last_message.chat_id,text="Your message has been rejected, please send it again 3 seconds later..")
                 return JsonResponse({"result": "ok"},status=200)
 
-    # try: 
+    try: 
+        data = json.loads(request.body.decode("utf-8"))
+        telegram_message_processor(transaction_type=True , json_content = data)
+        return JsonResponse({"result": "ok"},status=200)
 
-    data = json.loads(request.body.decode("utf-8"))
-    telegram_message_processor(transaction_type=True , json_content = data)
-    return JsonResponse({"result": "ok"},status=200)
-
-    # except Exception as e:
-    #         print(f'Error in ingestion process: {e}')
-    #         return JsonResponse({"result": 'ok'} , status=200)
+    except Exception as e:
+            print(f'Error: {e}')
+            return JsonResponse({"result": 'ok'} , status=200)

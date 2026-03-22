@@ -14,6 +14,8 @@ def telegram_message_processor(transaction_type:bool , json_content:dict):
     chat_id = metadata['chat_id']
     
     if message_type == 'new':
+        print(transaction_type,json_content,chat_id,message_id)
+        print("New message...")
         task_new_message.delay(transaction_type,json_content,chat_id,message_id)
 
     elif message_type == 'reply':
@@ -25,3 +27,5 @@ def telegram_message_processor(transaction_type:bool , json_content:dict):
     elif message_type == 'button':
         # Deleting documents button
         task_button_handling.delay(message_data,chat_id)
+
+
