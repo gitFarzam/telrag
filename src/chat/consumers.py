@@ -2,6 +2,7 @@ from .models import Conversation
 from channels.generic.websocket import WebsocketConsumer
 from asgiref.sync import async_to_sync
 from django.db.models import ProtectedError
+from .services import message_sender_custom
 class ChatConsumer(WebsocketConsumer):
     def connect(self):
         self.user = self.scope["user"]
@@ -20,12 +21,16 @@ class ChatConsumer(WebsocketConsumer):
             self.group_name,
             self.channel_name,
         )
+
+        
         # try:
         #     conversation_obj = Conversation.objects.filter(pk=int(self.conversation_id)).first()
         #     if conversation_obj:
-        #         print(f"Deleting conversation object: {conversation_obj}")
+        #         message_sender_custom(conversation_obj,message="This conversation is being deleted due to inactivity..")
+        #         print(f"❌ Deleting conversation object: {conversation_obj} ❌")
         #         conversation_obj.delete()
-        # except ProtectedError as e:
+        #     print("There is no conversation object...")
+        # except ValueError as e:
         #     print(e)
 
 

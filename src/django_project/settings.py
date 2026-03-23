@@ -203,12 +203,12 @@ DEMO = True
 
 # Celery
 CELERY_BROKER_URL = f"redis://{REDIS_HOST_NAME}:6379/1"
-# CELERY_BEAT_SCHEDULE = {
-#     "task_delete_unused_conversation" :{
-#         'task' : 'chat.tasks.task_delete_unused_conversation',
-#         'schedule' : 5, #every 5 seconds
-#     }
-# }
+CELERY_BEAT_SCHEDULE = {
+    "task_delete_unused_conversation" :{
+        'task' : 'chat.tasks.task_delete_unused_conversation',
+        'schedule' : 5, #every 5 seconds
+    }
+}
 
 
 

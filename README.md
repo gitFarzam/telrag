@@ -126,3 +126,4 @@ chmod +x entrypoint.sh
 - in demo mode, the initial context should be just related to each conversation, so it is a refreshed one each time
 - limiting voice length
 - creating demo
+- if there is more than 1 conversation with 1 chat id value, those conversations should be removed automatically before receving new telegram message!

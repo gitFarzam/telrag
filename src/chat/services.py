@@ -89,7 +89,7 @@ def process_telegram_object(telegram_object:TelegramMessage,is_new=True):
 
 
     for data in message_data:
-        if  data == 'text':
+        if data == 'text':
             model_object = creating_text_content_object(content = message_data[data])
             doc_source_obj = creating_document_source(model_object)
             doc_object.document_source = doc_source_obj
@@ -116,15 +116,6 @@ def process_telegram_object(telegram_object:TelegramMessage,is_new=True):
             return doc_object
     
 
-
-
-def message_group_creator(message:Message):
-    """
-    This function will have some logic to see how to group the messages.
-
-    1. wait for 2 seconds before answering to the customer, they may need to send another message
-    2. short messages which are not conisdered
-    """
 
 def message_operation( message):
     html = render_to_string(
@@ -222,40 +213,20 @@ def fetch_conversation_documents(instance:Conversation):
     
 
 
-def ask_user_telegram_chatid(conversation:Conversation,code):
-    message = f"""
-    Please send verify your telegram account to be able to work as an context provider.\n<br><br>
-    1. open your telegram application\n<br>
-    2. search for this chatbot in search feild: <b>@telrag_bot</b>\n<br>
-    3. tap/click <b>verify</b>\n<br>
-    4. send this code to the bot: {code}\n<br>
-    5. wait for the bot to verify your account\n\n<br><br>
-
-    -> After verification this window will be disapeared.
-    """
-
+def message_sender_custom(conversation:Conversation,message):
     channel_layer = get_channel_layer()
+    html = render_to_string("telegram.html",{"chat_id_request": message})
 
+    oob_html = ('<div id="messages" hx-swap-oob="beforeend" class="chat-container">'+ html+ "</div>")
 
-    html = render_to_string(
-        "message.html",
-        {"chat_id_request": message}
-    )
-
-    oob_html = (
-        '<div id="messages" hx-swap-oob="beforeend" class="chat-container">'
-        + html
-        + "</div>"
-    )
-
-
-    async_to_sync(channel_layer.group_send)(
-        f"chatgroup_{conversation.pk}",
-        {"type": "message_handler", "html_response": oob_html},
-    )
-
+    try:
+        async_to_sync(channel_layer.group_send)(
+            f"chatgroup_{conversation.pk}",
+            {"type": "message_handler", "html_response": oob_html},
+        )
+    except ValueError as e:
+        print(f"Cannot send message to group, reason: {e}")
     return True
-
 
 
 def entities_handling(message_data,chat_id):
@@ -263,47 +234,34 @@ def entities_handling(message_data,chat_id):
     for entity in message_data['entities']:
         if entity['type'] == 'bot_command':
             command = message_data['text'][entity['offset']:entity['length']]
-            if settings.DEMO:
-                # get chat id and sending message to user in telegram and asking for verification
-                tg_chatid , created = TelegramChatID.objects.get_or_create(chat_id=chat_id)
 
-                if command == '/verify':
-                    print('Chat_id: ', chat_id)
+            # get chat id and sending message to user in telegram and asking for verification
+            conversation = Conversation.objects.get(chat_id=chat_id)
 
-                    # now using chat check if user is verified or no
-                    is_verified = tg_chatid.is_verified
+            if command == '/verify':
+                print('Chat_id: ', chat_id)
 
-                    if is_verified:
-                        send_message(chat_id,text="You are already verified!",command=True)
-                    else:
-                        print('This command is for verification')
-                        send_message(chat_id,text="Please send the 4 digit code in the chat",command=True)
-                    return True
+                # now using chat check if user is verified or no
+                is_verified = conversation.is_verified
+
+                if is_verified:
+                    send_message(chat_id,text="You are already verified!",command=True)
+                else:
+                    print('This command is for verification')
+                    send_message(chat_id,text="Please send the 4 digit code in the chat",command=True)
+                return True
+            
+            elif command == '/getdocs':
+                docs:List[Document] = conversation.conv_documents.all()
+                print(docs)
+                if docs:
+                    for i,doc in enumerate(docs):
+                        text = f"<strong>Document {str(i)}:</strong>\nunique_id: <code>{doc.pk}</code> {fetch_content_from_document(doc)}" 
+                        send_message(chat_id=chat_id,text=text , document_id=doc.pk,command=True)
+                else:
+                    send_message(chat_id=chat_id,text="oOps! no document for this conversation!")
+                return True
                 
-                elif command == '/getdocs':
-                    docs = fetch_conversation_documents(instance=tg_chatid.conversation)
-                    print(docs)
-                    if docs:
-                        for i,doc in enumerate(docs):
-                            text = f"<strong>Document {str(i)}:</strong>\nunique_id: <code>{doc.pk}</code> {fetch_content_from_document(doc)}" 
-                            send_message(chat_id=chat_id,text=text , document_id=doc.pk,command=True)
-                    else:
-                        send_message(chat_id=chat_id,text="oOps! no document for this conversation!")
-                    return True
-            else:
-                if command == '/verify':
-                    send_message(settings.TELEGRAM_DEFAULT_CHAT_ID,text="No Verification is Required!",command=True)
-                    return True
-                
-                elif command =="/getdocs":
-                    docs = Document.objects.all()[:10]
-                    if docs:
-                        for i,doc in enumerate(docs):
-                            text = f"<strong>Document {str(i)}:</strong>\nunique_id: <code>{doc.pk}</code> {fetch_content_from_document(doc)}" 
-                            send_message(chat_id=chat_id,text=text , document_id=doc.pk,command=True)
-                    else:
-                        send_message(chat_id=chat_id,text="oOps! no document!")          
-                    return True
 def process_user_message(instance:Message):
 
     content = instance.content
@@ -375,10 +333,11 @@ def process_user_message(instance:Message):
             instance.save()
             print(telegram_message_id) 
         else:
-            conversation.code = instance.conversation.pk
+            code = instance.conversation.pk
+            conversation.code = code
             conversation.save()
             print('Object is existed but it doesnt have a chat id value')
-            ask_user_telegram_chatid(conversation=instance.conversation,code=conversation.code)
+            message_sender_custom(conversation=instance.conversation,message=f"""<br>Please link your Telegram account to this conversation.\n<br><br>Send number below to <ahref="https://t.me/telrag_bot">@telrag_bot</a><br><br><center><b>{code}</b></center>""")
 
 
 
@@ -502,6 +461,7 @@ def regex_for_get_verification_code(data:dict , from_id):
                 # also it should get conversation model from somewhere
                 conversation.save()
                 send_message(chat_id=conversation.chat_id,text="✅ verification code has been detected in your message, You are verified now")
+                message_sender_custom(conversation=conversation, message=f"<br>✅ Your telegram account is linked to this conversation!")
                 return JsonResponse({"result": "ok"}, status=200)
             else:
                 send_message(chat_id=from_id ,text="Wrong input! Please check chat window and just send the code you are seeing on the window!")
@@ -539,7 +499,7 @@ def add_initial_documents(conversation):
         
 
 def delete_unused_conversation():
-    threshold = timezone.now() - timedelta(hours=1)
+    threshold = timezone.now() - timedelta(minutes=50)
     return Conversation.objects.annotate(
         last_msg_time=Max("messages__created_at")
     ).filter(

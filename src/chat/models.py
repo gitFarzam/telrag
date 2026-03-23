@@ -14,6 +14,12 @@ class Conversation(models.Model):
     is_verified = models.BooleanField(default=False)
     is_active = models.BooleanField(default=False)
 
+    class Meta: 
+        constraints = [
+            models.UniqueConstraint(fields=["user"] , name="unique_user_per_conversation"),
+            models.UniqueConstraint(fields=["chat_id"] , name="unique_chat_id_per_conversation")
+        ]
+
 
     def __str__(self):
         return self.pk.__str__()
@@ -36,6 +42,7 @@ class TelegramMessage(models.Model):
     created_at = models.DateTimeField(auto_now_add=True,null=True)
     chat_id = models.PositiveIntegerField(default=0)
 
+
     def data(self):
         return self.json_content
 
@@ -55,11 +62,11 @@ class AudioContent(models.Model):
     trascription = models.TextField(null=True,blank=True)
 
 class Document(models.Model):
-    conversation = models.ForeignKey(Conversation,on_delete=models.CASCADE)
+    conversation = models.ForeignKey(Conversation,on_delete=models.CASCADE,related_name="conv_documents")
     caption = models.TextField(null=True , blank=True)
     document_source = models.ForeignKey(DocumentSource , on_delete=models.CASCADE,null=True)
     user_message = models.ForeignKey(Message , on_delete=models.CASCADE , null=True , blank=True, related_name='documents')
-    telegram_message = models.ForeignKey(TelegramMessage,on_delete=models.PROTECT,null=True)
+    telegram_message = models.ForeignKey(TelegramMessage,on_delete=models.CASCADE,null=True)
 
 
 class Chunk(models.Model):

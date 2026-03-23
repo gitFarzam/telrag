@@ -1,0 +1,10 @@
+ {% load markdown_extras %}
+<div id="message" class="message telegram">
+  <strong>Telrag</strong>
+
+  {% if message %}
+    <span>{{ message.content|convert_markdown|safe }}</span>
+  {% elif chat_id_request %}
+    <span>{{ chat_id_request|safe }}</span>
+  {% endif %}
+</div>

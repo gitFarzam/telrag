@@ -22,33 +22,66 @@ import time
 
 # First edit in demo branch
 
-class HomeView(TemplateView):
-    template_name = 'home.html'
+# class HomeView(TemplateView):
+#     def get(self, request, *args, **kwargs):
+#         user = request.user
+#         conversations = Conversation.objects.filter(user=user)
+#         print(conversations)
+#         print(f"User is {request.user}")
+#         return render(request=request,template_name='home.html')
+
+#     template_name='home.html'
 
 
 class NewConversationView(TemplateView):
+
+    def get(self, request, *args, **kwargs):
+        user = request.user
+        conversations = Conversation.objects.filter(user=user)
+        print(conversations)
+        print(f"User is {request.user}")
+        return render(request=request,template_name='home.html')
+    
     def post(self, request, *args, **kwargs):
+        user = self.request.user
         name = self.request.POST.get('name')
         if name:
-            username = f"{uuid.uuid4()}"
-            user = User(username=username)
-            user.set_unusable_password()
-            user.first_name = name
-            user.save()
+            # Check if the current user is authenticated  (logged in) , if yes , it shouldnt be able to create a new chat, or previous conversation should be deleted.
 
-            login(self.request, user, backend="django.contrib.auth.backends.ModelBackend")
-            
-            try:
+            if not user.is_authenticated:
+                username = f"{uuid.uuid4()}"
+                user = User(username=username)
+                user.set_unusable_password()
+                user.first_name = name
+                user.save()
+
+                print(f"User is (From Post) {user}")
+
+                login(self.request, user, backend="django.contrib.auth.backends.ModelBackend")
+                
+                try:
+                    conversation = Conversation.objects.create(user=user)
+                    result = add_initial_documents(conversation=conversation)
+                    if not result:
+                        print("Couldnt add initial document")
+
+                    return redirect('chat-detail', pk=conversation.pk)
+                except ValueError as e:
+                    print(f"Database error in creation conversation or/and chat id object, error: {e}")
+
+            # if user is already authenticated return user to the current conversation
+            conversation = Conversation.objects.filter(user=user).last()
+            if conversation:
+                return redirect('chat-detail', pk=conversation.pk)
+            else:
                 conversation = Conversation.objects.create(user=user)
+                conversation.refresh_from_db()
+                conversation.save()
                 result = add_initial_documents(conversation=conversation)
                 if not result:
                     print("Couldnt add initial document")
 
                 return redirect('chat-detail', pk=conversation.pk)
-
-            except ValueError as e:
-                print(f"Database error in creation conversation or/and chat id object, error: {e}")
-            
         
         return HttpResponse("Name is required", status=400)
 
@@ -71,6 +104,7 @@ class ChatView(LoginRequiredMixin , UserPassesTestMixin , DetailView):
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
         context["messages"] = self.object.messages.all().order_by("created_at")
+        # context["delete"] = self.get_object().delete()
         return context
         
 
@@ -96,6 +130,8 @@ class ChatSendMessageView(UpdateView):
 @csrf_exempt
 
 def telegram_webhook(request):
+
+
     print(telegram_webhook.__name__)
 
     if not request.body:
@@ -137,27 +173,32 @@ def telegram_webhook(request):
     
     # 2) Restrict which Telegram users can use the bot (e.g. admins only)
     
-    allowed_ids = settings.TELEGRAM_ALLOWED_USER_IDS 
-    allowed_ids += list(Conversation.objects.exclude(chat_id__isnull=True).values_list('chat_id', flat=True))
+    # allowed_ids = settings.TELEGRAM_ALLOWED_USER_IDS 
+    # allowed_ids += list(Conversation.objects.exclude(chat_id__isnull=True).values_list('chat_id', flat=True))
+    
+    # if allowed_ids:
+    from_id = data.get("message", {}).get("from", {}).get("id")
+    if from_id is None:
+        from_id = data.get("callback_query", {}).get("from", {}).get("id")
+    print(f'From ID: {from_id}')
 
-    if allowed_ids:
-        from_id = data.get("message", {}).get("from", {}).get("id")
-        if from_id is None:
-            from_id = data.get("callback_query", {}).get("from", {}).get("id")
-        print(f'From ID: {from_id}')
+    conversation = Conversation.objects.filter(chat_id=from_id).last()
 
-        if from_id is None or from_id not in allowed_ids:
-            print("-> Regex for detecting verificatin code")
-            regex_for_get_verification_code(data,from_id)
+    if not conversation:
+        print("-> Regex for detecting verificatin code")
+        regex_for_get_verification_code(data,from_id)
+        return JsonResponse({"result": "ok"},status=200)
+    else:
+        print("Nope! You can pass!")
+
+    
+    last_message = TelegramMessage.objects.filter(chat_id=from_id).last()
+    if last_message:
+        last_time = last_message.created_at.timestamp()
+        now_time = time.time()
+        if now_time - last_time < 3:
+            send_message(chat_id=last_message.chat_id,text="Your message has been rejected, please send it again 3 seconds later..")
             return JsonResponse({"result": "ok"},status=200)
-
-        last_message = TelegramMessage.objects.filter(chat_id=from_id).last()
-        if last_message:
-            last_time = last_message.created_at.timestamp()
-            now_time = time.time()
-            if now_time - last_time < 3:
-                send_message(chat_id=last_message.chat_id,text="Your message has been rejected, please send it again 3 seconds later..")
-                return JsonResponse({"result": "ok"},status=200)
 
     try: 
         data = json.loads(request.body.decode("utf-8"))

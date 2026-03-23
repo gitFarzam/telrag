@@ -32,7 +32,7 @@ def set_telegram_webhook_secret():
     print(f"Setting New Webhook on: {address}",response.content, response.status_code)
 
 
-set_telegram_webhook_secret()
+# set_telegram_webhook_secret()
 
 
 
