@@ -202,11 +202,12 @@ TELEGRAM_DEFAULT_CHAT_ID=120358726
 DEMO = True
 
 # Celery
+from datetime import timedelta
 CELERY_BROKER_URL = f"redis://{REDIS_HOST_NAME}:6379/1"
 CELERY_BEAT_SCHEDULE = {
     "task_delete_unused_conversation" :{
         'task' : 'chat.tasks.task_delete_unused_conversation',
-        'schedule' : 5, #every 5 seconds
+        'schedule' : timedelta(minutes=10)
     }
 }
 

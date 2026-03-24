@@ -51,7 +51,7 @@ services:
     container_name: telrag_celery
     working_dir: /usr/src/app
     entrypoint: ["/usr/src/app/entrypoint.sh"]
-    command: celery -A django_project worker -l info 
+    command: celery -A django_project worker -l info -B
     volumes:
       - ./src:/usr/src/app/src
       - ./entrypoint.sh:/usr/src/app/entrypoint.sh

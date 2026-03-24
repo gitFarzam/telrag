@@ -499,10 +499,19 @@ def add_initial_documents(conversation):
         
 
 def delete_unused_conversation():
-    threshold = timezone.now() - timedelta(minutes=50)
-    return Conversation.objects.annotate(
+
+    #getting conversations
+    threshold = timezone.now() - timedelta(minutes=30)
+    conversations = Conversation.objects.annotate(
         last_msg_time=Max("messages__created_at")
     ).filter(
         Q(last_msg_time__lt=threshold) |
         Q(last_msg_time__isnull=True, created_at__lt=threshold)
-    ).delete()
+    )
+    
+    for conversation in conversations:
+        message_sender_custom(conversation , """This conversation has expired due to inactivity. Please go to the <a href="https://tellrag.site">homepage</a and start a new one.""")
+        conversation.delete()
+        
+
+    
