@@ -36,54 +36,52 @@ import time
 class NewConversationView(TemplateView):
 
     def get(self, request, *args, **kwargs):
-        user = request.user
-        conversations = Conversation.objects.filter(user=user)
-        print(conversations)
-        print(f"User is {request.user}")
         return render(request=request,template_name='home.html')
     
     def post(self, request, *args, **kwargs):
         user = self.request.user
         name = self.request.POST.get('name')
-        if name:
-            # Check if the current user is authenticated  (logged in) , if yes , it shouldnt be able to create a new chat, or previous conversation should be deleted.
+        if not user.is_staff:
+            if name:
+                # Check if the current user is authenticated  (logged in) , if yes , it shouldnt be able to create a new chat, or previous conversation should be deleted.
 
-            if not user.is_authenticated:
-                username = f"{uuid.uuid4()}"
-                user = User(username=username)
-                user.set_unusable_password()
-                user.first_name = name
-                user.save()
+                if not user.is_authenticated:
+                    username = f"{uuid.uuid4()}"
+                    user = User(username=username)
+                    user.set_unusable_password()
+                    user.first_name = name
+                    user.save()
 
-                print(f"User is (From Post) {user}")
+                    print(f"User is (From Post) {user}")
 
-                login(self.request, user, backend="django.contrib.auth.backends.ModelBackend")
-                
-                try:
+                    login(self.request, user, backend="django.contrib.auth.backends.ModelBackend")
+                    
+                    try:
+                        conversation = Conversation.objects.create(user=user)
+                        result = add_initial_documents(conversation=conversation)
+                        if not result:
+                            print("Couldnt add initial document")
+
+                        return redirect('chat-detail', pk=conversation.pk)
+                    except ValueError as e:
+                        print(f"Database error in creation conversation or/and chat id object, error: {e}")
+
+                # if user is already authenticated return user to the current conversation
+                conversation = Conversation.objects.filter(user=user).last()
+                if conversation:
+                    return redirect('chat-detail', pk=conversation.pk)
+                else:
                     conversation = Conversation.objects.create(user=user)
+                    conversation.refresh_from_db()
+                    conversation.save()
                     result = add_initial_documents(conversation=conversation)
                     if not result:
                         print("Couldnt add initial document")
 
                     return redirect('chat-detail', pk=conversation.pk)
-                except ValueError as e:
-                    print(f"Database error in creation conversation or/and chat id object, error: {e}")
-
-            # if user is already authenticated return user to the current conversation
-            conversation = Conversation.objects.filter(user=user).last()
-            if conversation:
-                return redirect('chat-detail', pk=conversation.pk)
-            else:
-                conversation = Conversation.objects.create(user=user)
-                conversation.refresh_from_db()
-                conversation.save()
-                result = add_initial_documents(conversation=conversation)
-                if not result:
-                    print("Couldnt add initial document")
-
-                return redirect('chat-detail', pk=conversation.pk)
-        
-        return HttpResponse("Name is required", status=400)
+            
+            return HttpResponse("Name is required", status=400)
+        return HttpResponse("Logout from admin user", status=400)
 
 
 # Create your views here.
@@ -202,6 +200,7 @@ def telegram_webhook(request):
 
     try: 
         data = json.loads(request.body.decode("utf-8"))
+        print(data)
         telegram_message_processor(transaction_type=True , json_content = data)
         return JsonResponse({"result": "ok"},status=200)
 

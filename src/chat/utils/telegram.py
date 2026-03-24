@@ -55,10 +55,15 @@ def send_message(chat_id=120358726, text=None,document_id=None,reply_to_message_
         payload["reply_to_message_id"] = reply_to_message_id
 
     response = requests.post(url, json=payload)
+    response_dict:dict = response.json()
+    print('response:->>>>',response_dict.keys(),response_dict)
 
     if not command:
         # when there is a command, telegram doesnt send back a message id, so I can not get anything!
-        telegram_message_id = response.json()['result']['message_id']
+        result:dict = response_dict.get('result',{})
+        print(result)
+        telegram_message_id = result.get('message_id',{})
+        print(telegram_message_id)
         """
             {'ok': True, 'result': {'message_id': 34, 'from': {'id': 8176918185, 'is_bot': True, 'first_name': 'telrag', 'username': 'telrag_bot'}, 'chat': {'id': 120358726, 'first_name': 'F', 'username': 'Farzam91', 'type': 'private'}, 'date': 1770237370, 'text': 'Hey! Somebody have a question:\nU'}}
         """

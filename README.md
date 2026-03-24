@@ -127,3 +127,7 @@ chmod +x entrypoint.sh
 - limiting voice length
 - creating demo
 - if there is more than 1 conversation with 1 chat id value, those conversations should be removed automatically before receving new telegram message!
+- Deleting option in chat view
+- Celery task for deleting conversations and users
+- WebSocket doesnt work in mobile view , using wss:// instead of ws:// (probably you can just test in online mode in https)
+- Fix telegram message dictionary, it doesnt trigger ai, because there is a problem in reading 'result' key in dic
