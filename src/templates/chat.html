@@ -8,11 +8,49 @@
 
   <h2>Chat with {{user.first_name}}</h2>
 
-  
+
 
   <!-- SCROLLABLE MESSAGES -->
   <div id="messages" 
        class="chat-container">
+
+
+
+
+  <div class="help">
+<p>
+Hi! This is a demo. There is an imaginary restaurant called <strong>TelBurger</strong>, and you are a customer chatting with a customer service AI agent. You can ask questions for which answers are already available to the AI agent, such as:
+</p>
+
+<ul>
+  <li>What types of burgers do you have?</li>
+  <li>What is your refund policy?</li>
+</ul>
+
+<p>
+The AI agent will most likely be able to answer these questions using its stored knowledge and RAG system.
+</p>
+
+<hr>
+
+<p>
+Later, you may ask questions that are not necessarily covered in the database, and the AI agent may not be able to answer them. For example:
+</p>
+
+<ul>
+  <li>Do you have any special discounts for 2025?</li>
+  <li>Can you please not add tomato to my burger?</li>
+  <li>How can I place an order for a birthday party?</li>
+</ul>
+
+<p>
+In that case, the AI agent will try to contact a human agent via Telegram. Once the human agent responds (by replying to the message), the answer will be delivered to you.
+</p>
+
+  </div>
+
+
+
     {% for message in messages %}
       {% include "message.html" %}
     {% endfor %}

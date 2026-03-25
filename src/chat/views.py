@@ -1,5 +1,5 @@
 from django.shortcuts import render, redirect
-from .models import Conversation,TelegramMessage
+from .models import Conversation,TelegramMessage,Message
 from django.views.generic import DetailView, UpdateView,TemplateView
 from core.models import User
 from django.http import HttpResponse
@@ -59,6 +59,7 @@ class NewConversationView(TemplateView):
                     try:
                         conversation = Conversation.objects.create(user=user)
                         result = add_initial_documents(conversation=conversation)
+                        
                         if not result:
                             print("Couldnt add initial document")
 
@@ -128,10 +129,7 @@ class ChatSendMessageView(UpdateView):
 @csrf_exempt
 
 def telegram_webhook(request):
-
-
     print(telegram_webhook.__name__)
-
     if not request.body:
         error = "Request body is required"
         print(error)
@@ -140,7 +138,6 @@ def telegram_webhook(request):
             status=200
         )
         
-
     # 1) Verify request is from Telegram (rejects random POSTs to your webhook URL)
     secret = settings.TELEGRAM_WEBHOOK_SECRET
     if secret:
@@ -148,8 +145,6 @@ def telegram_webhook(request):
         if not hmac.compare_digest(secret, token):
             print("Request im webhook is not from telegram!")
             return JsonResponse({"error": "Forbidden"}, status=200)
-
-
 
     try:
         data = json.loads(request.body)

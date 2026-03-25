@@ -117,7 +117,7 @@ chmod +x entrypoint.sh
 
 
 ## Changes
-- adding an admin with a custome login address
+- adding an admin with a custom login address
 - adding demo guide
 - add logging
 - creating a dataset for demo
@@ -130,3 +130,7 @@ chmod +x entrypoint.sh
 - Deleting option in chat view
 - Celery task for deleting conversations and users
 - WebSocket doesnt work in mobile view , using wss:// instead of ws:// (probably you can just test in online mode in https)
+- Hiding demo help
+- Adding Demo help title to demo help
+- make demo help shorter
+- adding that, "or ask something irelevant, like I need to take a shower!, something which you can make sure AI agent can not answer to it!

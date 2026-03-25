@@ -312,12 +312,12 @@ def process_user_message(instance:Message):
                 is_agent=True
                 )
         
-    elif result in [2]:
+    elif result in [2,3]:
         # Sending to telegram
         # Temporary message 1 : waiting for sending message to the user
         message_sender(
                 conversation=conversation,
-                content="Oops! let me find somebody and ask from them!",
+                content="I don't have enough info. I'll check with a human agent and get back to you soon!",
                 is_agent=True
                 )
 
@@ -326,7 +326,7 @@ def process_user_message(instance:Message):
         if conversation.chat_id:
             chat_id = conversation.chat_id
             print('chat id: ',chat_id)
-            telegram_message_id = send_message(chat_id=chat_id,text=f"{content}")
+            telegram_message_id = send_message(chat_id=chat_id,text=f"A customer called : {instance.conversation.user.first_name} Asked this question: {content} , As I dont have enough information, please provide an answer (make sure you are replying to this message, so I can understand which message to point)")
 
             # Updating instance (message object) with telegram id
             instance.tg_id = telegram_message_id
@@ -337,11 +337,12 @@ def process_user_message(instance:Message):
             conversation.code = code
             conversation.save()
             print('Object is existed but it doesnt have a chat id value')
+            message_sender_custom(conversation=instance.conversation,message=f"""The AI Agent is now trying to send a message to a human agent on Telegram. Since this is a <strong>demo</strong>, you'll play the role of the human agent yourself.""")
             message_sender_custom(conversation=instance.conversation,message=f"""<br>Please link your Telegram account to this conversation.\n<br><br>Send number below to <ahref="https://t.me/telrag_bot">@telrag_bot</a><br><br><center><b>{code}</b></center>""")
 
 
 
-    elif result in [3]:
+    elif result in [4]:
         # send and aswer which you can not respond to this matter
         message_sender(
                 conversation=instance.conversation,
@@ -460,7 +461,7 @@ def regex_for_get_verification_code(data:dict , from_id):
                 conversation.is_verified = True
                 # also it should get conversation model from somewhere
                 conversation.save()
-                send_message(chat_id=conversation.chat_id,text="✅ verification code has been detected in your message, You are verified now")
+                send_message(chat_id=conversation.chat_id,text="✅ A verification code was detected in your message. You are now verified.")
                 message_sender_custom(conversation=conversation, message=f"<br>✅ Your telegram account is linked to this conversation!")
 
                 # Now we try to fetch the last message which is sent from user to the support telegram to have it answered right after verification
@@ -472,7 +473,7 @@ def regex_for_get_verification_code(data:dict , from_id):
                     last_message.save()
                 return JsonResponse({"result": "ok"}, status=200)
             else:
-                send_message(chat_id=from_id ,text="Wrong input! Please check chat window and just send the code you are seeing on the window!")
+                send_message(chat_id=from_id ,text="Invalid number. Please check the chat window and enter the code shown there.")
                 return JsonResponse({"result": "ok"}, status=200)
             
         else:
