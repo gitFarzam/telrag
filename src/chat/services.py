@@ -256,7 +256,7 @@ def entities_handling(message_data,chat_id):
                 print(docs)
                 if docs:
                     for i,doc in enumerate(docs):
-                        text = f"<strong>Document {str(i)}:</strong>\nunique_id: <code>{doc.pk}</code> {fetch_content_from_document(doc)}" 
+                        text = f"<strong>Document {str(i)}:</strong>\nid: <code>{doc.pk}</code>\nsummary: {fetch_content_from_document(doc)}" 
                         send_message(chat_id=chat_id,text=text , document_id=doc.pk,command=True)
                 else:
                     send_message(chat_id=chat_id,text="oOps! no document for this conversation!")
@@ -326,7 +326,7 @@ def process_user_message(instance:Message):
         if conversation.chat_id:
             chat_id = conversation.chat_id
             print('chat id: ',chat_id)
-            telegram_message_id = send_message(chat_id=chat_id,text=f"A customer called : {instance.conversation.user.first_name} Asked this question: {content} , As I dont have enough information, please provide an answer (make sure you are replying to this message, so I can understand which message to point)")
+            telegram_message_id = send_message(chat_id=chat_id,text=f"""💬 A customer named <b>{instance.conversation.user.first_name}</b> asked the following question:\n\n<blockquote>{content}</blockquote>\n\n🔻 I don't have enough information to answer it. Please reply to this message with your response so I can answer it correctly.""")
 
             # Updating instance (message object) with telegram id
             instance.tg_id = telegram_message_id
@@ -337,7 +337,7 @@ def process_user_message(instance:Message):
             conversation.code = code
             conversation.save()
             print('Object is existed but it doesnt have a chat id value')
-            message_sender_custom(conversation=instance.conversation,message=f"""The AI Agent is now trying to send a message to a human agent on Telegram. Since this is a <strong>demo</strong>, you'll play the role of the human agent yourself.""")
+            message_sender_custom(conversation=instance.conversation,message=f"""The AI Agent doesn't have enough information to answer to this question, So now is trying to send a message to a human agent on Telegram. Since this is a <strong>demo</strong>, you'll play the role of the human agent yourself.""")
             message_sender_custom(conversation=instance.conversation,message=f"""<br>Please link your Telegram account to this conversation.\n<br><br>Send number below to <ahref="https://t.me/telrag_bot">@telrag_bot</a><br><br><center><b>{code}</b></center>""")
 
 
@@ -462,12 +462,16 @@ def regex_for_get_verification_code(data:dict , from_id):
                 # also it should get conversation model from somewhere
                 conversation.save()
                 send_message(chat_id=conversation.chat_id,text="✅ A verification code was detected in your message. You are now verified.")
+                send_message(chat_id=conversation.chat_id,text="""Quick guide:\n
+1. Send a direct message on Telegram → it will be stored as context.\n
+2. Reply to a message from the agent → it will be stored as context and immediately sent to the agent to answer the question.\n
+3. Get all contexts (each context as a unique document): /getdocs """)
                 message_sender_custom(conversation=conversation, message=f"<br>✅ Your telegram account is linked to this conversation!")
 
                 # Now we try to fetch the last message which is sent from user to the support telegram to have it answered right after verification
                 last_message:Message = conversation.messages.filter(is_agent=False).last()
                 if last_message:
-                    telegram_message_id = send_message(chat_id=conversation.chat_id,text=last_message.content)
+                    telegram_message_id = send_message(chat_id=conversation.chat_id,text=f"""💬 A customer named <b>{conversation.user.first_name}</b> asked the following question:\n\n<b>{last_message.content}</b>\n\n🔻 I don't have enough information to answer it. Please reply to this message with your response so I can answer it correctly.""")
                     # note: as user gonna reply to this messsage, we have to store it as a telegram message id
                     last_message.tg_id = telegram_message_id
                     last_message.save()

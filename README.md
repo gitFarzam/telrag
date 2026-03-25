@@ -125,12 +125,15 @@ chmod +x entrypoint.sh
 - error handling
 - in demo mode, the initial context should be just related to each conversation, so it is a refreshed one each time
 - limiting voice length
-- creating demo
-- if there is more than 1 conversation with 1 chat id value, those conversations should be removed automatically before receving new telegram message!
 - Deleting option in chat view
 - Celery task for deleting conversations and users
 - WebSocket doesnt work in mobile view , using wss:// instead of ws:// (probably you can just test in online mode in https)
-- Hiding demo help
-- Adding Demo help title to demo help
 - make demo help shorter
 - adding that, "or ask something irelevant, like I need to take a shower!, something which you can make sure AI agent can not answer to it!
+- test voice
+- right about, if you just send a text/voice without replying it will be stored seprately as a context
+- edit the texts related to reply message
+- edit the message which instanly sends after verification, (it should contain description)
+- fix message and response combination from user telegram message
+- remove /delete command
+- add an additional guide, about if you open multiple browser, your messages will go to another conversation, click /refresh, to connect you to the current chat

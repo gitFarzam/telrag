@@ -17,9 +17,21 @@
 
 
 
-  <div class="help">
+  <div class="help-section" id="help-section">
+    <div class="help-toolbar">
+      <button
+        type="button"
+        class="help-toggle"
+        id="help-toggle"
+        aria-expanded="true"
+        aria-controls="help-body"
+      >
+        Hide help
+      </button>
+    </div>
+    <div class="help" id="help-body">
 <p>
-Hi! This is a demo. There is an imaginary restaurant called <strong>TelBurger</strong>, and you are a customer chatting with a customer service AI agent. You can ask questions for which answers are already available to the AI agent, such as:
+Hi! This is a demo. There is an imaginary restaurant called 🍔<strong>TelBurger</strong>, and you are a customer chatting with a customer service AI agent. You can ask questions for which answers are already available to the AI agent, such as:
 </p>
 
 <ul>
@@ -47,7 +59,7 @@ Later, you may ask questions that are not necessarily covered in the database, a
 In that case, the AI agent will try to contact a human agent via Telegram. Once the human agent responds (by replying to the message), the answer will be delivered to you.
 </p>
 
-  </div>
+  </div></div>
 
 
 
@@ -77,6 +89,38 @@ In that case, the AI agent will try to contact a human agent via Telegram. Once 
   </form>
 
 <script>
+
+
+(function () {
+  var STORAGE_KEY = 'telrag_chat_help_collapsed';
+  var section = document.getElementById('help-section');
+  var toggle = document.getElementById('help-toggle');
+  if (!section || !toggle) return;
+
+  function applyCollapsed(collapsed) {
+    section.classList.toggle('is-collapsed', collapsed);
+    toggle.setAttribute('aria-expanded', collapsed ? 'false' : 'true');
+    toggle.textContent = collapsed ? '🍔 Show help' : 'Hide help';
+    try {
+      localStorage.setItem(STORAGE_KEY, collapsed ? '1' : '0');
+    } catch (e) {}
+  }
+
+  try {
+    applyCollapsed(localStorage.getItem(STORAGE_KEY) === '1');
+  } catch (e) {
+    applyCollapsed(false);
+  }
+
+  toggle.addEventListener('click', function () {
+    applyCollapsed(!section.classList.contains('is-collapsed'));
+  });
+})();
+
+
+
+
+
 document.body.addEventListener('htmx:wsAfterMessage', function() {
   setTimeout(function() {
     var el = document.getElementById('messages');
