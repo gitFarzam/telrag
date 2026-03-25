@@ -25,7 +25,7 @@ class RAGToolKit(RecursiveCharacterTextSplitter):
 
 
     def text_generator(self,messages_history:list,new_messages:dict):
-        system_guideline = "You are a live agent customer service from Lumiere Beauty, which is a full-service online beauty retailer dedicated to providing high-quality skincare, makeup, haircare, and wellness products to customers across the United States and selected international markets."
+        system_guideline = "You are an ai-assistant customer service from TelBurger restaurant"
 
         system_message = {'role':'system','content':system_guideline}
         messages_history.insert(0,system_message)
@@ -42,7 +42,7 @@ class RAGToolKit(RecursiveCharacterTextSplitter):
 
         client = OpenAI()
 
-        system_guideline = "You are a live agent customer service from Lumiere Beauty, which is a full-service online beauty retailer dedicated to providing high-quality skincare, makeup, haircare, and wellness products to customers across the United States and selected international markets."
+        system_guideline = "You are an ai-assistant customer service from TelBurger restaurant."
 
         system_message = {'role':'system','content':system_guideline}
         messages_history.insert(0,system_message)
@@ -174,7 +174,10 @@ class RetirievalNavigator():
 
     def message_categorizer(self,content) -> int:
         system_prompt = f"""
-            You are an AI tasked with evaluating how well a user's question can be answered using a set of provided information.
+            You are an AI tasked with evaluating how well a user's question can be answered using a set of provided information.\n
+
+            Your scope: anything related to TelBurger restaurant, TelBurger sells burgers, so the scope you can answer is about pricing, delivery of burgers, type of burgers, refunding, and anything related to a burger restaurant customer service.\n
+
             Your job is to compare the user's question with the provided information and classify it into one of four categories:
             Category 0: The provided information is directly related to the question, and the question can be fully answered using it.\n
             Category 1: The provided information is not required to answer the question (for example, greetings, general questions, or requests unrelated to the information). The question can be answered without it.

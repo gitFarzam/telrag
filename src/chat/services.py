@@ -312,7 +312,7 @@ def process_user_message(instance:Message):
                 is_agent=True
                 )
         
-    elif result in [2,3]:
+    elif result in [2]:
         # Sending to telegram
         # Temporary message 1 : waiting for sending message to the user
         message_sender(
@@ -341,7 +341,7 @@ def process_user_message(instance:Message):
 
 
 
-    elif result in [4]:
+    elif result in [3]:
         # send and aswer which you can not respond to this matter
         message_sender(
                 conversation=instance.conversation,
@@ -462,6 +462,14 @@ def regex_for_get_verification_code(data:dict , from_id):
                 conversation.save()
                 send_message(chat_id=conversation.chat_id,text="✅ verification code has been detected in your message, You are verified now")
                 message_sender_custom(conversation=conversation, message=f"<br>✅ Your telegram account is linked to this conversation!")
+
+                # Now we try to fetch the last message which is sent from user to the support telegram to have it answered right after verification
+                last_message:Message = conversation.messages.filter(is_agent=False).last()
+                if last_message:
+                    telegram_message_id = send_message(chat_id=conversation.chat_id,text=last_message.content)
+                    # note: as user gonna reply to this messsage, we have to store it as a telegram message id
+                    last_message.tg_id = telegram_message_id
+                    last_message.save()
                 return JsonResponse({"result": "ok"}, status=200)
             else:
                 send_message(chat_id=from_id ,text="Wrong input! Please check chat window and just send the code you are seeing on the window!")
@@ -476,7 +484,7 @@ def regex_for_get_verification_code(data:dict , from_id):
 
 def add_initial_documents(conversation):
     import os
-    document_indices = ['0']
+    document_indices = ['1']
     dir = os.path.join(settings.BASE_DIR,'chat/management/commands/initial_data')
     for document_index in document_indices:
         try:

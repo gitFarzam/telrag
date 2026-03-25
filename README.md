@@ -130,4 +130,3 @@ chmod +x entrypoint.sh
 - Deleting option in chat view
 - Celery task for deleting conversations and users
 - WebSocket doesnt work in mobile view , using wss:// instead of ws:// (probably you can just test in online mode in https)
-- Fix telegram message dictionary, it doesnt trigger ai, because there is a problem in reading 'result' key in dic

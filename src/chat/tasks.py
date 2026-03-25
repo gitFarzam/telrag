@@ -18,6 +18,7 @@ def task_reply_message(transaction_type,json_content,chat_id,message_id):
     document_object = ingestion_process(transaction_type,json_content,chat_id,is_new=False)
     if document_object:
         send_message(text=f"Document has been created, ID: {document_object.pk}",reply_to_message_id=message_id)
+        print('debug: --->',document_object.user_message.conversation,'<------ after dubug')
         agent_message_sender(document_object.user_message,context=fetch_content_from_document(document_object))
     else:
         send_message(text=f"Creating Document was unsuccessfull",reply_to_message_id=message_id)

@@ -1,0 +1,41 @@
+-> General Info
+TelBurger is a restaurant which dedicated to provide tasty burgers to customers across the unithed states. Founded in 2025 with 100 beanches, including this cities:
+New York City, Los Angeles, Chicago, Houston, Phoenix, Philadelphia, San Antonio, San Diego, Dallas, San Jose, Austin, Jacksonville, Fort Worth, Columbus, Charlotte, San Francisco, Indianapolis, Seattle, Denver, Washington, Boston, El Paso, Nashville, Detroit, Oklahoma City, Portland, Las Vegas, Memphis, Louisville, Baltimore, Milwaukee, Albuquerque, Tucson, Fresno, Sacramento, Kansas City, Mesa, Atlanta, Omaha, Colorado Springs, Raleigh, Miami, Long Beach, Virginia Beach, Oakland, Minneapolis, Tulsa, Arlington, New Orleans, Wichita, Cleveland, Tampa, Bakersfield, Aurora, Anaheim, Honolulu, Santa Ana, Riverside, Corpus Christi, Lexington, Henderson, Stockton, Saint Paul, Cincinnati, St. Louis, Pittsburgh, Greensboro, Lincoln, Anchorage, Plano, Orlando, Irvine, Newark, Durham, Chula Vista, Toledo, Fort Wayne, St. Petersburg, Laredo, Jersey City, Chandler, Madison, Lubbock, Scottsdale, Reno, Buffalo, Gilbert, Glendale, North Las Vegas, Winston-Salem, Chesapeake, Norfolk, Fremont, Garland, Irving, Hialeah, Richmond, Boise
+
+<break>
+
+-> Menu
+Our restaurant currently offers three types of burgers: hamburger, cheeseburger, and veggie burger.
+All burgers are available with either a single or double patty.
+Hamburger ingredients: potato bun, high-quality beef patty, pickles, special sauce
+Cheeseburger ingredients: potato bun, high-quality beef patty, two layers of American cheese, pickles, special sauce
+Veggie burger ingredients: gluten-free bun, chickpea-based veggie patty, pickles, special vegan sauce
+
+<break>
+
+-> Shipping and Delivery
+We deliver through supported delivery apps to all areas available on those platforms.
+
+<break>
+
+-> Returns and Refund Policy
+Customer satisfaction is our top priority. If you’re not happy with your order, we’re sorry—just let us know. No questions asked. We’ll process your refund as quickly as possible.
+Refunds are issued to the original payment method within 5–7 business days after the returned items are inspected and approved.
+
+<break>
+
+-> Customer Support and Consultation
+Our customer service team is available via email, phone, and live chat. Support hours are Monday through Sunday, 9:00 AM to 11:00 PM (Eastern Time).
+
+<break>
+
+-> Loyalty and Rewards Program
+We offer a structured loyalty program designed to reward our returning customers. Members earn one point for every dollar spent. Points can be redeemed for discounts, exclusive items, and early access to promotions.
+Additional benefits include:
+40% off your first two orders after signing up for our newsletter
+A birthday reward of 50% off
+
+<break>
+
+-> Product Safety and Compliance
+We use 100% organic ingredients. All products sold by TelBurger comply with FDA regulations and relevant safety standards.
