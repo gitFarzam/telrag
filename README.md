@@ -137,3 +137,5 @@ chmod +x entrypoint.sh
 - fix message and response combination from user telegram message
 - remove /delete command
 - add an additional guide, about if you open multiple browser, your messages will go to another conversation, click /refresh, to connect you to the current chat
+- edit footer
+- adding contact form
