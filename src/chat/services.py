@@ -509,7 +509,6 @@ def add_initial_documents(conversation):
 
         except FileNotFoundError as e:
             raise FileNotFoundError('File %s.txt does not exist' % document_index)
-        
 
 def delete_unused_conversation():
 
@@ -525,6 +524,3 @@ def delete_unused_conversation():
     for conversation in conversations:
         message_sender_custom(conversation , """This conversation has expired due to inactivity. Please go to the <a href="https://tellrag.site">homepage</a and start a new one.""")
         conversation.delete()
-        
-
-    
