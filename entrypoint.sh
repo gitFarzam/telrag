@@ -5,7 +5,11 @@ set -e
 
 
 # Setting webhook
-source .env
+# . works like source , source is a bash command , but in vps we have shell, . works anyone if is available
+
+# no need to source env here! docker compose will do it automatically!
+
+
 
 curl -X POST "https://api.telegram.org/bot${TELEGRAM_API_KEY}/setWebhook" \
   -d "url=${ONLINE_WEBHOOK_ADDRESS}" \
@@ -24,6 +28,12 @@ echo "🧱 Collecting static files..."
 # Ensure we're in the Django project directory where manage.py lives
 # Change to directory where manage.py is
 cd /usr/src/app/src || exit 1
+
+
+
+
+
+
 
 echo "Current Directory After cd"
 pwd
