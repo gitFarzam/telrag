@@ -11,7 +11,7 @@ load_dotenv()
 # https://api.telegram.org/bot8536509873:BAFG4ILMA39Iuhj8SQhy6hks5RspmDRs_6D/getUpdates
 
 # https://api.telegram.org/bot8536509873:BAFG4ILMA39Iuhj8SQhy6hks5RspmDRs_6D/deleteWebhook
-telegram_api_key = os.getenv('telegram_api')
+telegram_api_key = os.getenv('TELEGRAM_API_KEY')
 
 
 def set_telegram_webhook_secret():

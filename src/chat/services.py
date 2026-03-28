@@ -261,6 +261,12 @@ def entities_handling(message_data,chat_id):
                 else:
                     send_message(chat_id=chat_id,text="oOps! no document for this conversation!")
                 return True
+            
+            elif command == '/refresh':
+                conversation = Conversation.objects.filter(chat_id=chat_id).first()
+                if conversation:
+                    conversation.delete()
+
                 
 def process_user_message(instance:Message):
 
@@ -522,5 +528,5 @@ def delete_unused_conversation():
     )
     
     for conversation in conversations:
-        message_sender_custom(conversation , """This conversation has expired due to inactivity. Please go to the <a href="https://tellrag.site">homepage</a and start a new one.""")
+        message_sender_custom(conversation , """This conversation has expired due to inactivity. Please go to the <a href="https://telrag.site">homepage</a and start a new one.""")
         conversation.delete()

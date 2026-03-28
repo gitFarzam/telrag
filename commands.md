@@ -150,3 +150,10 @@ docker run \
   --network telrag-network \
   telrag_celery_image
 ```
+
+
+```shell
+curl -X POST "https://api.telegram.org/bot${TELEGRAM_API_KEY}/setWebhook" \
+  -d "url=${WEBHOOK_URL}" \
+  -d "secret_token=${TG_SECRET_KEY}"
+```

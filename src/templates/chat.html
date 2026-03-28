@@ -107,11 +107,11 @@ In that case, the AI agent will try to contact a human agent via Telegram. Once 
   }
 
   try {
-    applyCollapsed(localStorage.getItem(STORAGE_KEY) === '1');
+    var savedCollapsed = localStorage.getItem(STORAGE_KEY);
+    applyCollapsed(savedCollapsed === null ? true : savedCollapsed === '1');
   } catch (e) {
-    applyCollapsed(false);
+    applyCollapsed(true);
   }
-
   toggle.addEventListener('click', function () {
     applyCollapsed(!section.classList.contains('is-collapsed'));
   });

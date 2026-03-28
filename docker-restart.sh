@@ -3,7 +3,9 @@ docker compose down
 docker builder prune --all
 docker image prune -a
 
+echo "pulling last changes"
+git pull origin demo
+
 echo "Docker | Building"
-chmod +x entrypoint.sh
 docker compose build --no-cache
-docker compose up
+docker compose up -d
