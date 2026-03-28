@@ -9,19 +9,20 @@ from dotenv import load_dotenv
 from enum import IntEnum
 import os
 from django.conf import settings
+import constants,prompts
 load_dotenv()
 
 class RAGToolKit(RecursiveCharacterTextSplitter):
 
     def __init__(self, separators = None, keep_separator = True, is_separator_regex = False, text=None, **kwargs):
-        super().__init__(separators, keep_separator, is_separator_regex,  chunk_size = 4000,
-        chunk_overlap = 200,**kwargs)
+        super().__init__(separators, keep_separator, is_separator_regex,  chunk_size = constants.CHUNK_SIZE,
+        chunk_overlap = constants.CHUNK_OVERLAP,**kwargs)
 
-
+    # in-use: for generating embedding for sentences
     def embedder(self,chunks:list):
-        client = InferenceClient(model="sentence-transformers/all-MiniLM-L6-v2" , token="hf_Gd3Gg0o75RfKG3IplnjVKC2tJulngVtKf5") 
+        client = InferenceClient(model=constants.HF_EMBEDDING_MODEL) 
         embedding = client.feature_extraction(text=chunks)
-        return embedding
+        return embedding[0]
 
 
     def text_generator(self,messages_history:list,new_messages:dict):
@@ -77,44 +78,13 @@ class CategorzingModel(BaseModel):
     result: Literal[0, 1, 2, 3]
 
 
-class IntentType(IntEnum):
-    GREETING = 0
-    GENERAL_INQUIRY = 1
-    PII_SUBMISSION = 2
-    PRODUCT_INFO = 3
-    ORDER = 4
-    SHIPPING = 5
-    RETURN_REFUND = 6
-    ACCOUNT = 7
-    PAYMENT = 8
-    PROMOTION = 9
-    COMPLAINT = 10
-    SAFETY = 11
-    BUSINESS = 12
-    TECHNICAL = 13
-    ESCALATION = 14
-    NONE = 15
-
-
-class IntegerModel(BaseModel):
-    result: IntentType
-
-
 
 class RetirievalNavigator():
     """
-    import paydantic
-    then -> write a class which returns True and False (to check if it's greeting or no):
-
-        if it's greeting, answering with one of the pre-ready answers.
-        if not -> go for similarity scores
-            provide context for another function which detects if contexts are good for answering or no (requires another True False passing for a pydantic)
-            (this can be replaced with a threshhold for similarity scores , or a hubrid approach)
-            if it's the anwer : send context to agent
-            if not -> sending to telegram
-                again here should pass through similarity gate
+    This is a class for
             
     """
+    
     def __init__(self,model,token):
         self.model = model
         self.token = token
@@ -172,6 +142,7 @@ class RetirievalNavigator():
 
         return CategorzingModel.model_validate_json(content).result
 
+    # in-use: for categorzing message
     def message_categorizer(self,content) -> int:
         system_prompt = f"""
             You are an AI tasked with evaluating how well a user's question can be answered using a set of provided information.\n
@@ -189,4 +160,45 @@ class RetirievalNavigator():
             Do not provide explanations or reasoning.
             Return only the category number: 0, 1, 2, or 3.
         """
+        return self.setUp_openai_detector(system_prompt, content)
+
+
+
+
+class OpenaiTool():
+    """
+    This is a class for using openai chat completionå
+    """
+    
+    def __init__(self,model):
+        self.model = model
+        return super().__init__()
+    
+
+    def setUp_openai_detector(self,system_prompt,user_prompt):
+        client = OpenAI()
+
+        completion = client.chat.completions.create(
+            model=self.model,
+            messages=[
+                {"role": "system", "content": system_prompt},
+                {"role": "user", "content": user_prompt}
+            ],
+            response_format={
+                "type": "json_schema",
+                "json_schema": {
+                    "name": "CategorizingResponse",
+                    "schema": CategorzingModel.model_json_schema()
+                }
+            },
+            temperature=0
+        )
+
+        content = completion.choices[0].message.content
+
+        return CategorzingModel.model_validate_json(content).result
+
+    # in-use: for categorzing message
+    def message_categorizer(self,content) -> int:
+        system_prompt = prompts.system_prompt_message_categorizer
         return self.setUp_openai_detector(system_prompt, content)

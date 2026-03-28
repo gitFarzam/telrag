@@ -121,7 +121,6 @@ chmod +x entrypoint.sh
 - add logging
 - improve using openai
 - error handling
-- in demo mode, the initial context should be just related to each conversation, so it is a refreshed one each time
 - limiting voice length
 - Deleting option in chat view
 - Celery task for deleting users
@@ -139,3 +138,5 @@ chmod +x entrypoint.sh
 - adding refresh mode (delete prvious conversation)
 - curl command for webhook
 - writing about this demo may have problem in mobile view, please use desktop view
+- redirect to homepage if it's not found
+- Cleaning: imports, redundant functions, constants, typos, logger, redundant files, gitignore, git cache

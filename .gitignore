@@ -12,6 +12,7 @@ src/db.sqlite3
 venv
 __pycache__
 
+
 # Python packaging / tooling
 .pytest_cache/
 .mypy_cache/

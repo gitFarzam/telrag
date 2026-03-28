@@ -4,7 +4,7 @@
 
 {% block content %}
 
-<div class="conversation" id="conversation" hx-ext="ws" ws-connect="wss://{{ request.get_host }}/ws/chat/{{ conversation.id }}/" >
+<div class="conversation" id="conversation" hx-ext="ws" ws-connect="/ws/chat/{{ conversation.id }}/" >
 
   <h2>Chat with {{user.first_name}}</h2>
 
@@ -92,6 +92,52 @@ In that case, the AI agent will try to contact a human agent via Telegram. Once 
 
 
 (function () {
+  var conv = document.getElementById('conversation');
+  if (!conv) return;
+
+  // Track the HTMX-managed socket so we can reconnect after mobile suspend / idle drops
+  // without leaking duplicate connections. Path-only ws-connect lets the HTMX ws extension
+  // choose ws: vs wss: from location.protocol (see ext/ws.js).
+  var origCreate = htmx.createWebSocket;
+  htmx.createWebSocket = function (url) {
+    if (window.__telragChatWs) {
+      try {
+        window.__telragChatWs.close();
+      } catch (e) {}
+    }
+    var sock = origCreate(url);
+    window.__telragChatWs = sock;
+    return sock;
+  };
+
+  function reconnectHtmxWsIfDead() {
+    var ws = window.__telragChatWs;
+    if (!ws || ws.readyState !== WebSocket.CLOSED) {
+      return;
+    }
+    htmx.process(conv);
+  }
+
+  document.addEventListener('visibilitychange', function () {
+    if (document.visibilityState === 'visible') {
+      reconnectHtmxWsIfDead();
+    }
+  });
+  window.addEventListener('pageshow', function () {
+    reconnectHtmxWsIfDead();
+  });
+  window.addEventListener('online', reconnectHtmxWsIfDead);
+  window.addEventListener('focus', reconnectHtmxWsIfDead);
+})();
+
+
+
+
+
+
+
+// demo hide help
+(function () {
   var STORAGE_KEY = 'telrag_chat_help_collapsed';
   var section = document.getElementById('help-section');
   var toggle = document.getElementById('help-toggle');
@@ -120,7 +166,7 @@ In that case, the AI agent will try to contact a human agent via Telegram. Once 
 
 
 
-
+// scroll bar adjustment
 document.body.addEventListener('htmx:wsAfterMessage', function() {
   setTimeout(function() {
     var el = document.getElementById('messages');

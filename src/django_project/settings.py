@@ -220,3 +220,32 @@ csrf_origins = os.getenv('CSRF_TRUSTED_ORIGINS', '')
 CSRF_TRUSTED_ORIGINS = [origin.strip() for origin in csrf_origins.split(',') if origin.strip()]
 
 CSRF_TRUSTED_ORIGINS.append(ngrok_csrf_trusted)
+
+# Logging Configuration
+
+LOGGING = {
+    'version' : 1,
+    'disable_existing_loggers' : False,
+    'handlers' : {
+        'console': {
+            'class' : 'logging.StreamHandler'
+        },
+        'file' : {
+            'class' : 'logging.FileHandler',
+            'filename' : 'general.log',
+            'formatter' : 'verbose'
+        }
+    },
+    'loggers' : {
+        '' : {
+            'handlers' :['console' , 'file'],
+            'level' : os.environ.get('DJANGO_LOG_LEVEL','INFO')
+        }
+    },
+    'formatters' : {
+        'verbose' : {
+            'format' : '{asctime} ({levelname}) - {name} - {message}',
+            'style' : '{' #str.format()
+        }
+    }
+}
