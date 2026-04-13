@@ -29,13 +29,21 @@ build/
 local_settings.py
 staticfiles/
 media/
+src/media_cdn/
+src/static_cdn/
+src/voices
 
 # Environment / secrets
 .env
 .env.*
 
 # Celery / Celery Beat (generated runtime files)
+src/celerybeat-schedule
+src/celerybeat-schedule.*
 celerybeat-schedule
 celerybeat-schedule.*
 celerybeat.pid
 celeryd.pid
+
+# Other trashy stuff
+src/dump.rdb
