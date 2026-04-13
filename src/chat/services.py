@@ -55,7 +55,7 @@ def similarity_search(conversation,input_text,num):
 def hybrid_search(conversation,user_query,input_text,num):
 
     rag_toolkit = NLPToolKit()
-    input_text_embedding = rag_toolkit.embedder([input_text])
+    input_text_embedding = rag_toolkit.embedder([input_text])[0]
 
 
     # converting user text keyword to -> PostgreSQL search query
@@ -238,7 +238,7 @@ def agent_message_sender(user_message:Message,context):
     print('-- user question --' , user_message.content)
     print('-- context --' , context)
 
-    ragtoolkit = NLPToolKit()
+    ragtoolkit = RetrievalToolKit(openai_model=constants.OPENAI_CHAT_MODEL)
     new_messages = {'role':'user','content':f"{user_message.content} \n\n available information:{context}"}
 
     response = ragtoolkit.openai_text_generator(message_history,new_messages)

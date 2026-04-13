@@ -22,7 +22,7 @@ class NLPToolKit(RecursiveCharacterTextSplitter):
     def embedder(self,chunks:list):
         client = InferenceClient(model=constants.HF_EMBEDDING_MODEL,token=os.getenv("HF_API_TOKEN")) 
         embedding = client.feature_extraction(text=chunks)
-        return embedding[0]
+        return embedding
 
     def audio_to_text(self,file_path: str, model: str = "whisper-1") -> str:
         client = OpenAI()  # Make sure OPENAI_API_KEY is set in env

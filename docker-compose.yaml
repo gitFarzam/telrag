@@ -39,10 +39,12 @@ services:
       - redis
     env_file:
       - .env
+    ports:
+      - "8000:8006"
     expose:
       - "8006"
     networks:
-      - caddy-network
+      # - caddy-network
       - telrag-network
 
   celery:
@@ -65,7 +67,7 @@ services:
     build: .
     container_name: telrag_celery_beat
     working_dir: /usr/src/app
-    command: celery -A django_project beat -l info
+    command: sh -c "rm -f celerybeat-schedule && celery -A django_project beat -l info"
     restart: always
     depends_on:
       - redis
@@ -81,7 +83,7 @@ volumes:
   telrag-pgvector-volume:
 
 networks:
-  caddy-network:
-    external: true
+  # caddy-network:
+  #   external: true
 
   telrag-network:
