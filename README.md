@@ -140,3 +140,4 @@ chmod +x entrypoint.sh
 - writing about this demo may have problem in mobile view, please use desktop view
 - redirect to homepage if it's not found
 - Cleaning: imports, redundant functions, constants, typos, logger, redundant files, gitignore, git cache
+- Making a niche app, a niche industry

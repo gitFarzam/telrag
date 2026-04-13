@@ -23,10 +23,11 @@ from channels.layers import get_channel_layer
 from pgvector.django import L2Distance
 
 # Local imports
-import constants
+import chat.constants as constants
+import chat.prompts as prompts
 from .models import Conversation, Message,DocumentSource , TelegramMessage,Document, Chunk, Embedding, TextContent,AudioContent
 from .utils.telegram import send_message,telegram_message_parser,telegram_downloader
-from .utils.rag import RAGToolKit,OpenaiTool
+from .utils.rag import NLPToolKit,RetrievalToolKit
 
 # loading env variables
 load_dotenv()
@@ -39,7 +40,7 @@ def similarity_search(conversation,input_text,num):
     This function search for top num of similar text to input text
     """
 
-    rag_toolkit = RAGToolKit()
+    rag_toolkit = NLPToolKit()
     input_text_embedding = rag_toolkit.embedder([input_text])[0]
 
     # if we are in demo we have to filter similar embeddings to just use default documents and the documents which are created for the current conversation
@@ -53,7 +54,7 @@ def similarity_search(conversation,input_text,num):
 
 def hybrid_search(conversation,user_query,input_text,num):
 
-    rag_toolkit = RAGToolKit()
+    rag_toolkit = NLPToolKit()
     input_text_embedding = rag_toolkit.embedder([input_text])
 
 
@@ -67,7 +68,7 @@ def hybrid_search(conversation,user_query,input_text,num):
         .annotate(
 
             # Turns the text column into a searchable vector,
-            search=SearchVector('chunk__content'), 
+            search=SearchVector('chunk__text'), 
 
             # Computes keyword relevance score, Higher = better keyword match
             # F('search') gets the value of search! (so there is comparsinon between serach column and query value for each row)
@@ -237,7 +238,7 @@ def agent_message_sender(user_message:Message,context):
     print('-- user question --' , user_message.content)
     print('-- context --' , context)
 
-    ragtoolkit = RAGToolKit()
+    ragtoolkit = NLPToolKit()
     new_messages = {'role':'user','content':f"{user_message.content} \n\n available information:{context}"}
 
     response = ragtoolkit.openai_text_generator(message_history,new_messages)
@@ -326,8 +327,8 @@ def entities_handling(message_data,chat_id):
 
 
 
-def message_categorizer(message:Message):
-    logger.debug(message_categorizer.__name__)
+def user_message_categorizer(message:Message):
+    logger.debug(user_message_categorizer.__name__)
 
     content = message.content
     conversation=message.conversation
@@ -338,17 +339,14 @@ def message_categorizer(message:Message):
     context =''
     if similar_embeddings:
         similar_text = "\n".join([embedding_obj.chunk.text for embedding_obj in similar_embeddings])
-
-        # Fetch similarity scores
-
-        context = f" \n\n Available information: {similar_text}"
+        context = similar_text
 
     # Check if the question is related
-    retreival_instance = OpenaiTool(model=constants.OPENAI_CHAT_MODEL)
+    retreival_instance = RetrievalToolKit(openai_model=constants.OPENAI_CHAT_MODEL)
 
     user_prompt = f"""
-        user question/reqeust : {content}{context}
-
+        User Question: {content}\n\n
+        Available Information: {context}
     """
     result = retreival_instance.message_categorizer(user_prompt)
     return context,result
@@ -359,20 +357,18 @@ def process_user_message(message:Message):
 
     content = message.content
     conversation=message.conversation
-
-    context,result = message_categorizer(message)
+    context,result = user_message_categorizer(message)
     
     # Fetch message history
     message_history = fetch_message_history(message)
 
-
     if result in [0,1]:
+        logger.debug("Question can be answered with available information")
         # Enough context / context not required to answer
+        nlptoolkit = RetrievalToolKit(openai_model=constants.OPENAI_CHAT_MODEL)
+        new_messages = {'role':'user','content':f"User question: {content}\n\nAvailable information: {context}"}
 
-        ragtoolkit = RAGToolKit()
-        new_messages = {'role':'user','content':f"{content} \n\n{context}"}
-
-        response = ragtoolkit.openai_text_generator(message_history,new_messages)
+        response = nlptoolkit.openai_text_generator(message_history,new_messages)
 
         message_sender(
                 conversation=conversation,
@@ -380,21 +376,20 @@ def process_user_message(message:Message):
                 is_agent=True
                 )
         
-    elif result in [2,3]:
+    elif result in [2]:
+        logger.debug("Question can not be answered with provided context")
         # Sending to telegram
         # Temporary message 1 : waiting for sending message to the user
         message_sender(
                 conversation=conversation,
-                content="I don't have enough info. I'll check with a human agent and get back to you soon!",
+                content=constants.NO_INFORMATION_MESSAGE,
                 is_agent=True
                 )
-
-
 
         if conversation.chat_id:
             chat_id = conversation.chat_id
             print('chat id: ',chat_id)
-            telegram_message_id = send_message(chat_id=chat_id,text=f"""💬 A customer named <b>{message.conversation.user.first_name}</b> asked the following question:\n\n<blockquote>{content}</blockquote>\n\n🔻 I don't have enough information to answer it. Please reply to this message with your response so I can answer it correctly.""")
+            telegram_message_id = send_message(chat_id=chat_id,text=constants.telegram_message_support(message.conversation.user.first_name,content))
 
             # Updating instance (message object) with telegram id
             message.tg_id = telegram_message_id
@@ -404,22 +399,20 @@ def process_user_message(message:Message):
             code = message.conversation.pk
             conversation.code = code
             conversation.save()
-            print('Object is existed but it doesnt have a chat id value')
-            message_sender_custom(conversation=message.conversation,message=f"""The AI Agent doesn't have enough information to answer to this question, So now is trying to send a message to a human agent on Telegram. Since this is a <strong>demo</strong>, you'll play the role of the human agent yourself.""")
-            message_sender_custom(conversation=message.conversation,message=f"""<br>Please link your Telegram account to this conversation.\n<br><br>Send number below to <ahref="https://t.me/telrag_bot">@telrag_bot</a><br><br><center><b>{code}</b></center>""")
+            message_sender_custom(conversation=message.conversation,message=constants.DEMO_TELEGRAM_HUMAN_ROLE_MESSAGE)
+            message_sender_custom(conversation=message.conversation,message=constants.demo_telegram_verify_messsage(code))
 
 
-
-    elif result in [4]:
+    elif result in [3]:
+        logger.debug("Question is out of scope of answering")
         # send and aswer which you can not respond to this matter
         message_sender(
                 conversation=message.conversation,
-                content="Sorry! I can't answer to this question!",
+                content=constants.CANT_ANSWER_MESSAGE,
                 is_agent=True
                 )
 
-
-
+# !tar -czf pack.tar.gz ./
 def creating_text_content_object(content:str):
     logger.debug(creating_chunk_objects.__name__)
     model_object = TextContent.objects.create(content = content)
@@ -461,7 +454,7 @@ def creating_document_object(conversation,document_source, caption=None,user_mes
 
 def transcriber(document_object:Document):
     logger.debug(transcriber.__name__)
-    rag_toolkit = RAGToolKit()
+    rag_toolkit = NLPToolKit()
     return rag_toolkit.audio_to_text(document_object.document_source.content_object.file.path)
 
 
@@ -498,7 +491,7 @@ def creating_chunk_objects(document_object:Document) -> List[Chunk]:
     
     if content_for_chunk:
 
-        rag_toolkit = RAGToolKit()
+        rag_toolkit = NLPToolKit()
         chunks = rag_toolkit.split_text(text=content_for_chunk)
 
         objects = Chunk.objects.bulk_create(
@@ -511,7 +504,7 @@ def creating_chunk_objects(document_object:Document) -> List[Chunk]:
 def creating_embedding_objects(chunks):
     logger.debug(creating_embedding_objects.__name__)
     
-    rag_toolkit = RAGToolKit()
+    rag_toolkit = NLPToolKit()
 
     chunks_text = [chunk.text for chunk in chunks]
     embeddings = rag_toolkit.embedder(chunks=chunks_text)

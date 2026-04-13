@@ -50,11 +50,8 @@ services:
     build: .
     container_name: telrag_celery
     working_dir: /usr/src/app
-    entrypoint: ["/usr/src/app/entrypoint.sh"]
-    command: celery -A django_project worker -l info -B
-    volumes:
-      - ./src:/usr/src/app/src
-      - ./entrypoint.sh:/usr/src/app/entrypoint.sh
+    command: celery -A django_project worker -l info
+    restart: always
     depends_on:
       - redis
       - db
@@ -62,6 +59,22 @@ services:
 
     networks:
       - telrag-network
+
+  celery_beat:
+  # the same dir for the app, as celery uses the app for running and installed inside the django app
+    build: .
+    container_name: telrag_celery_beat
+    working_dir: /usr/src/app
+    command: celery -A django_project beat -l info
+    restart: always
+    depends_on:
+      - redis
+      - db
+      - app
+
+    networks:
+      - telrag-network
+
 
 
 volumes:
