@@ -118,16 +118,13 @@ chmod +x entrypoint.sh
 
 ## Changes
 - adding an admin with a custom login address
-- add logging
 - improve using openai
 - error handling
 - limiting voice length
 - Deleting option in chat view
-- Celery task for deleting users
 - WebSocket doesnt work in mobile view , using wss:// instead of ws:// (probably you can just test in online mode in https)
-- make demo help shorter
 - adding that, "or ask something irelevant, like I need to take a shower!, something which you can make sure AI agent can not answer to it!
-- test voice
+- avoid long voice
 - right about, if you just send a text/voice without replying it will be stored seprately as a context
 - edit the texts related to reply message
 - edit the message which instanly sends after verification, (it should contain description)
@@ -135,13 +132,9 @@ chmod +x entrypoint.sh
 - add an additional guide, about if you open multiple browser, your messages will go to another conversation, click /refresh, to connect you to the current chat
 - edit footer
 - adding contact form
-- adding refresh mode (delete prvious conversation)
-- curl command for webhook
 - writing about this demo may have problem in mobile view, please use desktop view
-- redirect to homepage if it's not found
 - Cleaning: imports, redundant functions, constants, typos, logger, redundant files, gitignore, git cache
 - Making a niche app, a niche industry
 - log files for using in docker logs command
-- pshementa and garafana for docker containers
-- removing user when chat is deleted
-- user exit button
+- Promeseus and garafana for docker containers
+- celery monitoring

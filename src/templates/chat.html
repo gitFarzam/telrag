@@ -7,8 +7,16 @@
 <div class="conversation" id="conversation" hx-ext="ws" ws-connect="/ws/chat/{{ conversation.id }}/" >
 
   <h2>Chat with {{user.first_name}}</h2>
-
-
+    <form
+        method="post"
+        action="{% url 'chat-delete-user' conversation.pk %}"
+        class="delete-conversation-user"
+      >
+        {% csrf_token %}
+        <button type="submit" style="background-color: #dc3545; color: #fff; border: none; padding: 8px 14px; border-radius: 4px; cursor: pointer;">
+          Delete This Chat!
+        </button>
+    </form>
 
   <!-- SCROLLABLE MESSAGES -->
   <div id="messages" 

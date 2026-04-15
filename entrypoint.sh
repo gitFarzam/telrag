@@ -9,15 +9,6 @@ set -e
 
 # no need to source env here! docker compose will do it automatically!
 
-if [ "${DEBUG:-0}" -eq 1 ]; then
-  webhook_address=$ONLINE_WEBHOOK_ADDRESS
-else
-  webhook_address=$LOCAL_WEBHOOK_ADDRESS
-fi
-
-curl -X POST "https://api.telegram.org/bot${TELEGRAM_API_KEY}/setWebhook" \
-  -d "url=${webhook_address}" \
-  -d "secret_token=${TELEGRAM_WEBHOOK_SECRET}"
 
 echo "Webhook has been set"
 

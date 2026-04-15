@@ -49,9 +49,6 @@ def similarity_search(conversation,input_text,num):
     similar_embeddings = Embedding.objects.filter(chunk__document__conversation=conversation).order_by(L2Distance('vector', input_text_embedding))[:num]
     return input_text_embedding,similar_embeddings
 
-
-
-
 def hybrid_search(conversation,user_query,input_text,num):
 
     rag_toolkit = NLPToolKit()
@@ -83,12 +80,9 @@ def hybrid_search(conversation,user_query,input_text,num):
         .order_by('-rank', 'distance')[:num]
     )
 
-
-
 def similarity_score(input_embedding : np , similar_embeddings : List[Embedding]):
     embeddings = np.array([embedding.vector for embedding in similar_embeddings])
     return np.dot(input_embedding.reshape(1,384),embeddings.T)
-
 
 def ingestion_process(transaction_type , json_content,chat_id,is_new) -> Document:
     with transaction.atomic():
@@ -112,7 +106,6 @@ def ingestion_process(transaction_type , json_content,chat_id,is_new) -> Documen
         else:
             return False
     
-
 def process_telegram_object(telegram_object:TelegramMessage,is_new=True):
     print(process_telegram_object.__name__)
 
@@ -169,8 +162,6 @@ def process_telegram_object(telegram_object:TelegramMessage,is_new=True):
             send_message(chat_id=telegram_object.chat_id,text="Demo restrictions: Please make sure your voice duration is less than 60 seconds.")
             return False
     
-
-
 def message_operation( message):
     html = render_to_string(
         "message.html",
@@ -184,7 +175,6 @@ def message_operation( message):
     )
 
     return oob_html
-
 
 def message_sender(conversation:Conversation,content,is_agent):
     """
@@ -212,7 +202,6 @@ def message_sender(conversation:Conversation,content,is_agent):
     )
 
     return message
-
 
 def fetch_message_history(instance:Message):
     logger.debug(fetch_message_history.__name__)
@@ -249,7 +238,6 @@ def agent_message_sender(user_message:Message,context):
         is_agent=True
     )
 
-
 def fetch_conversation_documents(instance:Conversation):
     all_messages: QuerySet[Message] = instance.messages.all()
 
@@ -269,8 +257,6 @@ def fetch_conversation_documents(instance:Conversation):
     else:
         return False
     
-
-
 def message_sender_custom(conversation:Conversation,message):
     channel_layer = get_channel_layer()
     html = render_to_string("telegram.html",{"chat_id_request": message})
@@ -286,7 +272,6 @@ def message_sender_custom(conversation:Conversation,message):
         print(f"Cannot send message to group, reason: {e}")
     return True
 
-
 def entities_handling(message_data,chat_id):
     print(entities_handling.__name__)
     for entity in message_data['entities']:
@@ -295,21 +280,8 @@ def entities_handling(message_data,chat_id):
 
             # get chat id and sending message to user in telegram and asking for verification
             conversation = Conversation.objects.get(chat_id=chat_id)
-
-            if command == '/verify':
-                print('Chat_id: ', chat_id)
-
-                # now using chat check if user is verified or no
-                is_verified = conversation.is_verified
-
-                if is_verified:
-                    send_message(chat_id,text="You are already verified!",command=True)
-                else:
-                    print('This command is for verification')
-                    send_message(chat_id,text="Please send the 4 digit code in the chat",command=True)
-                return True
             
-            elif command == '/getdocs':
+            if command == '/getdocs':
                 docs:List[Document] = conversation.conv_documents.all()
                 print(docs)
                 if docs:
@@ -323,9 +295,9 @@ def entities_handling(message_data,chat_id):
             elif command == '/refresh':
                 conversation = Conversation.objects.filter(chat_id=chat_id).first()
                 if conversation:
-                    conversation.delete()
-
-
+                    user = conversation.user
+                    user.delete()
+                    send_message(chat_id=chat_id,text="Conversation has been deleted!")
 
 def user_message_categorizer(message:Message):
     logger.debug(user_message_categorizer.__name__)
@@ -350,7 +322,6 @@ def user_message_categorizer(message:Message):
     """
     result = retreival_instance.message_categorizer(user_prompt)
     return context,result
-
 
 def process_user_message(message:Message):
     logger.debug(process_user_message.__name__)
@@ -402,7 +373,6 @@ def process_user_message(message:Message):
             message_sender_custom(conversation=message.conversation,message=constants.DEMO_TELEGRAM_HUMAN_ROLE_MESSAGE)
             message_sender_custom(conversation=message.conversation,message=constants.demo_telegram_verify_messsage(code))
 
-
     elif result in [3]:
         logger.debug("Question is out of scope of answering")
         # send and aswer which you can not respond to this matter
@@ -420,7 +390,6 @@ def creating_text_content_object(content:str):
 
     return model_object
 
-
 def creating_document_source(model_object):
     logger.debug(creating_document_source.__name__)
     content_type_obj = ContentType.objects.get_for_model(model_object.__class__)
@@ -431,7 +400,6 @@ def creating_document_source(model_object):
     )
 
     return doc_source_obj
-
 
 def creating_document_object(conversation,document_source, caption=None,user_message=None,telegram_message=None) -> Document:
     logger.debug(creating_document_object.__name__)
@@ -450,13 +418,10 @@ def creating_document_object(conversation,document_source, caption=None,user_mes
 
     return doc_object
 
-    
-
 def transcriber(document_object:Document):
     logger.debug(transcriber.__name__)
     rag_toolkit = NLPToolKit()
     return rag_toolkit.audio_to_text(document_object.document_source.content_object.file.path)
-
 
 def fetch_content_from_document(document_object:Document):
     """
@@ -482,8 +447,6 @@ def fetch_content_from_document(document_object:Document):
     else:
         logger.info('Document object class is not supported')
         return False
-
-
 
 def creating_chunk_objects(document_object:Document) -> List[Chunk]:
     logger.debug(creating_chunk_objects.__name__)
@@ -517,7 +480,6 @@ def creating_embedding_objects(chunks):
     )
 
     return objects
-
 
 def regex_for_get_verification_code(data:dict , from_id):
     import re
@@ -558,8 +520,6 @@ def regex_for_get_verification_code(data:dict , from_id):
             # it should be checked if user telegram account is verified or no
             return JsonResponse({"error": "Forbidden"}, status=200) # returning 200 is crucial, otherwise requests will repeadedly be send through webhook again and again!
         
-
-
 def add_initial_documents(conversation):
     logger.debug(f"{add_initial_documents.__name__}")
     """

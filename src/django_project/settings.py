@@ -14,6 +14,7 @@ from pathlib import Path
 import os
 from dotenv import load_dotenv
 from datetime import timedelta
+import sentry_sdk
 
 APP_NAME = "telrag"
 ENV_PATH = f".env"
@@ -251,3 +252,11 @@ LOGGING = {
         }
     }
 }
+
+#sentry
+sentry_sdk.init(
+    dsn="https://f768307eef1286c50a3b4edc96976351@o4511242801119232.ingest.us.sentry.io/4511242802495488",
+    # Add data like request headers and IP for users,
+    # see https://docs.sentry.io/platforms/python/data-management/data-collected/ for more info
+    send_default_pii=True,
+)

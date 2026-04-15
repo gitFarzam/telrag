@@ -6,12 +6,13 @@ import uuid
 import json
 
 # Django imports
-from django.shortcuts import render, redirect
+from django.shortcuts import render, redirect, get_object_or_404
 from django.http import HttpResponse,JsonResponse
-from django.contrib.auth import login
+from django.contrib.auth import login, logout
 from django.contrib.auth.mixins import LoginRequiredMixin, UserPassesTestMixin
 from django.conf import settings
 from django.views.decorators.csrf import csrf_exempt
+from django.views import View
 from django.views.generic import DetailView, UpdateView,TemplateView
 from django.db import DatabaseError
 
@@ -90,6 +91,23 @@ class HomeView(TemplateView):
             
             return HttpResponse("Name is required", status=400)
         return HttpResponse("Logout from admin user", status=400)
+
+
+class DeleteConversationUserView(LoginRequiredMixin, UserPassesTestMixin, View):
+    def test_func(self):
+        conversation = get_object_or_404(Conversation, pk=self.kwargs["pk"])
+        if self.request.user.is_staff:
+            return True
+        return conversation.user == self.request.user
+
+    def post(self, request, pk):
+        conversation = get_object_or_404(Conversation, pk=pk)
+        user = conversation.user
+        if request.user == user:
+            logout(request)
+        user.delete()
+        return redirect("home")
+
 
 # Create your views here.
 class ChatView(LoginRequiredMixin , UserPassesTestMixin , DetailView):

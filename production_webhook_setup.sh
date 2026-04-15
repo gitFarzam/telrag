@@ -7,7 +7,7 @@ set -e
 # Setting webhook
 source .env
 
-echo ".........................................."
+echo ".................... Setting Production Webhook ....................."
 echo $ONLINE_WEBHOOK_ADDRESS
 echo ".........................................."
 
@@ -17,5 +17,5 @@ curl -X POST "https://api.telegram.org/bot${TELEGRAM_API_KEY}/setWebhook" \
 
 echo "Webhook has been set"
 
-exit "$@"
 
+exit "$@"
