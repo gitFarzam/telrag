@@ -141,3 +141,7 @@ chmod +x entrypoint.sh
 - redirect to homepage if it's not found
 - Cleaning: imports, redundant functions, constants, typos, logger, redundant files, gitignore, git cache
 - Making a niche app, a niche industry
+- log files for using in docker logs command
+- pshementa and garafana for docker containers
+- removing user when chat is deleted
+- user exit button
