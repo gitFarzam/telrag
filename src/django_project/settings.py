@@ -13,6 +13,7 @@ https://docs.djangoproject.com/en/6.0/ref/settings/
 from pathlib import Path
 import os
 from dotenv import load_dotenv
+from datetime import timedelta
 
 APP_NAME = "telrag"
 ENV_PATH = f".env"
@@ -84,7 +85,7 @@ TEMPLATES = [
 
 ASGI_APPLICATION = 'django_project.asgi.application'
 
-REDIS_HOST_NAME = "localhost" if DOCKER else os.getenv("REDIS_HOST_NAME")
+REDIS_HOST_NAME = os.getenv("REDIS_HOST_NAME") if DOCKER else "localhost"
 
 CHANNEL_LAYERS = {
     # 'default': {
@@ -101,8 +102,8 @@ CHANNEL_LAYERS = {
 # Database
 # https://docs.djangoproject.com/en/6.0/ref/settings/#databases
 
-POSTGRES_PORT =  5433 if DOCKER else os.getenv("POSTGRES_PORT",5432)
-HOST =  "localhost" if DOCKER else os.getenv("HOST")
+POSTGRES_PORT =  os.getenv("POSTGRES_PORT",5432) if DOCKER else 5433
+HOST = os.getenv("HOST") if DOCKER else "localhost"
 
 DATABASES = {
     'old': {
@@ -203,7 +204,7 @@ TELEGRAM_DEFAULT_CHAT_ID=120358726
 DEMO = True
 
 # Celery
-from datetime import timedelta
+
 CELERY_BROKER_URL = f"redis://{REDIS_HOST_NAME}:6379/1"
 CELERY_BEAT_SCHEDULE = {
     "task_delete_unused_conversation" :{
