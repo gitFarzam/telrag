@@ -138,3 +138,5 @@ chmod +x entrypoint.sh
 - log files for using in docker logs command
 - Promeseus and garafana for docker containers
 - celery monitoring
+- handling loading initial data in an optimized way (having it ready in the database)
+- adding google analytics
