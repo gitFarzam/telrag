@@ -224,31 +224,25 @@ CSRF_TRUSTED_ORIGINS = [origin.strip() for origin in csrf_origins.split(',') if 
 
 CSRF_TRUSTED_ORIGINS.append(ngrok_csrf_trusted)
 
-# Logging Configuration
-
+# Logging Configuration for alloy
+# when we send to out, using console, means that we do not need mount any log file, we can read them thrugh docker container access to the shell envoironment of the running container
 LOGGING = {
-    'version' : 1,
-    'disable_existing_loggers' : False,
-    'handlers' : {
-        'console': {
-            'class' : 'logging.StreamHandler'
+    "version": 1,
+    "disable_existing_loggers": False,
+    "formatters": {
+        "json": {
+            "format": '{"level": "%(levelname)s", "msg": "%(message)s", "logger": "%(name)s", "time": "%(asctime)s"}',
         },
-        'file' : {
-            'class' : 'logging.FileHandler',
-            'filename' : 'general.log',
-            'formatter' : 'verbose'
-        }
     },
-    'loggers' : {
-        '' : {
-            'handlers' :['console' , 'file'],
-            'level' : os.environ.get('DJANGO_LOG_LEVEL','INFO')
-        }
+    "handlers": {
+        "console": {
+            "class": "logging.StreamHandler",# StreamHandler is for streaming , FileHandler is for file creating
+            "formatter": "json",
+        },
+        # we dont have 'file' handler as we just need send to the out logic, stdout
     },
-    'formatters' : {
-        'verbose' : {
-            'format' : '{asctime} ({levelname}) - {name} - {message}',
-            'style' : '{' #str.format()
-        }
-    }
+    "root": {
+        "handlers": ["console"],
+        "level": "INFO",
+    },
 }

@@ -140,3 +140,4 @@ chmod +x entrypoint.sh
 - celery monitoring
 - handling loading initial data in an optimized way (having it ready in the database)
 - adding google analytics
+- using dev and product merge composition

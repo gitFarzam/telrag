@@ -1,4 +1,5 @@
 # Standard Library Imports
+import os
 import time
 import logging
 import hmac
@@ -163,6 +164,8 @@ def telegram_webhook(request):
         
     # 1) Verify request is from Telegram (rejects random POSTs to your webhook URL)
     secret = settings.TELEGRAM_WEBHOOK_SECRET
+    if settings.DEBUG:
+        secret = os.getenv("TELEGRAM_DEV_WEBHOOK_SECRET")
     if secret:
         token = request.headers.get("X-Telegram-Bot-Api-Secret-Token", "")
         if not hmac.compare_digest(secret, token):

@@ -8,15 +8,12 @@ services:
       - telrag-pgvector-volume:/var/lib/postgresql/data
     env_file:
       - .env
-    networks:
-      - telrag-network
-      
+
   redis:
     image: redis:7
     container_name: telrag_redis
     restart: always
-    networks:
-      - telrag-network
+
 
   app:
     # the dir which DockerFile is located
@@ -39,8 +36,6 @@ services:
       - "127.0.0.1:8000:8006"
     expose:
       - "8006"
-    networks:
-      - telrag-network
 
   celery:
   # the same dir for the app, as celery uses the app for running and installed inside the django app
@@ -54,9 +49,6 @@ services:
       - db
       - app
 
-    networks:
-      - telrag-network
-
   celery_beat:
   # the same dir for the app, as celery uses the app for running and installed inside the django app
     build: .
@@ -69,13 +61,32 @@ services:
       - db
       - app
 
-    networks:
-      - telrag-network
+  alloy:
+    image: grafana/alloy:latest
+    container_name: telrag_alloy
+    volumes:
+      - ./alloy-config.hcl:/etc/alloy/config.hcl
+      - /var/run/docker.sock:/var/run/docker.sock
+    command: ["run", "/etc/alloy/config.hcl"]
 
+  loki:
+    image: grafana/loki:latest
+    container_name: telrag_loki
 
+  grafana:
+    image: grafana/grafana:latest
+    container_name: telrag_grafana
+    ports:
+      - "3000:3000"
+    env_file:
+      - .env
+    environment:
+      - GF_USERS_ALLOW_SIGN_UP=false
+    volumes:
+      - grafana_data:/var/lib/grafana
+    depends_on:
+      - loki
 
 volumes:
   telrag-pgvector-volume:
-
-networks:
-  telrag-network:
+  grafana_data:

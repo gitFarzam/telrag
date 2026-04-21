@@ -71,10 +71,40 @@ services:
     networks:
       - telrag-network
 
+  loki:
+    image: grafana/loki:latest
+    ports:
+      - "3100:3100"
+
+  alloy:
+    image: grafana/alloy:latest
+    volumes:
+      - ./alloy-config.hcl:/etc/alloy/config.hcl
+      - /var/run/docker.sock:/var/run/docker.sock
+    command: ["run", "/etc/alloy/config.hcl"]
+
+
+  grafana:
+    image: grafana/grafana:latest
+    container_name: grafana
+    ports:
+      - "3000:3000"
+    env_file:
+      - .env
+    environment:
+      - GF_SECURITY_ADMIN_USER=admin
+      - GF_SECURITY_ADMIN_PASSWORD=admin
+      - GF_USERS_ALLOW_SIGN_UP=false
+    volumes:
+      - grafana_data:/var/lib/grafana
+    depends_on:
+      - loki
+
 
 
 volumes:
   telrag-pgvector-volume:
+  grafana_data:
 
 networks:
   caddy-network:
