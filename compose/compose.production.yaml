@@ -3,6 +3,11 @@ services:
     networks:
       - caddy-network
 
+  grafana:
+    networks:
+      - caddy-network
+
+
 networks:
   caddy-network:
     external: true
