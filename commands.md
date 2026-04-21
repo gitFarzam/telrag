@@ -157,3 +157,7 @@ curl -X POST "https://api.telegram.org/bot${TELEGRAM_API_KEY}/setWebhook" \
   -d "url=${WEBHOOK_URL}" \
   -d "secret_token=${TG_SECRET_KEY}"
 ```
+
+```shell
+docker compose -f compose.yaml -f compose/compose.dev.yaml build --no-cache
+```

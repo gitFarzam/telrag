@@ -1,0 +1,8 @@
+services:
+  app:
+    networks:
+      - caddy-network
+
+networks:
+  caddy-network:
+    external: true
