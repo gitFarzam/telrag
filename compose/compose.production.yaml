@@ -6,8 +6,7 @@ services:
   grafana:
     networks:
       - caddy-network
-
-
+      
 networks:
   caddy-network:
     external: true

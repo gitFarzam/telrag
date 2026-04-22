@@ -126,11 +126,9 @@ chmod +x entrypoint.sh
 - adding that, "or ask something irelevant, like I need to take a shower!, something which you can make sure AI agent can not answer to it!
 - avoid long voice
 - right about, if you just send a text/voice without replying it will be stored seprately as a context
-- edit the texts related to reply message
 - edit the message which instanly sends after verification, (it should contain description)
 - fix message and response combination from user telegram message
 - add an additional guide, about if you open multiple browser, your messages will go to another conversation, click /refresh, to connect you to the current chat
-- edit footer
 - adding contact form
 - writing about this demo may have problem in mobile view, please use desktop view
 - Cleaning: imports, redundant functions, constants, typos, logger, redundant files, gitignore, git cache
@@ -141,3 +139,5 @@ chmod +x entrypoint.sh
 - handling loading initial data in an optimized way (having it ready in the database)
 - adding google analytics
 - using dev and product merge composition
+- making production monitoring system limited to just django app and app metrics, by configurating alloy and loki (having a second alloy+/loki config file)
+- managing log storage in loki!

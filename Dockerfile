@@ -9,7 +9,7 @@ RUN apt-get update && apt-get install -y curl && rm -rf /var/lib/apt/lists/*
 COPY requirements.txt .
 RUN pip install --no-cache-dir -r requirements.txt
 
-# copy project (first dot in current dir in local:telrag/, second dot is current fir in container: /use/scr/app)
+# copy project (first dot in current dir in local:telrag/, second dot is current for in container: /use/scr/app)
 COPY . .
 
 ENV PYTHONUNBUFFERED=1
