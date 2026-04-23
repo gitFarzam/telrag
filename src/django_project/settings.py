@@ -38,7 +38,7 @@ DEBUG = True if int(os.getenv("DEBUG")) == 1 else False
 DOCKER = True if int(os.getenv("DOCKER")) == 1 else False
 
 
-ALLOWED_HOSTS = ['secluded-noncongregative-noelle.ngrok-free.dev',"127.0.0.1","localhost","telrag.site","https://telrag.site"]
+ALLOWED_HOSTS = ['secluded-noncongregative-noelle.ngrok-free.dev',"127.0.0.1","localhost","telrag.site","https://telrag.site","app"]
 if DEBUG:
     ALLOWED_HOSTS = ["*"]
 

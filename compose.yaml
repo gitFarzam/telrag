@@ -71,7 +71,7 @@ services:
     image: grafana/alloy:latest
     container_name: telrag_alloy
     volumes:
-      - ./alloy-config.hcl:/etc/alloy/config.hcl
+      - ./.config/alloy.hcl:/etc/alloy/config.hcl
       - /var/run/docker.sock:/var/run/docker.sock
     command: ["run", "/etc/alloy/config.hcl"]
     networks:
@@ -91,7 +91,6 @@ services:
     volumes:
       - "./.config/prometheus.yml:/etc/prometheus/prometheus.yml" #prometheus configuration file
       - "prometheus-data:/prometheus" # prometheus data
-
     networks:
       - telrag-network
     depends_on:

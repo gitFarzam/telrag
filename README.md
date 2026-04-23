@@ -137,8 +137,6 @@ chmod +x entrypoint.sh
 - Promeseus and garafana for docker containers
 - celery monitoring
 - handling loading initial data in an optimized way (having it ready in the database)
-- adding google analytics
-- using dev and product merge composition
 - making production monitoring system limited to just django app and app metrics, by configurating alloy and loki (having a second alloy+/loki config file)
 - managing log storage in loki!
 - it looks service_name is already included in the alloy outputs, this have overlap with container_name label

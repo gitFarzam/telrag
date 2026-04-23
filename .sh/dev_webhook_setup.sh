@@ -5,7 +5,7 @@ set -e
 
 
 # Setting webhook
-source .env
+source ../.env
 
 echo ".................... Setting Development Webhook ....................."
 echo $DEV_WEBHOOK_ADDRESS
