@@ -10,7 +10,7 @@ services:
       - .env
     networks:
       - telrag-network
-      
+
   redis:
     image: redis:7
     container_name: telrag_redis
@@ -97,7 +97,7 @@ services:
     depends_on:
       - loki
     networks:
-      - telrag-network
+      telrag-network:
 
 volumes:
   telrag-pgvector-volume:

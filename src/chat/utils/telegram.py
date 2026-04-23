@@ -1,12 +1,13 @@
 # telegram_app/telegram.py
 import requests
+import logging
 from dotenv import load_dotenv
 import os
 import json
 from django.conf import settings
 load_dotenv()
 
-
+logger = logging.getLogger(__name__)
 
 # https://api.telegram.org/bot8536509873:BAFG4ILMA39Iuhj8SQhy6hks5RspmDRs_6D/getUpdates
 
@@ -14,6 +15,7 @@ load_dotenv()
 
 telegram_api_key = os.getenv('TELEGRAM_API_KEY')
 if settings.DEBUG:
+    logger.info("Getting Telegram API key for Dev mode")
     telegram_api_key = os.getenv('TELEGRAM_DEV_API_KEY')
 
 
@@ -40,7 +42,7 @@ def set_telegram_webhook_secret():
 
 
 
-def send_message(chat_id=120358726, text=None,document_id=None,reply_to_message_id=None,command=False):
+def send_message(chat_id, text=None,document_id=None,reply_to_message_id=None,command=False):
     url = f"https://api.telegram.org/bot{telegram_api_key}/sendMessage"
 
     reply_markup = {}

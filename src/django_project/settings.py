@@ -37,7 +37,10 @@ SECRET_KEY = 'django-insecure-%tikckhl@8hyq3$m)aswe4avl+*x^=nc!e-8s0tdoicv-s!j1!
 DEBUG = True if int(os.getenv("DEBUG")) == 1 else False
 DOCKER = True if int(os.getenv("DOCKER")) == 1 else False
 
-ALLOWED_HOSTS = ['secluded-noncongregative-noelle.ngrok-free.dev','127.0.0.1','telrag.site','https://telrag.site']
+
+ALLOWED_HOSTS = ['secluded-noncongregative-noelle.ngrok-free.dev',"127.0.0.1","localhost","telrag.site","https://telrag.site"]
+if DEBUG:
+    ALLOWED_HOSTS = ["*"]
 
 
 # Application definition
@@ -50,12 +53,14 @@ INSTALLED_APPS = [
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
+    'django_prometheus',
     'markdown',
     'core',
     'chat',
 ]
 
 MIDDLEWARE = [
+    'django_prometheus.middleware.PrometheusBeforeMiddleware',
     'django.middleware.security.SecurityMiddleware',
     'django.contrib.sessions.middleware.SessionMiddleware',
     'django.middleware.common.CommonMiddleware',
@@ -63,6 +68,7 @@ MIDDLEWARE = [
     'django.contrib.auth.middleware.AuthenticationMiddleware',
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
+    'django_prometheus.middleware.PrometheusAfterMiddleware',
 ]
 
 ROOT_URLCONF = 'django_project.urls'
@@ -112,7 +118,7 @@ DATABASES = {
         'NAME': BASE_DIR / 'db.sqlite3',
     },
     'default': {
-        'ENGINE': 'django.db.backends.postgresql',
+        'ENGINE': 'django_prometheus.db.backends.postgresql',
         'NAME': os.getenv("POSTGRES_DB"),
         'USER': os.getenv("POSTGRES_USER"),
         'PASSWORD': os.getenv("POSTGRES_PASSWORD"),
@@ -184,6 +190,7 @@ LOGIN_REDIRECT_URL = 'home'
 # Set in .env: strong random string (1–256 chars, A-Za-z0-9_-). When setting webhook
 # via setWebhook, pass this as secret_token so Telegram sends it in every request.
 TELEGRAM_WEBHOOK_SECRET = os.getenv('TELEGRAM_WEBHOOK_SECRET', '')
+TELEGRAM_DEV_WEBHOOK_SECRET = os.getenv('TELEGRAM_DEV_WEBHOOK_SECRET', '')
 
 # Comma-separated Telegram user IDs allowed to use the bot (e.g. "120358726,123456789").
 # If empty, all Telegram users are allowed; set this to restrict to admins only.

@@ -1,12 +1,14 @@
+import json
+
 from django.db import models
 from django.contrib.contenttypes.models import ContentType
 from django.contrib.contenttypes.fields import GenericForeignKey
-from pgvector.django import VectorField
-import json
 from django.conf import settings
 
+from django_prometheus.models import ExportModelOperationsMixin
+from pgvector.django import VectorField
 
-class Conversation(models.Model):
+class Conversation(ExportModelOperationsMixin('conversation'), models.Model):
     created_at = models.DateTimeField(auto_now_add=True)
     user = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE)
 

@@ -334,7 +334,7 @@ def process_user_message(message:Message):
     message_history = fetch_message_history(message)
 
     if result in [0,1]:
-        logger.debug("Question can be answered with available information")
+        logger.info("Question can be answered with available information")
         # Enough context / context not required to answer
         nlptoolkit = RetrievalToolKit(openai_model=constants.OPENAI_CHAT_MODEL)
         new_messages = {'role':'user','content':f"User question: {content}\n\nAvailable information: {context}"}
@@ -348,7 +348,7 @@ def process_user_message(message:Message):
                 )
         
     elif result in [2]:
-        logger.debug("Question can not be answered with provided context")
+        logger.info("Question can not be answered with provided context")
         # Sending to telegram
         # Temporary message 1 : waiting for sending message to the user
         message_sender(
@@ -374,7 +374,7 @@ def process_user_message(message:Message):
             message_sender_custom(conversation=message.conversation,message=constants.demo_telegram_verify_messsage(code))
 
     elif result in [3]:
-        logger.debug("Question is out of scope of answering")
+        logger.info("Question is out of scope of answering")
         # send and aswer which you can not respond to this matter
         message_sender(
                 conversation=message.conversation,

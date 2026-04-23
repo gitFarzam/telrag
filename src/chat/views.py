@@ -156,7 +156,7 @@ def telegram_webhook(request):
     print(telegram_webhook.__name__)
     if not request.body:
         error = "Request body is required"
-        logger.error(error)
+        logger.info(error)
         return JsonResponse(
             {"error": error},
             status=200
@@ -165,25 +165,27 @@ def telegram_webhook(request):
     # 1) Verify request is from Telegram (rejects random POSTs to your webhook URL)
     secret = settings.TELEGRAM_WEBHOOK_SECRET
     if settings.DEBUG:
-        secret = os.getenv("TELEGRAM_DEV_WEBHOOK_SECRET")
+        secret = settings.TELEGRAM_DEV_WEBHOOK_SECRET
     if secret:
         token = request.headers.get("X-Telegram-Bot-Api-Secret-Token", "")
         if not hmac.compare_digest(secret, token):
-            print("Request im webhook is not from telegram!")
+            logger.info("Request im webhook is not from telegram!")
             return JsonResponse({"error": "Forbidden"}, status=200)
+        else:
+            logger.info("Webhook secret has been detected")
 
     try:
         data = json.loads(request.body)
     except json.JSONDecodeError:
+        logger.error("Invalid JSON from Telegram")
         return JsonResponse(
             {"error": "Invalid JSON"},
             status=200
         )
 
     if "message" not in data:
-        print(f"message key is not detected in the json body! keys are: {data.keys()}")
+        logger.error(f"message key is not detected in the json body! keys are: {data.keys()}")
         if "callback_query" not in data:
-            print('->>>>>> Yes there is callback_query')
             return JsonResponse(
                 {"error": "Missing required key: message"},
                 status=200
@@ -200,9 +202,6 @@ def telegram_webhook(request):
         logger.info("Regex for detecting verificatin code")
         regex_for_get_verification_code(data,from_id)
         return JsonResponse({"result": "ok"},status=200)
-    else:
-        print("Nope! You can pass!")
-
 
     last_message = TelegramMessage.objects.filter(chat_id=from_id).last()
     if last_message:
@@ -214,10 +213,10 @@ def telegram_webhook(request):
 
     try: 
         data = json.loads(request.body.decode("utf-8"))
-        logger.debug(f"data file frem telegram webhook:\n{data}")
+        logger.info(f"Data file frem telegram webhook:\n{data}")
         telegram_message_processor(transaction_type=True , json_content = data)
         return JsonResponse({"result": "ok"},status=200)
 
     except Exception as e:
-            logger.critical(f'Error in last json response:\n{e}')
+            logger.critical()
             return JsonResponse({"result": 'ok'} , status=200)

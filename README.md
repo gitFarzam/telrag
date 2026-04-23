@@ -141,3 +141,5 @@ chmod +x entrypoint.sh
 - using dev and product merge composition
 - making production monitoring system limited to just django app and app metrics, by configurating alloy and loki (having a second alloy+/loki config file)
 - managing log storage in loki!
+- it looks service_name is already included in the alloy outputs, this have overlap with container_name label
+- Drawing Canvases for TelRAG

@@ -17,8 +17,8 @@ curl -X POST "https://api.telegram.org/bot${TELEGRAM_DEV_API_KEY}/setWebhook" \
 
 echo "Webhook has been set"
 
-
-
+echo ".........................................."
+echo "⚠️⚠️ telegram webhook just can work through ngrok bypassing!!  ⚠️⚠️"
 
 exit "$@"
 

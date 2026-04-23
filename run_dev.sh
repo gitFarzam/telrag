@@ -15,4 +15,3 @@ docker compose -f compose.yaml -f compose/compose.dev.yaml up
 
 
 exit "$@"
-

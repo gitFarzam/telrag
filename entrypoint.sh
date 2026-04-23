@@ -3,21 +3,6 @@
 # Exit on error
 set -e
 
-
-# Setting webhook
-# . works like source , source is a bash command , but in vps we have shell, . works anyone if is available
-
-# no need to source env here! docker compose will do it automatically!
-
-
-echo "Webhook has been set"
-
-echo "-> ls"
-ls -a
-
-echo "Current Directory"
-pwd
-
 echo "🧱 Collecting static files..."
 
 # Ensure we're in the Django project directory where manage.py lives
