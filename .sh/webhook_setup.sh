@@ -5,7 +5,7 @@ set -e
 
 
 # Setting webhook
-source ../.env
+source ./.env
 
 echo ".................... Setting Production Webhook ....................."
 echo $ONLINE_WEBHOOK_ADDRESS
