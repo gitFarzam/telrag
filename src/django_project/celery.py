@@ -7,7 +7,7 @@ os.environ.setdefault("DJANGO_SETTINGS_MODULE","django_project.settings")
 celery = Celery('django_project')
 
 celery.config_from_object("django.conf:settings",namespace="CELERY")
-celery.autodiscover_tasks()
+# celery.autodiscover_tasks()
 
 # Configure Celery to survive disconnects
 celery.conf.update(
@@ -22,7 +22,7 @@ celery.conf.update(
     worker_task_log_format='[%(asctime)s: %(levelname)s/%(processName)s] %(task_name)s: %(message)s',
 )
 
-# Add task time limits (prevents freezing)
+# Add task time limits (prevents freezing) - we already did this in settings.py
 # celery.conf.update(
 #     task_time_limit=300,        # hard limit
 #     task_soft_time_limit=240,   # graceful stop

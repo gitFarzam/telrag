@@ -134,10 +134,12 @@ chmod +x entrypoint.sh
 - Cleaning: imports, redundant functions, constants, typos, logger, redundant files, gitignore, git cache
 - Making a niche app, a niche industry
 - log files for using in docker logs command
-- Promeseus and garafana for docker containers
+- Prometheus metrics for docker containers (cAdvisor and Node Exporter)
 - celery monitoring
 - handling loading initial data in an optimized way (having it ready in the database)
 - making production monitoring system limited to just django app and app metrics, by configurating alloy and loki (having a second alloy+/loki config file)
 - managing log storage in loki!
 - it looks service_name is already included in the alloy outputs, this have overlap with container_name label
 - Drawing Canvases for TelRAG
+- How to clean older data in log and metrics storage - Retention in Loki and prometheus
+- 'Keep my conversation' button - a functinality which if user wanted their conversation will remain, the user and pass will be retrieved for them as well.

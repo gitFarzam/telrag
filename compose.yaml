@@ -52,6 +52,25 @@ services:
     networks:
       - telrag-network
 
+  flower:
+    build: .
+    container_name: telrag_flower
+    working_dir: /usr/src/app
+    command: celery -A django_project flower
+    restart: always
+    env_file:
+      - .env
+    # ports:
+    #   - "5555:5555"
+    depends_on:
+      - redis
+      - db
+      - app
+      - celery
+    networks:
+      - telrag-network
+
+
   celery_beat:
   # the same dir for the app, as celery uses the app for running and installed inside the django app
     build: .

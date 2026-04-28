@@ -1,0 +1,57 @@
+// General - Positive
+{"q": "Who are you?", "a": "I am an AI assistant from Telburger Restauarant"}
+{"q": "How many branches do you have in the us?", "a": "We have 100 branches all over the us"}
+{"q":"Which cities do you operate" , "a" : "New York City, Los Angeles, Chicago, Houston, Phoenix, Philadelphia, San Antonio, San Diego, Dallas, San Jose, Austin, Jacksonville, Fort Worth, Columbus, Charlotte, San Francisco, Indianapolis, Seattle, Denver, Washington, Boston, El Paso, Nashville, Detroit, Oklahoma City, Portland, Las Vegas, Memphis, Louisville, Baltimore, Milwaukee, Albuquerque, Tucson, Fresno, Sacramento, Kansas City, Mesa, Atlanta, Omaha, Colorado Springs, Raleigh, Miami, Long Beach, Virginia Beach, Oakland, Minneapolis, Tulsa, Arlington, New Orleans, Wichita, Cleveland, Tampa, Bakersfield, Aurora, Anaheim, Honolulu, Santa Ana, Riverside, Corpus Christi, Lexington, Henderson, Stockton, Saint Paul, Cincinnati, St. Louis, Pittsburgh, Greensboro, Lincoln, Anchorage, Plano, Orlando, Irvine, Newark, Durham, Chula Vista, Toledo, Fort Wayne, St. Petersburg, Laredo, Jersey City, Chandler, Madison, Lubbock, Scottsdale, Reno, Buffalo, Gilbert, Glendale, North Las Vegas, Winston-Salem, Chesapeake, Norfolk, Fremont, Garland, Irving, Hialeah, Richmond, Boise"}
+
+
+// General - Negative
+{"q":"Are you a human Agent?" , "a" : "No I am an AI Assistant"}
+{"q": "How many branches do you have out of the US?", "a": "We do not have any braches out of the US"}
+{"q" : " Do you have any branches in Torrento " , "a" : " No we don't have any bracnhes in Torrento "}
+{"q" : " Do you have any branches in Berlin " , "a" : " No we don't have any branches in Berlin "}
+{"q" : " Do you have any branches in London " , "a" : " No we don't have any branches in London "}
+
+
+// Menu - Positive
+{"q": "What kind of burgers do you have?", "a": "We have 3 type of burgers, hamburger, cheeseburger, and veggie burger"}
+{"q" : " What are burgers ingredient? " , "a" : " potato bun, high-quality beef patty, pickles, special sauce "}
+{"q" : " What are Cheeseburger ingredients? " , "a" : " potato bun, high-quality beef patty, two layers of American cheese, pickles, special sauce "}
+{"q" : " What are Veggie burger ingredients? " , "a" : " gluten-free bun, chickpea-based veggie patty, mushroom ,pickles, special vegan sauce "}
+{"q" : " What kind of sides do you have? " , "a" : "Fries (medium size) and Season Salad "}
+{"q" : " What kind of sauce do you have " , "a" : " Ketchup "}
+{"q" : " What kind of drinks do you have " , "a" : " Coca cola can(regular and zero) and Pepsi can(regular and zero) "}
+
+// Menu - Negative
+{"q" : " Do you have mushroom burger " , "a" : " We don't have mushroom burger but we have a Veggie burger which contains mushroom "}
+{"q" : " Do you have chicken nuggete? " , "a" : " No we don't have chickem nuggete "}
+{"q" : " Do you have chicken sandwich? " , "a" : " No we don't have chicken sandwich we just have burgers"}
+{"q" : " Do you have chicken sandwich? " , "a" : " No we don't have chicken sandwich we just have burgers"}
+{"q" : " Do you have Ranch sauce? " , "a" : " No we just have ketchup sauce "}
+{"q" : " Do you have Fanta?" , "a" : " No we don't "}
+
+{"q" : "  " , "a" : "  "}
+{"q" : "  " , "a" : "  "}
+{"q" : "  " , "a" : "  "}
+{"q" : "  " , "a" : "  "}
+{"q" : "  " , "a" : "  "}
+{"q" : "  " , "a" : "  "}
+{"q" : "  " , "a" : "  "}
+{"q" : "  " , "a" : "  "}
+{"q" : "  " , "a" : "  "}
+{"q" : "  " , "a" : "  "}
+{"q" : "  " , "a" : "  "}
+{"q" : "  " , "a" : "  "}
+{"q" : "  " , "a" : "  "}
+{"q" : "  " , "a" : "  "}
+{"q" : "  " , "a" : "  "}
+{"q" : "  " , "a" : "  "}
+{"q" : "  " , "a" : "  "}
+{"q" : "  " , "a" : "  "}
+{"q" : "  " , "a" : "  "}
+{"q" : "  " , "a" : "  "}
+{"q" : "  " , "a" : "  "}
+{"q" : "  " , "a" : "  "}
+{"q" : "  " , "a" : "  "}
+{"q" : "  " , "a" : "  "}
+{"q" : "  " , "a" : "  "}
+{"q" : "  " , "a" : "  "}

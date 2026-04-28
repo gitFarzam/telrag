@@ -5,11 +5,24 @@ New York City, Los Angeles, Chicago, Houston, Phoenix, Philadelphia, San Antonio
 <break>
 
 -> Menu
+Main Menu:
 Our restaurant currently offers three types of burgers: hamburger, cheeseburger, and veggie burger.
 All burgers are available with either a single or double patty.
 Hamburger ingredients: potato bun, high-quality beef patty, pickles, special sauce
 Cheeseburger ingredients: potato bun, high-quality beef patty, two layers of American cheese, pickles, special sauce
-Veggie burger ingredients: gluten-free bun, chickpea-based veggie patty, pickles, special vegan sauce
+Veggie burger ingredients: gluten-free bun, chickpea-based veggie patty, mushroom ,pickles, special vegan sauce
+
+Sides:
+Fries (medium size)
+Season Salad
+
+Sauce:
+Ketchup
+
+Drinks:
+Water bottle
+Coca cola can(regular and zero)
+Pepsi can(regular and zero)
 
 <break>
 

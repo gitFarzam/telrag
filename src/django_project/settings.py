@@ -221,6 +221,14 @@ CELERY_BEAT_SCHEDULE = {
     }
 }
 
+# Celery Configuration to avoid memory leak:
+CELERY_TASK_TIME_LIMIT = 300  # Hard limit: kills the task if it runs longer than 300 seconds (prevents stuck/hanging tasks)
+
+CELERY_TASK_SOFT_TIME_LIMIT = 240  # Soft limit: sends an exception at 240s so you can gracefully handle cleanup before hard kill
+
+CELERY_WORKER_MAX_TASKS_PER_CHILD = 50  # Restarts worker process after 50 tasks to prevent memory leaks and long-term RAM growth (important for OOM issues)
+
+CELERY_WORKER_PREFETCH_MULTIPLIER = 1  # Limits each worker to fetch 1 task at a time (reduces memory spikes and improves fairness across workers)
 
 
 # CSRF trusted origins for production 
