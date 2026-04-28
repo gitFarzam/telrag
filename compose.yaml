@@ -69,6 +69,7 @@ services:
       - celery
     networks:
       - telrag-network
+      - caddy-network
 
 
   celery_beat:
