@@ -6,6 +6,10 @@ services:
   grafana:
     networks:
       - caddy-network
+
+  flower:
+    networks:
+      - caddy-network
       
 networks:
   caddy-network:

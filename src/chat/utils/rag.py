@@ -118,3 +118,8 @@ class RetrievalToolKit():
             business_description=constants.BUSINESS_DESCRIPTION
             )
         return self.setUp_openai_detector(system_prompt, content)
+    
+
+class RetrievalEvaluator():
+    def __init__(self,input_data, target_data):
+        pass

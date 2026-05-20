@@ -45,7 +45,6 @@ class TelegramMessage(models.Model):
     created_at = models.DateTimeField(auto_now_add=True,null=True)
     chat_id = models.PositiveIntegerField(default=0)
 
-
     def data(self):
         return self.json_content
 
@@ -64,12 +63,15 @@ class AudioContent(models.Model):
     file = models.FileField(upload_to='voices')
     trascription = models.TextField(null=True,blank=True)
 
+
 class Document(models.Model):
     conversation = models.ForeignKey(Conversation,on_delete=models.CASCADE,related_name="conv_documents")
     caption = models.TextField(null=True , blank=True)
     document_source = models.ForeignKey(DocumentSource , on_delete=models.CASCADE,null=True)
     user_message = models.ForeignKey(Message , on_delete=models.CASCADE , null=True , blank=True, related_name='documents')
     telegram_message = models.ForeignKey(TelegramMessage,on_delete=models.CASCADE,null=True)
+    is_initial = models.BooleanField(default=False)
+    category = models.CharField(null=True,blank=True,default="user_input")
 
 
 class Chunk(models.Model):

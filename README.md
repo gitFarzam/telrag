@@ -116,7 +116,7 @@ chmod +x entrypoint.sh
 ```
 
 
-## Changes
+## General
 - adding an admin with a custom login address
 - improve using openai
 - error handling
@@ -135,11 +135,31 @@ chmod +x entrypoint.sh
 - Making a niche app, a niche industry
 - log files for using in docker logs command
 - Prometheus metrics for docker containers (cAdvisor and Node Exporter)
-- celery monitoring
 - handling loading initial data in an optimized way (having it ready in the database)
 - making production monitoring system limited to just django app and app metrics, by configurating alloy and loki (having a second alloy+/loki config file)
-- managing log storage in loki!
 - it looks service_name is already included in the alloy outputs, this have overlap with container_name label
 - Drawing Canvases for TelRAG
 - How to clean older data in log and metrics storage - Retention in Loki and prometheus
 - 'Keep my conversation' button - a functinality which if user wanted their conversation will remain, the user and pass will be retrieved for them as well.
+- add `ngrok` in documentaion, for using in dev mode
+- fixing `DOCKER` and `DEBUG` env variables and db connection issue in dev mode
+- add caching
+
+
+## Security
+- Opening ports for grafana and flower panels can be closed probably, as caddy is using internal network for exposing
+- Safe db quieris
+- managing log storage in loki! Alloy scraping and prometheus!
+- Create Alert in grafana
+- Limit container memory usage
+- Limit receving messages in telegram for each chat id - maximum 100, increase 3 seconds waiting to 5 seconds
+- Where celery tasks results are stored in flower? they should not stack on the top of each other
+
+Copilot: command + control + i
+
+## RAG
+- Retrieval Evaluation
+- LLM Evaluation
+- Query Re-Writing
+- Caching
+- Check Ipad!

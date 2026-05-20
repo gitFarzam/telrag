@@ -1,7 +1,0 @@
-services:
-  app:
-    ports:
-      - "127.0.0.1:8000:8006"
-    volumes:
-      - ./src:/usr/src/app/src
-      - ./entrypoint.sh:/usr/src/app/entrypoint.sh

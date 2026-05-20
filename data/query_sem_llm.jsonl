@@ -21,6 +21,7 @@
 {"q" : " What kind of sauce do you have " , "a" : " Ketchup "}
 {"q" : " What kind of drinks do you have " , "a" : " Coca cola can(regular and zero) and Pepsi can(regular and zero) "}
 
+
 // Menu - Negative
 {"q" : " Do you have mushroom burger " , "a" : " We don't have mushroom burger but we have a Veggie burger which contains mushroom "}
 {"q" : " Do you have chicken nuggete? " , "a" : " No we don't have chickem nuggete "}
@@ -28,6 +29,7 @@
 {"q" : " Do you have chicken sandwich? " , "a" : " No we don't have chicken sandwich we just have burgers"}
 {"q" : " Do you have Ranch sauce? " , "a" : " No we just have ketchup sauce "}
 {"q" : " Do you have Fanta?" , "a" : " No we don't "}
+
 
 {"q" : "  " , "a" : "  "}
 {"q" : "  " , "a" : "  "}
