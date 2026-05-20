@@ -74,7 +74,7 @@ def hybrid_search(conversation,user_query,input_text,num):
             # Computes semantic distance
             distance=L2Distance('vector', input_text_embedding),
         )
-        .filter(chunk__document__conversation=conversation) # doe demo case we need to filter for the current conversation
+        .filter(Q(chunk__document__conversation=conversation) | Q(chunk__document__is_initial=True)) # in demo case we need to filter for the current conversation + initial documents
 
         # Highest keyword match first (-rank) , Then best semantic similarity (distance ascending)
         .order_by('-rank', 'distance')[:num]
@@ -403,10 +403,16 @@ def creating_document_source(model_object):
 
 def creating_document_object(document_source, category="user_input", conversation=None, is_initial=False, caption=None,user_message=None,telegram_message=None) -> Document:
     logger.debug(creating_document_object.__name__)
-    doc_object = Document.objects.create(document_source = document_source,is_initial=is_initial, category=category)
+    doc_object = Document.objects.create(document_source = document_source)
 
     if conversation:
         doc_object.conversation = conversation
+
+    if category:
+        doc_object.category = category
+
+    if is_initial:
+        doc_object.is_initial = is_initial
 
     if caption:
         doc_object.caption = caption

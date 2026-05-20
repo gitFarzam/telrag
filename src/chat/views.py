@@ -83,11 +83,13 @@ class HomeView(TemplateView):
                     conversation = Conversation.objects.create(user=user)
                     conversation.refresh_from_db()
                     conversation.save()
-                    result = add_initial_documents(conversation=conversation)
-                    if not result:
-                        logger.error("Error in adding initial data for user")
-                        return render(request=request,template_name='home.html')
 
+                    # I'm gonna delete this
+                    # result = add_initial_documents(conversation=conversation)
+                    # if not result:
+                    #     logger.error("Error in adding initial data for user")
+                    #     return render(request=request,template_name='home.html')
+                    logger.info("Redirecting to chat detail page")
                     return redirect('chat-detail', pk=conversation.pk)
             
             return HttpResponse("Name is required", status=400)

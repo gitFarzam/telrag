@@ -2,6 +2,7 @@ from langchain_text_splitters import RecursiveCharacterTextSplitter
 from typing import List
 from langchain_core.documents.base import Document
 from huggingface_hub import InferenceClient
+import openai
 from openai import OpenAI
 from pydantic import BaseModel
 from typing import Literal
@@ -12,7 +13,10 @@ from django.conf import settings
 import chat.constants as constants
 import chat.prompts as prompts
 import numpy as np
+import logging
+
 load_dotenv()
+logger = logging.getLogger(__name__)
 
 class NLPToolKit(RecursiveCharacterTextSplitter):
     def __init__(self, separators = None, keep_separator = True, is_separator_regex = False, text=None, **kwargs):
@@ -77,25 +81,30 @@ class RetrievalToolKit():
     def setUp_openai_detector(self,system_prompt,user_prompt):
         client = OpenAI()
 
-        completion = client.chat.completions.create(
-            model=self.openai_model,
-            messages=[
-                {"role": "system", "content": system_prompt},
-                {"role": "user", "content": user_prompt}
-            ],
-            response_format={
-                "type": "json_schema",
-                "json_schema": {
-                    "name": "CategorizingResponse",
-                    "schema": CategorzingModel.model_json_schema()
-                }
-            },
-            temperature=0
-        )
+        try:
+            completion = client.chat.completions.create(
+                model=self.openai_model,
+                messages=[
+                    {"role": "system", "content": system_prompt},
+                    {"role": "user", "content": user_prompt}
+                ],
+                response_format={
+                    "type": "json_schema",
+                    "json_schema": {
+                        "name": "CategorizingResponse",
+                        "schema": CategorzingModel.model_json_schema()
+                    }
+                },
+                temperature=0
+            )
 
-        content = completion.choices[0].message.content
+            content = completion.choices[0].message.content
+            return CategorzingModel.model_validate_json(content).result
+        
+        except openai.RateLimitError as error:
+            logger.error(error)
 
-        return CategorzingModel.model_validate_json(content).result
+        
     
 
     def openai_text_generator(self,messages_history:list,new_messages:dict):
@@ -105,20 +114,26 @@ class RetrievalToolKit():
         messages_history.insert(0,system_message)
         messages_history.append(new_messages)
 
+        try:
+            result =  client.chat.completions.create(
+                model=self.openai_model,  # or another supported model
+                messages=messages_history
+            ).choices[0].message.content
 
-        return client.chat.completions.create(
-            model=self.openai_model,  # or another supported model
-            messages=messages_history
-        ).choices[0].message.content
-    
+            return result
+        except openai.RateLimitError as error:
+            logger.error(error)
 
+        
     # in-use: for categorzing message
     def message_categorizer(self,content) -> int:
         system_prompt = prompts.system_prompt_message_categorizer(
             business_name=constants.BUSINESS_NAME,
             business_description=constants.BUSINESS_DESCRIPTION
             )
-        return self.setUp_openai_detector(system_prompt, content)
+        result = self.setUp_openai_detector(system_prompt, content)
+        if result:
+            return result
     
 
 class RetrievalEvaluator():
