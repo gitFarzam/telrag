@@ -9,6 +9,9 @@ export DJANGO_SUPERUSER_EMAIL=admin@example.com
 export DJANGO_SUPERUSER_PASSWORD=admin
 
 # Create superuser if it doesn't exist
-uv run ./src/manage.py createsuperuser --noinput || true
+python ./src/manage.py createsuperuser --noinput || true
+
+# Inserting data
+python ./src/manage.py insert_data
 
 echo "✅ Admin user ensured"

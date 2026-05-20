@@ -1,5 +1,5 @@
 from django.core.management.base import BaseCommand, CommandError
-from chat.models import Document
+from chat.models import Conversation
 from django.db import transaction
 from django.conf import settings
 from chat.services import creating_text_content_object, creating_document_source,creating_document_object,creating_chunk_objects,creating_embedding_objects
@@ -17,10 +17,7 @@ class Command(BaseCommand):
     (this inserts all documents from all indices, not that you should add a white space for each argument)
     """
 
-    def add_arguments(self,parser):
-        parser.add_argument("root_name" , nargs="+" ,type=int)
-
-    def load_documents(self,root_name="telburger"):
+    def load_documents(self):
         """
         this function returns a dictionary which have category name as a key and file path as value, for example:
 
@@ -30,18 +27,18 @@ class Command(BaseCommand):
         } 
         """
         txt_files_dict = {}
-        root_dir = os.path.join(settings.BASE_DIR,f'chat/management/commands/initial_data/{root_name}')
+        root_dir = os.path.join(settings.BASE_DIR,f'chat/management/commands/initial_data/telburger')
         dirs = os.listdir(root_dir)
         for dir in dirs:
             txt_file_path = os.path.join(root_dir,dir)
-            txt_file = os.listdir(txt_file_path)
-            txt_files_dict[f"{dir}_{Path(txt_file).stem}"] = txt_file_path
+            txt_files = os.listdir(txt_file_path)
+            for txt_file in txt_files:
+                txt_files_dict[f"{dir}_{Path(txt_file).stem}"] = os.path.join(txt_file_path,txt_file)
         return txt_files_dict
 
 
     def handle(self,*args,**options):
-        root_name = options["root_name"]
-        txt_files_dict = self.load_documents(root_name)
+        txt_files_dict = self.load_documents()
         for category in txt_files_dict:
             try:
                 file_path = txt_files_dict[category]
@@ -58,10 +55,10 @@ class Command(BaseCommand):
                     print(f"Embedding has been created: {embedding_objects}")
 
             except FileNotFoundError as e:
-                raise CommandError('File %s.txt does not exist' % root_name)
+                raise CommandError('File %s.txt does not exist')
 
         self.stdout.write(
-            self.style.SUCCESS(f"Root: {root_name}")
+            self.style.SUCCESS(f"Done!!!")
         )
 
-        # uv run manage.py insert_data 0
+        # python manage.py insert_data

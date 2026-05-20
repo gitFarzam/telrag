@@ -401,9 +401,12 @@ def creating_document_source(model_object):
 
     return doc_source_obj
 
-def creating_document_object(conversation,document_source, category="user_input", is_initial=False, caption=None,user_message=None,telegram_message=None) -> Document:
+def creating_document_object(document_source, category="user_input", conversation=None, is_initial=False, caption=None,user_message=None,telegram_message=None) -> Document:
     logger.debug(creating_document_object.__name__)
-    doc_object = Document.objects.create(conversation=conversation,document_source = document_source,is_initial=is_initial, category=category)
+    doc_object = Document.objects.create(document_source = document_source,is_initial=is_initial, category=category)
+
+    if conversation:
+        doc_object.conversation = conversation
 
     if caption:
         doc_object.caption = caption

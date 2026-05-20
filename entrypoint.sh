@@ -24,7 +24,7 @@ python manage.py makemigrations
 python manage.py migrate
 
 # echo "Initial Command For Inserting Data"
-# python manage.py insert_data telburger
+# python manage.py insert_data
 
 echo "finighsing entrypint"
 

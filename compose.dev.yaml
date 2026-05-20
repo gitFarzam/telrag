@@ -24,6 +24,7 @@ services:
     command: daphne -b 0.0.0.0 -p 8006 django_project.asgi:application
     volumes:
       - ./entrypoint.sh:/usr/src/app/entrypoint.sh
+      - ./src:/usr/src/app/src
     ports:
       - "127.0.0.1:8000:8006"
     depends_on:

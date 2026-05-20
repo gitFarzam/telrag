@@ -65,7 +65,7 @@ class AudioContent(models.Model):
 
 
 class Document(models.Model):
-    conversation = models.ForeignKey(Conversation,on_delete=models.CASCADE,related_name="conv_documents")
+    conversation = models.ForeignKey(Conversation,on_delete=models.CASCADE,related_name="conv_documents",null=True,blank=True)
     caption = models.TextField(null=True , blank=True)
     document_source = models.ForeignKey(DocumentSource , on_delete=models.CASCADE,null=True)
     user_message = models.ForeignKey(Message , on_delete=models.CASCADE , null=True , blank=True, related_name='documents')
