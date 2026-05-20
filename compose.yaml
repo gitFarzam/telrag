@@ -8,15 +8,11 @@ services:
       - telrag-pgvector-volume:/var/lib/postgresql/data
     env_file:
       - .env
-    # networks:
-    #   - telrag-network
 
   redis:
     image: redis:7
     container_name: telrag_redis
     restart: always
-    # networks:
-    #   - telrag-network
 
   app:
     # the dir which DockerFile is located
@@ -37,8 +33,8 @@ services:
       - .env
     expose:
       - "8006"
-    # networks:
-    #   - telrag-network
+    networks:
+      - caddy-network
 
   celery:
   # the same dir for the app, as celery uses the app for running and installed inside the django app
@@ -51,8 +47,7 @@ services:
       - redis
       - db
       - app
-    # networks:
-    #   - telrag-network
+
 
   flower:
     build: .
@@ -69,9 +64,8 @@ services:
       - db
       - app
       - celery
-    # networks:
-    #   - telrag-network
-
+    networks:
+      - caddy-network
 
   celery_beat:
   # the same dir for the app, as celery uses the app for running and installed inside the django app
@@ -84,8 +78,6 @@ services:
       - redis
       - db
       - app
-    # networks:
-    #   - telrag-network
 
 
   alloy:
@@ -95,16 +87,10 @@ services:
       - ./.config/alloy.hcl:/etc/alloy/config.hcl
       - /var/run/docker.sock:/var/run/docker.sock
     command: ["run", "/etc/alloy/config.hcl"]
-    # networks:
-    #   - telrag-network
-
 
   loki:
     image: grafana/loki:latest
     container_name: telrag_loki
-    # networks:
-    #   - telrag-network
-
 
   prometheus:
     image: prom/prometheus:latest
@@ -112,8 +98,6 @@ services:
     volumes:
       - "./.config/prometheus.yml:/etc/prometheus/prometheus.yml" #prometheus configuration file
       - "prometheus-data:/prometheus" # prometheus data
-    # networks:
-    #   - telrag-network
     depends_on:
       - app
 
@@ -130,15 +114,16 @@ services:
       - grafana_data:/var/lib/grafana
     depends_on:
       - loki
-    # networks:
-    #   telrag-network:
+    networks:
+      caddy-network
 
 volumes:
   telrag-pgvector-volume:
   prometheus-data:
   grafana_data:
 
-# networks:
-#   telrag-network:
+networks:
+  caddy-network:
+    external: true
 
 
