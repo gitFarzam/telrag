@@ -9,8 +9,8 @@ HF_INFERENCE_MODEL="meta-llama/Llama-3.1-8B-Instruct"
 OPENAI_CHAT_MODEL="gpt-4.1-mini"
 
 # Chunking
-CHUNK_SIZE=4000
-CHUNK_OVERLAP=200
+CHUNK_SIZE=400
+CHUNK_OVERLAP=40
 
 # Business
 BUSINESS_NAME="TelBurger restaurant"
