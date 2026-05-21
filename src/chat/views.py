@@ -89,7 +89,6 @@ class HomeView(TemplateView):
                     # if not result:
                     #     logger.error("Error in adding initial data for user")
                     #     return render(request=request,template_name='home.html')
-                    logger.info("Redirecting to chat detail page")
                     return redirect('chat-detail', pk=conversation.pk)
             
             return HttpResponse("Name is required", status=400)
