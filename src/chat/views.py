@@ -34,6 +34,7 @@ def redirect_404(request, exception):
     return redirect('/')
 
 
+
 # HomeView: Handling first page view and post view for creating a new conversation
 class HomeView(TemplateView):
     def get(self, request, *args, **kwargs):

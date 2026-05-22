@@ -1,20 +1,32 @@
 {
   "name": "Telrag App",
   "dockerComposeFile": "../compose.dev.yaml",
-
-  //service : the-name-of-the-service-you-want-to-work-with-in-vscode 
-  "service": "app", 
-
-  //Default workspace path in container to open (like when we use exec, we can set quickly log in a specific dir, instead of using cd src/usr/...)
+  "service": "app",
   "workspaceFolder": "/usr/src/app",
   "shutdownAction": "stopCompose",
 
-  "forwardPorts": [8000],
-    "portsAttributes": {
-    "8000": {
-      "label": "Django Backend",
-      "onAutoForward": "notify"
+  // Features to install — top-level, NOT inside customizations
+  "features": {
+    "ghcr.io/devcontainers/features/common-utils:2": {
+      "installZsh": true,
+      "installOhMyZsh": true,
+      "username": "vscode",
+      "uid": "1000",
+      "gid": "1000",
+      "upgradePackages": true
     }
-}
+  },
 
+  "customizations": {
+    "vscode": {
+      "extensions": [
+        "ms-python.python",
+        "ms-python.vscode-pylance"
+      ],
+      "settings": {
+        "python.defaultInterpreterPath": "/usr/src/app/venv/bin/python",
+        "python.terminal.activateEnvironment": true
+      }
+    }
+  }
 }

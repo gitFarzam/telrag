@@ -2,12 +2,13 @@ from django.conf import settings
 from django.conf.urls.static import static  
 from django.contrib import admin
 from django.urls import path,include
+from debug_toolbar.toolbar import debug_toolbar_urls
 
 urlpatterns = [
     path('admin/', admin.site.urls),
     path('', include('chat.urls')),
     path('', include('django_prometheus.urls')),
-]
+] + debug_toolbar_urls()
 # Serve static and media files during development  
 if settings.DEBUG:  
     urlpatterns += static(settings.STATIC_URL, document_root=settings.STATIC_ROOT)  

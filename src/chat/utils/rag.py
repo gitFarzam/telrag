@@ -1,6 +1,5 @@
 from langchain_text_splitters import RecursiveCharacterTextSplitter
 from typing import List
-from langchain_core.documents.base import Document
 from huggingface_hub import InferenceClient
 import openai
 from openai import OpenAI
@@ -9,11 +8,13 @@ from typing import Literal
 from dotenv import load_dotenv
 from enum import IntEnum
 import os
+import json
 from django.conf import settings
 import chat.constants as constants
 import chat.prompts as prompts
 import numpy as np
 import logging
+import pandas as pd
 
 load_dotenv()
 logger = logging.getLogger(__name__)
@@ -24,8 +25,8 @@ class NLPToolKit(RecursiveCharacterTextSplitter):
         chunk_overlap = constants.CHUNK_OVERLAP,**kwargs)
 
     # in-use: for generating embedding for sentences
-    def embedder(self,chunks:list):
-        client = InferenceClient(model=constants.HF_EMBEDDING_MODEL,token=os.getenv("HF_API_TOKEN")) 
+    def embedder(self,chunks:list,model=constants.HF_EMBEDDING_MODEL):
+        client = InferenceClient(model=model,token=os.getenv("HF_API_TOKEN")) 
         embedding = client.feature_extraction(text=chunks)
         return embedding
 
@@ -99,7 +100,8 @@ class RetrievalToolKit():
             )
 
             content = completion.choices[0].message.content
-            return CategorzingModel.model_validate_json(content).result
+            result = CategorzingModel.model_validate_json(content).result
+            return result
         
         except openai.RateLimitError as error:
             logger.error(error)
@@ -132,28 +134,42 @@ class RetrievalToolKit():
             business_description=constants.BUSINESS_DESCRIPTION
             )
         result = self.setUp_openai_detector(system_prompt, content)
-        if result:
-            return result
+        return result
     
 
-class RetrievalEvaluator():
+class NLP():
     """
     This class if made for evaluating retrieval performance, it gets multiple test query and will compare them with oberserved query, both queryies belong to a unique category, if categories were matched together, it means that retrieval worked properly with providing right documents @k
 
     test_query : jsonl file, will compite to dict: sample: {"query": "TelBurger submits refund requests immediately after approval", "category": "crm_support"}
     observed_query : fetches from database by retrieval and compiles as a dictionary like above
     k : a positive integer number will determine how many documents have to be retrieved from database
+
+    Steps:
+        1. Assigning an embedding model
+        2. having the path for input_queries ready
+        3. creating {'query':'embedding','category':'value'} for oberserved_query, by annotating Embedding model object
+        4. seprating vector embeddings from Embedding model as an numpy 2D array from categories as a different list
+        5. creating an embedding and category from test data as well, storing in the database
+        6. measuring hybrid search function by considering these values
     """
-    def __init__(self,embedding_model,input_queries, observed_query):
-        self.model = embedding_model
-        self.input_queries = input_queries
-        self.observed_query = observed_query
+    def __init__(self):
+        return super().__init__()
 
     def text_strip(text:str):
         return text.strip()
+    
+    def jsonl_reader(self,path)->pd.DataFrame:
+        """
+        jsonL works fine with large data, as its possible to stream it and no need to load all at once. (for big size using yield for streaming)
+        """
 
-    def embedder(self,chunks:list):
-        client = InferenceClient(model=self.model,token=os.getenv("HF_API_TOKEN")) 
+        with open(path) as f:
+            return pd.DataFrame([json.loads(line) for line in f])
+
+
+    def embedder(self,model,chunks:list):
+        client = InferenceClient(model=model,token=os.getenv("HF_API_TOKEN")) 
         embeddings = client.feature_extraction(text=chunks)
         return embeddings
     
@@ -226,3 +242,57 @@ class RetrievalEvaluator():
 
 
 
+class RagMetrics():
+    def __init__(self,top_k,test_df:pd.DataFrame):
+        from services import hybrid_search
+        self.hybrid_search = hybrid_search
+
+        # Initialzing an instance of NLP class
+        self.nlp = NLP()
+
+        # loading test data as a pandas dataframe
+        test_path_rel = "../data/query_class_retriever.jsonl"
+        self.jsonl_path = os.path.join(settings.BASE_DIR , test_path_rel)
+        self.df = self.nlp.jsonl_reader(path=self.jsonl_path)
+
+
+    def recall(self):
+        """
+        Recall = Relevant Retrieved / Total Relevant
+        """
+
+    def precision(self):
+        """
+        Precision = Relevant Retrieved / Total Retrieved
+        """
+
+        """
+        I need to have hybrid_search here, hybrid search requires conversation object
+        for all queries (prompts) in the dataframe hybrid search will be activated
+        """
+        k = 5 # top k document
+        all_correct = 0
+        for index, row in self.df.iterrows():
+            query = row['query']
+            query_category = row['category']
+            result = self.hybrid_search(
+                user_query=query,
+                input_text=query,
+                k=k
+                )
+            
+            categories = result.values_list('category')
+            correct_categories = 0
+            for category in categories:
+                for i in category:
+                    if i==query_category:
+                        correct_categories+=1 
+            all_correct+=correct_categories
+            
+        print(f"all correct: {all_correct}")
+        """
+        note: this is basically wrong, because you have to count the document numbers and not the number of chunks
+        
+        
+        """
+        print(f"Precission@{k} (Relevant/Total Retrieved): {all_correct/self.df.__len__()}")

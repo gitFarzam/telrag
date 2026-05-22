@@ -163,3 +163,6 @@ Copilot: command + control + i
 - Query Re-Writing
 - Caching
 - Check Ipad!
+
+## SQL
+- Duplicated queries

@@ -5,6 +5,7 @@ import numpy as np
 from asgiref.sync import async_to_sync
 from typing import List
 from datetime import timedelta
+from pathlib import Path
 
 # Django imports
 from django.contrib.contenttypes.models import ContentType
@@ -49,8 +50,19 @@ def similarity_search(conversation,input_text,num):
     similar_embeddings = Embedding.objects.filter(chunk__document__conversation=conversation).order_by(L2Distance('vector', input_text_embedding))[:num]
     return input_text_embedding,similar_embeddings
 
-def hybrid_search(conversation,user_query,input_text,num):
+def hybrid_search(user_query,input_text,k,conversation=None)->QuerySet[Embedding]:
 
+
+    """
+    hybrid search in pgvector using django ORM
+
+    - conversation: the conversatin object for the chat: Demo usage
+    - user_query : the query for searching inside the database for keyword search
+    - input_text : the text for embedding which retriever uses for semantic search
+    - k : number of document which should be retrieved
+
+    
+    """
     rag_toolkit = NLPToolKit()
     input_text_embedding = rag_toolkit.embedder([input_text])[0]
 
@@ -58,7 +70,7 @@ def hybrid_search(conversation,user_query,input_text,num):
     # converting user text keyword to -> PostgreSQL search query
     query = SearchQuery(user_query)
 
-    return (
+    result = (
         Embedding.objects
 
         # adding some temporary computed fields (search,rank,distance),
@@ -73,12 +85,23 @@ def hybrid_search(conversation,user_query,input_text,num):
 
             # Computes semantic distance
             distance=L2Distance('vector', input_text_embedding),
-        )
-        .filter(Q(chunk__document__conversation=conversation) | Q(chunk__document__is_initial=True)) # in demo case we need to filter for the current conversation + initial documents
 
+            category = F("chunk__document__category")
+        )
         # Highest keyword match first (-rank) , Then best semantic similarity (distance ascending)
-        .order_by('-rank', 'distance')[:num]
+        .order_by('-rank', 'distance')[:k]
     )
+
+    if conversation:
+        result = result.filter(Q(chunk__document__conversation=conversation) | Q(chunk__document__is_initial=True))
+    else:
+        result = result.filter(chunk__document__is_initial=True)
+
+    logger.info(result)
+
+    return result
+
+
 
 def similarity_score(input_embedding : np , similar_embeddings : List[Embedding]):
     embeddings = np.array([embedding.vector for embedding in similar_embeddings])
@@ -306,11 +329,11 @@ def user_message_categorizer(message:Message):
     conversation=message.conversation
 
     # Fetch Context
-    similar_embeddings = hybrid_search(conversation=conversation,user_query=message.content,input_text=message.content , num=5)
+    similar_embeddings = hybrid_search(conversation=conversation,user_query=message.content,input_text=message.content , k=5)
 
     context =''
     if similar_embeddings:
-        similar_text = "\n".join([embedding_obj.chunk.text for embedding_obj in similar_embeddings])
+        similar_text = "\n".join([embedding_obj.chunk.text for embedding_obj in similar_embeddings]) # instead of chunk text, it's better to provide the whole document
         context = similar_text
 
     # Check if the question is related
@@ -321,6 +344,7 @@ def user_message_categorizer(message:Message):
         Available Information: {context}
     """
     result = retreival_instance.message_categorizer(user_prompt)
+    logger.info(f"result from message_categorizer: {result}")
     return context,result
 
 def process_user_message(message:Message):
@@ -382,10 +406,12 @@ def process_user_message(message:Message):
                 is_agent=True
                 )
 
-# !tar -czf pack.tar.gz ./
-def creating_text_content_object(content:str):
+
+def creating_text_content_object(file,content:str):
     logger.debug(creating_chunk_objects.__name__)
     model_object = TextContent.objects.create(content = content)
+    if file:
+        model_object.file = file
     model_object.save()
 
     return model_object
@@ -569,3 +595,43 @@ def delete_unused_conversation():
     for conversation in conversations:
         message_sender_custom(conversation , """This conversation has expired due to inactivity. Please go to the <a href="https://tel‍rag.site">homepage</a and start a new one.""")
         conversation.delete()
+
+
+def load_initial_documents(initial_data_root_dir):
+    """
+    this function returns a dictionary which have category name as a key and file path as value, for example:
+
+    {'crm_refund' : 'chat/management/commands/initial_data/telburger/crm/refund.txt',
+    'general_general' : 'chat/management/commands/initial_data/telburger/general/general.txt',
+    ...,
+    } 
+    """
+    txt_files_dict = {}
+    dirs = os.listdir(initial_data_root_dir)
+    for dir in dirs:
+        txt_file_path = os.path.join(initial_data_root_dir,dir)
+        txt_files = os.listdir(txt_file_path)
+        for txt_file in txt_files:
+            txt_files_dict[f"{dir}_{Path(txt_file).stem}"] = os.path.join(txt_file_path,txt_file)
+    return txt_files_dict
+
+
+def intial_data_db_insert(initial_data_root_dir)->QuerySet[Embedding]:
+    txt_files_dict = load_initial_documents(initial_data_root_dir)
+    for category in txt_files_dict:
+        try:
+            file_path = txt_files_dict[category]
+            with open(file_path) as text_file:
+                text_string = text_file.read()
+                print(text_string)
+            with transaction.atomic():
+                text_content_object = creating_text_content_object(content=text_string)
+                doc_source_object = creating_document_source(model_object=text_content_object)
+                doc_object = creating_document_object(document_source=doc_source_object,category=category , is_initial=True)
+                chunk_objects = creating_chunk_objects(document_object=doc_object)
+                embedding_objects = creating_embedding_objects(chunks=chunk_objects)
+
+                return embedding_objects
+
+        except Exception as e:
+            logger.error(e)

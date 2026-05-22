@@ -6,6 +6,7 @@ from chat.views import (
     ChatSendMessageView,
     DeleteConversationUserView,
     telegram_webhook,
+
 )
 
 urlpatterns = [
@@ -18,6 +19,7 @@ urlpatterns = [
         DeleteConversationUserView.as_view(),
         name="chat-delete-user",
     ),
-    path('webhook/', telegram_webhook, name='webhook')
+    path('webhook/', telegram_webhook, name='webhook'),
+
 ]
 

@@ -27,7 +27,7 @@ class Command(BaseCommand):
         } 
         """
         txt_files_dict = {}
-        root_dir = os.path.join(settings.BASE_DIR,f'chat/management/commands/initial_data/telburger')
+        root_dir = os.path.join(settings.BASE_DIR,f'../initial_data/telburger')
         dirs = os.listdir(root_dir)
         for dir in dirs:
             txt_file_path = os.path.join(root_dir,dir)

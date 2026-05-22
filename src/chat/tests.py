@@ -1,18 +1,23 @@
 from django.test import TestCase
-from .models import TelegramMessage, Document, Chunk
+from django.conf import settings
+from django.db.models import QuerySet
+from .models import TelegramMessage, Document, Chunk, Conversation, Embedding
+from core.models import User
 import json
 from http import HTTPStatus
 import os
 from django.conf import settings
-from .services import process_telegram_object
-from .utils.rag import RAGToolKit,RetirievalNavigator
+from .services import process_telegram_object,hybrid_search,intial_data_db_insert
+from .utils.rag import NLP
 from .utils.telegram import telegram_downloader
 from unittest.mock import patch
+import chat.constants as constants
+import pandas as pd
 
 class TestWebhook(TestCase):
 
     @patch('chat.views.ingestion_process', return_value=True)
-    def test_if_webhook_returns_true(self ,mock_ingestion):
+    def test_if_webhook_returns_true(self , mock_ingestion):
         # Arrange
         file_relative_dir = "chat/sample_data/telegram_text.json"
         file_dir = os.path.join(settings.BASE_DIR , file_relative_dir)
@@ -157,3 +162,33 @@ class TestTelegramFileDownload(TestCase):
 
         self.assertTrue(result,"An output for the file is existed")
 
+
+class TestRetriever(TestCase):
+    def setUp(self):
+        initial_data_path_rel = os.path.join(settings.BASE_DIR,f'../data/initial_data/telburger')
+        test_path_rel = "../data/query_class_retriever.jsonl"
+        self.jsonl_path = os.path.join(settings.BASE_DIR , test_path_rel)
+        self.nlp = NLP()
+        self.df = self.nlp.jsonl_reader(path=self.jsonl_path)
+        
+        # objects
+        user = User.objects.create(username="test_username",password="test_password")
+        self.conversation = Conversation.objects.create(user=user)
+        embeddings:QuerySet[Embedding] = intial_data_db_insert(initial_data_path_rel)
+
+    def test_jsonl_reader(self):
+        result = self.nlp.jsonl_reader(path=self.jsonl_path)
+        assert isinstance(result, pd.DataFrame)
+
+    def test_embedding_model(self):
+        embeddings = self.nlp.embedder(
+            model=constants.HF_EMBEDDING_MODEL,
+            chunks=self.df['query'].tolist()[:5]
+            )
+        self.assertEqual(len(embeddings), 5) # Checking the number of embeddings
+        self.assertEqual(len(embeddings[0]), 384) # Checking the lenfth of each 
+
+    def test_hybrid_search(self):
+        """
+        hybrid search supposed to retrieve top k items for any input
+        """

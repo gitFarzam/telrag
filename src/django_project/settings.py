@@ -14,7 +14,7 @@ from pathlib import Path
 import os
 from dotenv import load_dotenv
 from datetime import timedelta
-
+import socket
 
 APP_NAME = "telrag"
 ENV_PATH = f".env"
@@ -47,6 +47,7 @@ if DEBUG:
 
 INSTALLED_APPS = [
     'daphne',
+    'debug_toolbar',
     'django.contrib.admin',
     'django.contrib.auth',
     'django.contrib.contenttypes',
@@ -62,6 +63,7 @@ INSTALLED_APPS = [
 MIDDLEWARE = [
     'django_prometheus.middleware.PrometheusBeforeMiddleware',
     'django.middleware.security.SecurityMiddleware',
+    "debug_toolbar.middleware.DebugToolbarMiddleware",
     'django.contrib.sessions.middleware.SessionMiddleware',
     'django.middleware.common.CommonMiddleware',
     'django.middleware.csrf.CsrfViewMiddleware',
@@ -87,6 +89,15 @@ TEMPLATES = [
         },
     },
 ]
+
+# Required for django toolbar to work
+INTERNAL_IPS = [
+    "127.0.0.1",
+]
+
+# Required in case you have app running in docker compose
+hostname, _, ips = socket.gethostbyname_ex(socket.gethostname())
+INTERNAL_IPS += [ip[:-1] + "1" for ip in ips]
 
 # WSGI_APPLICATION = 'django_project.wsgi.application'
 
