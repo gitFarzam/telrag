@@ -1,0 +1,29 @@
+TelMart Account Security
+
+Protecting Your TelMart Account:
+
+If You Suspect Unauthorized Account Access:
+- Change your password immediately using a strong, unique password.
+- Enable two-factor authentication if available.
+- Delete any saved payment information as a precaution.
+- If you use the same email address and password for accounts outside of TelMart.com, change your passwords for those accounts as well.
+- Review your Purchase History for any orders you did not place.
+- Review your account for any changes to your email, phone number, shipping address, or payment methods.
+- Contact TelMart Customer Care using the Chat with us button on TelMart.com.
+
+Signs of Unauthorized Account Activity:
+- Orders you did not place appearing in your Purchase History.
+- Changes to your account information (email, phone, shipping address) that you did not make.
+- Receiving emails about activity you did not initiate.
+- Receiving a digital receipt sent to a phone number or name that is not yours.
+
+Best Practices for Account Security:
+- Use a different password for every account. The longer the password, the more difficult it is to hack.
+- Never include personal information or common words and phrases in your password.
+- Combine 3 or more words together to create a phrase meaningful only to you.
+- Include numbers, symbols, and both uppercase and lowercase letters.
+- Security questions add a layer of protection, but answers should not be information easily found online.
+- Avoid using public Wi-Fi for account login.
+- Do not save passwords in browsers.
+
+For assistance with account security issues, contact TelMart Customer Care via the Chat with us button on TelMart.com, phone at 1-400-840-4060, or email at help@telmart.com.

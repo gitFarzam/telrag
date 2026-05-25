@@ -1,0 +1,23 @@
+TelMart Self-Checkout Assistance
+
+TelMart self-checkout kiosks are available in many store locations to provide a faster checkout experience for customers.
+
+How to Use Self-Checkout:
+- Scan each item's barcode using the kiosk scanner.
+- Place scanned items in the bagging area.
+- Review your order on the screen before proceeding to payment.
+- Use the Review Your Order feature before payment to confirm that all items match your cart.
+
+Common Self-Checkout Issues:
+- Missed scans: If the system does not register an item, scan it again or press the Help or Assistance button to alert a nearby associate.
+- Double-scanning: Review your receipt before leaving the store to verify items were not scanned twice.
+- Barcode errors: If a barcode is damaged or will not scan, press the Help or Assistance button for associate assistance.
+- Machine glitches: If the system freezes or displays an error, do not force bills into the machine or repeatedly press buttons. Press the Help or Assistance button on the screen to alert a TelMart employee.
+
+Self-Checkout and TelMart+:
+TelMart reserves some self-checkout access for TelMart+ members and delivery drivers in certain stores to deliver a more reliable, faster experience for frequent users. Changes to self-checkout configurations are made at the store manager's discretion based on feedback from associates and customers, shopping patterns, and business needs in the area.
+
+Associate Assistance:
+TelMart employees are trained to assist with self-checkout issues, including fixing barcode errors, clarifying item codes, and helping with payment. Press the Help button on screen to request immediate assistance.
+
+If you encounter a cash machine error at self-checkout, stay at the terminal to ensure your transaction is properly handled and press the Help or Assistance button.

@@ -1,0 +1,26 @@
+TelMart Product Availability
+
+Checking Product Availability:
+- Visit TelMart.com or the TelMart app and search for the item.
+- On the item's product page, enter your zip code or allow location access to check in-store availability at your local store.
+- The page will indicate whether the item is available for in-store purchase, pickup, or delivery.
+
+Online vs. In-Store Availability:
+- Not all products available on TelMart.com are available in every store.
+- Not all in-store products are listed on TelMart.com.
+- Availability can vary by store location and region.
+
+Out-of-Stock Items:
+- If an item is out of stock, check the product page for restock notifications or alternative options.
+- For online orders, if an ordered item becomes unavailable before shipment, TelMart will notify you and may offer a substitution or cancel the item from your order.
+
+Marketplace Items:
+- TelMart.com also features products from third-party Marketplace sellers.
+- Marketplace items are sold and shipped by third-party sellers and are not always available in TelMart stores.
+- Marketplace items sold by a Marketplace seller may be returned within 30 days.
+
+TelMart's Pricing Policy:
+- TelMart uses automated pricing rules to identify and remove offers from TelMart.com that are priced unfairly or are uncompetitive.
+- Market conditions change frequently. Prices are subject to change.
+
+For specific product inquiries, visit TelMart.com, use the TelMart app, or contact your local TelMart store.

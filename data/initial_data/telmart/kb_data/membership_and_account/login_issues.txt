@@ -1,0 +1,32 @@
+TelMart Account Login Issues
+
+If You Cannot Sign In to Your TelMart Account:
+
+Forgot Password:
+1. Go to TelMart.com or open the TelMart app.
+2. Select Sign in.
+3. Select Forgot Password.
+4. Enter the email address associated with your account.
+5. Follow the instructions sent to your email to reset your password.
+
+Passkeys:
+TelMart supports Passkeys as an alternative sign-in method. If you have set up a Passkey, use it to sign in on a compatible device.
+
+Account Locked:
+If your account has been locked due to multiple failed sign-in attempts, follow the password reset instructions sent to your email or contact Customer Care for assistance.
+
+Two-Factor Authentication:
+If two-factor authentication is enabled, you will need to verify your identity with the code sent to your phone number or email on file.
+
+Pharmacy Account Access:
+If you are unable to verify your identity for pharmacy access, follow the error help guide provided on the Pharmacy page or visit TelMart.com/help for instructions.
+If you see the error message "We couldn't verify your identity," follow the error help guide for help. Reset your TelMart Pharmacy PIN through the steps provided in the TelMart app or on TelMart.com under the pharmacy section.
+
+Unrecognized Login Activity:
+If you notice unrecognized activity on your account or receive emails about activity you did not initiate:
+- Change your password immediately.
+- Delete any saved payment information as a precaution.
+- If you use the same email address and password for accounts outside of TelMart.com, change your passwords for those accounts as well.
+- Contact TelMart Customer Care using the Chat with us button on TelMart.com.
+
+For additional help, contact Customer Care via chat at TelMart.com/help, phone at 1-400-840-4060, or email at help@telmart.com.
