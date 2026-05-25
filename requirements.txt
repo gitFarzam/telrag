@@ -53,6 +53,7 @@ numpy==2.4.2
 openai==2.26.0
 orjson==3.11.7
 packaging==26.0
+pandas==3.0.3
 pgvector==0.4.2
 prometheus_client==0.25.0
 prompt_toolkit==3.0.52
