@@ -27,7 +27,7 @@ class Command(BaseCommand):
         } 
         """
         txt_files_dict = {}
-        root_dir = os.path.join(settings.BASE_DIR,f'../initial_data/telburger')
+        root_dir = os.path.join('../data/initial_data/telmart/initial_data')
         dirs = os.listdir(root_dir)
         for dir in dirs:
             txt_file_path = os.path.join(root_dir,dir)
@@ -42,11 +42,13 @@ class Command(BaseCommand):
         for category in txt_files_dict:
             try:
                 file_path = txt_files_dict[category]
-                with open(file_path) as text_file:
-                    text_string = text_file.read()
-                    print(text_string)
                 with transaction.atomic():
-                    text_content_object = creating_text_content_object(content=text_string)
+                    with open(file_path,'r') as text_file:
+                        print(text_file)
+                        print(settings.EXTERNAL_DATA_DIR)
+                        break
+                        text_string = text_file.read()
+                        text_content_object = creating_text_content_object(txt_file=text_file,content=text_string)
                     doc_source_object = creating_document_source(model_object=text_content_object)
                     doc_object = creating_document_object(document_source=doc_source_object,category=category , is_initial=True)
                     chunk_objects = creating_chunk_objects(document_object=doc_object)

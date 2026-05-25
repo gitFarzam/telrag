@@ -17,6 +17,7 @@ from django.http import JsonResponse
 from django.template.loader import render_to_string
 from django.utils import timezone
 from django.contrib.postgres.search import SearchVector, SearchQuery, SearchRank
+from django.core.files import File
 
 # Other libraries import
 from dotenv import load_dotenv
@@ -407,11 +408,12 @@ def process_user_message(message:Message):
                 )
 
 
-def creating_text_content_object(file,content:str):
+def creating_text_content_object(txt_file,content:str):
     logger.debug(creating_chunk_objects.__name__)
     model_object = TextContent.objects.create(content = content)
-    if file:
-        model_object.file = file
+    if txt_file:
+        django_file = File(txt_file)
+        model_object.file = django_file
     model_object.save()
 
     return model_object

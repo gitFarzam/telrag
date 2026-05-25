@@ -27,6 +27,7 @@ services:
     volumes:
       - ./entrypoint.sh:/usr/src/app/entrypoint.sh
       - ./:/usr/src/app
+      - ./data:/usr/src/app/src/chat/data
     ports:
       - "127.0.0.1:8000:8006"
     depends_on:
