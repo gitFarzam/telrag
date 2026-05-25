@@ -11,7 +11,7 @@ src/db.sqlite3
 .venv
 venv
 __pycache__
-
+devcontainer-lock.json
 
 # Python packaging / tooling
 .pytest_cache/
@@ -47,3 +47,6 @@ celeryd.pid
 
 # Other trashy stuff
 src/dump.rdb
+
+# bind mounted files
+src/chat/data
