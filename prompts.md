@@ -48,7 +48,7 @@ file_name: is the name of the file
 
 PAY ATTENTION!: -> you have to add this data at the END of `telmart_retrieval.jsonl` file!
 
-your job is to read all `.txt` files in this dir: `data/knowledge_base/telmart/initial_data/pharmacy_support` and extract what the lines and add it to `telmart_retrieval.jsonl` as follows
+your job is to read all `.txt` files in this dir: `data/knowledge_base/telmart/test_data/source/product_help` and extract what the lines and add it to `telmart_retrieval.jsonl` as follows
 
 you should not use a python script or any script to chunk the txt files senteces, because in this way the quality of extracted sentences are meaningless, you have to read txt files line by line and extract senteces from that, sentences should be completed and should be understandble by their own, not an incomplete or vauge sentence, so you have read them carefully.
 

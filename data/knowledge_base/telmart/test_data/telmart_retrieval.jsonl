@@ -462,3 +462,156 @@
 {"query": "If the customer needs to cancel by phone, they should contact their local pharmacy and find the pharmacy phone number on their prescription label, receipt, or by using the TelMart Store Locator on TelMart.com.", "category": "pharmacy_support", "file_name": "vaccine_appointments.txt"}
 {"query": "The customer can download their immunization history through their TelMart profile and should go to TelMart.com/help for instructions.", "category": "pharmacy_support", "file_name": "vaccine_appointments.txt"}
 
+// account_security.txt
+{"query": "TelMart provides guidance to safeguard a TelMart account.", "category": "privacy_and_security", "file_name": "account_security.txt"}
+{"query": "If a customer detects suspicious account access, they should immediately change their password to a strong, unique one.", "category": "privacy_and_security", "file_name": "account_security.txt"}
+{"query": "The customer should activate two-factor authentication when it is available.", "category": "privacy_and_security", "file_name": "account_security.txt"}
+{"query": "The customer should clear any stored payment details as a safeguard.", "category": "privacy_and_security", "file_name": "account_security.txt"}
+{"query": "If the customer uses the same email and password across other accounts, they should update those passwords at the same time.", "category": "privacy_and_security", "file_name": "account_security.txt"}
+{"query": "The customer should review Purchase History to detect any unfamiliar purchases.", "category": "privacy_and_security", "file_name": "account_security.txt"}
+{"query": "The customer should inspect account settings for unexpected changes to email, contact number, delivery address, or payment details.", "category": "privacy_and_security", "file_name": "account_security.txt"}
+{"query": "The customer should contact TelMart Customer Care by selecting the Chat with us option on TelMart.com.", "category": "privacy_and_security", "file_name": "account_security.txt"}
+{"query": "Unauthorized purchases in Purchase History may indicate questionable account activity.", "category": "privacy_and_security", "file_name": "account_security.txt"}
+{"query": "Changes to personal account details without the customer's knowledge are a sign of suspicious account activity.", "category": "privacy_and_security", "file_name": "account_security.txt"}
+{"query": "Receiving notification emails for activities the customer did not perform can indicate account compromise.", "category": "privacy_and_security", "file_name": "account_security.txt"}
+{"query": "A digital receipt with an unrecognized phone number or name may signal suspicious account activity.", "category": "privacy_and_security", "file_name": "account_security.txt"}
+{"query": "The customer should choose a unique password for each account, since longer passwords are harder to crack.", "category": "privacy_and_security", "file_name": "account_security.txt"}
+{"query": "The customer should avoid personal details or common words when creating passwords.", "category": "privacy_and_security", "file_name": "account_security.txt"}
+{"query": "Linking three or more words can help the customer create a passphrase that is meaningful only to them.", "category": "privacy_and_security", "file_name": "account_security.txt"}
+{"query": "The customer should include numbers, special symbols, and a mix of uppercase and lowercase letters in their password.", "category": "privacy_and_security", "file_name": "account_security.txt"}
+{"query": "Security questions can provide added protection, but answers should not include details that are readily available online.", "category": "privacy_and_security", "file_name": "account_security.txt"}
+{"query": "The customer should avoid using public Wi-Fi networks when accessing their TelMart account.", "category": "privacy_and_security", "file_name": "account_security.txt"}
+{"query": "The customer should avoid allowing browsers to save their passwords.", "category": "privacy_and_security", "file_name": "account_security.txt"}
+{"query": "Customers can contact TelMart Customer Care for account security support by using Chat with us on TelMart.com, calling 1-400-840-4060, or emailing help@telmart.com.", "category": "privacy_and_security", "file_name": "account_security.txt"}
+
+// fraud_concerns.txt
+{"query": "TelMart shares caution alerts at corporate.telmart.com/privacy-security to educate customers about recognized scams and schemes that do not come from TelMart.", "category": "privacy_and_security", "file_name": "fraud_concerns.txt"}
+{"query": "Phishing uses fake communications or sites designed to resemble TelMart in order to collect personal or financial details.", "category": "privacy_and_security", "file_name": "fraud_concerns.txt"}
+{"query": "If an offer seems too good to be true, it is often a phishing attempt.", "category": "privacy_and_security", "file_name": "fraud_concerns.txt"}
+{"query": "The customer should avoid unfamiliar links, downloads, and sharing sensitive details over a phone call.", "category": "privacy_and_security", "file_name": "fraud_concerns.txt"}
+{"query": "Scammers may access a TelMart profile without permission to make unauthorized purchases or change settings.", "category": "privacy_and_security", "file_name": "fraud_concerns.txt"}
+{"query": "False accounts or suspicious purchase attempts may indicate identity theft.", "category": "privacy_and_security", "file_name": "fraud_concerns.txt"}
+{"query": "Fraudsters may pose as TelMart support agents, so the customer should use only legitimate TelMart contact channels.", "category": "privacy_and_security", "file_name": "fraud_concerns.txt"}
+{"query": "If the customer suspects fraud, they should quickly change their TelMart password.", "category": "privacy_and_security", "file_name": "fraud_concerns.txt"}
+{"query": "The customer should delete all saved payment information from their profile if they suspect fraud.", "category": "privacy_and_security", "file_name": "fraud_concerns.txt"}
+{"query": "The customer should notify their financial institutions and request assistance from fraud departments.", "category": "privacy_and_security", "file_name": "fraud_concerns.txt"}
+{"query": "The customer should inform their credit card issuers of potential fraud.", "category": "privacy_and_security", "file_name": "fraud_concerns.txt"}
+{"query": "The customer should file a report with local law enforcement if they believe they have been scammed.", "category": "privacy_and_security", "file_name": "fraud_concerns.txt"}
+{"query": "If the customer's identity is stolen, they should contact the Social Security Administration and credit bureaus.", "category": "privacy_and_security", "file_name": "fraud_concerns.txt"}
+{"query": "The customer should monitor their credit reports for suspicious activity and enable fraud alerts or account freezes as needed.", "category": "privacy_and_security", "file_name": "fraud_concerns.txt"}
+{"query": "The customer should report scams to TelMart Customer Care using Chat with us on TelMart.com.", "category": "privacy_and_security", "file_name": "fraud_concerns.txt"}
+{"query": "The customer should use strong, unique passwords for TelMart and all online accounts.", "category": "privacy_and_security", "file_name": "fraud_concerns.txt"}
+{"query": "The customer should enable two-factor authentication whenever it is available.", "category": "privacy_and_security", "file_name": "fraud_concerns.txt"}
+{"query": "The customer should avoid public Wi-Fi when logging in or shopping online.", "category": "privacy_and_security", "file_name": "fraud_concerns.txt"}
+{"query": "Customers who are concerned about security should avoid saving card information in their TelMart profile.", "category": "privacy_and_security", "file_name": "fraud_concerns.txt"}
+{"query": "The customer should review their account and order history regularly for unexpected activity.", "category": "privacy_and_security", "file_name": "fraud_concerns.txt"}
+{"query": "The customer should alert TelMart Customer Care to any suspicious calls, messages, or activities.", "category": "privacy_and_security", "file_name": "fraud_concerns.txt"}
+{"query": "The customer can report fraud to the Federal Trade Commission at reportfraud.ftc.gov.", "category": "privacy_and_security", "file_name": "fraud_concerns.txt"}
+
+// payment_security.txt
+{"query": "TelMart recommends the customer examine linked payment accounts by checking recent transactions in their TelMart profile.", "category": "privacy_and_security", "file_name": "payment_security.txt"}
+{"query": "If the customer believes their payment details have been compromised, they should remove all stored payment methods immediately.", "category": "privacy_and_security", "file_name": "payment_security.txt"}
+{"query": "The customer should go to Account, then Settings, then Wallet, and choose Edit to remove saved payment information.", "category": "privacy_and_security", "file_name": "payment_security.txt"}
+{"query": "The customer should ensure their account is secure before entering new payment information.", "category": "privacy_and_security", "file_name": "payment_security.txt"}
+{"query": "The customer should activate transaction alerts with their bank to detect suspicious charges quickly.", "category": "privacy_and_security", "file_name": "payment_security.txt"}
+{"query": "When the customer finds unfamiliar charges, they should dispute them promptly and may be able to recover their money.", "category": "privacy_and_security", "file_name": "payment_security.txt"}
+{"query": "The customer should notify their bank immediately when they discover fraudulent charges.", "category": "privacy_and_security", "file_name": "payment_security.txt"}
+{"query": "The customer should call the bank's fraud department or use the number printed on the back of their card.", "category": "privacy_and_security", "file_name": "payment_security.txt"}
+{"query": "A temporary authorization hold may appear on the customer's payment method when they place an online order.", "category": "privacy_and_security", "file_name": "payment_security.txt"}
+{"query": "After the final amount is processed, any remaining authorization hold funds will be returned.", "category": "privacy_and_security", "file_name": "payment_security.txt"}
+{"query": "The customer's financial institution will remove the authorization hold according to its own timeline, which may take up to 10 business days after order completion.", "category": "privacy_and_security", "file_name": "payment_security.txt"}
+{"query": "TelMart cannot remove the bank authorization hold; only the customer's financial institution can.", "category": "privacy_and_security", "file_name": "payment_security.txt"}
+{"query": "TelMart, marketplace sellers on TelMart.com, and shipping providers will not request additional delivery charges after purchase completion.", "category": "privacy_and_security", "file_name": "payment_security.txt"}
+{"query": "If the customer receives such a request, they should ignore it and contact TelMart Customer Care.", "category": "privacy_and_security", "file_name": "payment_security.txt"}
+{"query": "If the customer's payment data is compromised, they should contact their financial institution immediately and ask for fraud assistance.", "category": "privacy_and_security", "file_name": "payment_security.txt"}
+{"query": "The customer should notify their card issuers by calling the number on the back of their card.", "category": "privacy_and_security", "file_name": "payment_security.txt"}
+{"query": "The customer should file a police report so the incident is documented by local law enforcement.", "category": "privacy_and_security", "file_name": "payment_security.txt"}
+{"query": "The customer should monitor their credit reports for suspicious activity and enable fraud notifications or account locks as needed.", "category": "privacy_and_security", "file_name": "payment_security.txt"}
+
+// personal_information.txt
+{"query": "TelMart values the trust customers place in the company when they share personal information.", "category": "privacy_and_security", "file_name": "personal_information.txt"}
+{"query": "TelMart handles personal data with respect for the individual.", "category": "privacy_and_security", "file_name": "personal_information.txt"}
+{"query": "TelMart provides Privacy Guidelines that explain how personal information is collected, used, and shared.", "category": "privacy_and_security", "file_name": "personal_information.txt"}
+{"query": "The customer can view these Privacy Guidelines at corporate.telmart.com/privacy-security.", "category": "privacy_and_security", "file_name": "personal_information.txt"}
+{"query": "TelMart may participate in privacy programs and maintain privacy certifications for certain products, services, and programs.", "category": "privacy_and_security", "file_name": "personal_information.txt"}
+{"query": "Customers can view information about current privacy certifications at corporate.telmart.com/privacy-security.", "category": "privacy_and_security", "file_name": "personal_information.txt"}
+{"query": "Everything customers share through TelMart eReceipts is subject to TelMart Privacy Guidelines.", "category": "privacy_and_security", "file_name": "personal_information.txt"}
+{"query": "TelMart may modify, restrict, or discontinue the customer's use of eReceipts at its sole discretion.", "category": "privacy_and_security", "file_name": "personal_information.txt"}
+{"query": "Before disposing of a device containing personal information, the customer should erase that information fully according to the manufacturer's instructions.", "category": "privacy_and_security", "file_name": "personal_information.txt"}
+{"query": "The customer should review the guidance article on how to clear personal information before discarding a phone.", "category": "privacy_and_security", "file_name": "personal_information.txt"}
+{"query": "Information posted publicly online may be collected by data brokers and used by anyone.", "category": "privacy_and_security", "file_name": "personal_information.txt"}
+{"query": "The customer should limit the personal information they share online to help protect their privacy.", "category": "privacy_and_security", "file_name": "personal_information.txt"}
+{"query": "The customer can review and update account details at Account > Settings on TelMart.com or in the TelMart app.", "category": "privacy_and_security", "file_name": "personal_information.txt"}
+{"query": "The customer can change their name, email, phone, delivery addresses, and payment details at any time.", "category": "privacy_and_security", "file_name": "personal_information.txt"}
+{"query": "For more details about TelMart's privacy practices or to submit a privacy request, the customer should visit corporate.telmart.com/privacy-security or contact TelMart Customer Care.", "category": "privacy_and_security", "file_name": "personal_information.txt"}
+
+// damaged_items.txt
+{"query": "If an item the customer received from TelMart.com is damaged or defective, it may be eligible to be returned by mail or to any TelMart store.", "category": "product_help", "file_name": "damaged_items.txt"}
+{"query": "A damaged item may qualify for a refund or replacement.", "category": "product_help", "file_name": "damaged_items.txt"}
+{"query": "The customer should start a return in the TelMart app or online by going to Purchase History and selecting Start a return.", "category": "product_help", "file_name": "damaged_items.txt"}
+{"query": "For items sold by a Marketplace seller, the customer should contact the seller directly using the Contact seller link on the order or item page.", "category": "product_help", "file_name": "damaged_items.txt"}
+{"query": "Marketplace sellers are responsible for processing, shipping, returns, and customer service for their orders.", "category": "product_help", "file_name": "damaged_items.txt"}
+{"query": "Once the Marketplace Return Center receives the returned item, the refund will be processed within two business days.", "category": "product_help", "file_name": "damaged_items.txt"}
+{"query": "The customer should inspect items before accepting delivery, signing for them, and opening them.", "category": "product_help", "file_name": "damaged_items.txt"}
+{"query": "If the customer notices damage before accepting and signing, the delivery can be refused at no charge.", "category": "product_help", "file_name": "damaged_items.txt"}
+{"query": "Exchanges and refunds for opened or damaged major appliances can occur within the two-day delivery timeframe.", "category": "product_help", "file_name": "damaged_items.txt"}
+{"query": "For the remaining 28 days, returns and refunds for opened items are at the seller's discretion and may be subject to additional fees.", "category": "product_help", "file_name": "damaged_items.txt"}
+{"query": "Installed items generally cannot be returned, and customers should rely on the manufacturer's warranty.", "category": "product_help", "file_name": "damaged_items.txt"}
+{"query": "TelMart Marketplace requires sellers to disclose the condition of items when creating a listing.", "category": "product_help", "file_name": "damaged_items.txt"}
+{"query": "New with Defects items are brand new and functional but may have cosmetic imperfections from production or delivery.", "category": "product_help", "file_name": "damaged_items.txt"}
+{"query": "For help with a damaged item, the customer can visit the TelMart Help Center at TelMart.com/help, use the Chat with us button, or go to the Customer Service Desk at their local TelMart store.", "category": "product_help", "file_name": "damaged_items.txt"}
+
+// item_location.txt
+{"query": "The customer can ask any TelMart associate in the store for help finding an item, as associates are stationed throughout the store and are trained to help locate products.", "category": "product_help", "file_name": "item_location.txt"}
+{"query": "The customer can use the TelMart app to search for an item and see its location within their local store, and the app can guide them to the correct aisle and section.", "category": "product_help", "file_name": "item_location.txt"}
+{"query": "The customer should look for aisle signs and department markers to navigate to the correct section.", "category": "product_help", "file_name": "item_location.txt"}
+{"query": "The customer can visit TelMart.com or open the TelMart app.", "category": "product_help", "file_name": "item_location.txt"}
+{"query": "The customer can use the search bar to find the item by name, brand, or keyword.", "category": "product_help", "file_name": "item_location.txt"}
+{"query": "The customer can filter results by department, price, brand, ratings, and other attributes.", "category": "product_help", "file_name": "item_location.txt"}
+{"query": "The customer can check item availability at their local store by entering their zip code or enabling location services.", "category": "product_help", "file_name": "item_location.txt"}
+{"query": "Product availability varies by store location and online inventory.", "category": "product_help", "file_name": "item_location.txt"}
+{"query": "On the item page at TelMart.com, the customer can check if an item is available for in-store purchase, pickup, or delivery at their local store.", "category": "product_help", "file_name": "item_location.txt"}
+{"query": "If an item is out of stock, the customer may be able to sign up for in-stock notifications on TelMart.com.", "category": "product_help", "file_name": "item_location.txt"}
+{"query": "TelMart+ members can use the Scan and Go feature in the TelMart app to scan items while they shop and pay without waiting in line.", "category": "product_help", "file_name": "item_location.txt"}
+
+// product_availability.txt
+{"query": "If the customer needs help locating an item, they can visit the Customer Service Desk at their local TelMart store or contact TelMart Customer Care at 1-400-840-4060.", "category": "product_help", "file_name": "item_location.txt"}
+{"query": "The customer can visit TelMart.com or the TelMart app and search for the item.", "category": "product_help", "file_name": "product_availability.txt"}
+{"query": "On the item's product page, the customer can enter their zip code or allow location access to check in-store availability at their local store.", "category": "product_help", "file_name": "product_availability.txt"}
+{"query": "The page will indicate whether the item is available for in-store purchase, pickup, or delivery.", "category": "product_help", "file_name": "product_availability.txt"}
+{"query": "Not all products available on TelMart.com are available in every store.", "category": "product_help", "file_name": "product_availability.txt"}
+{"query": "Not all in-store products are listed on TelMart.com.", "category": "product_help", "file_name": "product_availability.txt"}
+{"query": "Availability can vary by store location and region.", "category": "product_help", "file_name": "product_availability.txt"}
+{"query": "If an item is out of stock, the customer should check the product page for restock notifications or alternative options.", "category": "product_help", "file_name": "product_availability.txt"}
+{"query": "If an ordered item becomes unavailable before shipment, TelMart will notify the customer and may offer a substitution or cancel the item from the order.", "category": "product_help", "file_name": "product_availability.txt"}
+{"query": "TelMart.com also features products from third-party Marketplace sellers.", "category": "product_help", "file_name": "product_availability.txt"}
+{"query": "Marketplace items are sold and shipped by third-party sellers and may not be available in TelMart stores.", "category": "product_help", "file_name": "product_availability.txt"}
+{"query": "Marketplace items sold by a Marketplace seller may be returned within 30 days.", "category": "product_help", "file_name": "product_availability.txt"}
+{"query": "TelMart uses automated pricing rules to identify and remove offers from TelMart.com that are priced unfairly or uncompetitive.", "category": "product_help", "file_name": "product_availability.txt"}
+{"query": "Market conditions change frequently, and prices are subject to change.", "category": "product_help", "file_name": "product_availability.txt"}
+{"query": "For specific product inquiries, the customer can visit TelMart.com, use the TelMart app, or contact their local TelMart store.", "category": "product_help", "file_name": "product_availability.txt"}
+
+// warranty_questions.txt
+{"query": "Products sold by TelMart may come with a manufacturer's warranty.", "category": "product_help", "file_name": "warranty_questions.txt"}
+{"query": "The manufacturer's warranty covers defects in the item itself.", "category": "product_help", "file_name": "warranty_questions.txt"}
+{"query": "Warranty terms and duration vary by manufacturer and product type.", "category": "product_help", "file_name": "warranty_questions.txt"}
+{"query": "For more information about a product's warranty, the customer should contact the manufacturer directly.", "category": "product_help", "file_name": "warranty_questions.txt"}
+{"query": "TelMart's terms of use do not limit the terms of any manufacturer's product warranty.", "category": "product_help", "file_name": "warranty_questions.txt"}
+{"query": "TelMart Protection Plans by Allstate are available for some products sold on TelMart.com.", "category": "product_help", "file_name": "warranty_questions.txt"}
+{"query": "The customer can select a protection plan on the item page or at checkout for eligible items.", "category": "product_help", "file_name": "warranty_questions.txt"}
+{"query": "Protection plans for online orders must be purchased during checkout.", "category": "product_help", "file_name": "warranty_questions.txt"}
+{"query": "If the customer wants a protection plan after checkout, they can buy one in-store within 30 days of their online order with their receipt.", "category": "product_help", "file_name": "warranty_questions.txt"}
+{"query": "Coverage starts on the date of purchase and not after the manufacturer's warranty expires.", "category": "product_help", "file_name": "warranty_questions.txt"}
+{"query": "The Standard Plan covers products such as TVs, home appliances, lawn and garden equipment, and power tools.", "category": "product_help", "file_name": "warranty_questions.txt"}
+{"query": "The Accident Plan covers select portable electronics such as laptops, tablets, phones, and headphones.", "category": "product_help", "file_name": "warranty_questions.txt"}
+{"query": "To file a claim, the customer can visit telmartprotection.com, call 1-877-538-4389, or text an image of their receipt to 202202.", "category": "product_help", "file_name": "warranty_questions.txt"}
+{"query": "If the item cannot be repaired, TelMart will send a replacement or reimburse the customer.", "category": "product_help", "file_name": "warranty_questions.txt"}
+{"query": "TelMart offers a Limited Warranty on tires purchased and installed at TelMart Auto Care Centers.", "category": "product_help", "file_name": "warranty_questions.txt"}
+{"query": "When making a claim, the customer must present their tires and vehicle to their local TelMart Auto Care Center for inspection.", "category": "product_help", "file_name": "warranty_questions.txt"}
+{"query": "The customer must also present their original invoice and TelMart installation record.", "category": "product_help", "file_name": "warranty_questions.txt"}
+{"query": "The customer can find the nearest TelMart location that can process the replacement request by visiting TelMart.com or calling 800-925-6278.", "category": "product_help", "file_name": "warranty_questions.txt"}
+{"query": "An optional Road Hazard Warranty is available for additional coverage against tire failures caused by road hazards such as nails, glass, or metal stones.", "category": "product_help", "file_name": "warranty_questions.txt"}
+{"query": "For third-party seller items, the customer should use the Contact seller option on the item's page to request a copy of the warranty.", "category": "product_help", "file_name": "warranty_questions.txt"}
+{"query": "Warranty information for refurbished items can be found on the product page.", "category": "product_help", "file_name": "warranty_questions.txt"}
+{"query": "Premium Marketplace items require a minimum one-year written warranty.", "category": "product_help", "file_name": "warranty_questions.txt"}
+{"query": "Like New Marketplace items include at least 90-day free returns.", "category": "product_help", "file_name": "warranty_questions.txt"}
