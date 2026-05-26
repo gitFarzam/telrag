@@ -116,7 +116,7 @@
 {"query": "When submitting store feedback, the customer should include the specific store location, date and time of the visit, a description of the experience, names of employees involved if applicable, and any supporting information such as receipts or order numbers.", "category": "complaints_and_feedback", "file_name": "store_experience.txt"}
 {"query": "TelMart takes store experience feedback seriously and uses it to improve the in-store experience for customers and employees.", "category": "complaints_and_feedback", "file_name": "store_experience.txt"}
 
-// customer_service_desk/exchanges.txt
+// exchanges.txt
 {"query": "Most items purchased from TelMart can be exchanged within 90 days of purchase or receipt unless otherwise stated.", "category": "customer_service_desk", "file_name": "exchanges.txt"}
 {"query": "Items purchased from a third-party marketplace seller are generally eligible for exchange within 30 days.", "category": "customer_service_desk", "file_name": "exchanges.txt"}
 {"query": "To exchange an item in-store the customer should bring the product and the purchase receipt to the Customer Service desk at any TelMart location.", "category": "customer_service_desk", "file_name": "exchanges.txt"}
@@ -128,21 +128,21 @@
 {"query": "The customer should inspect deliveries before signing for them; if visible damage is present prior to signing, the customer may decline the shipment at no charge.", "category": "customer_service_desk", "file_name": "exchanges.txt"}
 {"query": "Large or mounted items may not be eligible for in-home delivery returns and may be subject to the manufacturer's warranty.", "category": "customer_service_desk", "file_name": "exchanges.txt"}
 
-// customer_service_desk/general_questions.txt
+// general_questions.txt
 {"query": "The customer can contact TelMart Support via Chat with us on TelMart.com, by phone at 1-400-840-4060, by email at help@telmart.com, or in person at a store Service Counter.", "category": "customer_service_desk", "file_name": "general_questions.txt"}
 {"query": "The Support Center at TelMart.com/help provides answers to common questions and resources for order tracking, returns and refunds, pickup and delivery, account management, pharmacy services, TelMart+ program, financial services, and privacy matters.", "category": "customer_service_desk", "file_name": "general_questions.txt"}
 {"query": "The customer may use the store locator on TelMart.com to find nearby stores, hours, and available services.", "category": "customer_service_desk", "file_name": "general_questions.txt"}
 {"query": "For in-store issues the customer should bring the receipt to the Service Counter for help with exchanges, refunds, price adjustments, and other requests.", "category": "customer_service_desk", "file_name": "general_questions.txt"}
 {"query": "For online purchases most account and order issues can be handled through Order History in the customer's TelMart profile on TelMart.com or the TelMart app.", "category": "customer_service_desk", "file_name": "general_questions.txt"}
 
-// customer_service_desk/price_adjustments.txt
+// price_adjustments.txt
 {"query": "TelMart offers price matching policies that vary between stores and TelMart.com; details and any exclusions are available on the corporate Terms and Policies pages.", "category": "customer_service_desk", "file_name": "price_adjustments.txt"}
 {"query": "TelMart may cancel orders that were placed due to pricing errors or other listing mistakes.", "category": "customer_service_desk", "file_name": "price_adjustments.txt"}
 {"query": "When a customer uses a prepaid or EBT card a price-adjustment authorization hold may be placed to confirm sufficient funds; any excess will be released after the final amount is processed.", "category": "customer_service_desk", "file_name": "price_adjustments.txt"}
 {"query": "For online purchases a temporary authorization hold may be placed on the customer's payment method; the customer's bank will remove the hold according to their policies, which may take up to 10 business days after transaction completion.", "category": "customer_service_desk", "file_name": "price_adjustments.txt"}
 {"query": "All TelMart policies that apply to in-store purchases, such as price matching, promotions, returns, and exchanges, also apply to purchases made with TelMart Money service.", "category": "customer_service_desk", "file_name": "price_adjustments.txt"}
 
-// customer_service_desk/refunds.txt
+// refunds.txt
 {"query": "TelMart issues refunds for TelMart.com purchases back to the original payment method when returned in-store or by mail; shipping charges are not always refundable.", "category": "customer_service_desk", "file_name": "refunds.txt"}
 {"query": "Refund processing times vary by payment method: credit and debit card refunds may take up to 10 business days depending on the customer's bank.", "category": "customer_service_desk", "file_name": "refunds.txt"}
 {"query": "PayPal refunds may take longer depending on international bank processing times, and EBT or stored value refunds are typically processed within 3 business hours.", "category": "customer_service_desk", "file_name": "refunds.txt"}
@@ -153,7 +153,7 @@
 {"query": "Refunds for items requiring ID verification, such as alcohol, may be delayed up to 10 business days while TelMart verifies the customer's age.", "category": "customer_service_desk", "file_name": "refunds.txt"}
 {"query": "Certain Quick Pay charges and fees related to TelMart Financial Services products are nonrefundable.", "category": "customer_service_desk", "file_name": "refunds.txt"}
 
-// customer_service_desk/returns.txt
+// returns.txt
 {"query": "Most items are returnable within 90 days of purchase or receipt unless otherwise specified; items sold by third-party sellers may have a 30-day return window.", "category": "customer_service_desk", "file_name": "returns.txt"}
 {"query": "Customers are advised to keep manufacturer packaging and the receipt for at least 90 days after purchase to facilitate returns.", "category": "customer_service_desk", "file_name": "returns.txt"}
 {"query": "Consumer electronics are typically returnable within 30 days and mobile phones within 14 days.", "category": "customer_service_desk", "file_name": "returns.txt"}
@@ -164,3 +164,57 @@
 {"query": "In-Home collection is not available for items purchased from third-party sellers, oversized freight-shipped items, or certain food products.", "category": "customer_service_desk", "file_name": "returns.txt"}
 {"query": "Items not eligible for return include motorized recreational vehicles, at-home test kits, certain home health medical supplies, certain regulated ingredients, and digital video or software downloads after purchase unless specified.", "category": "customer_service_desk", "file_name": "returns.txt"}
 {"query": "Quick Pay charges and fees linked to TelMart Financial Services products are irreversible and not returnable.", "category": "customer_service_desk", "file_name": "returns.txt"}
+
+// gift_cards.txt
+{"query": "TelMart gift cards are available as physical cards and as e-gift cards.", "category": "membership_and_account", "file_name": "gift_cards.txt"}
+{"query": "Third-party gift cards such as Visa, Mastercard, Apple, Google Play, and coffee shop cards are sold at TelMart but are not TelMart gift cards.", "category": "membership_and_account", "file_name": "gift_cards.txt"}
+{"query": "A TelMart gift card can be used in-store or at TelMart.com.", "category": "membership_and_account", "file_name": "gift_cards.txt"}
+{"query": "For physical gift cards the customer should remove the metallic strip on the back to reveal the last four digits and the security code.", "category": "membership_and_account", "file_name": "gift_cards.txt"}
+{"query": "For e-gift cards the customer should locate the security code in the email receipt.", "category": "membership_and_account", "file_name": "gift_cards.txt"}
+{"query": "To add a gift card to their profile the customer should open the TelMart app or TelMart.com, go to Account > Settings > Wallet > Add new payment method > Gift Card, enter the card number, security code, and an optional nickname, then save the card.", "category": "membership_and_account", "file_name": "gift_cards.txt"}
+{"query": "The customer can check a gift card balance using the 16-digit card number and security code via TelMart.com/help, by calling 1-400-880-4080, or at a register in a TelMart store.", "category": "membership_and_account", "file_name": "gift_cards.txt"}
+{"query": "If a gift card does not include a security code the customer must exchange it for one with a security code at any TelMart store.", "category": "membership_and_account", "file_name": "gift_cards.txt"}
+{"query": "A customer may send multiple TelMart e-gift cards to up to five recipients per purchase.", "category": "membership_and_account", "file_name": "gift_cards.txt"}
+{"query": "If a customer adds a message to an e-gift card purchase the same message will be applied to all e-gift cards in that purchase.", "category": "membership_and_account", "file_name": "gift_cards.txt"}
+{"query": "TelMart Money cannot be exchanged for third-party gift cards or network-branded gift cards such as Visa, Mastercard, or American Express gift cards.", "category": "membership_and_account", "file_name": "gift_cards.txt"}
+{"query": "TelMart+ annual membership gift cards and e-gift cards cannot be used to purchase a TelMart+ membership.", "category": "membership_and_account", "file_name": "gift_cards.txt"}
+
+// login_issues.txt
+{"query": "If a customer cannot sign in to their TelMart account they should use the account recovery or password reset process on TelMart.com or in the TelMart app by entering the email linked to their account and following the instructions sent to that email.", "category": "membership_and_account", "file_name": "login_issues.txt"}
+{"query": "TelMart supports passkey authentication; if a customer has configured a passkey they can use it to sign in on a compatible device.", "category": "membership_and_account", "file_name": "login_issues.txt"}
+{"query": "If an account is locked due to repeated failed sign-in attempts the customer should follow the account recovery instructions sent to their email or contact Customer Service for assistance.", "category": "membership_and_account", "file_name": "login_issues.txt"}
+{"query": "If two-step verification is enabled the customer must verify their identity using the code sent to their phone or email.", "category": "membership_and_account", "file_name": "login_issues.txt"}
+{"query": "If a customer cannot verify their identity for pharmacy benefits they should follow the error guidance on the Pharmacy page or check TelMart.com/help for instructions.", "category": "membership_and_account", "file_name": "login_issues.txt"}
+{"query": "If a customer notices unfamiliar activity on their account they should change their password immediately, remove any saved payment methods, update the same credentials on other sites, and contact TelMart Customer Service via Chat on TelMart.com.", "category": "membership_and_account", "file_name": "login_issues.txt"}
+{"query": "For additional assistance the customer can contact Customer Service via Chat on TelMart.com/help, by phone at 1-400-840-4060, or by email at help@telmart.com.", "category": "membership_and_account", "file_name": "login_issues.txt"}
+
+// walmart_account_help.txt
+{"query": "To create a TelMart account the customer should go to TelMart.com or open the TelMart app, select Register, and follow the prompts to set up an account with their email and password.", "category": "membership_and_account", "file_name": "walmart_account_help.txt"}
+{"query": "Customers can also use passkeys as a sign-in option for additional security.", "category": "membership_and_account", "file_name": "walmart_account_help.txt"}
+{"query": "Signing in to the customer's TelMart account allows them to manage personal information, payment methods, order history, and preferences.", "category": "membership_and_account", "file_name": "walmart_account_help.txt"}
+{"query": "To change profile information the customer should go to Account and select the Settings icon.", "category": "membership_and_account", "file_name": "walmart_account_help.txt"}
+{"query": "To view past purchases, track orders, or start returns the customer should sign in and go to Order History.", "category": "membership_and_account", "file_name": "walmart_account_help.txt"}
+{"query": "To add, edit, or remove payment methods the customer should go to Account > Settings > Wallet.", "category": "membership_and_account", "file_name": "walmart_account_help.txt"}
+{"query": "TelMart accepts credit cards, debit cards, PayPal, gift cards, HSA/FSA cards, and linked bank accounts as payment methods.", "category": "membership_and_account", "file_name": "walmart_account_help.txt"}
+{"query": "The customer should use a strong, unique password for their account.", "category": "membership_and_account", "file_name": "walmart_account_help.txt"}
+{"query": "If the customer notices unauthorized activity they should change their password immediately and contact Customer Service.", "category": "membership_and_account", "file_name": "walmart_account_help.txt"}
+{"query": "The customer should enable two-step verification if it is available for their account.", "category": "membership_and_account", "file_name": "walmart_account_help.txt"}
+{"query": "Non-taxable business customers should visit TelMart.com/help for instructions on creating a non-taxable account.", "category": "membership_and_account", "file_name": "walmart_account_help.txt"}
+{"query": "To add pharmacy benefits to their account the customer should go to the Pharmacy section on the app or TelMart.com and follow the identity verification steps.", "category": "membership_and_account", "file_name": "walmart_account_help.txt"}
+{"query": "For account-related issues the customer should visit TelMart.com/help or contact Customer Service via Chat on TelMart.com, by phone at 1-400-840-4060, or by email at help@telmart.com.", "category": "membership_and_account", "file_name": "walmart_account_help.txt"}
+
+// membership_and_account
+{"query": "TelMart+ is TelMart's subscription service that provides benefits for a monthly or annual fee.", "category": "membership_and_account", "file_name": "walmart_support.txt"}
+{"query": "TelMart+ benefits include free store pickup on eligible orders over $35 which can save subscribers up to $9.95 on Express Pickup fees.", "category": "membership_and_account", "file_name": "walmart_support.txt"}
+{"query": "TelMart+ includes free next-day and two-day shipping from TelMart.com with no minimum purchase required.", "category": "membership_and_account", "file_name": "walmart_support.txt"}
+{"query": "TelMart+ members receive fuel discounts of $0.10 per gallon at TelMart, Exxon, Mobil, and Murphy stations, plus member pricing at Sam's Club where available; offers may vary by location.", "category": "membership_and_account", "file_name": "walmart_support.txt"}
+{"query": "Additional TelMart+ benefits include streaming perks, holiday benefits, Burger King discounts, early access deals, gas savings, InHome returns, mobile check and same-day services, free online pet care with Pawp, and vehicle maintenance offers.", "category": "membership_and_account", "file_name": "walmart_support.txt"}
+{"query": "To manage a TelMart+ subscription the customer should sign in, go to Account, select TelMart+, and choose Manage Membership.", "category": "membership_and_account", "file_name": "walmart_support.txt"}
+{"query": "Membership options include monthly and yearly plans.", "category": "membership_and_account", "file_name": "walmart_support.txt"}
+{"query": "A customer cannot downgrade from a yearly plan to a monthly plan.", "category": "membership_and_account", "file_name": "walmart_support.txt"}
+{"query": "Members can pause their membership for one month at a time up to three times per year; paused members are not charged but do not receive member benefits while suspended; this option is not available for promotional or top-tier switch memberships.", "category": "membership_and_account", "file_name": "walmart_support.txt"}
+{"query": "Discounted TelMart+ membership options are available for qualifying participants in assistance programs and for eligible college students.", "category": "membership_and_account", "file_name": "walmart_support.txt"}
+{"query": "If the customer receives the error 'Your payment method couldn't be verified' they should re-enter the full card number, verify the expiration date, check the name on the card, and confirm the billing address and postal code.", "category": "membership_and_account", "file_name": "walmart_support.txt"}
+{"query": "If the customer cannot renew their membership because the payment method is expired or declined they should update the payment method before attempting to renew.", "category": "membership_and_account", "file_name": "walmart_support.txt"}
+{"query": "TelMart+ annual membership gift cards and e-gift cards cannot be used to purchase a TelMart+ membership but can be used toward purchases at TelMart stores or TelMart.com.", "category": "membership_and_account", "file_name": "walmart_support.txt"}
+{"query": "For TelMart+ account questions the customer should review the TelMart+ FAQ at TelMart.com/plus/faq or contact Customer Service.", "category": "membership_and_account", "file_name": "walmart_support.txt"}
