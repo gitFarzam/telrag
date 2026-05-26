@@ -15,3 +15,13 @@ category: is the name of the parent directory where file is located
 file_name: is the name of the file
 
 your job is to read `cashier_help.txt` file and it to `telmart_retrieval.jsonl` as follows
+
+## Prompt 3
+Task: Extracting each sentence or semantic part from .txt file and add it to jsonl file : `telmart_retrieval.jsonl`
+
+category: is the name of the parent directory where file is located
+file_name: is the name of the file
+
+your job is to read all `.txt` files in this path: `data/knowledge_base/telmart/test_data/source` and it to `telmart_retrieval.jsonl` as follows. 
+
+Example: this operation is already done for :`data/knowledge_base/telmart/test_data/source/checkout_support/cashier_help.txt` file and corrosponded data are already added to `telmart_retrieval.jsonl` file, so use that examlple to understand the data structure and skip doing this operation for`cashier_help.txt` file
