@@ -375,3 +375,90 @@
 {"query": "If the customer declines the substitute, the store associate will remove it from the order.", "category": "online_orders", "file_name": "substitutions.txt"}
 {"query": "Delivery drivers cannot remove the item from the customer's order and return it to the store.", "category": "online_orders", "file_name": "substitutions.txt"}
 
+// insurance_questions.txt
+{"query": "TelMart recognizes the vast majority of pharmacy insurance options and the customer should talk to their insurance provider for specific coverage details.", "category": "pharmacy_support", "file_name": "insurance_questions.txt"}
+{"query": "The customer may update their insurance information during any online prescription refill or transfer request.", "category": "pharmacy_support", "file_name": "insurance_questions.txt"}
+{"query": "The customer should select Add or Change insurance before submitting and follow the prompts.", "category": "pharmacy_support", "file_name": "insurance_questions.txt"}
+{"query": "To update insurance by phone or add prescription notes or coupon documents, the customer should call or visit their local TelMart Pharmacy.", "category": "pharmacy_support", "file_name": "insurance_questions.txt"}
+{"query": "The customer can add prescription notes and coupons by calling or visiting the pharmacy.", "category": "pharmacy_support", "file_name": "insurance_questions.txt"}
+{"query": "If the customer needs coverage, TelMart Insurance Options can help them find a plan that works for them on TelMart.com.", "category": "pharmacy_support", "file_name": "insurance_questions.txt"}
+{"query": "TelMart.com provides information on Medicare insurance plan options.", "category": "pharmacy_support", "file_name": "insurance_questions.txt"}
+{"query": "For Medicaid renewal support, the customer should go to the Medicaid Renewal page in the Support Center on TelMart.com.", "category": "pharmacy_support", "file_name": "insurance_questions.txt"}
+{"query": "The customer can review Medicare insurance plan options at TelMart.com/help.", "category": "pharmacy_support", "file_name": "insurance_questions.txt"}
+{"query": "TelMart Eye Centers accept many vision insurance options.", "category": "pharmacy_support", "file_name": "insurance_questions.txt"}
+{"query": "The customer should go to the Vision Benefits page at TelMart.com/help for more details.", "category": "pharmacy_support", "file_name": "insurance_questions.txt"}
+{"query": "The customer can use the Find a TelMart Eye Center tool to locate a nearby Eye Center.", "category": "pharmacy_support", "file_name": "insurance_questions.txt"}
+{"query": "TelMart Pharmacy and Eye Center/Vision HIPAA forms are available at TelMart.com/help.", "category": "pharmacy_support", "file_name": "insurance_questions.txt"}
+{"query": "For specific insurance questions, the customer should contact their local TelMart Pharmacy directly and find the pharmacy phone number on their prescription label or by using the Store Locator at TelMart.com.", "category": "pharmacy_support", "file_name": "insurance_questions.txt"}
+
+// prescription_pickup.txt
+{"query": "TelMart Pharmacy offers prescription pickup at many locations across the United States.", "category": "pharmacy_support", "file_name": "prescription_pickup.txt"}
+{"query": "The customer should go to their local TelMart Pharmacy during pharmacy hours.", "category": "pharmacy_support", "file_name": "prescription_pickup.txt"}
+{"query": "The customer should provide their name and date of birth to the pharmacy team member.", "category": "pharmacy_support", "file_name": "prescription_pickup.txt"}
+{"query": "The customer should show their insurance card if it applies.", "category": "pharmacy_support", "file_name": "prescription_pickup.txt"}
+{"query": "The customer should pay any applicable deductible or copay.", "category": "pharmacy_support", "file_name": "prescription_pickup.txt"}
+{"query": "With an online pharmacy profile, the customer can request refills, schedule delivery for eligible prescriptions, review prescription history, schedule health services appointments, and more.", "category": "pharmacy_support", "file_name": "prescription_pickup.txt"}
+{"query": "The customer should sign in to their TelMart profile on TelMart.com or in the TelMart app.", "category": "pharmacy_support", "file_name": "prescription_pickup.txt"}
+{"query": "They should choose Settings, then Pharmacy.", "category": "pharmacy_support", "file_name": "prescription_pickup.txt"}
+{"query": "The customer should verify their 4-digit passcode or use biometrics if available.", "category": "pharmacy_support", "file_name": "prescription_pickup.txt"}
+{"query": "They should follow the prompts to link and verify their pharmacy profile.", "category": "pharmacy_support", "file_name": "prescription_pickup.txt"}
+{"query": "After identity verification and pharmacy profile linking, the customer can select Manage Prescriptions to handle current refills.", "category": "pharmacy_support", "file_name": "prescription_pickup.txt"}
+{"query": "They can select Pharmacy History for a list of prescriptions from the last two years.", "category": "pharmacy_support", "file_name": "prescription_pickup.txt"}
+{"query": "They can choose Transfer Prescriptions to move a new prescription to TelMart Pharmacy.", "category": "pharmacy_support", "file_name": "prescription_pickup.txt"}
+{"query": "Eligible prescriptions may be delivered as soon as today with no minimum order fees.", "category": "pharmacy_support", "file_name": "prescription_pickup.txt"}
+{"query": "The prescription is filled by a TelMart pharmacy professional with the same expert care and low price.", "category": "pharmacy_support", "file_name": "prescription_pickup.txt"}
+{"query": "When the prescription is ready, the customer should add it to their cart.", "category": "pharmacy_support", "file_name": "prescription_pickup.txt"}
+{"query": "The customer will receive a notification on how to proceed.", "category": "pharmacy_support", "file_name": "prescription_pickup.txt"}
+{"query": "They should choose how and when to receive the prescription, delivered with their groceries and essentials.", "category": "pharmacy_support", "file_name": "prescription_pickup.txt"}
+{"query": "TelMart also offers a $4 Prescription Program for select generic medications and the customer should visit the Pharmacy page on TelMart.com for more details.", "category": "pharmacy_support", "file_name": "prescription_pickup.txt"}
+
+// refill_questions.txt
+{"query": "The customer should sign in to their TelMart profile before requesting a refill.", "category": "pharmacy_support", "file_name": "refill_questions.txt"}
+{"query": "They should choose Settings.", "category": "pharmacy_support", "file_name": "refill_questions.txt"}
+{"query": "They should choose Pharmacy.", "category": "pharmacy_support", "file_name": "refill_questions.txt"}
+{"query": "The customer should verify their 4-digit passcode or use biometrics if available.", "category": "pharmacy_support", "file_name": "refill_questions.txt"}
+{"query": "They should choose Manage Prescriptions.", "category": "pharmacy_support", "file_name": "refill_questions.txt"}
+{"query": "The customer should select the checkbox next to each available medication.", "category": "pharmacy_support", "file_name": "refill_questions.txt"}
+{"query": "They should choose Continue.", "category": "pharmacy_support", "file_name": "refill_questions.txt"}
+{"query": "The customer should review the pickup location.", "category": "pharmacy_support", "file_name": "refill_questions.txt"}
+{"query": "The customer should review the order and make changes as needed, including payment method by selecting Change in the Payment section.", "category": "pharmacy_support", "file_name": "refill_questions.txt"}
+{"query": "They should choose Submit Order to place the refill request.", "category": "pharmacy_support", "file_name": "refill_questions.txt"}
+{"query": "The customer should choose Scan to Pickup and scan the barcode on the prescription bottle.", "category": "pharmacy_support", "file_name": "refill_questions.txt"}
+{"query": "The customer can check the status of their prescription refill order through Order History in the TelMart app or on TelMart.com.", "category": "pharmacy_support", "file_name": "refill_questions.txt"}
+{"query": "TelMart will notify the customer when the prescription is ready for pickup or delivery.", "category": "pharmacy_support", "file_name": "refill_questions.txt"}
+{"query": "Not all prescriptions are available for refill at every time; refill eligibility depends on the medication type and the timing of the previous fill.", "category": "pharmacy_support", "file_name": "refill_questions.txt"}
+{"query": "The customer should contact their TelMart Pharmacy directly with questions about refill eligibility.", "category": "pharmacy_support", "file_name": "refill_questions.txt"}
+{"query": "The customer can find their pharmacy location phone number on their prescription label or receipt.", "category": "pharmacy_support", "file_name": "refill_questions.txt"}
+{"query": "The customer can also use the TelMart Store Locator on TelMart.com to find their pharmacy and its contact information.", "category": "pharmacy_support", "file_name": "refill_questions.txt"}
+{"query": "For questions about estimated prescription fill costs, the customer should visit the Estimated Prescription Fill Prices help article at TelMart.com/help.", "category": "pharmacy_support", "file_name": "refill_questions.txt"}
+
+
+// vaccine_appointments.txt
+{"query": "TelMart Pharmacies offer a range of immunizations including flu shots, COVID-19 vaccines, and more.", "category": "pharmacy_support", "file_name": "vaccine_appointments.txt"}
+{"query": "TelMart offers the updated COVID-19 vaccine.", "category": "pharmacy_support", "file_name": "vaccine_appointments.txt"}
+{"query": "TelMart offers the flu shot.", "category": "pharmacy_support", "file_name": "vaccine_appointments.txt"}
+{"query": "TelMart provides tetanus vaccines, which generally require an initial dose and a booster every 10 years.", "category": "pharmacy_support", "file_name": "vaccine_appointments.txt"}
+{"query": "TelMart offers the shingles vaccine for immunocompromised adults 19+ and adults 50+.", "category": "pharmacy_support", "file_name": "vaccine_appointments.txt"}
+{"query": "Additional select vaccines are available at TelMart Pharmacies.", "category": "pharmacy_support", "file_name": "vaccine_appointments.txt"}
+{"query": "Not every vaccine is available for online scheduling.", "category": "pharmacy_support", "file_name": "vaccine_appointments.txt"}
+{"query": "Most insurance plans offer a $0 deductible for eligible vaccines, though state, age, and health restrictions may apply.", "category": "pharmacy_support", "file_name": "vaccine_appointments.txt"}
+{"query": "The customer should go to TelMart.com/pharmacy or the TelMart app and choose Immunizations.", "category": "pharmacy_support", "file_name": "vaccine_appointments.txt"}
+{"query": "They should choose a vaccine type and select Continue, such as shingles.", "category": "pharmacy_support", "file_name": "vaccine_appointments.txt"}
+{"query": "The customer should choose Find a clinic.", "category": "pharmacy_support", "file_name": "vaccine_appointments.txt"}
+{"query": "They can select Add another person to schedule multiple people under one appointment.", "category": "pharmacy_support", "file_name": "vaccine_appointments.txt"}
+{"query": "The customer should enter a ZIP code or city and choose Find.", "category": "pharmacy_support", "file_name": "vaccine_appointments.txt"}
+{"query": "They should select a location from the list and choose Continue.", "category": "pharmacy_support", "file_name": "vaccine_appointments.txt"}
+{"query": "The customer should select a date and time and choose Continue.", "category": "pharmacy_support", "file_name": "vaccine_appointments.txt"}
+{"query": "They should submit the required personal information and choose Continue.", "category": "pharmacy_support", "file_name": "vaccine_appointments.txt"}
+{"query": "They should answer the health questions and choose Continue.", "category": "pharmacy_support", "file_name": "vaccine_appointments.txt"}
+{"query": "They should acknowledge individual consent and choose Continue.", "category": "pharmacy_support", "file_name": "vaccine_appointments.txt"}
+{"query": "The customer should choose Confirm Appointment.", "category": "pharmacy_support", "file_name": "vaccine_appointments.txt"}
+{"query": "The customer may also visit when the pharmacy is open for walk-in immunization services.", "category": "pharmacy_support", "file_name": "vaccine_appointments.txt"}
+{"query": "The customer should open the previous confirmation email or message from their booked appointment.", "category": "pharmacy_support", "file_name": "vaccine_appointments.txt"}
+{"query": "They should check their inbox for 'Your TelMart pharmacy appointment.'", "category": "pharmacy_support", "file_name": "vaccine_appointments.txt"}
+{"query": "The customer should select the Cancel link in the communication.", "category": "pharmacy_support", "file_name": "vaccine_appointments.txt"}
+{"query": "They should sign in to their TelMart.com profile.", "category": "pharmacy_support", "file_name": "vaccine_appointments.txt"}
+{"query": "The customer should verify their birthdate.", "category": "pharmacy_support", "file_name": "vaccine_appointments.txt"}
+{"query": "If the customer needs to cancel by phone, they should contact their local pharmacy and find the pharmacy phone number on their prescription label, receipt, or by using the TelMart Store Locator on TelMart.com.", "category": "pharmacy_support", "file_name": "vaccine_appointments.txt"}
+{"query": "The customer can download their immunization history through their TelMart profile and should go to TelMart.com/help for instructions.", "category": "pharmacy_support", "file_name": "vaccine_appointments.txt"}
+
