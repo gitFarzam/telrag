@@ -1,13 +1,41 @@
+// cashier_help.txt
 {"query": "TelMart Cashier Checkout Assistance", "category": "checkout_support", "file_name": "cashier_help.txt"}
 {"query": "TelMart associates are available at staffed checkout lanes throughout the store to assist customers with their purchases.", "category": "checkout_support", "file_name": "cashier_help.txt"}
 {"query": "Check Out With Me Service: TelMart associates can check out customers directly on the sales floor using cellular devices and Bluetooth printers.", "category": "checkout_support", "file_name": "cashier_help.txt"}
-{"query": "Associates outfitted with mobile checkout devices can complete your purchase and provide a receipt (paper or electronic) wherever you are in the store.", "category": "checkout_support", "file_name": "cashier_help.txt"}
+{"query": "Associates outfitted with mobile checkout devices can complete the customer's purchase and provide a receipt (paper or electronic) wherever the customer is in the store.", "category": "checkout_support", "file_name": "cashier_help.txt"}
 {"query": "This service is positioned in the busiest areas of the store, such as the garden center, electronics, or action alley.", "category": "checkout_support", "file_name": "cashier_help.txt"}
-{"query": "To complete a purchase at a staffed register, place your items on the conveyor belt or hand them to the cashier.", "category": "checkout_support", "file_name": "cashier_help.txt"}
+{"query": "To complete a purchase at a staffed register, the customer should place their items on the conveyor belt or hand them to the cashier.", "category": "checkout_support", "file_name": "cashier_help.txt"}
 {"query": "The cashier will scan each item and provide a running total.", "category": "checkout_support", "file_name": "cashier_help.txt"}
-{"query": "Once all items are scanned, select your payment method.", "category": "checkout_support", "file_name": "cashier_help.txt"}
+{"query": "Once all items are scanned, the customer should select their payment method.", "category": "checkout_support", "file_name": "cashier_help.txt"}
 {"query": "Payment types accepted include cash, credit card, debit card, TelMart Pay, EBT/SNAP, gift cards, and other approved payment methods.", "category": "checkout_support", "file_name": "cashier_help.txt"}
-{"query": "For transactions using TelMart Pay, scan the on-screen QR code to connect your account.", "category": "checkout_support", "file_name": "cashier_help.txt"}
+{"query": "For transactions using TelMart Pay, the customer should scan the on-screen QR code to connect their account.", "category": "checkout_support", "file_name": "cashier_help.txt"}
 {"query": "All TelMart policies applicable to store sales, including those regarding Ad Match, Price Matching, Coupon use, Returns, and Exchanges, apply to purchases made through TelMart Pay.", "category": "checkout_support", "file_name": "cashier_help.txt"}
-{"query": "If you experience any issues at the cashier lane, ask the associate for assistance or contact the Customer Service Desk.", "category": "checkout_support", "file_name": "cashier_help.txt"}
+{"query": "If a customer experiences any issues at the cashier lane, they should ask the associate for assistance or contact the Customer Service Desk.", "category": "checkout_support", "file_name": "cashier_help.txt"}
 
+// payment_issues.txt
+{"query": "TelMart acknowledges a broad scope of compensation approaches in-store and web.", "category": "checkout_support", "file_name": "payment_issues.txt"}
+{"query": "TelMart accepts charge certificates including Visa, Mastercard, American Express, and Discover.", "category": "checkout_support", "file_name": "payment_issues.txt"}
+{"query": "Debit certificates are an accepted payment method at TelMart.", "category": "checkout_support", "file_name": "payment_issues.txt"}
+{"query": "TelMart Money service provides mobile compensation through the TelMart application.", "category": "checkout_support", "file_name": "payment_issues.txt"}
+{"query": "EBT/SNAP certificates are accepted at TelMart.", "category": "checkout_support", "file_name": "payment_issues.txt"}
+{"query": "TelMart Present Cards and e-Present Cards are accepted payment methods.", "category": "checkout_support", "file_name": "payment_issues.txt"}
+{"query": "TelMart Money is exchangeable as an e-Present card at pay time.", "category": "checkout_support", "file_name": "payment_issues.txt"}
+{"query": "HSA/FSA certificates for qualifying products can be submitted as a charge card.", "category": "checkout_support", "file_name": "payment_issues.txt"}
+{"query": "Bank profiles can be linked via web payment at TelMart.com; up to 3 bank profiles may be saved.", "category": "checkout_support", "file_name": "payment_issues.txt"}
+{"query": "PayPal is an accepted payment method at TelMart.", "category": "checkout_support", "file_name": "payment_issues.txt"}
+{"query": "Purchase Now, Reimburse Later through OnePay Later is available at TelMart.", "category": "checkout_support", "file_name": "payment_issues.txt"}
+{"query": "At the counter or automated pay station, the customer can scan the on-display QR code to connect their profile.", "category": "checkout_support", "file_name": "payment_issues.txt"}
+{"query": "The customer can use the TelMart application scanner or their phone camera to scan the QR code for TelMart Money service.", "category": "checkout_support", "file_name": "payment_issues.txt"}
+{"query": "All TelMart guidelines for in-store purchases apply to transactions made through TelMart Money service.", "category": "checkout_support", "file_name": "payment_issues.txt"}
+{"query": "To exchange present funds, customers should select Use TelMart Money to exchange their present funds for a TelMart e-Present card toward their purchase.", "category": "checkout_support", "file_name": "payment_issues.txt"}
+{"query": "If the customer's TelMart Money balance is less than their shopping total, the entire balance will be applied to their purchase.", "category": "checkout_support", "file_name": "payment_issues.txt"}
+{"query": "If the customer's TelMart Money balance is more than their shopping total, only the necessary portion will be applied to their purchase.", "category": "checkout_support", "file_name": "payment_issues.txt"}
+{"query": "TelMart Money cannot be exchanged for cash services, third-party gift cards, scheme-named gift cards, reloadable prepaid cards, or drug-related items.", "category": "checkout_support", "file_name": "payment_issues.txt"}
+{"query": "To add a payment method to their profile, the customer should launch the TelMart application or navigate to TelMart.com.", "category": "checkout_support", "file_name": "payment_issues.txt"}
+{"query": "To manage payment methods, select Account, then select Settings, then select Wallet, and then select Add new payment method.", "category": "checkout_support", "file_name": "payment_issues.txt"}
+{"query": "When adding a payment method, the customer should select their payment type and submit required information, then save the card.", "category": "checkout_support", "file_name": "payment_issues.txt"}
+{"query": "If a customer experiences issues with a payment method, they should verify the card number, security code, expiration date, and billing address.", "category": "checkout_support", "file_name": "payment_issues.txt"}
+{"query": "If problems persist, contact Customer Service through the Chat with us option on TelMart.com.", "category": "checkout_support", "file_name": "payment_issues.txt"}
+{"query": "A temporary authorization hold may be placed on the customer's payment method when making an online purchase.", "category": "checkout_support", "file_name": "payment_issues.txt"}
+{"query": "After the customer's final amount is confirmed, any extra funds from the authorization hold will be released.", "category": "checkout_support", "file_name": "payment_issues.txt"}
+{"query": "The customer's financial institution will remove the authorization hold according to their guidelines, which may take up to 10 business days after transaction completion.", "category": "checkout_support", "file_name": "payment_issues.txt"}

@@ -31,3 +31,9 @@ Example: this operation is already done for :`data/knowledge_base/telmart/test_d
 your job is to read all `.txt` files in this path: `data/knowledge_base/telmart/test_data/source` and it to `telmart_retrieval.jsonl` as follows. 
 
 you should not use a python script or any script to chunk the txt files senteces, because in this way the quality of extracted sentences are meaningless, you have to read txt files lines by lines and extract senteces from that, sentences should be completed and should be understandble by their own, not an incomplete or vauge sentence, so you have read them carefully.
+
+## Prompt 4
+
+check this path: `data/knowledge_base/telmart/test_data/telmart_retrieval.jsonl`
+
+The pronouns are wrong in this file for `query` key, you, your -> should point to The customer , and sentences should be re written. All of the sentences should be revised to check if they are to third person or not.
