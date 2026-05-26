@@ -56,3 +56,22 @@
 {"query": "Purchase confirmation and receipt information are sent to the contact information linked to the customer's TelMart profile.", "category": "checkout_support", "file_name": "receipt_questions.txt"}
 {"query": "The customer can also retrieve purchase details and receipts through Transaction History in their TelMart profile.", "category": "checkout_support", "file_name": "receipt_questions.txt"}
 {"query": "For questions about a specific charge on a receipt or to obtain a copy of a receipt, the customer should visit the Service Counter in-store or contact Customer Service through Chat on TelMart.com.", "category": "checkout_support", "file_name": "receipt_questions.txt"}
+
+// self_checkout_help.txt
+{"query": "TelMart offers self-checkout stations in numerous store locations to provide a faster checkout experience for customers.", "category": "checkout_support", "file_name": "self_checkout_help.txt"}
+{"query": "The customer should scan every product's barcode using the station scanner at self-checkout.", "category": "checkout_support", "file_name": "self_checkout_help.txt"}
+{"query": "Scanned items should be placed in the bagging area at the self-checkout station.", "category": "checkout_support", "file_name": "self_checkout_help.txt"}
+{"query": "The customer should review their purchase on the display before proceeding to payment.", "category": "checkout_support", "file_name": "self_checkout_help.txt"}
+{"query": "The customer should use the Check Your Purchase option before payment to verify that all items are on their list.", "category": "checkout_support", "file_name": "self_checkout_help.txt"}
+{"query": "If the self-checkout machine does not register a product, the customer should scan it again or press the Help button to notify a nearby worker.", "category": "checkout_support", "file_name": "self_checkout_help.txt"}
+{"query": "The customer should examine their receipt before leaving the store to verify items were not scanned twice.", "category": "checkout_support", "file_name": "self_checkout_help.txt"}
+{"query": "If a barcode is damaged or cannot be scanned, the customer should press the Help button for worker assistance.", "category": "checkout_support", "file_name": "self_checkout_help.txt"}
+{"query": "If the self-checkout machine pauses or displays an error, the customer should not force items into the machine or repeatedly press buttons.", "category": "checkout_support", "file_name": "self_checkout_help.txt"}
+{"query": "When the self-checkout machine has a problem, the customer should press the Help button on the display to notify a TelMart worker.", "category": "checkout_support", "file_name": "self_checkout_help.txt"}
+{"query": "TelMart reserves certain self-checkout stations for TelMart+ members and delivery drivers in select stores.", "category": "checkout_support", "file_name": "self_checkout_help.txt"}
+{"query": "Reserved self-checkout stations offer a faster and more reliable experience for frequent customers.", "category": "checkout_support", "file_name": "self_checkout_help.txt"}
+{"query": "Changes to self-checkout configurations are made at the store manager's discretion based on worker and customer feedback, shopping patterns, and business needs in the area.", "category": "checkout_support", "file_name": "self_checkout_help.txt"}
+{"query": "TelMart workers are trained to assist with self-checkout issues such as resolving barcode problems, explaining product policies, and helping with payment.", "category": "checkout_support", "file_name": "self_checkout_help.txt"}
+{"query": "The customer should press the Help button on screen to get immediate assistance at self-checkout.", "category": "checkout_support", "file_name": "self_checkout_help.txt"}
+{"query": "If the customer experiences a payment machine error at self-checkout, they should remain at the station to verify their transaction is processed correctly.", "category": "checkout_support", "file_name": "self_checkout_help.txt"}
+{"query": "If the customer experiences a payment issue at self-checkout, they should press the Help button to contact a TelMart worker.", "category": "checkout_support", "file_name": "self_checkout_help.txt"}
