@@ -218,3 +218,59 @@
 {"query": "If the customer cannot renew their membership because the payment method is expired or declined they should update the payment method before attempting to renew.", "category": "membership_and_account", "file_name": "telmart_support.txt"}
 {"query": "TelMart+ annual membership gift cards and e-gift cards cannot be used to purchase a TelMart+ membership but can be used toward purchases at TelMart stores or TelMart.com.", "category": "membership_and_account", "file_name": "telmart_support.txt"}
 {"query": "For TelMart+ account questions the customer should review the TelMart+ FAQ at TelMart.com/plus/faq or contact Customer Service.", "category": "membership_and_account", "file_name": "telmart_support.txt"}
+
+
+// bill_payment.txt
+{"query": "TelMart provides in-store bill payment services at Service Counters and Money Centers for customers who need to pay bills with cash.", "category": "money_services", "file_name": "bill_payment.txt"}
+{"query": "Customers can pay bills quickly and conveniently with cash through TelMart bill payment services.", "category": "money_services", "file_name": "bill_payment.txt"}
+{"query": "The customer should go to the Service Counter or a TelMart Money Center at their local store to pay a bill.", "category": "money_services", "file_name": "bill_payment.txt"}
+{"query": "The customer should bring a paper copy of the bill or a barcode on their phone when paying a bill at TelMart.", "category": "money_services", "file_name": "bill_payment.txt"}
+{"query": "A TelMart associate will scan the barcode associated with the customer's account to process the bill payment.", "category": "money_services", "file_name": "bill_payment.txt"}
+{"query": "The customer should pay the bill amount in cash and the funds will be transferred electronically through a centralized payment system.", "category": "money_services", "file_name": "bill_payment.txt"}
+{"query": "TelMart offers bill payment services at every TelMart location in the country.", "category": "money_services", "file_name": "bill_payment.txt"}
+{"query": "TelMart bill payment is designed for customers who prefer to pay bills with cash, including unbanked and underbanked customers.", "category": "money_services", "file_name": "bill_payment.txt"}
+{"query": "TelMart also offers online bill payment options through its Money Center partners at TelMart.com/money-services and in the TelMart app.", "category": "money_services", "file_name": "bill_payment.txt"}
+{"query": "TelMart Money Centers provide money transfers, check cashing, money orders, fee programs, and prepaid card loads in addition to bill payment services.", "category": "money_services", "file_name": "bill_payment.txt"}
+{"query": "Quick Pay bill payments and related fees associated with TelMart Financial Services are final and nonrefundable.", "category": "money_services", "file_name": "bill_payment.txt"}
+{"query": "For bill payment questions, the customer should visit the Service Counter or call 1-400-840-4060.", "category": "money_services", "file_name": "bill_payment.txt"}
+
+// check_cashing.txt
+{"query": "TelMart Money Centers offer check cashing for payroll checks, government checks, personal checks, and other approved check types.", "category": "money_services", "file_name": "check_cashing.txt"}
+{"query": "The customer can cash a check at the Service Counter or a TelMart Money Center at their local store.", "category": "money_services", "file_name": "check_cashing.txt"}
+{"query": "To cash a check the customer should bring the check and a valid government-issued photo ID.", "category": "money_services", "file_name": "check_cashing.txt"}
+{"query": "The customer should pay the applicable fee to cash the check and will receive the cash immediately.", "category": "money_services", "file_name": "check_cashing.txt"}
+{"query": "TelMart currently cashes checks for $4, though fees may vary by location and customers should check with their local store for current prices.", "category": "money_services", "file_name": "check_cashing.txt"}
+{"query": "TelMart also offers check printing services and can mail customized checks directly to the customer's home.", "category": "money_services", "file_name": "check_cashing.txt"}
+{"query": "TelMart Money Centers provide money transfers, bill payment, money orders, fee programs, and prepaid card load and unload services.", "category": "money_services", "file_name": "check_cashing.txt"}
+{"query": "Customers can use Swift Refill for reloadable debit cards at TelMart Money Centers.", "category": "money_services", "file_name": "check_cashing.txt"}
+{"query": "TelMart Money Centers typically open at 6 a.m. as part of TelMart Superstore hours, but hours may vary by location.", "category": "money_services", "file_name": "check_cashing.txt"}
+{"query": "For check cashing inquiries, the customer should visit the Service Counter or call 1-400-840-4060.", "category": "money_services", "file_name": "check_cashing.txt"}
+
+// money_orders.txt
+{"query": "TelMart sells money orders at Service Counters and Money Centers.", "category": "money_services", "file_name": "money_orders.txt"}
+{"query": "A money order is a prepaid financial instrument and the customer must pay the full amount at the time of purchase.", "category": "money_services", "file_name": "money_orders.txt"}
+{"query": "Money orders are not a payment method requiring credit approval.", "category": "money_services", "file_name": "money_orders.txt"}
+{"query": "A bank account is not required for the customer to purchase a money order.", "category": "money_services", "file_name": "money_orders.txt"}
+{"query": "That makes money orders accessible for customers in a wide range of financial situations.", "category": "money_services", "file_name": "money_orders.txt"}
+{"query": "To get a money order the customer should go to the Service Counter or a Money Center at their local TelMart location.", "category": "money_services", "file_name": "money_orders.txt"}
+{"query": "The customer should choose the amount for the money order and pay the full face value plus any applicable fee.", "category": "money_services", "file_name": "money_orders.txt"}
+{"query": "TelMart money orders are low-cost and secure and offer customers reduced fees and strong protection.", "category": "money_services", "file_name": "money_orders.txt"}
+{"query": "TelMart Money Centers offer money transfers, check cashing, bill payment, fee programs, and prepaid card loading services.", "category": "money_services", "file_name": "money_orders.txt"}
+{"query": "Money Center hours may vary by location, and customers should contact their local store for current hours.", "category": "money_services", "file_name": "money_orders.txt"}
+{"query": "For more information, the customer should visit the TelMart Money Center webpage or contact their local store.", "category": "money_services", "file_name": "money_orders.txt"}
+
+// money_transfers.txt
+{"query": "TelMart Money Centers and Service Counters provide domestic and international money transfer services through partners such as Western Union, Ria, and MoneyGram.", "category": "money_services", "file_name": "money_transfers.txt"}
+{"query": "The customer can send money domestically using TelMart2TelMart or internationally using TelMart2World.", "category": "money_services", "file_name": "money_transfers.txt"}
+{"query": "The customer can receive money transfers and can also send money to Mexican locations for pickup at TelMart or Bodega Aurrera locations.", "category": "money_services", "file_name": "money_transfers.txt"}
+{"query": "To send a money transfer the customer should go to the Service Counter or Money Center and present a driver's license or other valid government-issued photo ID.", "category": "money_services", "file_name": "money_transfers.txt"}
+{"query": "The customer may use cash or a PIN-based debit card for sending in domestic currency.", "category": "money_services", "file_name": "money_transfers.txt"}
+{"query": "To receive a transfer the customer should go to the Service Counter or Money Center and present a valid government-issued photo ID.", "category": "money_services", "file_name": "money_transfers.txt"}
+{"query": "The customer may also pick up money transfers at MoneyGram and Western Union locations.", "category": "money_services", "file_name": "money_transfers.txt"}
+{"query": "With a few exceptions, money transfers are typically ready for pickup in as little as 10 minutes, unless the transfer requires additional review by Western Union, Ria, or MoneyGram.", "category": "money_services", "file_name": "money_transfers.txt"}
+{"query": "Available payout options include cash pickup, bank account deposit, debit card deposit, mobile wallet deposit, and home delivery.", "category": "money_services", "file_name": "money_transfers.txt"}
+{"query": "Payout options vary by transfer partner and the destination region.", "category": "money_services", "file_name": "money_transfers.txt"}
+{"query": "TelMart offers money transfer services to more than 200 countries and territories through its transfer partners.", "category": "money_services", "file_name": "money_transfers.txt"}
+{"query": "For questions about money transfers, the customer can call the partner's support line or track the transfer using the receipt information on the partner's website.", "category": "money_services", "file_name": "money_transfers.txt"}
+{"query": "For Ria transfers the customer can call 1-855-355-2144, for MoneyGram transfers the customer can call 1-800-926-9400, and for Western Union transfers the customer can call 1-844-982-4287.", "category": "money_services", "file_name": "money_transfers.txt"}
+{"query": "TelMart store hours are typically 6 a.m. to 11 p.m., while Money Center hours may vary by location.", "category": "money_services", "file_name": "money_transfers.txt"}
