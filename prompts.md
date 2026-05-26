@@ -14,11 +14,11 @@ Task: Extracting each sentence or semantic part and add it to jsonl file : `telm
 category: is the name of the parent directory where file is located
 file_name: is the name of the file
 
-your job is to read `data/knowledge_base/telmart/initial_data/checkout_support/payment_issues.txt` file and it to `telmart_retrieval.jsonl` as follows
+your job is to read `data/knowledge_base/telmart/initial_data/checkout_support/receipt_questions.txt` file and it to `telmart_retrieval.jsonl` as follows
 
 you should not use a python script or any script to chunk the txt files senteces, because in this way the quality of extracted sentences are meaningless, you have to read txt files line by line and extract senteces from that, sentences should be completed and should be understandble by their own, not an incomplete or vauge sentence, so you have read them carefully.
 
-
+All the pronouns for `query` key, you, your -> should point to The customer (the third person) , and sentences should be re written and then be pasted there. All of the sentences should be revised to check if they are to third person or not.
 
 ## Prompt 3
 Task: Extracting each sentence or semantic part from .txt file and add it to jsonl file : `telmart_retrieval.jsonl`

@@ -39,3 +39,20 @@
 {"query": "A temporary authorization hold may be placed on the customer's payment method when making an online purchase.", "category": "checkout_support", "file_name": "payment_issues.txt"}
 {"query": "After the customer's final amount is confirmed, any extra funds from the authorization hold will be released.", "category": "checkout_support", "file_name": "payment_issues.txt"}
 {"query": "The customer's financial institution will remove the authorization hold according to their guidelines, which may take up to 10 business days after transaction completion.", "category": "checkout_support", "file_name": "payment_issues.txt"}
+
+// receipt_questions.txt
+{"query": "TelMart provides receipts in sheet and digital formats for in-store and online purchases.", "category": "checkout_support", "file_name": "receipt_questions.txt"}
+{"query": "TelMart provides eReceipts (digital receipts) for in-store purchases.", "category": "checkout_support", "file_name": "receipt_questions.txt"}
+{"query": "At the counter or automated pay station, the customer may choose to obtain a digital receipt.", "category": "checkout_support", "file_name": "receipt_questions.txt"}
+{"query": "Information provided by customers in the TelMart eReceipts program is protected under the TelMart Privacy Policy.", "category": "checkout_support", "file_name": "receipt_questions.txt"}
+{"query": "TelMart may alter, restrict, or terminate the customer's use of eReceipts at its discretion.", "category": "checkout_support", "file_name": "receipt_questions.txt"}
+{"query": "Requesting an eReceipt at the counter will not automatically deliver the eReceipt to the customer.", "category": "checkout_support", "file_name": "receipt_questions.txt"}
+{"query": "To view receipts, the customer should register to their TelMart profile on TelMart.com or the TelMart application.", "category": "checkout_support", "file_name": "receipt_questions.txt"}
+{"query": "The customer can navigate to Transaction History to view current purchases and retrieve receipts for purchases made online or in-store using a linked payment method.", "category": "checkout_support", "file_name": "receipt_questions.txt"}
+{"query": "For in-store returns, the customer should present their receipt to the Service Counter.", "category": "checkout_support", "file_name": "receipt_questions.txt"}
+{"query": "If the customer does not have their receipt, they should show a valid government-issued ID at the Service Counter.", "category": "checkout_support", "file_name": "receipt_questions.txt"}
+{"query": "Without a receipt, the refund may be issued as a TelMart gift card or present card.", "category": "checkout_support", "file_name": "receipt_questions.txt"}
+{"query": "If the transaction was made with a debit or credit card, TelMart can usually locate the transaction using the card information.", "category": "checkout_support", "file_name": "receipt_questions.txt"}
+{"query": "Purchase confirmation and receipt information are sent to the contact information linked to the customer's TelMart profile.", "category": "checkout_support", "file_name": "receipt_questions.txt"}
+{"query": "The customer can also retrieve purchase details and receipts through Transaction History in their TelMart profile.", "category": "checkout_support", "file_name": "receipt_questions.txt"}
+{"query": "For questions about a specific charge on a receipt or to obtain a copy of a receipt, the customer should visit the Service Counter in-store or contact Customer Service through Chat on TelMart.com.", "category": "checkout_support", "file_name": "receipt_questions.txt"}
