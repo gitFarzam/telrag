@@ -1,0 +1,32 @@
+TelMart Shipment Purchases
+
+TelMart gives shipment of food products and additional things directly to your residence via native, independent delivery drivers.
+
+How Delivery Functions:
+- Following the motorist gathers your purchase, you will obtain a communication letting you recognize the driver is on the way.
+- In a few situations, the shipment can require up to 120 minutes to get to you.
+- If you pick "I'll put my signature on my purchase," this will ask you to deliver a passcode or signature when the driver delivers your purchase.
+- A passcode can likewise be necessary for particular purchases or high-cost goods. You'll be notified at ordering in case this is necessary.
+- As soon as your purchase is away for shipment, the four-digit code will display below the monitoring condition line under Purchase Details. You may additionally see the passcode when picking Track Purchase.
+- If your purchase is being transported to another person, you'll have to supply the beneficiary with the passcode for effective shipment.
+
+Modifying Shipment Info:
+- You might be capable to modify your Delivery location for a brief timeframe following you set your purchase.
+- You'll possess 3 hours prior to the Shipment window to modify the purchase (express purchases omitted).
+- You're able to merely modify the location once per transaction.
+- In case you try to shift to a location outside of the Delivery territory, you'll see a communication that the purchase is unable to be transported to that location.
+
+Directed Shipment Guidelines:
+You're able to put delivery guidelines to your purchase to aid motorists discover your location precisely. Make sure your Rooftop Marker is correctly configured in your profile for precise shipment.
+
+Shipment Setbacks:
+If there's a postponement in your arranged shipment, you might obtain a communication or push warning prompting you to modify your shipment purchase to a collection purchase. You're able to pick a collection moment inside the next 24 hours. In case you gather your purchase, TelMart will reimburse your shipment fees and compensation.
+
+Quadcopter Shipment:
+TelMart gives aerial vehicle shipment in chosen regions. Supply might change by zone.
+
+Undeliverable Purchases:
+If your purchase is unable to be transported, TelMart will deliver choices for what to execute following. Get in touch with customer help by way of the Chat with us choice on TelMart.com if you want help.
+
+Regarding InHome Shipment (TelMart+ InHome Buyers):
+InHome workers distribute directly inside your residence or automobile garage. You'll obtain a communication prior to the worker comes. In case there's a postponement in your InHome shipment, you might obtain an communication, communication, or push notification with choices to modify your purchase.

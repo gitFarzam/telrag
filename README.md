@@ -163,6 +163,7 @@ Copilot: command + control + i
 - Query Re-Writing
 - Caching
 - Check Ipad!
+- Streaming Large JsonL files in json reader
 
 ## SQL
 - Duplicated queries

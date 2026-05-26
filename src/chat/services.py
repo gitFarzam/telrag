@@ -408,14 +408,9 @@ def process_user_message(message:Message):
                 )
 
 
-def creating_text_content_object(txt_file,content:str):
+def creating_text_content_object(content:str):
     logger.debug(creating_chunk_objects.__name__)
     model_object = TextContent.objects.create(content = content)
-    if txt_file:
-        django_file = File(txt_file)
-        model_object.file = django_file
-    model_object.save()
-
     return model_object
 
 def creating_document_source(model_object):

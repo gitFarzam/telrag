@@ -1,0 +1,32 @@
+TelMart Profile Sign-In Concerns
+
+In Case You're Unable to Register to Your TelMart Profile:
+
+Missing Credentials:
+1. Head to TelMart.com or launch the TelMart application.
+2. Pick Register.
+3. Pick Missing Credentials.
+4. Input the communication linked to your profile.
+5. Adhere to the guidelines delivered to your communication to re-establish your credentials.
+
+Passkey Authentication:
+TelMart enables Passkey Authentication as a substitute sign-in process. In case you've configured a Passkey, utilize it to register on a appropriate gadget.
+
+Profile Restricted:
+If your profile has been prohibited as a outcome of repeated unsuccessful sign-in endeavors, adhere to the credentials re-establishment guidelines delivered to your communication or contact Client Help for assistance.
+
+Two-Step Confirmation:
+In case two-step confirmation is permitted, you'll have to authenticate your character with the code transmitted to your contact number or mail on documentation.
+
+Drug Profit Admittance:
+In case you're unable to confirm your character for drug profit admittance, adhere to the mistake guide given on the Drug page or check TelMart.com/help for guidelines.
+In case you observe the mistake communication "We couldn't authenticate your character," adhere to the mistake guide for aid. Modify your TelMart Drug PIN by the procedures offered in the TelMart application or on TelMart.com beneath the drug area.
+
+Unrecognizable Sign-In Activity:
+In case you observe unrecognizable exercises on your profile or obtain messages concerning exercises you didn't complete:
+- Modify your credentials right away.
+- Take out every kept compensation information as a safety measure.
+- If you utilize the identical communication and credentials for profiles beyond TelMart.com, modify your credentials for those profiles likewise.
+- Get in touch with TelMart Client Help using the Chat with us choice on TelMart.com.
+
+For further help, contact Client Help by chat at TelMart.com/help, contact at 1-400-840-4060, or mail at help@telmart.com.

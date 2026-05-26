@@ -48,5 +48,5 @@ celeryd.pid
 # Other trashy stuff
 src/dump.rdb
 
-# bind mounted files
-src/chat/data
+# transfered data file
+src/data

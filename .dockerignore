@@ -5,3 +5,5 @@ __pycache__
 .gitignore
 celerybeat-schedule
 celerybeat-schedule.*
+
+**/.git

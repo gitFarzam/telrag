@@ -26,8 +26,15 @@ services:
     command: daphne -b 0.0.0.0 -p 8006 django_project.asgi:application
     volumes:
       - ./entrypoint.sh:/usr/src/app/entrypoint.sh
-      - ./:/usr/src/app
-      - ./data:/usr/src/app/src/chat/data
+      - ./src:/usr/src/app/src
+      - ./.env:/usr/src/app/.env
+      - ./.config:/usr/src/app/.config
+      - ./entrypoint.sh:/usr/src/app/entrypoint.sh
+      - ./.commands:/usr/src/app/.commands
+      - ./README.md:/usr/src/app/README.md
+      - ./requirements.txt:/usr/src/app/requirements.txt
+      - ./compose.dev.yaml:/usr/src/app/compose.dev.yaml
+      - ./compose.yaml:/usr/src/app/compose.yaml
     ports:
       - "127.0.0.1:8000:8006"
     depends_on:

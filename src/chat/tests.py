@@ -165,8 +165,8 @@ class TestTelegramFileDownload(TestCase):
 
 class TestRetriever(TestCase):
     def setUp(self):
-        initial_data_path_rel = os.path.join(settings.BASE_DIR,f'../data/initial_data/telburger')
-        test_path_rel = "../data/query_class_retriever.jsonl"
+        initial_data_path_rel = os.path.join(settings.BASE_DIR,f'data/initial_data/telmart/inital_data')
+        test_path_rel = "data/initial_data/telmart/test_data/query_class_retriever.jsonl"
         self.jsonl_path = os.path.join(settings.BASE_DIR , test_path_rel)
         self.nlp = NLP()
         self.df = self.nlp.jsonl_reader(path=self.jsonl_path)
