@@ -115,3 +115,52 @@
 {"query": "Contact options for store feedback include Chat with us on TelMart.com/help, calling 1-400-840-4060, emailing help@telmart.com, speaking with a store manager in person, or messaging @TelMartHelp on social media.", "category": "complaints_and_feedback", "file_name": "store_experience.txt"}
 {"query": "When submitting store feedback, the customer should include the specific store location, date and time of the visit, a description of the experience, names of employees involved if applicable, and any supporting information such as receipts or order numbers.", "category": "complaints_and_feedback", "file_name": "store_experience.txt"}
 {"query": "TelMart takes store experience feedback seriously and uses it to improve the in-store experience for customers and employees.", "category": "complaints_and_feedback", "file_name": "store_experience.txt"}
+
+// customer_service_desk/exchanges.txt
+{"query": "Most items purchased from TelMart can be exchanged within 90 days of purchase or receipt unless otherwise stated.", "category": "customer_service_desk", "file_name": "exchanges.txt"}
+{"query": "Items purchased from a third-party marketplace seller are generally eligible for exchange within 30 days.", "category": "customer_service_desk", "file_name": "exchanges.txt"}
+{"query": "To exchange an item in-store the customer should bring the product and the purchase receipt to the Customer Service desk at any TelMart location.", "category": "customer_service_desk", "file_name": "exchanges.txt"}
+{"query": "If the customer purchased online, the customer may start an exchange through Order History on TelMart.com or in the TelMart app.", "category": "customer_service_desk", "file_name": "exchanges.txt"}
+{"query": "Products must be in new condition with manufacturer packaging when applicable for an exchange.", "category": "customer_service_desk", "file_name": "exchanges.txt"}
+{"query": "Items sold by third-party sellers that were not sold directly by TelMart are typically not eligible for exchange through TelMart.", "category": "customer_service_desk", "file_name": "exchanges.txt"}
+{"query": "Most consumer electronics are returnable within 30 days, and cell phones are returnable within 14 days.", "category": "customer_service_desk", "file_name": "exchanges.txt"}
+{"query": "For marketplace appliances, replacements or refunds for opened or installed items may be subject to a brief inspection window and specific return rules.", "category": "customer_service_desk", "file_name": "exchanges.txt"}
+{"query": "The customer should inspect deliveries before signing for them; if visible damage is present prior to signing, the customer may decline the shipment at no charge.", "category": "customer_service_desk", "file_name": "exchanges.txt"}
+{"query": "Large or mounted items may not be eligible for in-home delivery returns and may be subject to the manufacturer's warranty.", "category": "customer_service_desk", "file_name": "exchanges.txt"}
+
+// customer_service_desk/general_questions.txt
+{"query": "The customer can contact TelMart Support via Chat with us on TelMart.com, by phone at 1-400-840-4060, by email at help@telmart.com, or in person at a store Service Counter.", "category": "customer_service_desk", "file_name": "general_questions.txt"}
+{"query": "The Support Center at TelMart.com/help provides answers to common questions and resources for order tracking, returns and refunds, pickup and delivery, account management, pharmacy services, TelMart+ program, financial services, and privacy matters.", "category": "customer_service_desk", "file_name": "general_questions.txt"}
+{"query": "The customer may use the store locator on TelMart.com to find nearby stores, hours, and available services.", "category": "customer_service_desk", "file_name": "general_questions.txt"}
+{"query": "For in-store issues the customer should bring the receipt to the Service Counter for help with exchanges, refunds, price adjustments, and other requests.", "category": "customer_service_desk", "file_name": "general_questions.txt"}
+{"query": "For online purchases most account and order issues can be handled through Order History in the customer's TelMart profile on TelMart.com or the TelMart app.", "category": "customer_service_desk", "file_name": "general_questions.txt"}
+
+// customer_service_desk/price_adjustments.txt
+{"query": "TelMart offers price matching policies that vary between stores and TelMart.com; details and any exclusions are available on the corporate Terms and Policies pages.", "category": "customer_service_desk", "file_name": "price_adjustments.txt"}
+{"query": "TelMart may cancel orders that were placed due to pricing errors or other listing mistakes.", "category": "customer_service_desk", "file_name": "price_adjustments.txt"}
+{"query": "When a customer uses a prepaid or EBT card a price-adjustment authorization hold may be placed to confirm sufficient funds; any excess will be released after the final amount is processed.", "category": "customer_service_desk", "file_name": "price_adjustments.txt"}
+{"query": "For online purchases a temporary authorization hold may be placed on the customer's payment method; the customer's bank will remove the hold according to their policies, which may take up to 10 business days after transaction completion.", "category": "customer_service_desk", "file_name": "price_adjustments.txt"}
+{"query": "All TelMart policies that apply to in-store purchases, such as price matching, promotions, returns, and exchanges, also apply to purchases made with TelMart Money service.", "category": "customer_service_desk", "file_name": "price_adjustments.txt"}
+
+// customer_service_desk/refunds.txt
+{"query": "TelMart issues refunds for TelMart.com purchases back to the original payment method when returned in-store or by mail; shipping charges are not always refundable.", "category": "customer_service_desk", "file_name": "refunds.txt"}
+{"query": "Refund processing times vary by payment method: credit and debit card refunds may take up to 10 business days depending on the customer's bank.", "category": "customer_service_desk", "file_name": "refunds.txt"}
+{"query": "PayPal refunds may take longer depending on international bank processing times, and EBT or stored value refunds are typically processed within 3 business hours.", "category": "customer_service_desk", "file_name": "refunds.txt"}
+{"query": "If the original card used for purchase is no longer available, the customer will generally receive the refund on a TelMart gift card or stored value card.", "category": "customer_service_desk", "file_name": "refunds.txt"}
+{"query": "If the customer does not have the purchase receipt, the customer should present a valid government-issued ID to process a refund; debit card refunds will be returned to the debit card when possible.", "category": "customer_service_desk", "file_name": "refunds.txt"}
+{"query": "If a customer cancels an order before shipment, TelMart clears the payment hold; once the item has shipped the customer may return it for a refund instead of cancelling the shipment.", "category": "customer_service_desk", "file_name": "refunds.txt"}
+{"query": "For third-party seller returns TelMart processes the refund once the Marketplace Return Hub receives the returned item and typically posts the refund within two business days after receipt.", "category": "customer_service_desk", "file_name": "refunds.txt"}
+{"query": "Refunds for items requiring ID verification, such as alcohol, may be delayed up to 10 business days while TelMart verifies the customer's age.", "category": "customer_service_desk", "file_name": "refunds.txt"}
+{"query": "Certain Quick Pay charges and fees related to TelMart Financial Services products are nonrefundable.", "category": "customer_service_desk", "file_name": "refunds.txt"}
+
+// customer_service_desk/returns.txt
+{"query": "Most items are returnable within 90 days of purchase or receipt unless otherwise specified; items sold by third-party sellers may have a 30-day return window.", "category": "customer_service_desk", "file_name": "returns.txt"}
+{"query": "Customers are advised to keep manufacturer packaging and the receipt for at least 90 days after purchase to facilitate returns.", "category": "customer_service_desk", "file_name": "returns.txt"}
+{"query": "Consumer electronics are typically returnable within 30 days and mobile phones within 14 days.", "category": "customer_service_desk", "file_name": "returns.txt"}
+{"query": "Items purchased between October 1 and December 31 are often eligible for extended returns through January 31; third-party seller policies may differ.", "category": "customer_service_desk", "file_name": "returns.txt"}
+{"query": "If a product the customer received from TelMart.com arrived damaged or defective, the customer may start a return online through Order History or return the item at any TelMart store for refund or exchange.", "category": "customer_service_desk", "file_name": "returns.txt"}
+{"query": "To start an online return the customer should go to Order History, view details for the item, select Start a return, choose the reason, select refund or replacement, and follow the prompts to choose a return method.", "category": "customer_service_desk", "file_name": "returns.txt"}
+{"query": "Return methods include printing and dropping off the return at a FedEx location, returning the item at a TelMart store, or using In-Home pickup for TelMart+ InHome customers when eligible.", "category": "customer_service_desk", "file_name": "returns.txt"}
+{"query": "In-Home collection is not available for items purchased from third-party sellers, oversized freight-shipped items, or certain food products.", "category": "customer_service_desk", "file_name": "returns.txt"}
+{"query": "Items not eligible for return include motorized recreational vehicles, at-home test kits, certain home health medical supplies, certain regulated ingredients, and digital video or software downloads after purchase unless specified.", "category": "customer_service_desk", "file_name": "returns.txt"}
+{"query": "Quick Pay charges and fees linked to TelMart Financial Services products are irreversible and not returnable.", "category": "customer_service_desk", "file_name": "returns.txt"}
