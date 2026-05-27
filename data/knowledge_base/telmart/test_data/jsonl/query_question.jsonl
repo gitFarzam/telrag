@@ -1,0 +1,539 @@
+{"query": "Where can I find information about getting help at a TelMart checkout lane?", "category": "checkout_support", "file_name": "cashier_help.txt"}
+{"query": "Who is available to assist shoppers with ringing up their items at staffed registers?", "category": "checkout_support", "file_name": "cashier_help.txt"}
+{"query": "What is the 'Check Out With Me' service and how does it function on the sales floor?", "category": "checkout_support", "file_name": "cashier_help.txt"}
+{"query": "Can mobile checkout associates provide me with a physical or digital receipt away from the front lanes?", "category": "checkout_support", "file_name": "cashier_help.txt"}
+{"query": "In which departments are mobile checkout associates usually stationed during busy hours?", "category": "checkout_support", "file_name": "cashier_help.txt"}
+{"query": "What is the proper way to present my merchandise to the cashier at a standard register?", "category": "checkout_support", "file_name": "cashier_help.txt"}
+{"query": "Who is responsible for scanning products and calculating the final price at the checkout counter?", "category": "checkout_support", "file_name": "cashier_help.txt"}
+{"query": "At what point in the checkout process am I supposed to choose my preferred way to pay?", "category": "checkout_support", "file_name": "cashier_help.txt"}
+{"query": "Which specific forms of payment are permitted at staffed lanes?", "category": "checkout_support", "file_name": "cashier_help.txt"}
+{"query": "How do I link my account to the register when checking out with TelMart Pay?", "category": "checkout_support", "file_name": "cashier_help.txt"}
+{"query": "Do standard store guidelines, such as price matching and coupon rules, still apply to TelMart Pay transactions?", "category": "checkout_support", "file_name": "cashier_help.txt"}
+{"query": "Where should I go or who should I talk to if I encounter a problem while at the cashier lane?", "category": "checkout_support", "file_name": "cashier_help.txt"}
+{"query": "Does TelMart offer a wide variety of payment options for both physical and online shopping?", "category": "checkout_support", "file_name": "payment_issues.txt"}
+{"query": "Which major credit networks are supported for purchases at TelMart?", "category": "checkout_support", "file_name": "payment_issues.txt"}
+{"query": "Are debit cards permitted for making payments?", "category": "checkout_support", "file_name": "payment_issues.txt"}
+{"query": "What app feature enables mobile payments on smartphones?", "category": "checkout_support", "file_name": "payment_issues.txt"}
+{"query": "Can I use EBT or SNAP benefits to pay for my groceries here?", "category": "checkout_support", "file_name": "payment_issues.txt"}
+{"query": "Does the store accept physical and electronic gift cards at the register?", "category": "checkout_support", "file_name": "payment_issues.txt"}
+{"query": "Is it possible to convert TelMart Money into an e-Present card during the checkout phase?", "category": "checkout_support", "file_name": "payment_issues.txt"}
+{"query": "How are HSA and FSA cards processed when buying eligible healthcare products?", "category": "checkout_support", "file_name": "payment_issues.txt"}
+{"query": "What is the maximum number of bank accounts I can link to my web profile for online payments?", "category": "checkout_support", "file_name": "payment_issues.txt"}
+{"query": "Is PayPal a valid option for settling my bill?", "category": "checkout_support", "file_name": "payment_issues.txt"}
+{"query": "Does the retailer offer a 'Buy Now, Pay Later' financing solution?", "category": "checkout_support", "file_name": "payment_issues.txt"}
+{"query": "What must I scan at the physical register to sync my digital wallet profile?", "category": "checkout_support", "file_name": "payment_issues.txt"}
+{"query": "Which tools can be used to scan the QR code required for the TelMart Money service?", "category": "checkout_support", "file_name": "payment_issues.txt"}
+{"query": "Are transactions made via TelMart Money subject to the same general store rules as standard purchases?", "category": "checkout_support", "file_name": "payment_issues.txt"}
+{"query": "What steps are required to turn gift funds into an e-Present card balance for an active transaction?", "category": "checkout_support", "file_name": "payment_issues.txt"}
+{"query": "What happens if my available TelMart Money is not enough to cover the full cart total?", "category": "checkout_support", "file_name": "payment_issues.txt"}
+{"query": "How much of my TelMart Money is deducted if the balance exceeds the total cost of my items?", "category": "checkout_support", "file_name": "payment_issues.txt"}
+{"query": "What items and services are restricted from being purchased with TelMart Money?", "category": "checkout_support", "file_name": "payment_issues.txt"}
+{"query": "Where do I navigate online or in the app to attach a new card to my account?", "category": "checkout_support", "file_name": "payment_issues.txt"}
+{"query": "What is the specific menu path to find the 'Add new payment method' button?", "category": "checkout_support", "file_name": "payment_issues.txt"}
+{"query": "What details must be entered when saving a new credit or debit card to my wallet?", "category": "checkout_support", "file_name": "payment_issues.txt"}
+{"query": "What account details should I double-check if my card gets declined?", "category": "checkout_support", "file_name": "payment_issues.txt"}
+{"query": "Who do I contact via chat if I cannot resolve a persistent payment error on my own?", "category": "checkout_support", "file_name": "payment_issues.txt"}
+{"query": "Why might there be a pending authorization charge on my bank statement after an internet purchase?", "category": "checkout_support", "file_name": "payment_issues.txt"}
+{"query": "When are excess funds from a temporary hold released back to my card?", "category": "checkout_support", "file_name": "payment_issues.txt"}
+{"query": "How long does it typically take for a bank to remove an authorization hold once an order is complete?", "category": "checkout_support", "file_name": "payment_issues.txt"}
+{"query": "In what formats can I receive my proof of purchase for both web and physical store orders?", "category": "checkout_support", "file_name": "receipt_questions.txt"}
+{"query": "Are digital eReceipts available when I shop inside a physical location?", "category": "checkout_support", "file_name": "receipt_questions.txt"}
+{"query": "At what machine or station can I opt into receiving a paperless receipt?", "category": "checkout_support", "file_name": "receipt_questions.txt"}
+{"query": "How is customer data safeguarded when participating in the eReceipts initiative?", "category": "checkout_support", "file_name": "receipt_questions.txt"}
+{"query": "Can the company revoke or limit access to the digital receipt program without warning?", "category": "checkout_support", "file_name": "receipt_questions.txt"}
+{"query": "Does merely asking for an eReceipt at the register guarantee it will be sent to me automatically?", "category": "checkout_support", "file_name": "receipt_questions.txt"}
+{"query": "Where do I need to register in order to access my past digital receipts?", "category": "checkout_support", "file_name": "receipt_questions.txt"}
+{"query": "Which section of my profile allows me to pull up receipts for orders paid with a linked card?", "category": "checkout_support", "file_name": "receipt_questions.txt"}
+{"query": "What document must I bring to the Service Counter when returning an item bought in person?", "category": "checkout_support", "file_name": "receipt_questions.txt"}
+{"query": "What form of identification is required if I want to return something but lost the paper receipt?", "category": "checkout_support", "file_name": "receipt_questions.txt"}
+{"query": "In what format will my refund be issued if I cannot provide the original proof of purchase?", "category": "checkout_support", "file_name": "receipt_questions.txt"}
+{"query": "Can the store look up my past transaction if I paid using a bank card instead of cash?", "category": "checkout_support", "file_name": "receipt_questions.txt"}
+{"query": "Where are online order confirmations and digital receipts automatically routed?", "category": "checkout_support", "file_name": "receipt_questions.txt"}
+{"query": "Is there an alternative way to view order specifics if I don't check my email inbox?", "category": "checkout_support", "file_name": "receipt_questions.txt"}
+{"query": "Who should I speak with if I need a duplicate copy of a receipt or have questions about a specific charge?", "category": "checkout_support", "file_name": "receipt_questions.txt"}
+{"query": "Why does the store provide self-checkout stations for customers?", "category": "checkout_support", "file_name": "self_checkout_help.txt"}
+{"query": "What is the proper method for ringing up individual products at an automated kiosk?", "category": "checkout_support", "file_name": "self_checkout_help.txt"}
+{"query": "Where am I supposed to put my groceries immediately after scanning them at the kiosk?", "category": "checkout_support", "file_name": "self_checkout_help.txt"}
+{"query": "What should I look at before I finalize my transaction at the self-serve register?", "category": "checkout_support", "file_name": "self_checkout_help.txt"}
+{"query": "Which screen option helps me confirm that all my items were scanned accurately?", "category": "checkout_support", "file_name": "self_checkout_help.txt"}
+{"query": "What actions should I take if a barcode fails to scan on the first try?", "category": "checkout_support", "file_name": "self_checkout_help.txt"}
+{"query": "Why is it recommended to look over my printed receipt prior to exiting the building?", "category": "checkout_support", "file_name": "self_checkout_help.txt"}
+{"query": "How do I request staff intervention if a product's tag is ripped and unreadable?", "category": "checkout_support", "file_name": "self_checkout_help.txt"}
+{"query": "What behaviors should I avoid if the automated register suddenly freezes or shows an error screen?", "category": "checkout_support", "file_name": "self_checkout_help.txt"}
+{"query": "Which on-screen button summons an employee when the machine malfunctions?", "category": "checkout_support", "file_name": "self_checkout_help.txt"}
+{"query": "Who has exclusive access to designated self-checkout lanes in certain store locations?", "category": "checkout_support", "file_name": "self_checkout_help.txt"}
+{"query": "What is the primary benefit of using a reserved lane for frequent shoppers?", "category": "checkout_support", "file_name": "self_checkout_help.txt"}
+{"query": "Who decides how self-checkout registers are configured and allocated at a specific branch?", "category": "checkout_support", "file_name": "self_checkout_help.txt"}
+{"query": "What types of problems are floor attendants specifically trained to solve at the automated registers?", "category": "checkout_support", "file_name": "self_checkout_help.txt"}
+{"query": "What is the quickest way to grab a staff member's attention while I am checking out myself?", "category": "checkout_support", "file_name": "self_checkout_help.txt"}
+{"query": "What should I do if the card reader crashes while I am trying to pay for my groceries?", "category": "checkout_support", "file_name": "self_checkout_help.txt"}
+{"query": "How do I alert someone if my cash or card is not being accepted at the kiosk?", "category": "checkout_support", "file_name": "self_checkout_help.txt"}
+{"query": "What preliminary checks should I perform if the app says my package arrived but it is nowhere to be found?", "category": "complaints_and_feedback", "file_name": "delivery_complaints.txt"}
+{"query": "Why is it suggested to wait 48 hours after receiving a delivery confirmation before reporting a missing package?", "category": "complaints_and_feedback", "file_name": "delivery_complaints.txt"}
+{"query": "Which online feature should be utilized if a package is still missing after two business days?", "category": "complaints_and_feedback", "file_name": "delivery_complaints.txt"}
+{"query": "Where can I submit an official commendation or complaint regarding my assigned courier?", "category": "complaints_and_feedback", "file_name": "delivery_complaints.txt"}
+{"query": "How can I verify if an absent item was actually supposed to be in the box I just opened?", "category": "complaints_and_feedback", "file_name": "delivery_complaints.txt"}
+{"query": "What is the proper channel for notifying support about a partial order fulfillment?", "category": "complaints_and_feedback", "file_name": "delivery_complaints.txt"}
+{"query": "What alternative fulfillment method might be offered via notification if my courier is running late?", "category": "complaints_and_feedback", "file_name": "delivery_complaints.txt"}
+{"query": "Will I get my shipping fees back if I decide to pick up my delayed items myself?", "category": "complaints_and_feedback", "file_name": "delivery_complaints.txt"}
+{"query": "Who should be contacted if the scheduled arrival time has expired and my groceries aren't here?", "category": "complaints_and_feedback", "file_name": "delivery_complaints.txt"}
+{"query": "What specific details are required when filling out the Business Feedback Form for a courier issue?", "category": "complaints_and_feedback", "file_name": "delivery_complaints.txt"}
+{"query": "Besides the online form, what other communication methods exist for reporting shipping problems?", "category": "complaints_and_feedback", "file_name": "delivery_complaints.txt"}
+{"query": "Which option on the Business Feedback Form is meant for comments regarding staff interactions?", "category": "complaints_and_feedback", "file_name": "employee_feedback.txt"}
+{"query": "What identifying information about the worker should I include when praising or complaining about them online?", "category": "complaints_and_feedback", "file_name": "employee_feedback.txt"}
+{"query": "In which section of the form do I input my own personal details before hitting submit?", "category": "complaints_and_feedback", "file_name": "employee_feedback.txt"}
+{"query": "Can I use social media or speak to a manager in person to escalate a staff-related issue?", "category": "complaints_and_feedback", "file_name": "employee_feedback.txt"}
+{"query": "Why does the company encourage shoppers to leave positive reviews for standout workers?", "category": "complaints_and_feedback", "file_name": "employee_feedback.txt"}
+{"query": "What documentation and details should I gather if I am involved in a physical accident on store property?", "category": "complaints_and_feedback", "file_name": "employee_feedback.txt"}
+{"query": "Is it possible to bring a broken item received in the mail directly to a physical store for a return?", "category": "complaints_and_feedback", "file_name": "product_complaints.txt"}
+{"query": "How do I initiate the digital return process for an order that arrived broken?", "category": "complaints_and_feedback", "file_name": "product_complaints.txt"}
+{"query": "What are the potential resolutions offered after a defective item is evaluated by returns staff?", "category": "complaints_and_feedback", "file_name": "product_complaints.txt"}
+{"query": "Who handles the return logistics if the broken item was bought from an independent marketplace vendor?", "category": "complaints_and_feedback", "file_name": "product_complaints.txt"}
+{"query": "What should I do if an independent seller ignores my request for a refund on a faulty product?", "category": "complaints_and_feedback", "file_name": "product_complaints.txt"}
+{"query": "What are the three main ways to reach out to corporate regarding a terrible product?", "category": "complaints_and_feedback", "file_name": "product_complaints.txt"}
+{"query": "What specific evidence and documentation should I attach when formally complaining about an item?", "category": "complaints_and_feedback", "file_name": "product_complaints.txt"}
+{"query": "Which federal agency should be notified if a purchased item poses a severe danger to consumers?", "category": "complaints_and_feedback", "file_name": "product_complaints.txt"}
+{"query": "Where can I find comprehensive documentation outlining the official rules for returning bad merchandise?", "category": "complaints_and_feedback", "file_name": "product_complaints.txt"}
+{"query": "Which dropdown category on the website's feedback page is dedicated to reviews of physical locations?", "category": "complaints_and_feedback", "file_name": "store_experience.txt"}
+{"query": "Which text box is meant for describing the details of my latest shopping trip?", "category": "complaints_and_feedback", "file_name": "store_experience.txt"}
+{"query": "How can I locate the exact branch I visited if it is not appearing on the feedback form dropdown?", "category": "complaints_and_feedback", "file_name": "store_experience.txt"}
+{"query": "Is there a way to send comments about a messy store directly to the company's social media handles?", "category": "complaints_and_feedback", "file_name": "store_experience.txt"}
+{"query": "What contextual information is necessary to make my store complaint actionable for management?", "category": "complaints_and_feedback", "file_name": "store_experience.txt"}
+{"query": "Why is it worthwhile to spend time submitting observations about the cleanliness and layout of the stores?", "category": "complaints_and_feedback", "file_name": "store_experience.txt"}
+{"query": "How many days do I have to bring back a standard item for a swap?", "category": "customer_service_desk", "file_name": "exchanges.txt"}
+{"query": "What is the typical time limit for exchanging goods purchased from external vendors on the website?", "category": "customer_service_desk", "file_name": "exchanges.txt"}
+{"query": "Where exactly inside the building should I go to swap an item I bought?", "category": "customer_service_desk", "file_name": "exchanges.txt"}
+{"query": "Can I process a product swap entirely through the mobile app if I ordered it online?", "category": "customer_service_desk", "file_name": "exchanges.txt"}
+{"query": "Does the original box need to be intact to qualify for a merchandise swap?", "category": "customer_service_desk", "file_name": "exchanges.txt"}
+{"query": "Will the physical service desk accept exchanges for products fulfilled by independent online merchants?", "category": "customer_service_desk", "file_name": "exchanges.txt"}
+{"query": "How long is the return window for a new smartphone compared to a standard television?", "category": "customer_service_desk", "file_name": "exchanges.txt"}
+{"query": "Are there special inspection conditions applied to large marketplace appliances before they can be refunded?", "category": "customer_service_desk", "file_name": "exchanges.txt"}
+{"query": "Can I refuse a freight delivery outright if I spot damage on the box before signing?", "category": "customer_service_desk", "file_name": "exchanges.txt"}
+{"query": "Do standard in-home return policies apply to massive items that have already been mounted to a wall?", "category": "customer_service_desk", "file_name": "exchanges.txt"}
+{"query": "What are all the available methods for getting in touch with the support team for generic inquiries?", "category": "customer_service_desk", "file_name": "general_questions.txt"}
+{"query": "Which website section contains self-help articles regarding subscriptions, pharmacy, and order tracking?", "category": "customer_service_desk", "file_name": "general_questions.txt"}
+{"query": "How can I figure out what time the pharmacy opens at the branch closest to my house?", "category": "customer_service_desk", "file_name": "general_questions.txt"}
+{"query": "Where do I take my physical receipt if I need a manager to override a price adjustment?", "category": "customer_service_desk", "file_name": "general_questions.txt"}
+{"query": "What is the best way to handle issues related to a web order without calling anyone?", "category": "customer_service_desk", "file_name": "general_questions.txt"}
+{"query": "Are the rules for matching a competitor's price exactly the same online as they are at a physical register?", "category": "customer_service_desk", "file_name": "price_adjustments.txt"}
+{"query": "What happens if I manage to order an item that was accidentally listed for one cent on the website?", "category": "customer_service_desk", "file_name": "price_adjustments.txt"}
+{"query": "Why might a hold be placed on my EBT card when requesting a price change?", "category": "customer_service_desk", "file_name": "price_adjustments.txt"}
+{"query": "How long will my bank freeze my funds after a temporary hold is placed for an internet order?", "category": "customer_service_desk", "file_name": "price_adjustments.txt"}
+{"query": "If I pay using the app's mobile wallet, can I still ask for a promotional price match at the desk?", "category": "customer_service_desk", "file_name": "price_adjustments.txt"}
+{"query": "Are the original shipping fees refunded when I return an online order to a physical store?", "category": "customer_service_desk", "file_name": "refunds.txt"}
+{"query": "How many days might I have to wait to see a refunded amount show up on my debit card statement?", "category": "customer_service_desk", "file_name": "refunds.txt"}
+{"query": "Which payment method receives refunds the fastest, typically within three hours?", "category": "customer_service_desk", "file_name": "refunds.txt"}
+{"query": "What is the fallback refund method if the credit card I used is now closed or lost?", "category": "customer_service_desk", "file_name": "refunds.txt"}
+{"query": "Will they still put the money back on my debit card if I lost the receipt but brought my driver's license?", "category": "customer_service_desk", "file_name": "refunds.txt"}
+{"query": "What happens to the pending payment charge if I successfully abort an order before it leaves the warehouse?", "category": "customer_service_desk", "file_name": "refunds.txt"}
+{"query": "How quickly do independent sellers release funds once their hub receives my shipped return?", "category": "customer_service_desk", "file_name": "refunds.txt"}
+{"query": "Why might it take an extra ten days to get my money back after returning a bottle of wine?", "category": "customer_service_desk", "file_name": "refunds.txt"}
+{"query": "Can I get a refund on the processing fees associated with the company's financial services?", "category": "customer_service_desk", "file_name": "refunds.txt"}
+{"query": "What is the standard allowable timeframe for bringing back unwanted merchandise?", "category": "customer_service_desk", "file_name": "returns.txt"}
+{"query": "Why is it important to keep the original cardboard packaging for three months?", "category": "customer_service_desk", "file_name": "returns.txt"}
+{"query": "How many weeks do I have to evaluate and return a newly purchased laptop?", "category": "customer_service_desk", "file_name": "returns.txt"}
+{"query": "Do holiday purchases have a longer return window than items bought in the spring?", "category": "customer_service_desk", "file_name": "returns.txt"}
+{"query": "Can I bring a broken web order to a cashier instead of mailing it back?", "category": "customer_service_desk", "file_name": "returns.txt"}
+{"query": "What sequence of buttons do I click online to print a return shipping label?", "category": "customer_service_desk", "file_name": "returns.txt"}
+{"query": "What courier options are available for sending a rejected item back to the warehouse?", "category": "customer_service_desk", "file_name": "returns.txt"}
+{"query": "Are massive freight shipments eligible to be picked up from my living room by the returns team?", "category": "customer_service_desk", "file_name": "returns.txt"}
+{"query": "Which specific categories of products are completely barred from being returned once purchased?", "category": "customer_service_desk", "file_name": "returns.txt"}
+{"query": "Are the fees incurred from using Quick Pay services refundable under any circumstances?", "category": "customer_service_desk", "file_name": "returns.txt"}
+{"query": "Are store credits available in both plastic and email formats?", "category": "membership_and_account", "file_name": "gift_cards.txt"}
+{"query": "Are the Apple and Google Play cards hanging on the racks considered store-brand gift cards?", "category": "membership_and_account", "file_name": "gift_cards.txt"}
+{"query": "Where am I allowed to spend the balance of my store-branded gift card?", "category": "membership_and_account", "file_name": "gift_cards.txt"}
+{"query": "How do I uncover the PIN required to use a plastic gift card online?", "category": "membership_and_account", "file_name": "gift_cards.txt"}
+{"query": "Where is the security PIN located if somebody emails me a digital gift card?", "category": "membership_and_account", "file_name": "gift_cards.txt"}
+{"query": "What is the exact app menu path to store a gift card balance in my digital wallet?", "category": "membership_and_account", "file_name": "gift_cards.txt"}
+{"query": "Is there a phone number I can call to check how much money is left on my gift card?", "category": "membership_and_account", "file_name": "gift_cards.txt"}
+{"query": "What is the protocol if my older physical gift card does not have a scratch-off security code?", "category": "membership_and_account", "file_name": "gift_cards.txt"}
+{"query": "Can I email digital gift cards to several different friends in a single transaction?", "category": "membership_and_account", "file_name": "gift_cards.txt"}
+{"query": "If I write a custom greeting during a bulk e-gift card order, will every recipient see the same note?", "category": "membership_and_account", "file_name": "gift_cards.txt"}
+{"query": "Can I use my digital wallet balance to buy a prepaid Visa card?", "category": "membership_and_account", "file_name": "gift_cards.txt"}
+{"query": "Is it permissible to pay for a premium subscription using a store gift card?", "category": "membership_and_account", "file_name": "gift_cards.txt"}
+{"query": "What steps will recover my account access if I forget my login password?", "category": "membership_and_account", "file_name": "login_issues.txt"}
+{"query": "Can biometric authentication be used to bypass typing a password on a smartphone?", "category": "membership_and_account", "file_name": "login_issues.txt"}
+{"query": "What should I do if the system completely locks me out after guessing my password too many times?", "category": "membership_and_account", "file_name": "login_issues.txt"}
+{"query": "What secondary step is required to log in if I enabled extra security features?", "category": "membership_and_account", "file_name": "login_issues.txt"}
+{"query": "Who can assist me if the portal refuses to verify my identity for prescription access?", "category": "membership_and_account", "file_name": "login_issues.txt"}
+{"query": "What immediate actions should be taken if a stranger hacks into my shopping profile?", "category": "membership_and_account", "file_name": "login_issues.txt"}
+{"query": "What is the email address for tech support if I am unable to use the live chat?", "category": "membership_and_account", "file_name": "login_issues.txt"}
+{"query": "How do I initiate the process of opening a brand new profile on the mobile application?", "category": "membership_and_account", "file_name": "telmart_account_help.txt"}
+{"query": "Are hardware security keys an acceptable method for securing my new account?", "category": "membership_and_account", "file_name": "telmart_account_help.txt"}
+{"query": "What kind of personal data and history becomes accessible once I log into the website?", "category": "membership_and_account", "file_name": "telmart_account_help.txt"}
+{"query": "Which icon must be clicked to modify my saved name and phone number?", "category": "membership_and_account", "file_name": "telmart_account_help.txt"}
+{"query": "Where do I find the tracking numbers for things I bought last month?", "category": "membership_and_account", "file_name": "telmart_account_help.txt"}
+{"query": "Where can I delete an expired credit card from my profile?", "category": "membership_and_account", "file_name": "telmart_account_help.txt"}
+{"query": "Does the website support direct bank account withdrawals for orders?", "category": "membership_and_account", "file_name": "telmart_account_help.txt"}
+{"query": "Why is it important to create a password that I don't use anywhere else?", "category": "membership_and_account", "file_name": "telmart_account_help.txt"}
+{"query": "Should I call someone if I see a linked credit card that isn't mine?", "category": "membership_and_account", "file_name": "telmart_account_help.txt"}
+{"query": "Is two-step verification a highly recommended setting for everyday shoppers?", "category": "membership_and_account", "file_name": "telmart_account_help.txt"}
+{"query": "What special instructions apply to organizations trying to set up tax-exempt purchasing?", "category": "membership_and_account", "file_name": "telmart_account_help.txt"}
+{"query": "How does the app confirm who I am before granting access to my medical prescriptions?", "category": "membership_and_account", "file_name": "telmart_account_help.txt"}
+{"query": "Can the customer support hotline resolve issues related to my account being blocked?", "category": "membership_and_account", "file_name": "telmart_account_help.txt"}
+{"query": "What exactly is the premium subscription program offered by the company?", "category": "membership_and_account", "file_name": "telmart_support.txt"}
+{"query": "How much money can subscribers save on fees when utilizing the express curb-side service?", "category": "membership_and_account", "file_name": "telmart_support.txt"}
+{"query": "Do I have to spend a certain dollar amount to get free overnight shipping as a member?", "category": "membership_and_account", "file_name": "telmart_support.txt"}
+{"query": "Which specific gas stations honor the ten-cent per gallon discount for members?", "category": "membership_and_account", "file_name": "telmart_support.txt"}
+{"query": "What are some of the lesser-known lifestyle perks included in the subscription package?", "category": "membership_and_account", "file_name": "telmart_support.txt"}
+{"query": "Where in the account dashboard is the button to cancel or modify my subscription?", "category": "membership_and_account", "file_name": "telmart_support.txt"}
+{"query": "Can I pay for the premium service on a month-to-month basis instead of all at once?", "category": "membership_and_account", "file_name": "telmart_support.txt"}
+{"query": "Is it possible to switch from an annual billing cycle down to a monthly billing cycle mid-year?", "category": "membership_and_account", "file_name": "telmart_support.txt"}
+{"query": "How many times a year am I allowed to freeze my subscription to avoid being billed?", "category": "membership_and_account", "file_name": "telmart_support.txt"}
+{"query": "Do university students or low-income families get a price break on the annual fee?", "category": "membership_and_account", "file_name": "telmart_support.txt"}
+{"query": "What fields should I double-check if the system says my credit card could not be authorized?", "category": "membership_and_account", "file_name": "telmart_support.txt"}
+{"query": "What is the proper procedure if my scheduled subscription renewal fails due to a canceled card?", "category": "membership_and_account", "file_name": "telmart_support.txt"}
+{"query": "Can I apply the balance of a premium membership gift card to a regular cart full of groceries?", "category": "membership_and_account", "file_name": "telmart_support.txt"}
+{"query": "Is there a dedicated FAQ page that explains the nuances of the premium subscription?", "category": "membership_and_account", "file_name": "telmart_support.txt"}
+{"query": "What desk inside the store handles taking physical cash to settle utility accounts?", "category": "money_services", "file_name": "bill_payment.txt"}
+{"query": "Why might someone choose to use the store's service to pay their utility invoices?", "category": "money_services", "file_name": "bill_payment.txt"}
+{"query": "Where exactly should I stand in line if I want to pay my electric bill in person?", "category": "money_services", "file_name": "bill_payment.txt"}
+{"query": "Do I need to print my invoice or can the clerk scan it directly from my smartphone screen?", "category": "money_services", "file_name": "bill_payment.txt"}
+{"query": "How does the clerk know which utility company to send the money to?", "category": "money_services", "file_name": "bill_payment.txt"}
+{"query": "How is the physical cash I hand to the clerk actually sent to the utility provider?", "category": "money_services", "file_name": "bill_payment.txt"}
+{"query": "Is the in-person utility payment service available at every single retail branch?", "category": "money_services", "file_name": "bill_payment.txt"}
+{"query": "What demographic of shoppers benefits the most from the cash-based invoice service?", "category": "money_services", "file_name": "bill_payment.txt"}
+{"query": "Can I settle my utility invoices using the company's website instead of driving to the store?", "category": "money_services", "file_name": "bill_payment.txt"}
+{"query": "Aside from handling invoices, what other financial products are sold at the service desk?", "category": "money_services", "file_name": "bill_payment.txt"}
+{"query": "Is there any way to get a refund on the processing fee if I accidentally pay the wrong utility company?", "category": "money_services", "file_name": "bill_payment.txt"}
+{"query": "What phone number connects to support for questions about a pending utility transfer?", "category": "money_services", "file_name": "bill_payment.txt"}
+{"query": "Will the desk cash a check issued by the government as well as one from my employer?", "category": "money_services", "file_name": "check_cashing.txt"}
+{"query": "At which specific counter inside the building do I present my paycheck for cash?", "category": "money_services", "file_name": "check_cashing.txt"}
+{"query": "What forms of ID are mandatory when attempting to turn a paper check into cash?", "category": "money_services", "file_name": "check_cashing.txt"}
+{"query": "Do I have to wait for the check to clear the bank before the clerk hands me the cash?", "category": "money_services", "file_name": "check_cashing.txt"}
+{"query": "What is the flat fee required to cash a standard paycheck, and does it change by state?", "category": "money_services", "file_name": "check_cashing.txt"}
+{"query": "Can the store print custom checks for my personal bank account and mail them to me?", "category": "money_services", "file_name": "check_cashing.txt"}
+{"query": "What types of transactions, besides check cashing, are handled by the financial center?", "category": "money_services", "file_name": "check_cashing.txt"}
+{"query": "What is the name of the service used to add funds to reloadable debit cards at the counter?", "category": "money_services", "file_name": "check_cashing.txt"}
+{"query": "Do the financial services desks open at the exact same time as the main grocery store?", "category": "money_services", "file_name": "check_cashing.txt"}
+{"query": "Who can I call if a clerk refuses to cash a check I know is legitimate?", "category": "money_services", "file_name": "check_cashing.txt"}
+{"query": "Where inside the building can I purchase a certified money order?", "category": "money_services", "file_name": "money_orders.txt"}
+{"query": "Can I buy a money order on credit, or must I provide the cash upfront?", "category": "money_services", "file_name": "money_orders.txt"}
+{"query": "Do money orders require a credit background check before purchase?", "category": "money_services", "file_name": "money_orders.txt"}
+{"query": "Is proof of an active checking account required to obtain a money order?", "category": "money_services", "file_name": "money_orders.txt"}
+{"query": "Why are money orders considered highly accessible for individuals without traditional banking?", "category": "money_services", "file_name": "money_orders.txt"}
+{"query": "Which desk employee should I approach to draft a money order for my rent?", "category": "money_services", "file_name": "money_orders.txt"}
+{"query": "Does the total cost of the money order include a service fee on top of the face value?", "category": "money_services", "file_name": "money_orders.txt"}
+{"query": "What makes purchasing money orders from this specific retailer advantageous?", "category": "money_services", "file_name": "money_orders.txt"}
+{"query": "What other financial instruments can be purchased at the same counter as money orders?", "category": "money_services", "file_name": "money_orders.txt"}
+{"query": "Are the operating hours for purchasing money orders identical across all branch locations?", "category": "money_services", "file_name": "money_orders.txt"}
+{"query": "Where on the internet can I find the daily limits for purchasing money orders?", "category": "money_services", "file_name": "money_orders.txt"}
+{"query": "Which third-party brands power the international remittance services offered at the desk?", "category": "money_services", "file_name": "money_transfers.txt"}
+{"query": "What is the branding name for sending funds to someone living in another country?", "category": "money_services", "file_name": "money_transfers.txt"}
+{"query": "Can I wire funds to a partner supermarket brand located in Mexico?", "category": "money_services", "file_name": "money_transfers.txt"}
+{"query": "What identification must be handed to the clerk when initiating an outgoing wire?", "category": "money_services", "file_name": "money_transfers.txt"}
+{"query": "Am I allowed to use a credit card to fund a domestic wire, or only debit and cash?", "category": "money_services", "file_name": "money_transfers.txt"}
+{"query": "What documentation is required by the clerk before handing over inbound wired cash?", "category": "money_services", "file_name": "money_transfers.txt"}
+{"query": "Can a recipient retrieve the funds at a standalone Western Union shop instead of a supermarket?", "category": "money_services", "file_name": "money_transfers.txt"}
+{"query": "How many minutes does it typically take for an initiated wire to become available for withdrawal?", "category": "money_services", "file_name": "money_transfers.txt"}
+{"query": "Besides cash, what other ways can a recipient accept the wired funds?", "category": "money_services", "file_name": "money_transfers.txt"}
+{"query": "Do the available withdrawal methods change depending on what country the receiver lives in?", "category": "money_services", "file_name": "money_transfers.txt"}
+{"query": "To how many different nations is the remittance service capable of sending funds?", "category": "money_services", "file_name": "money_transfers.txt"}
+{"query": "Where can I locate the tracking number required to monitor the status of a sent wire?", "category": "money_services", "file_name": "money_transfers.txt"}
+{"query": "What is the dedicated toll-free number for resolving issues with a MoneyGram wire?", "category": "money_services", "file_name": "money_transfers.txt"}
+{"query": "Are the wire transfer desks open until 11 p.m. like the rest of the supermarket?", "category": "money_services", "file_name": "money_transfers.txt"}
+{"query": "Does the company use its own employees or freelancers to drop off groceries at my house?", "category": "online_orders", "file_name": "delivery_orders.txt"}
+{"query": "How will I know when the courier has departed the store with my groceries?", "category": "online_orders", "file_name": "delivery_orders.txt"}
+{"query": "What is the absolute maximum time it might take for an order to arrive once dispatched?", "category": "online_orders", "file_name": "delivery_orders.txt"}
+{"query": "Can I force the driver to get a physical signature before leaving the boxes on the porch?", "category": "online_orders", "file_name": "delivery_orders.txt"}
+{"query": "Will the app warn me if I am buying an expensive item that mandates a passcode upon arrival?", "category": "online_orders", "file_name": "delivery_orders.txt"}
+{"query": "Where exactly in the app interface can I locate the four-digit PIN for the courier?", "category": "online_orders", "file_name": "delivery_orders.txt"}
+{"query": "Does the courier PIN also show up on the live map tracking screen?", "category": "online_orders", "file_name": "delivery_orders.txt"}
+{"query": "What must I do if I ordered a gift to be sent to a friend's house and it requires a PIN?", "category": "online_orders", "file_name": "delivery_orders.txt"}
+{"query": "Is there a grace period where I can fix a typo in my street address after checking out?", "category": "online_orders", "file_name": "delivery_orders.txt"}
+{"query": "How many hours prior to the arrival window does the system lock me out of editing the destination?", "category": "online_orders", "file_name": "delivery_orders.txt"}
+{"query": "Can I change the destination address multiple times if I keep changing my mind?", "category": "online_orders", "file_name": "delivery_orders.txt"}
+{"query": "What error appears if I try to reroute my groceries to a town 50 miles away?", "category": "online_orders", "file_name": "delivery_orders.txt"}
+{"query": "Where can I type out gate codes or directions so the driver doesn't get lost?", "category": "online_orders", "file_name": "delivery_orders.txt"}
+{"query": "How does adjusting the digital map pin improve the chances of a successful drop-off?", "category": "online_orders", "file_name": "delivery_orders.txt"}
+{"query": "What proactive solution might the app suggest if the store is completely out of couriers?", "category": "online_orders", "file_name": "delivery_orders.txt"}
+{"query": "How far into the future can I schedule a curb-side collection if I cancel my delayed courier?", "category": "online_orders", "file_name": "delivery_orders.txt"}
+{"query": "Will the courier tip be refunded if the system forces me to go get the groceries myself?", "category": "online_orders", "file_name": "delivery_orders.txt"}
+{"query": "Is aerial drone drop-off available nationwide or only in specific zip codes?", "category": "online_orders", "file_name": "delivery_orders.txt"}
+{"query": "What are the contingency plans if the courier cannot access my apartment building?", "category": "online_orders", "file_name": "delivery_orders.txt"}
+{"query": "Who is the best point of contact if the courier gets lost and cannot speak English?", "category": "online_orders", "file_name": "delivery_orders.txt"}
+{"query": "Do the couriers for the premium tier actually enter my kitchen to put away groceries?", "category": "online_orders", "file_name": "delivery_orders.txt"}
+{"query": "Will my phone buzz before the premium employee unlocks my front door?", "category": "online_orders", "file_name": "delivery_orders.txt"}
+{"query": "What happens to a premium in-home appointment if the worker's schedule gets backed up?", "category": "online_orders", "file_name": "delivery_orders.txt"}
+{"query": "Why might my toothpaste and my socks arrive in two separate boxes on different afternoons?", "category": "online_orders", "file_name": "missing_items.txt"}
+{"query": "Does the system provide unique shipping codes for every individual box in a split order?", "category": "online_orders", "file_name": "missing_items.txt"}
+{"query": "How can I tell exactly how many cardboard boxes should be sitting on my porch?", "category": "online_orders", "file_name": "missing_items.txt"}
+{"query": "Should I cross-reference my physical boxes against the app before assuming something was stolen?", "category": "online_orders", "file_name": "missing_items.txt"}
+{"query": "What button do I press if I opened all the boxes and the toothpaste is still missing?", "category": "online_orders", "file_name": "missing_items.txt"}
+{"query": "What is the first step I should take if the app says 'Delivered' but the porch is empty?", "category": "online_orders", "file_name": "missing_items.txt"}
+{"query": "How can looking at the driver's snapshot prove my groceries were left at the wrong house?", "category": "online_orders", "file_name": "missing_items.txt"}
+{"query": "Is it possible a roommate or spouse brought the boxes inside without telling me?", "category": "online_orders", "file_name": "missing_items.txt"}
+{"query": "Could a typo in my profile settings have caused the courier to go to the wrong street?", "category": "online_orders", "file_name": "missing_items.txt"}
+{"query": "Why do shipping companies sometimes scan a box as delivered while it is still in the truck?", "category": "online_orders", "file_name": "missing_items.txt"}
+{"query": "How do I fix the issue if the GPS coordinates for my address point to an empty field?", "category": "online_orders", "file_name": "missing_items.txt"}
+{"query": "After waiting the recommended 48 hours for a false scan, who do I complain to?", "category": "online_orders", "file_name": "missing_items.txt"}
+{"query": "Where can I view the photographic proof of delivery to solve a missing package mystery?", "category": "online_orders", "file_name": "missing_items.txt"}
+{"query": "What should be my immediate action if the photographic proof clearly shows my neighbor's door?", "category": "online_orders", "file_name": "missing_items.txt"}
+{"query": "How can writing better courier notes prevent my packages from vanishing in the future?", "category": "online_orders", "file_name": "missing_items.txt"}
+{"query": "What credentials are required to view the live GPS tracking of my inbound groceries?", "category": "online_orders", "file_name": "order_status.txt"}
+{"query": "Which tabs must I click on the website to see whether my toaster has shipped yet?", "category": "online_orders", "file_name": "order_status.txt"}
+{"query": "Does the interface show historical timestamps for when the box left the warehouse?", "category": "online_orders", "file_name": "order_status.txt"}
+{"query": "Why might an order sit in 'Processing' status for days if an item goes viral online?", "category": "online_orders", "file_name": "order_status.txt"}
+{"query": "Will the app ping me immediately if my assigned driver gets stuck in traffic?", "category": "online_orders", "file_name": "order_status.txt"}
+{"query": "Who is responsible for helping me if the arrival countdown clock hits zero and resets?", "category": "online_orders", "file_name": "order_status.txt"}
+{"query": "Which contact method is most efficient for reporting an order that is five days late?", "category": "online_orders", "file_name": "order_status.txt"}
+{"query": "Can I paste the tracking number into the FedEx website for more detailed information?", "category": "online_orders", "file_name": "order_status.txt"}
+{"query": "What alternative solution is presented on my screen if the local store runs out of drivers?", "category": "online_orders", "file_name": "order_status.txt"}
+{"query": "How narrow of a time slot can I pick if I decide to go collect the delayed items myself?", "category": "online_orders", "file_name": "order_status.txt"}
+{"query": "Are courier tips automatically refunded if an order defaults back to curb-side collection?", "category": "online_orders", "file_name": "order_status.txt"}
+{"query": "What is the procedure if a courier leaves my groceries at an address on the other side of town?", "category": "online_orders", "file_name": "order_status.txt"}
+{"query": "Will the company refund my credit card if they fail to retrieve the misdelivered groceries?", "category": "online_orders", "file_name": "order_status.txt"}
+{"query": "Can I call a phone number instead of using the text chat to complain about a late order?", "category": "online_orders", "file_name": "order_status.txt"}
+{"query": "How will the store let me know that my bags are packed and sitting in the staging area?", "category": "online_orders", "file_name": "pickup_orders.txt"}
+{"query": "What buttons do I press in the parking lot to alert the staff that my car has arrived?", "category": "online_orders", "file_name": "pickup_orders.txt"}
+{"query": "Who physically loads the bags into my trunk once I am parked in the designated zone?", "category": "online_orders", "file_name": "pickup_orders.txt"}
+{"query": "Is it possible to authorize my spouse to collect the groceries on my behalf during checkout?", "category": "online_orders", "file_name": "pickup_orders.txt"}
+{"query": "What is the exact sequence of clicks needed to swap the name of the designated driver?", "category": "online_orders", "file_name": "pickup_orders.txt"}
+{"query": "Do I need to type in the new driver's phone number so the store can verify their identity?", "category": "online_orders", "file_name": "pickup_orders.txt"}
+{"query": "Can I change the authorized driver's name if the order was already placed two hours ago?", "category": "online_orders", "file_name": "pickup_orders.txt"}
+{"query": "Is there a way to switch which branch I am driving to if I am suddenly out of town?", "category": "online_orders", "file_name": "pickup_orders.txt"}
+{"query": "What is the cutoff time for changing the destination store before the system locks the order?", "category": "online_orders", "file_name": "pickup_orders.txt"}
+{"query": "How many times does the system permit me to alter the collection location?", "category": "online_orders", "file_name": "pickup_orders.txt"}
+{"query": "Am I allowed to push my 3 p.m. time slot to 5 p.m. if I get stuck at work?", "category": "online_orders", "file_name": "pickup_orders.txt"}
+{"query": "Is there a button to convert my curb-side collection into a home delivery if I get sick?", "category": "online_orders", "file_name": "pickup_orders.txt"}
+{"query": "What is the only workaround if I desperately need my curb-side items dropped at my house?", "category": "online_orders", "file_name": "pickup_orders.txt"}
+{"query": "What happens if my assigned slot was 4 p.m. but I don't show up until 7:30 p.m.?", "category": "online_orders", "file_name": "pickup_orders.txt"}
+{"query": "What occurs if I try to claim my groceries at 9 p.m. when the collection zone closes at 8 p.m.?", "category": "online_orders", "file_name": "pickup_orders.txt"}
+{"query": "Will my ice cream melt if I am three hours late to collect my bags?", "category": "online_orders", "file_name": "pickup_orders.txt"}
+{"query": "Does the staff throw away my food or refund my card if I completely forget to show up?", "category": "online_orders", "file_name": "pickup_orders.txt"}
+{"query": "How does the store handle a scenario where the exact brand of milk I wanted is sold out?", "category": "online_orders", "file_name": "substitutions.txt"}
+{"query": "Am I forced to pay for a replacement item if it is completely different from what I wanted?", "category": "online_orders", "file_name": "substitutions.txt"}
+{"query": "Do I have to pay the higher price if the store replaces my generic bread with a premium brand?", "category": "online_orders", "file_name": "substitutions.txt"}
+{"query": "Why does my credit card show a pending charge that is slightly higher than my cart total?", "category": "online_orders", "file_name": "substitutions.txt"}
+{"query": "How quickly will my phone buzz to warn me that my favorite cereal was swapped for another?", "category": "online_orders", "file_name": "substitutions.txt"}
+{"query": "Do I have an unlimited amount of time to review and reject the proposed swaps?", "category": "online_orders", "file_name": "substitutions.txt"}
+{"query": "What screen do I look at to explicitly approve or deny the replacement choices?", "category": "online_orders", "file_name": "substitutions.txt"}
+{"query": "What is the default action if I ignore the app notification about the replacement items?", "category": "online_orders", "file_name": "substitutions.txt"}
+{"query": "Can I get my money back later if I didn't see the notification and hate the replacement?", "category": "online_orders", "file_name": "substitutions.txt"}
+{"query": "Is there a way to preemptively ban the store from swapping out my baby formula?", "category": "online_orders", "file_name": "substitutions.txt"}
+{"query": "Can I dictate exactly which brand of soap they should grab if my primary choice is gone?", "category": "online_orders", "file_name": "substitutions.txt"}
+{"query": "Does the associate picking my items strictly follow my pre-selected backup choices?", "category": "online_orders", "file_name": "substitutions.txt"}
+{"query": "What happens to my bill if an item is missing and I toggled the 'no replacements' switch?", "category": "online_orders", "file_name": "substitutions.txt"}
+{"query": "How are government benefit cards billed when a replacement item costs more than the original?", "category": "online_orders", "file_name": "substitutions.txt"}
+{"query": "Will the system force the associate to pick a cheaper replacement if I pay strictly with EBT?", "category": "online_orders", "file_name": "substitutions.txt"}
+{"query": "What occurs if the store cannot find a cheaper alternative for an EBT order?", "category": "online_orders", "file_name": "substitutions.txt"}
+{"query": "If a replacement costs more, can the system automatically charge the difference to my backup credit card?", "category": "online_orders", "file_name": "substitutions.txt"}
+{"query": "Are the extra charges placed on the backup card subject to standard tax and service rates?", "category": "online_orders", "file_name": "substitutions.txt"}
+{"query": "Who is responsible for physically taking the rejected item out of my bags before I arrive?", "category": "online_orders", "file_name": "substitutions.txt"}
+{"query": "Can the person dropping off the groceries take back the unwanted replacement item?", "category": "online_orders", "file_name": "substitutions.txt"}
+{"query": "Does the pharmacy department process claims from the majority of national healthcare providers?", "category": "pharmacy_support", "file_name": "insurance_questions.txt"}
+{"query": "Is there a digital portal where I can input my new health plan ID while ordering a refill?", "category": "pharmacy_support", "file_name": "insurance_questions.txt"}
+{"query": "Which buttons do I click to permanently save my new healthcare provider details in the app?", "category": "pharmacy_support", "file_name": "insurance_questions.txt"}
+{"query": "Who do I call if I want to attach a manufacturer's discount card to my profile instead of using the app?", "category": "pharmacy_support", "file_name": "insurance_questions.txt"}
+{"query": "Can the pharmacist apply a physical discount voucher if I walk it up to the counter?", "category": "pharmacy_support", "file_name": "insurance_questions.txt"}
+{"query": "Does the company offer a service to help uninsured people shop for medical coverage?", "category": "pharmacy_support", "file_name": "insurance_questions.txt"}
+{"query": "Where can seniors go online to read about compatible government health plans?", "category": "pharmacy_support", "file_name": "insurance_questions.txt"}
+{"query": "What specific webpage assists low-income families with maintaining their state benefits?", "category": "pharmacy_support", "file_name": "insurance_questions.txt"}
+{"query": "Is there a dedicated help portal for navigating complex senior healthcare plans?", "category": "pharmacy_support", "file_name": "insurance_questions.txt"}
+{"query": "Are standard optical plans recognized by the in-store optometrists?", "category": "pharmacy_support", "file_name": "insurance_questions.txt"}
+{"query": "Where is the documentation outlining exactly which optical plans are supported?", "category": "pharmacy_support", "file_name": "insurance_questions.txt"}
+{"query": "What search feature helps me figure out which branch has an optometrist on duty?", "category": "pharmacy_support", "file_name": "insurance_questions.txt"}
+{"query": "Where can I download the mandated medical privacy waivers before my appointment?", "category": "pharmacy_support", "file_name": "insurance_questions.txt"}
+{"query": "Why should I look at the label on my medicine bottle if I have a complex billing issue?", "category": "pharmacy_support", "file_name": "insurance_questions.txt"}
+{"query": "Is the service to grab my medication in person available at most branches nationwide?", "category": "pharmacy_support", "file_name": "prescription_pickup.txt"}
+{"query": "What hours am I actually allowed to walk up and get my medicine?", "category": "pharmacy_support", "file_name": "prescription_pickup.txt"}
+{"query": "What basic personal identifiers will the technician ask me for at the register?", "category": "pharmacy_support", "file_name": "prescription_pickup.txt"}
+{"query": "Do I need to physically show my health plan card every single time I grab my medicine?", "category": "pharmacy_support", "file_name": "prescription_pickup.txt"}
+{"query": "Who collects the out-of-pocket costs dictated by my health plan?", "category": "pharmacy_support", "file_name": "prescription_pickup.txt"}
+{"query": "What are the primary benefits of linking my medical history to my digital shopping account?", "category": "pharmacy_support", "file_name": "prescription_pickup.txt"}
+{"query": "Where do I initially log in before attempting to sync my medical data?", "category": "pharmacy_support", "file_name": "prescription_pickup.txt"}
+{"query": "What is the exact menu path to reach the medical dashboard within the settings panel?", "category": "pharmacy_support", "file_name": "prescription_pickup.txt"}
+{"query": "How does the app ensure my children cannot access my medical history on my phone?", "category": "pharmacy_support", "file_name": "prescription_pickup.txt"}
+{"query": "What on-screen instructions guide the initial synchronization of my medical records?", "category": "pharmacy_support", "file_name": "prescription_pickup.txt"}
+{"query": "Which dashboard button allows me to authorize a new batch of pills?", "category": "pharmacy_support", "file_name": "prescription_pickup.txt"}
+{"query": "How many years back does the digital archive of my past medications go?", "category": "pharmacy_support", "file_name": "prescription_pickup.txt"}
+{"query": "Is there a tool to digitally move my prescription from a competitor's pharmacy to this one?", "category": "pharmacy_support", "file_name": "prescription_pickup.txt"}
+{"query": "Can the courier service legally drop off my medication the same afternoon I order it?", "category": "pharmacy_support", "file_name": "prescription_pickup.txt"}
+{"query": "Are the pills sorted by actual licensed professionals before being handed to the courier?", "category": "pharmacy_support", "file_name": "prescription_pickup.txt"}
+{"query": "At what point in the app do I combine my medication with my weekly grocery order?", "category": "pharmacy_support", "file_name": "prescription_pickup.txt"}
+{"query": "Will my phone alert me when the pharmacist finishes counting the pills?", "category": "pharmacy_support", "file_name": "prescription_pickup.txt"}
+{"query": "Can I dictate the exact time the courier arrives with my groceries and medicine together?", "category": "pharmacy_support", "file_name": "prescription_pickup.txt"}
+{"query": "Where can I find the list of generic drugs that only cost four dollars?", "category": "pharmacy_support", "file_name": "prescription_pickup.txt"}
+{"query": "What must I do on the website before the system will let me request more pills?", "category": "pharmacy_support", "file_name": "refill_questions.txt"}
+{"query": "Which gear icon menu must be clicked first to find the refill tools?", "category": "pharmacy_support", "file_name": "refill_questions.txt"}
+{"query": "After clicking the gear icon, what is the next menu option to select?", "category": "pharmacy_support", "file_name": "refill_questions.txt"}
+{"query": "Why does the app ask for my face ID when I try to open the medical tab?", "category": "pharmacy_support", "file_name": "refill_questions.txt"}
+{"query": "Which specific link takes me to the list of medicines ready to be renewed?", "category": "pharmacy_support", "file_name": "refill_questions.txt"}
+{"query": "How do I visually indicate which of the five listed medicines I want to renew today?", "category": "pharmacy_support", "file_name": "refill_questions.txt"}
+{"query": "What button moves me from the selection screen to the final review screen?", "category": "pharmacy_support", "file_name": "refill_questions.txt"}
+{"query": "Should I verify the store address before finalizing my renewal request?", "category": "pharmacy_support", "file_name": "refill_questions.txt"}
+{"query": "Is it possible to switch the credit card being charged for the copay at the last second?", "category": "pharmacy_support", "file_name": "refill_questions.txt"}
+{"query": "What is the final button that pushes my renewal request to the pharmacist's queue?", "category": "pharmacy_support", "file_name": "refill_questions.txt"}
+{"query": "How can my phone's camera be used to bypass typing in the long prescription numbers?", "category": "pharmacy_support", "file_name": "refill_questions.txt"}
+{"query": "Where do I look to see if the pharmacist is currently working on my order?", "category": "pharmacy_support", "file_name": "refill_questions.txt"}
+{"query": "How will I know if the bag is sitting at the counter ready for me?", "category": "pharmacy_support", "file_name": "refill_questions.txt"}
+{"query": "Why might the system block me from renewing my pain medication three weeks early?", "category": "pharmacy_support", "file_name": "refill_questions.txt"}
+{"query": "Who is the ultimate authority on whether I am legally allowed to get more pills today?", "category": "pharmacy_support", "file_name": "refill_questions.txt"}
+{"query": "Where can I find the direct phone extension for the technician handling my case?", "category": "pharmacy_support", "file_name": "refill_questions.txt"}
+{"query": "Can the main website directory help me find the fax number for the medical desk?", "category": "pharmacy_support", "file_name": "refill_questions.txt"}
+{"query": "Which help article explains why my copay randomly went up this month?", "category": "pharmacy_support", "file_name": "refill_questions.txt"}
+{"query": "Are routine inoculations like the seasonal flu jab administered by the staff?", "category": "pharmacy_support", "file_name": "vaccine_appointments.txt"}
+{"query": "Is the most recently formulated coronavirus booster currently in stock?", "category": "pharmacy_support", "file_name": "vaccine_appointments.txt"}
+{"query": "Can I walk in and request an influenza immunization during the fall?", "category": "pharmacy_support", "file_name": "vaccine_appointments.txt"}
+{"query": "Does the clinic track when I am due for my decade-long lockjaw booster?", "category": "pharmacy_support", "file_name": "vaccine_appointments.txt"}
+{"query": "What age criteria must be met to qualify for the shingles prevention shot?", "category": "pharmacy_support", "file_name": "vaccine_appointments.txt"}
+{"query": "Are travel-specific inoculations carried in the standard store inventory?", "category": "pharmacy_support", "file_name": "vaccine_appointments.txt"}
+{"query": "Why does the online calendar refuse to let me book a slot for a rare immunization?", "category": "pharmacy_support", "file_name": "vaccine_appointments.txt"}
+{"query": "Do most health plans cover the entire cost of preventative shots without a copay?", "category": "pharmacy_support", "file_name": "vaccine_appointments.txt"}
+{"query": "What specific app tab must I navigate to in order to book a shot?", "category": "pharmacy_support", "file_name": "vaccine_appointments.txt"}
+{"query": "How do I specify which illness I want to be vaccinated against in the booking portal?", "category": "pharmacy_support", "file_name": "vaccine_appointments.txt"}
+{"query": "Which button triggers the GPS search for the nearest clinic with available doses?", "category": "pharmacy_support", "file_name": "vaccine_appointments.txt"}
+{"query": "Is there a way to book my wife and myself for shots at the exact same time?", "category": "pharmacy_support", "file_name": "vaccine_appointments.txt"}
+{"query": "How do I manually search for a clinic if my phone's GPS is turned off?", "category": "pharmacy_support", "file_name": "vaccine_appointments.txt"}
+{"query": "What do I click after verifying the correct store address on the map?", "category": "pharmacy_support", "file_name": "vaccine_appointments.txt"}
+{"query": "How granular is the time selection when picking an appointment slot?", "category": "pharmacy_support", "file_name": "vaccine_appointments.txt"}
+{"query": "Why does the scheduling tool mandate that I input my legal name and address?", "category": "pharmacy_support", "file_name": "vaccine_appointments.txt"}
+{"query": "What kind of medical history questions are asked before the booking is finalized?", "category": "pharmacy_support", "file_name": "vaccine_appointments.txt"}
+{"query": "What legal agreements must I digitally sign before the pharmacist can stick me?", "category": "pharmacy_support", "file_name": "vaccine_appointments.txt"}
+{"query": "Which final button locks my name into the clinic's daily schedule?", "category": "pharmacy_support", "file_name": "vaccine_appointments.txt"}
+{"query": "Is a digital reservation strictly required, or can I just show up and wait?", "category": "pharmacy_support", "file_name": "vaccine_appointments.txt"}
+{"query": "Where do I look to find the cancellation link for my upcoming clinic visit?", "category": "pharmacy_support", "file_name": "vaccine_appointments.txt"}
+{"query": "What specific email subject line should I search for if I lost my reservation details?", "category": "pharmacy_support", "file_name": "vaccine_appointments.txt"}
+{"query": "Will clicking the hyperlink in the email instantly wipe my reservation from the system?", "category": "pharmacy_support", "file_name": "vaccine_appointments.txt"}
+{"query": "Do I have to type my password to cancel the reservation via the website?", "category": "pharmacy_support", "file_name": "vaccine_appointments.txt"}
+{"query": "Why does the cancellation portal ask me to prove my age?", "category": "pharmacy_support", "file_name": "vaccine_appointments.txt"}
+{"query": "Can I simply dictate my cancellation to the technician over the telephone?", "category": "pharmacy_support", "file_name": "vaccine_appointments.txt"}
+{"query": "Is there a way to print out an official record of every shot I have received here?", "category": "pharmacy_support", "file_name": "vaccine_appointments.txt"}
+{"query": "Where does the company publish best practices for keeping my digital profile locked down?", "category": "privacy_and_security", "file_name": "account_security.txt"}
+{"query": "What is the very first step to take if I suspect someone else logged into my profile?", "category": "privacy_and_security", "file_name": "account_security.txt"}
+{"query": "How can SMS codes serve as a secondary barrier against hackers?", "category": "privacy_and_security", "file_name": "account_security.txt"}
+{"query": "Why is it wise to delete saved credit cards after a suspected hacking attempt?", "category": "privacy_and_security", "file_name": "account_security.txt"}
+{"query": "If my store password was 'password123', why should I also change my email password?", "category": "privacy_and_security", "file_name": "account_security.txt"}
+{"query": "Which dashboard tab reveals if a hacker used my card to buy a television?", "category": "privacy_and_security", "file_name": "account_security.txt"}
+{"query": "What subtle profile changes might indicate a hacker is preparing to intercept my packages?", "category": "privacy_and_security", "file_name": "account_security.txt"}
+{"query": "What is the fastest way to alert corporate security that my profile was breached?", "category": "privacy_and_security", "file_name": "account_security.txt"}
+{"query": "Are ghost orders appearing in my history a definitive sign of a breach?", "category": "privacy_and_security", "file_name": "account_security.txt"}
+{"query": "Why would a hacker change the phone number attached to my account without buying anything?", "category": "privacy_and_security", "file_name": "account_security.txt"}
+{"query": "If I get an email confirming an address change I didn't make, what does it mean?", "category": "privacy_and_security", "file_name": "account_security.txt"}
+{"query": "Could a weird phone number printed on a store receipt mean my account is compromised?", "category": "privacy_and_security", "file_name": "account_security.txt"}
+{"query": "Why do security experts insist that a twenty-character password is better than a six-character one?", "category": "privacy_and_security", "file_name": "account_security.txt"}
+{"query": "Why is using my dog's name or my birth year a terrible idea for a password?", "category": "privacy_and_security", "file_name": "account_security.txt"}
+{"query": "How does combining random words like 'PurpleCoffeeCar' create a stronger defense?", "category": "privacy_and_security", "file_name": "account_security.txt"}
+{"query": "What specific characters make brute-force hacking significantly more difficult?", "category": "privacy_and_security", "file_name": "account_security.txt"}
+{"query": "Why shouldn't I use 'What is your mother's maiden name' if I am active on Facebook?", "category": "privacy_and_security", "file_name": "account_security.txt"}
+{"query": "How could checking my order status while sipping coffee at a cafe lead to a hack?", "category": "privacy_and_security", "file_name": "account_security.txt"}
+{"query": "Is it dangerous to let Google Chrome remember my store login details?", "category": "privacy_and_security", "file_name": "account_security.txt"}
+{"query": "What are the three official channels for begging for help after getting locked out by a hacker?", "category": "privacy_and_security", "file_name": "account_security.txt"}
+{"query": "Where can I read up on the latest text message tricks criminals are using to impersonate the store?", "category": "privacy_and_security", "file_name": "fraud_concerns.txt"}
+{"query": "What is the technical term for a fake website designed to steal my login credentials?", "category": "privacy_and_security", "file_name": "fraud_concerns.txt"}
+{"query": "Should I be suspicious of a pop-up offering me a free thousand-dollar gift card?", "category": "privacy_and_security", "file_name": "fraud_concerns.txt"}
+{"query": "What types of attachments should never be opened if they claim to be from the store?", "category": "privacy_and_security", "file_name": "fraud_concerns.txt"}
+{"query": "What is the primary motivation for scammers trying to break into my shopping profile?", "category": "privacy_and_security", "file_name": "fraud_concerns.txt"}
+{"query": "Does the sudden appearance of a secondary account in my name mean someone stole my identity?", "category": "privacy_and_security", "file_name": "fraud_concerns.txt"}
+{"query": "How can I verify that the person calling me is actually a store representative and not a thief?", "category": "privacy_and_security", "file_name": "fraud_concerns.txt"}
+{"query": "What is the best immediate countermeasure to a suspected phishing click?", "category": "privacy_and_security", "file_name": "fraud_concerns.txt"}
+{"query": "Why is wiping my digital wallet critical after clicking a bad link?", "category": "privacy_and_security", "file_name": "fraud_concerns.txt"}
+{"query": "Should I call my bank to preemptively cancel my debit card after a breach?", "category": "privacy_and_security", "file_name": "fraud_concerns.txt"}
+{"query": "Do credit card companies have special departments for handling stolen card numbers?", "category": "privacy_and_security", "file_name": "fraud_concerns.txt"}
+{"query": "Is a digital scam considered a real crime that requires filing a police report?", "category": "privacy_and_security", "file_name": "fraud_concerns.txt"}
+{"query": "Which government agency handles cases where a scammer opens credit cards in my name?", "category": "privacy_and_security", "file_name": "fraud_concerns.txt"}
+{"query": "How can freezing my Equifax file prevent a scammer from doing further damage?", "category": "privacy_and_security", "file_name": "fraud_concerns.txt"}
+{"query": "Will the store's chat support team care if I report a scammer pretending to be them?", "category": "privacy_and_security", "file_name": "fraud_concerns.txt"}
+{"query": "Is it actually that important to use different passwords for every single website?", "category": "privacy_and_security", "file_name": "fraud_concerns.txt"}
+{"query": "Does enabling SMS login codes severely disrupt a hacker's workflow?", "category": "privacy_and_security", "file_name": "fraud_concerns.txt"}
+{"query": "Why do hackers hang out on unsecured airport Wi-Fi networks?", "category": "privacy_and_security", "file_name": "fraud_concerns.txt"}
+{"query": "If I am deeply paranoid, should I just type my card number in every time instead of saving it?", "category": "privacy_and_security", "file_name": "fraud_concerns.txt"}
+{"query": "How often should a cautious shopper review their past orders for anomalies?", "category": "privacy_and_security", "file_name": "fraud_concerns.txt"}
+{"query": "Can the store track down a scammer if I forward them the weird voicemail I received?", "category": "privacy_and_security", "file_name": "fraud_concerns.txt"}
+{"query": "What is the official federal website for reporting interstate internet scams?", "category": "privacy_and_security", "file_name": "fraud_concerns.txt"}
+{"query": "Where inside the app can I scrutinize the exact dollar amounts charged to my saved card?", "category": "privacy_and_security", "file_name": "payment_security.txt"}
+{"query": "What is the emergency procedure for disconnecting a stolen credit card from the app?", "category": "privacy_and_security", "file_name": "payment_security.txt"}
+{"query": "Which sequence of settings menus leads to the digital wallet deletion screen?", "category": "privacy_and_security", "file_name": "payment_security.txt"}
+{"query": "Why shouldn't I immediately add my replacement card to my profile after a hack?", "category": "privacy_and_security", "file_name": "payment_security.txt"}
+{"query": "How can banking push notifications alert me to a hacker in real-time?", "category": "privacy_and_security", "file_name": "payment_security.txt"}
+{"query": "Will the bank automatically refund me if I formally dispute a hacker's purchase?", "category": "privacy_and_security", "file_name": "payment_security.txt"}
+{"query": "Is there a time limit on how quickly I must report a fraudulent charge to Chase or Wells Fargo?", "category": "privacy_and_security", "file_name": "payment_security.txt"}
+{"query": "Where can I find the emergency fraud hotline for my specific Visa card?", "category": "privacy_and_security", "file_name": "payment_security.txt"}
+{"query": "Why does my banking app show a pending charge for an order that hasn't shipped yet?", "category": "privacy_and_security", "file_name": "payment_security.txt"}
+{"query": "What happens to the extra money if the pre-authorization hold was larger than my final receipt?", "category": "privacy_and_security", "file_name": "payment_security.txt"}
+{"query": "Is it normal for a pre-authorization hold to sit on my debit account for a week?", "category": "privacy_and_security", "file_name": "payment_security.txt"}
+{"query": "Can the store's customer service reps manually delete a bank hold from their end?", "category": "privacy_and_security", "file_name": "payment_security.txt"}
+{"query": "Would a legitimate independent seller ever email me asking for extra money for shipping?", "category": "privacy_and_security", "file_name": "payment_security.txt"}
+{"query": "Should I report a seller to corporate if they demand an external payment via Venmo?", "category": "privacy_and_security", "file_name": "payment_security.txt"}
+{"query": "Who is the absolute first entity I should call if my entire wallet was stolen?", "category": "privacy_and_security", "file_name": "payment_security.txt"}
+{"query": "What specific phone number on the plastic card connects directly to fraud prevention?", "category": "privacy_and_security", "file_name": "payment_security.txt"}
+{"query": "Does filing a police report actually help my bank's fraud investigation?", "category": "privacy_and_security", "file_name": "payment_security.txt"}
+{"query": "How can a credit freeze prevent a thief from doing more damage down the line?", "category": "privacy_and_security", "file_name": "payment_security.txt"}
+{"query": "Does the company officially state that they value customer data security?", "category": "privacy_and_security", "file_name": "personal_information.txt"}
+{"query": "Is individual consumer data treated with care and respect by the corporation?", "category": "privacy_and_security", "file_name": "personal_information.txt"}
+{"query": "What document dictates exactly what the company is allowed to do with my search history?", "category": "privacy_and_security", "file_name": "personal_information.txt"}
+{"query": "What is the precise URL to read the lengthy legal document regarding data usage?", "category": "privacy_and_security", "file_name": "personal_information.txt"}
+{"query": "Does the retailer submit to third-party audits to maintain data protection certifications?", "category": "privacy_and_security", "file_name": "personal_information.txt"}
+{"query": "Where can a tech-savvy user verify the specific ISO or SOC certifications the company holds?", "category": "privacy_and_security", "file_name": "personal_information.txt"}
+{"query": "Are my paperless receipts subjected to the same data mining rules as my web browsing?", "category": "privacy_and_security", "file_name": "personal_information.txt"}
+{"query": "Can the company legally delete my entire digital receipt history if they choose to?", "category": "privacy_and_security", "file_name": "personal_information.txt"}
+{"query": "Why is a factory reset crucial before trading in an old smartphone?", "category": "privacy_and_security", "file_name": "personal_information.txt"}
+{"query": "Is there a specific tutorial on the site that teaches me how to wipe a hard drive?", "category": "privacy_and_security", "file_name": "personal_information.txt"}
+{"query": "How do data brokers exploit the comments and reviews I leave on public forums?", "category": "privacy_and_security", "file_name": "personal_information.txt"}
+{"query": "What is the best way to prevent strangers from compiling a profile on me?", "category": "privacy_and_security", "file_name": "personal_information.txt"}
+{"query": "Which dashboard page allows me to see all the personal data the company has on file?", "category": "privacy_and_security", "file_name": "personal_information.txt"}
+{"query": "Am I allowed to delete my old addresses and phone numbers from the system database?", "category": "privacy_and_security", "file_name": "personal_information.txt"}
+{"query": "How do I submit a formal California Consumer Privacy Act request to delete my data?", "category": "privacy_and_security", "file_name": "personal_information.txt"}
+{"query": "What are my options if a vase I ordered online arrives shattered in the box?", "category": "product_help", "file_name": "damaged_items.txt"}
+{"query": "Will the store replace my broken item for free or just give me my money back?", "category": "product_help", "file_name": "damaged_items.txt"}
+{"query": "How do I use the mobile app to tell the warehouse that my item arrived broken?", "category": "product_help", "file_name": "damaged_items.txt"}
+{"query": "Who is responsible for fixing the issue if I bought the broken item from a random seller on the site?", "category": "product_help", "file_name": "damaged_items.txt"}
+{"query": "Do independent sellers manage their own customer service and return logistics?", "category": "product_help", "file_name": "damaged_items.txt"}
+{"query": "How many days will it take to get my money back once the third-party warehouse scans my return?", "category": "product_help", "file_name": "damaged_items.txt"}
+{"query": "Why is it important to open the cardboard box while the delivery driver is still standing there?", "category": "product_help", "file_name": "damaged_items.txt"}
+{"query": "Can I simply tell the freight driver to put the dented refrigerator back on the truck?", "category": "product_help", "file_name": "damaged_items.txt"}
+{"query": "How long do I have to report a hidden dent on a newly delivered washing machine?", "category": "product_help", "file_name": "damaged_items.txt"}
+{"query": "What kind of restocking fees might apply if I try to return a used appliance on day 25?", "category": "product_help", "file_name": "damaged_items.txt"}
+{"query": "If my new dishwasher breaks after being plumbed in, do I contact the store or the manufacturer?", "category": "product_help", "file_name": "damaged_items.txt"}
+{"query": "Are third-party vendors legally required to tell me if an item is scratched before I buy it?", "category": "product_help", "file_name": "damaged_items.txt"}
+{"query": "What exactly does 'New with Defects' mean when looking at an online listing?", "category": "product_help", "file_name": "damaged_items.txt"}
+{"query": "Can the physical service desk override a rejected online claim for a shattered television?", "category": "product_help", "file_name": "damaged_items.txt"}
+{"query": "Can the employee stocking shelves in the grocery aisle help me find a specific toy?", "category": "product_help", "file_name": "item_location.txt"}
+{"query": "How does the mobile app function as an indoor GPS to find the exact aisle for a product?", "category": "product_help", "file_name": "item_location.txt"}
+{"query": "What physical signage should I look for when navigating the massive warehouse?", "category": "product_help", "file_name": "item_location.txt"}
+{"query": "Do I have to download the app to search the store inventory, or does the website work too?", "category": "product_help", "file_name": "item_location.txt"}
+{"query": "Is there a search bar that allows me to type in 'Sony headphones' to see if they are in stock?", "category": "product_help", "file_name": "item_location.txt"}
+{"query": "Can I filter the search results to only show items that have five-star reviews?", "category": "product_help", "file_name": "item_location.txt"}
+{"query": "How does typing in my zip code change the search results on the website?", "category": "product_help", "file_name": "item_location.txt"}
+{"query": "Is it possible for a specific laptop to be sold out in my town but available on the website?", "category": "product_help", "file_name": "item_location.txt"}
+{"query": "Where on the product page does it explicitly state if I can drive to the store and buy it today?", "category": "product_help", "file_name": "item_location.txt"}
+{"query": "Can the system send me an email the second a popular toy is restocked?", "category": "product_help", "file_name": "item_location.txt"}
+{"query": "What premium app feature lets me bypass the checkout lane by scanning barcodes as I walk?", "category": "product_help", "file_name": "item_location.txt"}
+{"query": "Who can I call on my phone if I am walking around the store and cannot find the customer service desk?", "category": "product_help", "file_name": "item_location.txt"}
+{"query": "Where should I start my search if I want to know if a specific blender is sold by the company?", "category": "product_help", "file_name": "product_availability.txt"}
+{"query": "How does allowing the website to track my location help me find groceries?", "category": "product_help", "file_name": "product_availability.txt"}
+{"query": "Will the product page tell me if a courier can bring the item to my house this afternoon?", "category": "product_help", "file_name": "product_availability.txt"}
+{"query": "Why can't I find the massive inflatable pool I saw online at my local neighborhood branch?", "category": "product_help", "file_name": "product_availability.txt"}
+{"query": "Do the physical stores stock seasonal items that are completely absent from the website?", "category": "product_help", "file_name": "product_availability.txt"}
+{"query": "Does the inventory of winter coats change depending on whether I live in Florida or Maine?", "category": "product_help", "file_name": "product_availability.txt"}
+{"query": "What are my options if the webpage says the specific laptop I want is permanently out of stock?", "category": "product_help", "file_name": "product_availability.txt"}
+{"query": "Will the warehouse automatically cancel my order if the last television is sold before my box is packed?", "category": "product_help", "file_name": "product_availability.txt"}
+{"query": "Does the main website act as a storefront for random independent businesses as well?", "category": "product_help", "file_name": "product_availability.txt"}
+{"query": "Are items sold by independent vendors shipped directly to the physical store for me to browse?", "category": "product_help", "file_name": "product_availability.txt"}
+{"query": "How many days do independent vendors give me to decide if I want to keep their product?", "category": "product_help", "file_name": "product_availability.txt"}
+{"query": "Does the company use algorithms to delete listings from independent vendors who price gouge?", "category": "product_help", "file_name": "product_availability.txt"}
+{"query": "Can the price of a gallon of milk change from one day to the next based on supply chains?", "category": "product_help", "file_name": "product_availability.txt"}
+{"query": "Is there a customer support line I can call to demand they order a specific brand of dog food?", "category": "product_help", "file_name": "product_availability.txt"}
+{"query": "Do the televisions sold in the store come with a standard guarantee from the company that made them?", "category": "product_help", "file_name": "warranty_questions.txt"}
+{"query": "Does the factory guarantee cover me if I drop the television, or only if it breaks on its own?", "category": "product_help", "file_name": "warranty_questions.txt"}
+{"query": "Does a cheap toaster have the same length of guarantee as an expensive refrigerator?", "category": "product_help", "file_name": "warranty_questions.txt"}
+{"query": "Who am I supposed to call if my vacuum cleaner motor dies after six months?", "category": "product_help", "file_name": "warranty_questions.txt"}
+{"query": "Can the retail store legally invalidate the factory guarantee if I complain about a product?", "category": "product_help", "file_name": "warranty_questions.txt"}
+{"query": "What third-party company provides the extended insurance policies sold at checkout?", "category": "product_help", "file_name": "warranty_questions.txt"}
+{"query": "At what point during the online checkout process am I prompted to buy an extended insurance policy?", "category": "product_help", "file_name": "warranty_questions.txt"}
+{"query": "Is it mandatory to buy the insurance at the exact same time I buy the laptop?", "category": "product_help", "file_name": "warranty_questions.txt"}
+{"query": "Can I walk into a physical store two weeks later and add insurance to a laptop I bought online?", "category": "product_help", "file_name": "warranty_questions.txt"}
+{"query": "Does the extended insurance start on day one, or does it wait for the factory guarantee to end?", "category": "product_help", "file_name": "warranty_questions.txt"}
+{"query": "Which type of insurance policy is designed for heavy machinery like riding lawnmowers?", "category": "product_help", "file_name": "warranty_questions.txt"}
+{"query": "What specific insurance policy covers me if I accidentally drop my tablet in the bathtub?", "category": "product_help", "file_name": "warranty_questions.txt"}
+{"query": "Can I initiate an insurance claim simply by texting a photo of my receipt to a shortcode?", "category": "product_help", "file_name": "warranty_questions.txt"}
+{"query": "What happens if the insurance repair depot cannot figure out how to fix my broken laptop?", "category": "product_help", "file_name": "warranty_questions.txt"}
+{"query": "Does the auto shop provide any sort of guarantee for the tires they mount on my car?", "category": "product_help", "file_name": "warranty_questions.txt"}
+{"query": "Do I have to physically drive my car to the auto shop to prove my tire blew out?", "category": "product_help", "file_name": "warranty_questions.txt"}
+{"query": "What paperwork must the mechanic see before honoring a blown tire claim?", "category": "product_help", "file_name": "warranty_questions.txt"}
+{"query": "How do I figure out which auto shop branch is closest to my broken-down car?", "category": "product_help", "file_name": "warranty_questions.txt"}
+{"query": "Is there a specific add-on policy that covers running over a nail on the highway?", "category": "product_help", "file_name": "warranty_questions.txt"}
+{"query": "How do I force an independent vendor to show me their guarantee rules before I buy?", "category": "product_help", "file_name": "warranty_questions.txt"}
+{"query": "Where on the screen do I look to see if a used, refurbished phone has any sort of guarantee?", "category": "product_help", "file_name": "warranty_questions.txt"}
+{"query": "Are independent sellers forced to provide a one-year guarantee if they label an item as 'Premium'?", "category": "product_help", "file_name": "warranty_questions.txt"}
+{"query": "Do 'Like New' items from independent sellers automatically qualify for three months of free returns?", "category": "product_help", "file_name": "warranty_questions.txt"}
