@@ -1,5 +1,4 @@
-// cashier_help.txt
-{"query": "TelMart Cashier Checkout Assistance", "category": "checkout_support", "file_name": "cashier_help.txt"}
+"query": "TelMart Cashier Checkout Assistance", "category": "checkout_support", "file_name": "cashier_help.txt"}
 {"query": "TelMart associates are available at staffed checkout lanes throughout the store to assist customers with their purchases.", "category": "checkout_support", "file_name": "cashier_help.txt"}
 {"query": "Check Out With Me Service: TelMart associates can check out customers directly on the sales floor using cellular devices and Bluetooth printers.", "category": "checkout_support", "file_name": "cashier_help.txt"}
 {"query": "Associates outfitted with mobile checkout devices can complete the customer's purchase and provide a receipt (paper or electronic) wherever the customer is in the store.", "category": "checkout_support", "file_name": "cashier_help.txt"}
@@ -11,8 +10,6 @@
 {"query": "For transactions using TelMart Pay, the customer should scan the on-screen QR code to connect their account.", "category": "checkout_support", "file_name": "cashier_help.txt"}
 {"query": "All TelMart policies applicable to store sales, including those regarding Ad Match, Price Matching, Coupon use, Returns, and Exchanges, apply to purchases made through TelMart Pay.", "category": "checkout_support", "file_name": "cashier_help.txt"}
 {"query": "If a customer experiences any issues at the cashier lane, they should ask the associate for assistance or contact the Customer Service Desk.", "category": "checkout_support", "file_name": "cashier_help.txt"}
-
-// payment_issues.txt
 {"query": "TelMart acknowledges a broad scope of compensation approaches in-store and web.", "category": "checkout_support", "file_name": "payment_issues.txt"}
 {"query": "TelMart accepts charge certificates including Visa, Mastercard, American Express, and Discover.", "category": "checkout_support", "file_name": "payment_issues.txt"}
 {"query": "Debit certificates are an accepted payment method at TelMart.", "category": "checkout_support", "file_name": "payment_issues.txt"}
@@ -39,8 +36,6 @@
 {"query": "A temporary authorization hold may be placed on the customer's payment method when making an online purchase.", "category": "checkout_support", "file_name": "payment_issues.txt"}
 {"query": "After the customer's final amount is confirmed, any extra funds from the authorization hold will be released.", "category": "checkout_support", "file_name": "payment_issues.txt"}
 {"query": "The customer's financial institution will remove the authorization hold according to their guidelines, which may take up to 10 business days after transaction completion.", "category": "checkout_support", "file_name": "payment_issues.txt"}
-
-// receipt_questions.txt
 {"query": "TelMart provides receipts in sheet and digital formats for in-store and online purchases.", "category": "checkout_support", "file_name": "receipt_questions.txt"}
 {"query": "TelMart provides eReceipts (digital receipts) for in-store purchases.", "category": "checkout_support", "file_name": "receipt_questions.txt"}
 {"query": "At the counter or automated pay station, the customer may choose to obtain a digital receipt.", "category": "checkout_support", "file_name": "receipt_questions.txt"}
@@ -56,8 +51,6 @@
 {"query": "Purchase confirmation and receipt information are sent to the contact information linked to the customer's TelMart profile.", "category": "checkout_support", "file_name": "receipt_questions.txt"}
 {"query": "The customer can also retrieve purchase details and receipts through Transaction History in their TelMart profile.", "category": "checkout_support", "file_name": "receipt_questions.txt"}
 {"query": "For questions about a specific charge on a receipt or to obtain a copy of a receipt, the customer should visit the Service Counter in-store or contact Customer Service through Chat on TelMart.com.", "category": "checkout_support", "file_name": "receipt_questions.txt"}
-
-// self_checkout_help.txt
 {"query": "TelMart offers self-checkout stations in numerous store locations to provide a faster checkout experience for customers.", "category": "checkout_support", "file_name": "self_checkout_help.txt"}
 {"query": "The customer should scan every product's barcode using the station scanner at self-checkout.", "category": "checkout_support", "file_name": "self_checkout_help.txt"}
 {"query": "Scanned items should be placed in the bagging area at the self-checkout station.", "category": "checkout_support", "file_name": "self_checkout_help.txt"}
@@ -75,8 +68,6 @@
 {"query": "The customer should press the Help button on screen to get immediate assistance at self-checkout.", "category": "checkout_support", "file_name": "self_checkout_help.txt"}
 {"query": "If the customer experiences a payment machine error at self-checkout, they should remain at the station to verify their transaction is processed correctly.", "category": "checkout_support", "file_name": "self_checkout_help.txt"}
 {"query": "If the customer experiences a payment issue at self-checkout, they should press the Help button to contact a TelMart worker.", "category": "checkout_support", "file_name": "self_checkout_help.txt"}
-
-// delivery_complaints.txt
 {"query": "If an order shows delivered but the customer cannot find it, the customer should check around the delivery area, review the delivery confirmation photo, ask household members, and confirm the delivery address on their profile.", "category": "complaints_and_feedback", "file_name": "delivery_complaints.txt"}
 {"query": "The customer should wait two business days, as carriers occasionally mark items delivered before they actually arrive.", "category": "complaints_and_feedback", "file_name": "delivery_complaints.txt"}
 {"query": "If the customer still has not received the item after two business days, the customer should use the Chat with us option on TelMart.com to contact Customer Service.", "category": "complaints_and_feedback", "file_name": "delivery_complaints.txt"}
@@ -88,16 +79,12 @@
 {"query": "If the customer's order has not arrived after the delivery window has passed, the customer should contact Customer Service using the Chat with us option.", "category": "complaints_and_feedback", "file_name": "delivery_complaints.txt"}
 {"query": "To submit a delivery complaint, the customer should complete the Business Feedback Form on TelMart.com, select Delivery Complaints, and provide details such as order number, delivery date, and a description of the issue.", "category": "complaints_and_feedback", "file_name": "delivery_complaints.txt"}
 {"query": "Alternatively, the customer may contact Customer Service by chat, call 1-400-840-4060, or email help@telmart.com to report a delivery issue.", "category": "complaints_and_feedback", "file_name": "delivery_complaints.txt"}
-
-// employee_feedback.txt
 {"query": "The customer can submit employee feedback using the Business Feedback Form on TelMart.com and selecting Store Experience or the applicable subject.", "category": "complaints_and_feedback", "file_name": "employee_feedback.txt"}
 {"query": "On the feedback form the customer should provide details about the interaction and include the employee's name or title if known.", "category": "complaints_and_feedback", "file_name": "employee_feedback.txt"}
 {"query": "The customer should provide contact information in the Tell us a bit about you section before submitting feedback.", "category": "complaints_and_feedback", "file_name": "employee_feedback.txt"}
 {"query": "As alternative contact options, the customer may use Chat with us on TelMart.com, call 1-400-840-4060, email help@telmart.com, visit the store to speak with a manager, or post publicly and tag @TelMartHelp for assistance.", "category": "complaints_and_feedback", "file_name": "employee_feedback.txt"}
 {"query": "When an employee provided exceptional service, the customer is encouraged to submit positive feedback so TelMart can recognize the team members involved.", "category": "complaints_and_feedback", "file_name": "employee_feedback.txt"}
 {"query": "If the customer was involved in an incident at a TelMart store, the customer should seek a manager, obtain a copy of the incident report, and record details such as time, date, store area, and a description of what occurred.", "category": "complaints_and_feedback", "file_name": "employee_feedback.txt"}
-
-// product_complaints.txt
 {"query": "If a product the customer received from TelMart arrived damaged or defective, the item may be eligible for return by mail or drop-off at any TelMart store.", "category": "complaints_and_feedback", "file_name": "product_complaints.txt"}
 {"query": "The customer should start a return in the TelMart app or on the website by going to Order History and selecting Start a return.", "category": "complaints_and_feedback", "file_name": "product_complaints.txt"}
 {"query": "A damaged or defective product may be eligible for a refund or replacement, depending on the return evaluation.", "category": "complaints_and_feedback", "file_name": "product_complaints.txt"}
@@ -107,16 +94,12 @@
 {"query": "When filing a product complaint, the customer should include the order number or receipt information, the product name or item number, a description of the issue, and photos if available.", "category": "complaints_and_feedback", "file_name": "product_complaints.txt"}
 {"query": "If the customer believes a product creates a safety hazard, the customer should contact TelMart Customer Service immediately and, if appropriate, report the concern to the U.S. Consumer Product Safety Commission (CPSC) at cpsc.gov.", "category": "complaints_and_feedback", "file_name": "product_complaints.txt"}
 {"query": "For more information about TelMart's product complaint and return policies, the customer should visit the Support Center at TelMart.com/help.", "category": "complaints_and_feedback", "file_name": "product_complaints.txt"}
-
-// store_experience.txt
 {"query": "The customer can submit in-store experience feedback by completing the Business Feedback Form on TelMart.com and selecting Store Experience.", "category": "complaints_and_feedback", "file_name": "store_experience.txt"}
 {"query": "On the form the customer should provide as much detail as desired in the Tell us about your visit section and include required contact information before continuing.", "category": "complaints_and_feedback", "file_name": "store_experience.txt"}
 {"query": "If the customer cannot find the store on the form, the customer may search by postal code, address, or contact Customer Service via Chat with us for assistance identifying the location.", "category": "complaints_and_feedback", "file_name": "store_experience.txt"}
 {"query": "Contact options for store feedback include Chat with us on TelMart.com/help, calling 1-400-840-4060, emailing help@telmart.com, speaking with a store manager in person, or messaging @TelMartHelp on social media.", "category": "complaints_and_feedback", "file_name": "store_experience.txt"}
 {"query": "When submitting store feedback, the customer should include the specific store location, date and time of the visit, a description of the experience, names of employees involved if applicable, and any supporting information such as receipts or order numbers.", "category": "complaints_and_feedback", "file_name": "store_experience.txt"}
 {"query": "TelMart takes store experience feedback seriously and uses it to improve the in-store experience for customers and employees.", "category": "complaints_and_feedback", "file_name": "store_experience.txt"}
-
-// exchanges.txt
 {"query": "Most items purchased from TelMart can be exchanged within 90 days of purchase or receipt unless otherwise stated.", "category": "customer_service_desk", "file_name": "exchanges.txt"}
 {"query": "Items purchased from a third-party marketplace seller are generally eligible for exchange within 30 days.", "category": "customer_service_desk", "file_name": "exchanges.txt"}
 {"query": "To exchange an item in-store the customer should bring the product and the purchase receipt to the Customer Service desk at any TelMart location.", "category": "customer_service_desk", "file_name": "exchanges.txt"}
@@ -127,22 +110,16 @@
 {"query": "For marketplace appliances, replacements or refunds for opened or installed items may be subject to a brief inspection window and specific return rules.", "category": "customer_service_desk", "file_name": "exchanges.txt"}
 {"query": "The customer should inspect deliveries before signing for them; if visible damage is present prior to signing, the customer may decline the shipment at no charge.", "category": "customer_service_desk", "file_name": "exchanges.txt"}
 {"query": "Large or mounted items may not be eligible for in-home delivery returns and may be subject to the manufacturer's warranty.", "category": "customer_service_desk", "file_name": "exchanges.txt"}
-
-// general_questions.txt
 {"query": "The customer can contact TelMart Support via Chat with us on TelMart.com, by phone at 1-400-840-4060, by email at help@telmart.com, or in person at a store Service Counter.", "category": "customer_service_desk", "file_name": "general_questions.txt"}
 {"query": "The Support Center at TelMart.com/help provides answers to common questions and resources for order tracking, returns and refunds, pickup and delivery, account management, pharmacy services, TelMart+ program, financial services, and privacy matters.", "category": "customer_service_desk", "file_name": "general_questions.txt"}
 {"query": "The customer may use the store locator on TelMart.com to find nearby stores, hours, and available services.", "category": "customer_service_desk", "file_name": "general_questions.txt"}
 {"query": "For in-store issues the customer should bring the receipt to the Service Counter for help with exchanges, refunds, price adjustments, and other requests.", "category": "customer_service_desk", "file_name": "general_questions.txt"}
 {"query": "For online purchases most account and order issues can be handled through Order History in the customer's TelMart profile on TelMart.com or the TelMart app.", "category": "customer_service_desk", "file_name": "general_questions.txt"}
-
-// price_adjustments.txt
 {"query": "TelMart offers price matching policies that vary between stores and TelMart.com; details and any exclusions are available on the corporate Terms and Policies pages.", "category": "customer_service_desk", "file_name": "price_adjustments.txt"}
 {"query": "TelMart may cancel orders that were placed due to pricing errors or other listing mistakes.", "category": "customer_service_desk", "file_name": "price_adjustments.txt"}
 {"query": "When a customer uses a prepaid or EBT card a price-adjustment authorization hold may be placed to confirm sufficient funds; any excess will be released after the final amount is processed.", "category": "customer_service_desk", "file_name": "price_adjustments.txt"}
 {"query": "For online purchases a temporary authorization hold may be placed on the customer's payment method; the customer's bank will remove the hold according to their policies, which may take up to 10 business days after transaction completion.", "category": "customer_service_desk", "file_name": "price_adjustments.txt"}
 {"query": "All TelMart policies that apply to in-store purchases, such as price matching, promotions, returns, and exchanges, also apply to purchases made with TelMart Money service.", "category": "customer_service_desk", "file_name": "price_adjustments.txt"}
-
-// refunds.txt
 {"query": "TelMart issues refunds for TelMart.com purchases back to the original payment method when returned in-store or by mail; shipping charges are not always refundable.", "category": "customer_service_desk", "file_name": "refunds.txt"}
 {"query": "Refund processing times vary by payment method: credit and debit card refunds may take up to 10 business days depending on the customer's bank.", "category": "customer_service_desk", "file_name": "refunds.txt"}
 {"query": "PayPal refunds may take longer depending on international bank processing times, and EBT or stored value refunds are typically processed within 3 business hours.", "category": "customer_service_desk", "file_name": "refunds.txt"}
@@ -152,8 +129,6 @@
 {"query": "For third-party seller returns TelMart processes the refund once the Marketplace Return Hub receives the returned item and typically posts the refund within two business days after receipt.", "category": "customer_service_desk", "file_name": "refunds.txt"}
 {"query": "Refunds for items requiring ID verification, such as alcohol, may be delayed up to 10 business days while TelMart verifies the customer's age.", "category": "customer_service_desk", "file_name": "refunds.txt"}
 {"query": "Certain Quick Pay charges and fees related to TelMart Financial Services products are nonrefundable.", "category": "customer_service_desk", "file_name": "refunds.txt"}
-
-// returns.txt
 {"query": "Most items are returnable within 90 days of purchase or receipt unless otherwise specified; items sold by third-party sellers may have a 30-day return window.", "category": "customer_service_desk", "file_name": "returns.txt"}
 {"query": "Customers are advised to keep manufacturer packaging and the receipt for at least 90 days after purchase to facilitate returns.", "category": "customer_service_desk", "file_name": "returns.txt"}
 {"query": "Consumer electronics are typically returnable within 30 days and mobile phones within 14 days.", "category": "customer_service_desk", "file_name": "returns.txt"}
@@ -164,8 +139,6 @@
 {"query": "In-Home collection is not available for items purchased from third-party sellers, oversized freight-shipped items, or certain food products.", "category": "customer_service_desk", "file_name": "returns.txt"}
 {"query": "Items not eligible for return include motorized recreational vehicles, at-home test kits, certain home health medical supplies, certain regulated ingredients, and digital video or software downloads after purchase unless specified.", "category": "customer_service_desk", "file_name": "returns.txt"}
 {"query": "Quick Pay charges and fees linked to TelMart Financial Services products are irreversible and not returnable.", "category": "customer_service_desk", "file_name": "returns.txt"}
-
-// gift_cards.txt
 {"query": "TelMart gift cards are available as physical cards and as e-gift cards.", "category": "membership_and_account", "file_name": "gift_cards.txt"}
 {"query": "Third-party gift cards such as Visa, Mastercard, Apple, Google Play, and coffee shop cards are sold at TelMart but are not TelMart gift cards.", "category": "membership_and_account", "file_name": "gift_cards.txt"}
 {"query": "A TelMart gift card can be used in-store or at TelMart.com.", "category": "membership_and_account", "file_name": "gift_cards.txt"}
@@ -178,8 +151,6 @@
 {"query": "If a customer adds a message to an e-gift card purchase the same message will be applied to all e-gift cards in that purchase.", "category": "membership_and_account", "file_name": "gift_cards.txt"}
 {"query": "TelMart Money cannot be exchanged for third-party gift cards or network-branded gift cards such as Visa, Mastercard, or American Express gift cards.", "category": "membership_and_account", "file_name": "gift_cards.txt"}
 {"query": "TelMart+ annual membership gift cards and e-gift cards cannot be used to purchase a TelMart+ membership.", "category": "membership_and_account", "file_name": "gift_cards.txt"}
-
-// login_issues.txt
 {"query": "If a customer cannot sign in to their TelMart account they should use the account recovery or password reset process on TelMart.com or in the TelMart app by entering the email linked to their account and following the instructions sent to that email.", "category": "membership_and_account", "file_name": "login_issues.txt"}
 {"query": "TelMart supports passkey authentication; if a customer has configured a passkey they can use it to sign in on a compatible device.", "category": "membership_and_account", "file_name": "login_issues.txt"}
 {"query": "If an account is locked due to repeated failed sign-in attempts the customer should follow the account recovery instructions sent to their email or contact Customer Service for assistance.", "category": "membership_and_account", "file_name": "login_issues.txt"}
@@ -187,8 +158,6 @@
 {"query": "If a customer cannot verify their identity for pharmacy benefits they should follow the error guidance on the Pharmacy page or check TelMart.com/help for instructions.", "category": "membership_and_account", "file_name": "login_issues.txt"}
 {"query": "If a customer notices unfamiliar activity on their account they should change their password immediately, remove any saved payment methods, update the same credentials on other sites, and contact TelMart Customer Service via Chat on TelMart.com.", "category": "membership_and_account", "file_name": "login_issues.txt"}
 {"query": "For additional assistance the customer can contact Customer Service via Chat on TelMart.com/help, by phone at 1-400-840-4060, or by email at help@telmart.com.", "category": "membership_and_account", "file_name": "login_issues.txt"}
-
-// telmart_account_help.txt
 {"query": "To create a TelMart account the customer should go to TelMart.com or open the TelMart app, select Register, and follow the prompts to set up an account with their email and password.", "category": "membership_and_account", "file_name": "telmart_account_help.txt"}
 {"query": "Customers can also use passkeys as a sign-in option for additional security.", "category": "membership_and_account", "file_name": "telmart_account_help.txt"}
 {"query": "Signing in to the customer's TelMart account allows them to manage personal information, payment methods, order history, and preferences.", "category": "membership_and_account", "file_name": "telmart_account_help.txt"}
@@ -202,8 +171,6 @@
 {"query": "Non-taxable business customers should visit TelMart.com/help for instructions on creating a non-taxable account.", "category": "membership_and_account", "file_name": "telmart_account_help.txt"}
 {"query": "To add pharmacy benefits to their account the customer should go to the Pharmacy section on the app or TelMart.com and follow the identity verification steps.", "category": "membership_and_account", "file_name": "telmart_account_help.txt"}
 {"query": "For account-related issues the customer should visit TelMart.com/help or contact Customer Service via Chat on TelMart.com, by phone at 1-400-840-4060, or by email at help@telmart.com.", "category": "membership_and_account", "file_name": "telmart_account_help.txt"}
-
-// telmart_support.txt
 {"query": "TelMart+ is TelMart's subscription service that provides benefits for a monthly or annual fee.", "category": "membership_and_account", "file_name": "telmart_support.txt"}
 {"query": "TelMart+ benefits include free store pickup on eligible orders over $35 which can save subscribers up to $9.95 on Express Pickup fees.", "category": "membership_and_account", "file_name": "telmart_support.txt"}
 {"query": "TelMart+ includes free next-day and two-day shipping from TelMart.com with no minimum purchase required.", "category": "membership_and_account", "file_name": "telmart_support.txt"}
@@ -218,9 +185,6 @@
 {"query": "If the customer cannot renew their membership because the payment method is expired or declined they should update the payment method before attempting to renew.", "category": "membership_and_account", "file_name": "telmart_support.txt"}
 {"query": "TelMart+ annual membership gift cards and e-gift cards cannot be used to purchase a TelMart+ membership but can be used toward purchases at TelMart stores or TelMart.com.", "category": "membership_and_account", "file_name": "telmart_support.txt"}
 {"query": "For TelMart+ account questions the customer should review the TelMart+ FAQ at TelMart.com/plus/faq or contact Customer Service.", "category": "membership_and_account", "file_name": "telmart_support.txt"}
-
-
-// bill_payment.txt
 {"query": "TelMart provides in-store bill payment services at Service Counters and Money Centers for customers who need to pay bills with cash.", "category": "money_services", "file_name": "bill_payment.txt"}
 {"query": "Customers can pay bills quickly and conveniently with cash through TelMart bill payment services.", "category": "money_services", "file_name": "bill_payment.txt"}
 {"query": "The customer should go to the Service Counter or a TelMart Money Center at their local store to pay a bill.", "category": "money_services", "file_name": "bill_payment.txt"}
@@ -233,8 +197,6 @@
 {"query": "TelMart Money Centers provide money transfers, check cashing, money orders, fee programs, and prepaid card loads in addition to bill payment services.", "category": "money_services", "file_name": "bill_payment.txt"}
 {"query": "Quick Pay bill payments and related fees associated with TelMart Financial Services are final and nonrefundable.", "category": "money_services", "file_name": "bill_payment.txt"}
 {"query": "For bill payment questions, the customer should visit the Service Counter or call 1-400-840-4060.", "category": "money_services", "file_name": "bill_payment.txt"}
-
-// check_cashing.txt
 {"query": "TelMart Money Centers offer check cashing for payroll checks, government checks, personal checks, and other approved check types.", "category": "money_services", "file_name": "check_cashing.txt"}
 {"query": "The customer can cash a check at the Service Counter or a TelMart Money Center at their local store.", "category": "money_services", "file_name": "check_cashing.txt"}
 {"query": "To cash a check the customer should bring the check and a valid government-issued photo ID.", "category": "money_services", "file_name": "check_cashing.txt"}
@@ -245,8 +207,6 @@
 {"query": "Customers can use Swift Refill for reloadable debit cards at TelMart Money Centers.", "category": "money_services", "file_name": "check_cashing.txt"}
 {"query": "TelMart Money Centers typically open at 6 a.m. as part of TelMart Superstore hours, but hours may vary by location.", "category": "money_services", "file_name": "check_cashing.txt"}
 {"query": "For check cashing inquiries, the customer should visit the Service Counter or call 1-400-840-4060.", "category": "money_services", "file_name": "check_cashing.txt"}
-
-// money_orders.txt
 {"query": "TelMart sells money orders at Service Counters and Money Centers.", "category": "money_services", "file_name": "money_orders.txt"}
 {"query": "A money order is a prepaid financial instrument and the customer must pay the full amount at the time of purchase.", "category": "money_services", "file_name": "money_orders.txt"}
 {"query": "Money orders are not a payment method requiring credit approval.", "category": "money_services", "file_name": "money_orders.txt"}
@@ -258,8 +218,6 @@
 {"query": "TelMart Money Centers offer money transfers, check cashing, bill payment, fee programs, and prepaid card loading services.", "category": "money_services", "file_name": "money_orders.txt"}
 {"query": "Money Center hours may vary by location, and customers should contact their local store for current hours.", "category": "money_services", "file_name": "money_orders.txt"}
 {"query": "For more information, the customer should visit the TelMart Money Center webpage or contact their local store.", "category": "money_services", "file_name": "money_orders.txt"}
-
-// money_transfers.txt
 {"query": "TelMart Money Centers and Service Counters provide domestic and international money transfer services through partners such as Western Union, Ria, and MoneyGram.", "category": "money_services", "file_name": "money_transfers.txt"}
 {"query": "The customer can send money domestically using TelMart2TelMart or internationally using TelMart2World.", "category": "money_services", "file_name": "money_transfers.txt"}
 {"query": "The customer can receive money transfers and can also send money to Mexican locations for pickup at TelMart or Bodega Aurrera locations.", "category": "money_services", "file_name": "money_transfers.txt"}
@@ -274,9 +232,6 @@
 {"query": "For questions about money transfers, the customer can call the partner's support line or track the transfer using the receipt information on the partner's website.", "category": "money_services", "file_name": "money_transfers.txt"}
 {"query": "For Ria transfers the customer can call 1-855-355-2144, for MoneyGram transfers the customer can call 1-800-926-9400, and for Western Union transfers the customer can call 1-844-982-4287.", "category": "money_services", "file_name": "money_transfers.txt"}
 {"query": "TelMart store hours are typically 6 a.m. to 11 p.m., while Money Center hours may vary by location.", "category": "money_services", "file_name": "money_transfers.txt"}
-
-
-// delivery_orders.txt
 {"query": "TelMart delivers food products and other items directly to the customer's residence using independent delivery drivers.", "category": "online_orders", "file_name": "delivery_orders.txt"}
 {"query": "After the driver collects the customer's order, the customer receives a notification when the driver is on the way.", "category": "online_orders", "file_name": "delivery_orders.txt"}
 {"query": "In some cases, delivery can take up to 120 minutes to arrive.", "category": "online_orders", "file_name": "delivery_orders.txt"}
@@ -300,8 +255,6 @@
 {"query": "For InHome delivery, TelMart associates deliver directly inside the customer's home or garage.", "category": "online_orders", "file_name": "delivery_orders.txt"}
 {"query": "The customer receives a notification before the associate arrives for InHome delivery.", "category": "online_orders", "file_name": "delivery_orders.txt"}
 {"query": "If an InHome delivery is delayed, the customer may receive a message, text, or push notification with options to modify the order.", "category": "online_orders", "file_name": "delivery_orders.txt"}
-
-// missing_items.txt
 {"query": "TelMart may deliver orders containing multiple items from different warehouses in separate shipments on different days.", "category": "online_orders", "file_name": "missing_items.txt"}
 {"query": "Each package receives its own tracking number.", "category": "online_orders", "file_name": "missing_items.txt"}
 {"query": "The customer should go to the order tracking page to check the number of packages for the order.", "category": "online_orders", "file_name": "missing_items.txt"}
@@ -317,8 +270,6 @@
 {"query": "For delivery orders where Order Details shows the package was delivered but the customer cannot find it, the customer should review the delivery confirmation photo.", "category": "online_orders", "file_name": "missing_items.txt"}
 {"query": "The customer should contact customer service if the delivery appears to have been left at the wrong location.", "category": "online_orders", "file_name": "missing_items.txt"}
 {"query": "The customer should use delivery instructions to confirm order details before completing checkout in order to help prevent delivery problems.", "category": "online_orders", "file_name": "missing_items.txt"}
-
-// order_status.txt
 {"query": "The customer should sign in to their TelMart account on TelMart.com or in the TelMart app to track their order.", "category": "online_orders", "file_name": "order_status.txt"}
 {"query": "The customer should choose Account and then Order Details to find their order and view the current status.", "category": "online_orders", "file_name": "order_status.txt"}
 {"query": "The order tracker shows estimated arrival dates and all changes.", "category": "online_orders", "file_name": "order_status.txt"}
@@ -333,8 +284,6 @@
 {"query": "If the driver delivers the customer's order to the wrong address, a representative will contact the customer to reschedule delivery.", "category": "online_orders", "file_name": "order_status.txt"}
 {"query": "If the order cannot be rescheduled, TelMart cancels the delivery order and works to resolve the issue.", "category": "online_orders", "file_name": "order_status.txt"}
 {"query": "For any questions about order status, the customer should contact customer service via Chat with us on TelMart.com or by phone at 1-400-840-4060.", "category": "online_orders", "file_name": "order_status.txt"}
-
-// pickup_orders.txt
 {"query": "When the customer's order is ready for store pickup, TelMart sends a Ready for Pickup notification.", "category": "online_orders", "file_name": "pickup_orders.txt"}
 {"query": "The customer should check in using the TelMart app or follow the instructions in the Ready for Pickup notification when they arrive at the store.", "category": "online_orders", "file_name": "pickup_orders.txt"}
 {"query": "A TelMart associate will bring the customer's order to the designated pickup area.", "category": "online_orders", "file_name": "pickup_orders.txt"}
@@ -352,8 +301,6 @@
 {"query": "If the customer misses the deadline after 8 p.m., the customer must modify or cancel the order and place a new one.", "category": "online_orders", "file_name": "pickup_orders.txt"}
 {"query": "Perishable items such as produce are kept at the proper temperature until pickup.", "category": "online_orders", "file_name": "pickup_orders.txt"}
 {"query": "If the customer does not pick up the order by store closing on the scheduled day, the store cancels the order the next day.", "category": "online_orders", "file_name": "pickup_orders.txt"}
-
-// substitutions.txt
 {"query": "If an item the customer purchased is unavailable, TelMart will offer a similar item as a replacement.", "category": "online_orders", "file_name": "substitutions.txt"}
 {"query": "The customer can accept, decline, or return substituted items.", "category": "online_orders", "file_name": "substitutions.txt"}
 {"query": "TelMart charges the customer for the price of any substituted item.", "category": "online_orders", "file_name": "substitutions.txt"}
@@ -374,8 +321,6 @@
 {"query": "Amounts charged to non-SNAP/EBT payment methods are subject to service fees.", "category": "online_orders", "file_name": "substitutions.txt"}
 {"query": "If the customer declines the substitute, the store associate will remove it from the order.", "category": "online_orders", "file_name": "substitutions.txt"}
 {"query": "Delivery drivers cannot remove the item from the customer's order and return it to the store.", "category": "online_orders", "file_name": "substitutions.txt"}
-
-// insurance_questions.txt
 {"query": "TelMart recognizes the vast majority of pharmacy insurance options and the customer should talk to their insurance provider for specific coverage details.", "category": "pharmacy_support", "file_name": "insurance_questions.txt"}
 {"query": "The customer may update their insurance information during any online prescription refill or transfer request.", "category": "pharmacy_support", "file_name": "insurance_questions.txt"}
 {"query": "The customer should select Add or Change insurance before submitting and follow the prompts.", "category": "pharmacy_support", "file_name": "insurance_questions.txt"}
@@ -390,8 +335,6 @@
 {"query": "The customer can use the Find a TelMart Eye Center tool to locate a nearby Eye Center.", "category": "pharmacy_support", "file_name": "insurance_questions.txt"}
 {"query": "TelMart Pharmacy and Eye Center/Vision HIPAA forms are available at TelMart.com/help.", "category": "pharmacy_support", "file_name": "insurance_questions.txt"}
 {"query": "For specific insurance questions, the customer should contact their local TelMart Pharmacy directly and find the pharmacy phone number on their prescription label or by using the Store Locator at TelMart.com.", "category": "pharmacy_support", "file_name": "insurance_questions.txt"}
-
-// prescription_pickup.txt
 {"query": "TelMart Pharmacy offers prescription pickup at many locations across the United States.", "category": "pharmacy_support", "file_name": "prescription_pickup.txt"}
 {"query": "The customer should go to their local TelMart Pharmacy during pharmacy hours.", "category": "pharmacy_support", "file_name": "prescription_pickup.txt"}
 {"query": "The customer should provide their name and date of birth to the pharmacy team member.", "category": "pharmacy_support", "file_name": "prescription_pickup.txt"}
@@ -411,8 +354,6 @@
 {"query": "The customer will receive a notification on how to proceed.", "category": "pharmacy_support", "file_name": "prescription_pickup.txt"}
 {"query": "They should choose how and when to receive the prescription, delivered with their groceries and essentials.", "category": "pharmacy_support", "file_name": "prescription_pickup.txt"}
 {"query": "TelMart also offers a $4 Prescription Program for select generic medications and the customer should visit the Pharmacy page on TelMart.com for more details.", "category": "pharmacy_support", "file_name": "prescription_pickup.txt"}
-
-// refill_questions.txt
 {"query": "The customer should sign in to their TelMart profile before requesting a refill.", "category": "pharmacy_support", "file_name": "refill_questions.txt"}
 {"query": "They should choose Settings.", "category": "pharmacy_support", "file_name": "refill_questions.txt"}
 {"query": "They should choose Pharmacy.", "category": "pharmacy_support", "file_name": "refill_questions.txt"}
@@ -431,9 +372,6 @@
 {"query": "The customer can find their pharmacy location phone number on their prescription label or receipt.", "category": "pharmacy_support", "file_name": "refill_questions.txt"}
 {"query": "The customer can also use the TelMart Store Locator on TelMart.com to find their pharmacy and its contact information.", "category": "pharmacy_support", "file_name": "refill_questions.txt"}
 {"query": "For questions about estimated prescription fill costs, the customer should visit the Estimated Prescription Fill Prices help article at TelMart.com/help.", "category": "pharmacy_support", "file_name": "refill_questions.txt"}
-
-
-// vaccine_appointments.txt
 {"query": "TelMart Pharmacies offer a range of immunizations including flu shots, COVID-19 vaccines, and more.", "category": "pharmacy_support", "file_name": "vaccine_appointments.txt"}
 {"query": "TelMart offers the updated COVID-19 vaccine.", "category": "pharmacy_support", "file_name": "vaccine_appointments.txt"}
 {"query": "TelMart offers the flu shot.", "category": "pharmacy_support", "file_name": "vaccine_appointments.txt"}
@@ -461,8 +399,6 @@
 {"query": "The customer should verify their birthdate.", "category": "pharmacy_support", "file_name": "vaccine_appointments.txt"}
 {"query": "If the customer needs to cancel by phone, they should contact their local pharmacy and find the pharmacy phone number on their prescription label, receipt, or by using the TelMart Store Locator on TelMart.com.", "category": "pharmacy_support", "file_name": "vaccine_appointments.txt"}
 {"query": "The customer can download their immunization history through their TelMart profile and should go to TelMart.com/help for instructions.", "category": "pharmacy_support", "file_name": "vaccine_appointments.txt"}
-
-// account_security.txt
 {"query": "TelMart provides guidance to safeguard a TelMart account.", "category": "privacy_and_security", "file_name": "account_security.txt"}
 {"query": "If a customer detects suspicious account access, they should immediately change their password to a strong, unique one.", "category": "privacy_and_security", "file_name": "account_security.txt"}
 {"query": "The customer should activate two-factor authentication when it is available.", "category": "privacy_and_security", "file_name": "account_security.txt"}
@@ -483,8 +419,6 @@
 {"query": "The customer should avoid using public Wi-Fi networks when accessing their TelMart account.", "category": "privacy_and_security", "file_name": "account_security.txt"}
 {"query": "The customer should avoid allowing browsers to save their passwords.", "category": "privacy_and_security", "file_name": "account_security.txt"}
 {"query": "Customers can contact TelMart Customer Care for account security support by using Chat with us on TelMart.com, calling 1-400-840-4060, or emailing help@telmart.com.", "category": "privacy_and_security", "file_name": "account_security.txt"}
-
-// fraud_concerns.txt
 {"query": "TelMart shares caution alerts at corporate.telmart.com/privacy-security to educate customers about recognized scams and schemes that do not come from TelMart.", "category": "privacy_and_security", "file_name": "fraud_concerns.txt"}
 {"query": "Phishing uses fake communications or sites designed to resemble TelMart in order to collect personal or financial details.", "category": "privacy_and_security", "file_name": "fraud_concerns.txt"}
 {"query": "If an offer seems too good to be true, it is often a phishing attempt.", "category": "privacy_and_security", "file_name": "fraud_concerns.txt"}
@@ -507,8 +441,6 @@
 {"query": "The customer should review their account and order history regularly for unexpected activity.", "category": "privacy_and_security", "file_name": "fraud_concerns.txt"}
 {"query": "The customer should alert TelMart Customer Care to any suspicious calls, messages, or activities.", "category": "privacy_and_security", "file_name": "fraud_concerns.txt"}
 {"query": "The customer can report fraud to the Federal Trade Commission at reportfraud.ftc.gov.", "category": "privacy_and_security", "file_name": "fraud_concerns.txt"}
-
-// payment_security.txt
 {"query": "TelMart recommends the customer examine linked payment accounts by checking recent transactions in their TelMart profile.", "category": "privacy_and_security", "file_name": "payment_security.txt"}
 {"query": "If the customer believes their payment details have been compromised, they should remove all stored payment methods immediately.", "category": "privacy_and_security", "file_name": "payment_security.txt"}
 {"query": "The customer should go to Account, then Settings, then Wallet, and choose Edit to remove saved payment information.", "category": "privacy_and_security", "file_name": "payment_security.txt"}
@@ -527,8 +459,6 @@
 {"query": "The customer should notify their card issuers by calling the number on the back of their card.", "category": "privacy_and_security", "file_name": "payment_security.txt"}
 {"query": "The customer should file a police report so the incident is documented by local law enforcement.", "category": "privacy_and_security", "file_name": "payment_security.txt"}
 {"query": "The customer should monitor their credit reports for suspicious activity and enable fraud notifications or account locks as needed.", "category": "privacy_and_security", "file_name": "payment_security.txt"}
-
-// personal_information.txt
 {"query": "TelMart values the trust customers place in the company when they share personal information.", "category": "privacy_and_security", "file_name": "personal_information.txt"}
 {"query": "TelMart handles personal data with respect for the individual.", "category": "privacy_and_security", "file_name": "personal_information.txt"}
 {"query": "TelMart provides Privacy Guidelines that explain how personal information is collected, used, and shared.", "category": "privacy_and_security", "file_name": "personal_information.txt"}
@@ -544,8 +474,6 @@
 {"query": "The customer can review and update account details at Account > Settings on TelMart.com or in the TelMart app.", "category": "privacy_and_security", "file_name": "personal_information.txt"}
 {"query": "The customer can change their name, email, phone, delivery addresses, and payment details at any time.", "category": "privacy_and_security", "file_name": "personal_information.txt"}
 {"query": "For more details about TelMart's privacy practices or to submit a privacy request, the customer should visit corporate.telmart.com/privacy-security or contact TelMart Customer Care.", "category": "privacy_and_security", "file_name": "personal_information.txt"}
-
-// damaged_items.txt
 {"query": "If an item the customer received from TelMart.com is damaged or defective, it may be eligible to be returned by mail or to any TelMart store.", "category": "product_help", "file_name": "damaged_items.txt"}
 {"query": "A damaged item may qualify for a refund or replacement.", "category": "product_help", "file_name": "damaged_items.txt"}
 {"query": "The customer should start a return in the TelMart app or online by going to Purchase History and selecting Start a return.", "category": "product_help", "file_name": "damaged_items.txt"}
@@ -560,8 +488,6 @@
 {"query": "TelMart Marketplace requires sellers to disclose the condition of items when creating a listing.", "category": "product_help", "file_name": "damaged_items.txt"}
 {"query": "New with Defects items are brand new and functional but may have cosmetic imperfections from production or delivery.", "category": "product_help", "file_name": "damaged_items.txt"}
 {"query": "For help with a damaged item, the customer can visit the TelMart Help Center at TelMart.com/help, use the Chat with us button, or go to the Customer Service Desk at their local TelMart store.", "category": "product_help", "file_name": "damaged_items.txt"}
-
-// item_location.txt
 {"query": "The customer can ask any TelMart associate in the store for help finding an item, as associates are stationed throughout the store and are trained to help locate products.", "category": "product_help", "file_name": "item_location.txt"}
 {"query": "The customer can use the TelMart app to search for an item and see its location within their local store, and the app can guide them to the correct aisle and section.", "category": "product_help", "file_name": "item_location.txt"}
 {"query": "The customer should look for aisle signs and department markers to navigate to the correct section.", "category": "product_help", "file_name": "item_location.txt"}
@@ -573,8 +499,6 @@
 {"query": "On the item page at TelMart.com, the customer can check if an item is available for in-store purchase, pickup, or delivery at their local store.", "category": "product_help", "file_name": "item_location.txt"}
 {"query": "If an item is out of stock, the customer may be able to sign up for in-stock notifications on TelMart.com.", "category": "product_help", "file_name": "item_location.txt"}
 {"query": "TelMart+ members can use the Scan and Go feature in the TelMart app to scan items while they shop and pay without waiting in line.", "category": "product_help", "file_name": "item_location.txt"}
-
-// product_availability.txt
 {"query": "If the customer needs help locating an item, they can visit the Customer Service Desk at their local TelMart store or contact TelMart Customer Care at 1-400-840-4060.", "category": "product_help", "file_name": "item_location.txt"}
 {"query": "The customer can visit TelMart.com or the TelMart app and search for the item.", "category": "product_help", "file_name": "product_availability.txt"}
 {"query": "On the item's product page, the customer can enter their zip code or allow location access to check in-store availability at their local store.", "category": "product_help", "file_name": "product_availability.txt"}
@@ -590,8 +514,6 @@
 {"query": "TelMart uses automated pricing rules to identify and remove offers from TelMart.com that are priced unfairly or uncompetitive.", "category": "product_help", "file_name": "product_availability.txt"}
 {"query": "Market conditions change frequently, and prices are subject to change.", "category": "product_help", "file_name": "product_availability.txt"}
 {"query": "For specific product inquiries, the customer can visit TelMart.com, use the TelMart app, or contact their local TelMart store.", "category": "product_help", "file_name": "product_availability.txt"}
-
-// warranty_questions.txt
 {"query": "Products sold by TelMart may come with a manufacturer's warranty.", "category": "product_help", "file_name": "warranty_questions.txt"}
 {"query": "The manufacturer's warranty covers defects in the item itself.", "category": "product_help", "file_name": "warranty_questions.txt"}
 {"query": "Warranty terms and duration vary by manufacturer and product type.", "category": "product_help", "file_name": "warranty_questions.txt"}

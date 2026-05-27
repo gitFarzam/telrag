@@ -166,7 +166,7 @@ class NLP():
 
         with open(path) as f:
             return pd.DataFrame([json.loads(line) for line in f])
-
+        
 
     def embedder(self,model,chunks:list):
         client = InferenceClient(model=model,token=os.getenv("HF_API_TOKEN")) 
@@ -251,10 +251,29 @@ class RagMetrics():
         self.nlp = NLP()
 
         # loading test data as a pandas dataframe
-        test_path_rel = "../data/query_class_retriever.jsonl"
+        test_data_source_path_rel = "data/knowledge_base/telmart/test_data/source"
+        self.test_data_source_path = os.path.join(settings.BASE_DIR , test_data_source_path_rel)
+        test_path_rel = "data/query_class_retriever.jsonl"
         self.jsonl_path = os.path.join(settings.BASE_DIR , test_path_rel)
         self.df = self.nlp.jsonl_reader(path=self.jsonl_path)
 
+    def value_checker(self,df:pd.DataFrame):
+        """
+        This method will check are all keys from source data (category and file_name) existed in the dataframe or not
+        
+        """
+        unique_categories = df['category'].unique().sort()
+        unique_files = df['file_name'].unique().sort()
+
+        categories = [dir.name for dir in os.scandir(self.test_data_source_path) if dir.is_dir()].sort()
+        files=[]
+        for category in categories:
+            files +=[f for f in os.listdir(os.path.join(self.test_data_source_path,category)) if f.endswith('.txt')]
+
+        if unique_files == files and unique_categories == categories:
+            return True
+        else:
+            return False
 
     def recall(self):
         """
