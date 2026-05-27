@@ -260,7 +260,6 @@ class RagMetrics():
     def value_checker(self,df:pd.DataFrame):
         """
         This method will check are all keys from source data (category and file_name) existed in the dataframe or not
-        
         """
         unique_categories = df['category'].unique().sort()
         unique_files = df['file_name'].unique().sort()

@@ -27,3 +27,18 @@ def telegram_message_support(firstname,content):
 
 def demo_telegram_verify_messsage(code):
     return f"""<br>Please link your Telegram account to this conversation.\n<br><br>Send number below to <ahref="https://t.me/telrag_bot">@telrag_bot</a><br><br><center><b>{code}</b></center>"""
+
+def data_path(name:str):
+    main_path = f"data/knowledge_base/{name}/"
+    path_dict =  {
+        "initial" : "initial_data",
+        "test_raw" : "test_data",
+        "test_retrieval_question_jsonl" : "retrieval_eval_question.jsonl",
+        "test_retrieval_question_jsonl" : "retrieval_eval_declerative.jsonl",
+    }
+
+    for i in path_dict:
+        path_dict[i] = main_path + path_dict[i]
+
+    return path_dict
+     
