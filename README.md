@@ -144,6 +144,7 @@ chmod +x entrypoint.sh
 - add `ngrok` in documentaion, for using in dev mode
 - fixing `DOCKER` and `DEBUG` env variables and db connection issue in dev mode
 - add caching
+- change port from 8006 ro 8000!
 
 
 ## Security
