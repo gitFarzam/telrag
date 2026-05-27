@@ -47,6 +47,3 @@ celeryd.pid
 
 # Other trashy stuff
 src/dump.rdb
-
-# transfered data file
-src/data

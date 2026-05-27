@@ -3,10 +3,6 @@
 # Exit on error
 set -e
 
-# Transfering Data file
-
-mv data/ src/
-
 echo "🧱 Collecting static files..."
 
 # Ensure we're in the Django project directory where manage.py lives
