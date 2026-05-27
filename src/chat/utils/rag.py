@@ -243,7 +243,7 @@ class NLP():
 
 
 class RagMetrics():
-    def __init__(self,top_k,test_df:pd.DataFrame):
+    def __init__(self,test_data_path:str):
         from services import hybrid_search
         self.hybrid_search = hybrid_search
 
@@ -251,11 +251,7 @@ class RagMetrics():
         self.nlp = NLP()
 
         # loading test data as a pandas dataframe
-        test_data_source_path_rel = "data/knowledge_base/telmart/test_data/source"
-        self.test_data_source_path = os.path.join(settings.BASE_DIR , test_data_source_path_rel)
-        test_path_rel = "data/query_class_retriever.jsonl"
-        self.jsonl_path = os.path.join(settings.BASE_DIR , test_path_rel)
-        self.df = self.nlp.jsonl_reader(path=self.jsonl_path)
+        self.df = self.nlp.jsonl_reader(path=test_data_path)
 
     def value_checker(self,df:pd.DataFrame):
         """

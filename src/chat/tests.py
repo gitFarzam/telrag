@@ -163,32 +163,26 @@ class TestTelegramFileDownload(TestCase):
         self.assertTrue(result,"An output for the file is existed")
 
 
-class TestRetriever(TestCase):
+class TestJsonlReader(TestCase):
     def setUp(self):
-        initial_data_path_rel = os.path.join(settings.BASE_DIR,f'data/initial_data/telmart/inital_data')
-        test_path_rel = "data/initial_data/telmart/test_data/query_class_retriever.jsonl"
-        self.jsonl_path = os.path.join(settings.BASE_DIR , test_path_rel)
+        self.jsonl_path = os.path.join(settings.BASE_DIR,constants.data_path("telmart")["test_retrieval_question_jsonl"])
         self.nlp = NLP()
-        self.df = self.nlp.jsonl_reader(path=self.jsonl_path)
         
-        # objects
-        user = User.objects.create(username="test_username",password="test_password")
-        self.conversation = Conversation.objects.create(user=user)
-        embeddings:QuerySet[Embedding] = intial_data_db_insert(initial_data_path_rel)
-
     def test_jsonl_reader(self):
         result = self.nlp.jsonl_reader(path=self.jsonl_path)
         assert isinstance(result, pd.DataFrame)
 
-    def test_embedding_model(self):
+
+class TestEmbedder(TestCase):
+    def setUp(self):
+        jsonl_path = os.path.join(settings.BASE_DIR,constants.data_path("telmart")["test_retrieval_question_jsonl"])
+        self.nlp = NLP()
+        self.df = self.nlp.jsonl_reader(path=jsonl_path)
+
+    def test_embedder(self):
         embeddings = self.nlp.embedder(
             model=constants.HF_EMBEDDING_MODEL,
             chunks=self.df['query'].tolist()[:5]
             )
         self.assertEqual(len(embeddings), 5) # Checking the number of embeddings
         self.assertEqual(len(embeddings[0]), 384) # Checking the lenfth of each 
-
-    def test_hybrid_search(self):
-        """
-        hybrid search supposed to retrieve top k items for any input
-        """

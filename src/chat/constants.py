@@ -33,8 +33,8 @@ def data_path(name:str):
     path_dict =  {
         "initial" : "initial_data",
         "test_raw" : "test_data",
-        "test_retrieval_question_jsonl" : "retrieval_eval_question.jsonl",
-        "test_retrieval_question_jsonl" : "retrieval_eval_declerative.jsonl",
+        "test_retrieval_question_jsonl" : "test_data/jsonl/retrieval_eval_question.jsonl",
+        "test_retrieval_declerative_jsonl" : "test_data/jsonl/retrieval_eval_declerative.jsonl",
     }
 
     for i in path_dict:
