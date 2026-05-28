@@ -168,6 +168,30 @@ class NLP():
             return pd.DataFrame([json.loads(line) for line in f])
         
 
+    def value_checker(self,df:pd.DataFrame,test_raw_path):
+        """
+        This method will check are all keys from source data (category and file_name) existed in the dataframe or not
+        """
+        unique_categories = sorted(df['category'].unique().tolist())
+        unique_files = sorted(df['file_name'].unique().tolist())
+        
+        categories = sorted([dir.name for dir in os.scandir(test_raw_path) if dir.is_dir()])
+        files=[]
+        for category in categories:
+            files +=[f for f in os.listdir(os.path.join(test_raw_path,category)) if f.endswith('.txt')]
+        
+        files = sorted(files)
+
+        
+        if unique_files == files and unique_categories == categories:
+            return True
+        else:
+            print("there is a mismatch: unique_categories, categories , unique_files , files -> \n\n" , 
+                        f"{unique_categories}\n\n{categories}\n\n{unique_files}\n\n{files}"
+                    )
+            return False
+
+
     def embedder(self,model,chunks:list):
         client = InferenceClient(model=model,token=os.getenv("HF_API_TOKEN")) 
         embeddings = client.feature_extraction(text=chunks)
@@ -248,27 +272,10 @@ class RagMetrics():
         self.hybrid_search = hybrid_search
 
         # Initialzing an instance of NLP class
-        self.nlp = NLP()
+        nlp = NLP()
 
         # loading test data as a pandas dataframe
-        self.df = self.nlp.jsonl_reader(path=test_data_path)
-
-    def value_checker(self,df:pd.DataFrame):
-        """
-        This method will check are all keys from source data (category and file_name) existed in the dataframe or not
-        """
-        unique_categories = df['category'].unique().sort()
-        unique_files = df['file_name'].unique().sort()
-
-        categories = [dir.name for dir in os.scandir(self.test_data_source_path) if dir.is_dir()].sort()
-        files=[]
-        for category in categories:
-            files +=[f for f in os.listdir(os.path.join(self.test_data_source_path,category)) if f.endswith('.txt')]
-
-        if unique_files == files and unique_categories == categories:
-            return True
-        else:
-            return False
+        self.df = nlp.jsonl_reader(path=test_data_path)
 
     def recall(self):
         """

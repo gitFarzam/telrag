@@ -29,7 +29,7 @@ import chat.constants as constants
 import chat.prompts as prompts
 from .models import Conversation, Message,DocumentSource , TelegramMessage,Document, Chunk, Embedding, TextContent,AudioContent
 from .utils.telegram import send_message,telegram_message_parser,telegram_downloader
-from .utils.rag import NLPToolKit,RetrievalToolKit
+from .utils.rag import NLPToolKit,RetrievalToolKit,NLP
 
 # loading env variables
 load_dotenv()
@@ -51,25 +51,23 @@ def similarity_search(conversation,input_text,num):
     similar_embeddings = Embedding.objects.filter(chunk__document__conversation=conversation).order_by(L2Distance('vector', input_text_embedding))[:num]
     return input_text_embedding,similar_embeddings
 
-def hybrid_search(user_query,input_text,k,conversation=None)->QuerySet[Embedding]:
+def hybrid_search(search_keyword,input_text_embedding,k,conversation=None)->QuerySet[Embedding]:
 
 
     """
     hybrid search in pgvector using django ORM
 
     - conversation: the conversatin object for the chat: Demo usage
-    - user_query : the query for searching inside the database for keyword search
-    - input_text : the text for embedding which retriever uses for semantic search
+    - search_keyword : the query for searching inside the database for keyword search
+    - input_text_embedding : the embedded input text for embedding which retriever uses for semantic search
     - k : number of document which should be retrieved
 
     
     """
-    rag_toolkit = NLPToolKit()
-    input_text_embedding = rag_toolkit.embedder([input_text])[0]
 
 
     # converting user text keyword to -> PostgreSQL search query
-    query = SearchQuery(user_query)
+    query = SearchQuery(search_keyword)
 
     result = (
         Embedding.objects
@@ -90,13 +88,13 @@ def hybrid_search(user_query,input_text,k,conversation=None)->QuerySet[Embedding
             category = F("chunk__document__category")
         )
         # Highest keyword match first (-rank) , Then best semantic similarity (distance ascending)
-        .order_by('-rank', 'distance')[:k]
+        .order_by('-rank', 'distance')
     )
 
     if conversation:
-        result = result.filter(Q(chunk__document__conversation=conversation) | Q(chunk__document__is_initial=True))
+        result = result.filter(Q(chunk__document__conversation=conversation) | Q(chunk__document__is_initial=True))[:k]
     else:
-        result = result.filter(chunk__document__is_initial=True)
+        result = result.filter(chunk__document__is_initial=True)[:k]
 
     logger.info(result)
 
@@ -330,7 +328,10 @@ def user_message_categorizer(message:Message):
     conversation=message.conversation
 
     # Fetch Context
-    similar_embeddings = hybrid_search(conversation=conversation,user_query=message.content,input_text=message.content , k=5)
+    nlp = NLP()
+    input_text_embedding = nlp.embedder([message.content])[0]
+
+    similar_embeddings = hybrid_search(conversation=conversation,search_keyword=message.content,input_text_embedding=input_text_embedding , k=5)
 
     context =''
     if similar_embeddings:
@@ -594,7 +595,7 @@ def delete_unused_conversation():
         conversation.delete()
 
 
-def load_initial_documents(initial_data_root_dir):
+def load_initial_documents(abs_data_dir):
     """
     this function returns a dictionary which have category name as a key and file path as value, for example:
 
@@ -604,31 +605,36 @@ def load_initial_documents(initial_data_root_dir):
     } 
     """
     txt_files_dict = {}
-    dirs = os.listdir(initial_data_root_dir)
+    dirs = os.listdir(abs_data_dir)
     for dir in dirs:
-        txt_file_path = os.path.join(initial_data_root_dir,dir)
+        txt_file_path = os.path.join(abs_data_dir,dir)
         txt_files = os.listdir(txt_file_path)
+        txt_files_full_path_list = []
         for txt_file in txt_files:
-            txt_files_dict[f"{dir}_{Path(txt_file).stem}"] = os.path.join(txt_file_path,txt_file)
+            txt_file_full_path = os.path.join(txt_file_path,txt_file)
+            txt_files_full_path_list.append(txt_file_full_path)
+        txt_files_dict[f"{dir}"] = txt_files_full_path_list
     return txt_files_dict
 
 
-def intial_data_db_insert(initial_data_root_dir)->QuerySet[Embedding]:
-    txt_files_dict = load_initial_documents(initial_data_root_dir)
-    for category in txt_files_dict:
-        try:
-            file_path = txt_files_dict[category]
-            with open(file_path) as text_file:
-                text_string = text_file.read()
-                print(text_string)
-            with transaction.atomic():
-                text_content_object = creating_text_content_object(content=text_string)
-                doc_source_object = creating_document_source(model_object=text_content_object)
-                doc_object = creating_document_object(document_source=doc_source_object,category=category , is_initial=True)
-                chunk_objects = creating_chunk_objects(document_object=doc_object)
-                embedding_objects = creating_embedding_objects(chunks=chunk_objects)
+def intial_data_db_insert(data_dir)->QuerySet[Embedding]:
+    abs_data_dir = os.path.join(settings.BASE_DIR,data_dir)
+    txt_files_dict = load_initial_documents(abs_data_dir)
 
-                return embedding_objects
+    try:
+        for category in txt_files_dict:
+            for file_path in txt_files_dict[category]:
+                with transaction.atomic():
+                    with open(file_path,'r') as text_file:
+                        text_string = text_file.read()
+                    text_content_object = creating_text_content_object(content=text_string)
+                    doc_source_object = creating_document_source(model_object=text_content_object)
+                    doc_object = creating_document_object(document_source=doc_source_object,category=category , is_initial=True)
+                    chunk_objects = creating_chunk_objects(document_object=doc_object)
+                    embedding_objects = creating_embedding_objects(chunks=chunk_objects)
 
-        except Exception as e:
-            logger.error(e)
+                    print(f"Embedding has been created for: {category}")
+
+                    return embedding_objects
+    except Exception as e:
+        logger.error(e)

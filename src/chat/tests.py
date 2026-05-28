@@ -7,8 +7,8 @@ import json
 from http import HTTPStatus
 import os
 from django.conf import settings
-from .services import process_telegram_object,hybrid_search,intial_data_db_insert
-from .utils.rag import NLP
+from .services import process_telegram_object,hybrid_search,intial_data_db_insert,load_initial_documents
+from .utils.rag import NLP, RagMetrics
 from .utils.telegram import telegram_downloader
 from unittest.mock import patch
 import chat.constants as constants
@@ -163,6 +163,21 @@ class TestTelegramFileDownload(TestCase):
         self.assertTrue(result,"An output for the file is existed")
 
 
+
+class TestInsertData(TestCase):
+    def setUp(self):
+        self.data_dir = constants.data_path("telmart")["initial"]
+        self.abs_data_dir = os.path.join(settings.BASE_DIR,self.data_dir)
+    def test_load_initial_documents(self):
+        categories = os.listdir(self.abs_data_dir)
+        result = load_initial_documents(self.abs_data_dir)
+        self.assertEqual(result.__len__() , categories.__len__() , msg=f"The number of folders in the {self.abs_data_dir} path is equal to number of keys in categories dictionary and equals to {result.__len__()}")
+
+    def test_intial_data_db_insert(self):
+        result = intial_data_db_insert(self.data_dir)
+        self.assertGreaterEqual(result.__len__(),1,msg="Emebddings list at least have 1 value")
+        [self.assertIsInstance(obj,Embedding,msg="Object class is Embedding") for obj in result]
+
 class TestJsonlReader(TestCase):
     def setUp(self):
         self.jsonl_path = os.path.join(settings.BASE_DIR,constants.data_path("telmart")["test_retrieval_question_jsonl"])
@@ -186,3 +201,41 @@ class TestEmbedder(TestCase):
             )
         self.assertEqual(len(embeddings), 5) # Checking the number of embeddings
         self.assertEqual(len(embeddings[0]), 384) # Checking the lenfth of each 
+
+
+class TestValueChecker(TestCase):
+    def setUp(self):
+        jsonl_path = os.path.join(settings.BASE_DIR,constants.data_path("telmart")["test_retrieval_question_jsonl"])
+        self.test_raw_source = os.path.join(settings.BASE_DIR,constants.data_path("telmart")["test_raw"])
+        self.nlp = NLP()
+        self.df = self.nlp.jsonl_reader(path=jsonl_path)
+
+    def test_value_checker(self):
+        result = self.nlp.value_checker(self.df,self.test_raw_source)
+        self.assertTrue(result)
+
+class TestHybridSearch(TestCase):
+
+    def setUp(self):
+        self.search_keyword = "telmart"
+
+        input_text = "what does telmart do?"
+        nlp = NLP()
+        self.input_text_embedding = nlp.embedder(
+            model=constants.HF_EMBEDDING_MODEL,
+            chunks=[input_text]
+            )[0]
+
+        self.k = 5
+        return super().setUp()
+    
+    def test_hybrid_search(self):
+        result = hybrid_search(
+            self.search_keyword,
+            self.input_text_embedding,
+            self.k
+        )
+
+        print(result)
+
+        self.assertEqual(result.__len__(),self.k)

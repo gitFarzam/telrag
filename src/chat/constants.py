@@ -32,7 +32,7 @@ def data_path(name:str):
     main_path = f"data/knowledge_base/{name}/"
     path_dict =  {
         "initial" : "initial_data",
-        "test_raw" : "test_data",
+        "test_raw" : "test_data/raw",
         "test_retrieval_question_jsonl" : "test_data/jsonl/retrieval_eval_question.jsonl",
         "test_retrieval_declerative_jsonl" : "test_data/jsonl/retrieval_eval_declerative.jsonl",
     }
