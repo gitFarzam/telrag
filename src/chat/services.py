@@ -12,12 +12,13 @@ from django.contrib.contenttypes.models import ContentType
 from django.core.files.base import ContentFile
 from django.conf import settings
 from django.db import transaction
-from django.db.models import QuerySet,Case, When, Value, CharField,Max, Q,F
+from django.db.models import QuerySet,Case, When, Value, CharField,Max, Q,F,FloatField
 from django.http import JsonResponse
 from django.template.loader import render_to_string
 from django.utils import timezone
 from django.contrib.postgres.search import SearchVector, SearchQuery, SearchRank
 from django.core.files import File
+from django.db.models.expressions import ExpressionWrapper
 
 # Other libraries import
 from dotenv import load_dotenv
@@ -51,8 +52,7 @@ def similarity_search(conversation,input_text,num):
     similar_embeddings = Embedding.objects.filter(chunk__document__conversation=conversation).order_by(L2Distance('vector', input_text_embedding))[:num]
     return input_text_embedding,similar_embeddings
 
-def hybrid_search(search_keyword,input_text_embedding,k,conversation=None)->QuerySet[Embedding]:
-
+def hybrid_search(search_keyword,input_text_embedding,k,beta,conversation=None)->QuerySet[Embedding]:
 
     """
     hybrid search in pgvector using django ORM
@@ -77,15 +77,26 @@ def hybrid_search(search_keyword,input_text_embedding,k,conversation=None)->Quer
 
             # Computes keyword relevance score, Higher = better keyword match
             # F('search') gets the value of search! (so there is comparsinon between serach column and query value for each row)
-            rank=SearchRank(F('search'), query),
+            keyword_score=SearchRank(F('search'), query),
 
             # Computes semantic distance
             distance=L2Distance('vector', input_text_embedding),
+            # Convert distance -> similarity
+            semantic_score=ExpressionWrapper(
+                1 / (1 + F("distance")),
+                output_field=FloatField(),
+            ),
 
+            # Final weighted hybrid score
+            hybrid_score=ExpressionWrapper(
+                beta * F("keyword_score") +
+                (1 - beta) * F("semantic_score"),
+                output_field=FloatField(),
+            ),
             category = F("chunk__document__category")
         )
         # Highest keyword match first (-rank) , Then best semantic similarity (distance ascending)
-        .order_by('-rank', 'distance')
+        .order_by("-hybrid_score")
     )
 
     if conversation:
@@ -94,9 +105,19 @@ def hybrid_search(search_keyword,input_text_embedding,k,conversation=None)->Quer
         result = result.filter(chunk__document__is_initial=True)[:k]
 
 
-
     return result
 
+
+def similar_category(category:str):
+    """
+    This function will explore the database and will find number of all documents with the same category
+    """
+
+    result = Document.objects.filter(
+        category=category
+    ).values_list('category' , flat=True)
+
+    return result
 
 
 def similarity_score(input_embedding : np , similar_embeddings : List[Embedding]):
@@ -617,10 +638,12 @@ def load_initial_documents(abs_data_dir):
 def intial_data_db_insert(data_dir)->QuerySet[Embedding]:
     abs_data_dir = os.path.join(settings.BASE_DIR,data_dir)
     txt_files_dict = load_initial_documents(abs_data_dir)
+    number_of_documents = 0
 
     try:
         for category in txt_files_dict:
             for file_path in txt_files_dict[category]:
+                print(f"category : {category} - filepath: {file_path}")
                 with transaction.atomic():
                     with open(file_path,'r') as text_file:
                         text_string = text_file.read()
@@ -631,7 +654,8 @@ def intial_data_db_insert(data_dir)->QuerySet[Embedding]:
                     embedding_objects = creating_embedding_objects(chunks=chunk_objects)
 
                     print(f"Embedding has been created for: {category}")
-
-                    return embedding_objects
+                    number_of_documents+=1
+        print(number_of_documents)
+        return number_of_documents
     except Exception as e:
         logger.error(e)

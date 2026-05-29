@@ -174,7 +174,7 @@ class TestLLM(TestCase):
     def test_text_summarization(self):
         result = self.llm.openai_response(
             content="my name is Farzam",
-            job='summarizing'
+            job='keyword_extraction'
         )
         self.assertIsInstance(result,list)
         self.assertGreaterEqual(result.__len__(),1)

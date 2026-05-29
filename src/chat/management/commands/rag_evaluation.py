@@ -17,7 +17,7 @@ class Command(BaseCommand):
 
     def handle(self,*args,**options):
         test_data_path = constants.data_path('telmart')['test_retrieval_question_jsonl']
-        ragmetrics = RagMetrics(test_data_path)
+        ragmetrics = RagMetrics(test_data_path,model=constants.OPENAI_CHAT_MODEL,top_k=10)
 
         try:
             precision = ragmetrics.precision()

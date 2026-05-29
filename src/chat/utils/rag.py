@@ -92,7 +92,7 @@ class LLM():
             validator = CategorzingModel.model_validate_json
             json_schema_name = "CategorizingResponse"
 
-        elif job == 'summarizing':
+        elif job == 'keyword_extraction':
             schema = KeywordModel.model_json_schema
             validator = KeywordModel.model_validate_json
             json_schema_name = "KeywordResponse"
@@ -149,7 +149,7 @@ class LLM():
                 business_name=constants.BUSINESS_NAME,
                 business_description=constants.BUSINESS_DESCRIPTION
                 )
-        elif job == 'summarizing':
+        elif job == 'keyword_extraction':
             system_prompt = prompts.system_prompt_keyword_extractor()
 
 
@@ -287,15 +287,23 @@ class NLP():
 
 
 class RagMetrics():
-    def __init__(self,test_data_path:str):
-        from chat.services import hybrid_search
+    def __init__(self,test_data_path:str,model,top_k:int):
+
+        from chat.services import hybrid_search,similar_category
         self.hybrid_search = hybrid_search
+        self.similar_category = similar_category
 
         # Initialzing an instance of NLP class
         self.nlp = NLP()
 
         # loading test data as a pandas dataframe
         self.df = self.nlp.jsonl_reader(path=test_data_path)
+
+        # openai keyword extractor
+        self.llm = LLM(model)
+        self.keyword_extractor = self.llm.openai_response
+
+        self.top_k = top_k
 
     def recall(self):
         """
@@ -311,19 +319,26 @@ class RagMetrics():
         I need to have hybrid_search here, hybrid search requires conversation object
         for all queries (prompts) in the dataframe hybrid search will be activated
         """
-        k = 5 # top k document
+        
+
+
         all_categories = 0
         all_correct = 0
+        total_relevant = 0
         for index, row in self.df.iterrows():
             query = row['query']
             query_category = row['category']
+            relevant_categories = self.similar_category(query_category)
+            total_relevant += relevant_categories.__len__()
             result = self.hybrid_search(
-                search_keyword=query,
+                search_keyword=query, # alternatively: self.keyword_extractor(query,'keyword_extraction')[0] , # getting the first keyword
+                # search_keyword=self.keyword_extractor(query,'keyword_extraction')[0] ,
                 input_text_embedding=self.nlp.embedder(
                 model=constants.HF_EMBEDDING_MODEL,
                 chunks=[query]
                 )[0],
-                k=k
+                k=self.top_k,
+                beta=0
                 )
             
             categories = list(result.values_list('category',flat=True))
@@ -333,12 +348,23 @@ class RagMetrics():
             for category in categories:
                 if category==query_category:
                     correct_categories+=1 
+
+            
             all_correct+=correct_categories
+            print(f"""
+Query Category: {query_category}
+Categories: {categories}
+total_relevant: {relevant_categories}({relevant_categories.__len__()})
+correct_categories : {correct_categories}
+\n------------------\n
+                    """)
 
-            print(categories , query_category , '\n----\n')
-
+            # if index==20:
+            #     break
         """
         note: this is basically wrong, because you have to count the document numbers and not the number of chunks
         
         """
-        print(f"Precission@{k} (Relevant/Total Retrieved): {all_correct/all_categories}")
+        print(f"Precission@{self.top_k} (Relevant/Total Retrieved): {all_correct/all_categories}")
+
+        print(f"Recall@{self.top_k} (Relevant/Total Relevant): {all_correct/total_relevant}")
