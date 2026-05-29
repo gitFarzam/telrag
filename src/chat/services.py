@@ -61,10 +61,7 @@ def hybrid_search(search_keyword,input_text_embedding,k,conversation=None)->Quer
     - search_keyword : the query for searching inside the database for keyword search
     - input_text_embedding : the embedded input text for embedding which retriever uses for semantic search
     - k : number of document which should be retrieved
-
-    
     """
-
 
     # converting user text keyword to -> PostgreSQL search query
     query = SearchQuery(search_keyword)
@@ -96,7 +93,7 @@ def hybrid_search(search_keyword,input_text_embedding,k,conversation=None)->Quer
     else:
         result = result.filter(chunk__document__is_initial=True)[:k]
 
-    logger.info(result)
+
 
     return result
 

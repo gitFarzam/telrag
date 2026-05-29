@@ -3,7 +3,7 @@ from typing import List
 from huggingface_hub import InferenceClient
 import openai
 from openai import OpenAI
-from pydantic import BaseModel
+from pydantic import BaseModel,Field
 from typing import Literal
 from dotenv import load_dotenv
 from enum import IntEnum
@@ -43,6 +43,68 @@ class NLPToolKit(RecursiveCharacterTextSplitter):
 
 class CategorzingModel(BaseModel):
     result: Literal[0, 1, 2, 3]
+
+class KeywordModel(BaseModel):
+    result: List[str] = Field(
+        ...,
+        min_length=2,
+        max_length=5
+    )
+
+class HuggingFaceModel:
+    def __init__(self, hf_model: str, hf_token: str):
+        self.hf_model = hf_model
+        self.hf_token = hf_token
+
+        self.client = InferenceClient(
+            model=self.hf_model,
+            token=self.hf_token
+        )
+
+class HuggingFaceModel:
+    def __init__(self, hf_model: str, hf_token: str):
+        self.hf_model = hf_model
+        self.hf_token = hf_token
+
+        self.client = InferenceClient(
+            model=self.hf_model,
+            token=self.hf_token
+        )
+
+    def setup_hf_detector(self, system_prompt: str, user_prompt: str):
+
+        prompt = f"""
+                {system_prompt}
+
+                User:
+                {user_prompt}
+
+                Return ONLY valid JSON in this exact format:
+                {{
+                    "result": [
+                        "keyword1",
+                        "keyword2",
+                        "keyword3",
+                        "keyword4",
+                        "keyword5"
+                    ]
+                }}
+                """
+
+        completion = self.client.text_generation(
+            prompt=prompt,
+            max_new_tokens=120,
+            temperature=0.1,
+            return_full_text=False
+        )
+
+        # Parse JSON string
+        data = json.loads(completion)
+
+        # Validate with Pydantic
+        validated = KeywordModel(**data)
+
+        return validated.result
 
 
 class RetrievalToolKit():
@@ -106,8 +168,6 @@ class RetrievalToolKit():
         except openai.RateLimitError as error:
             logger.error(error)
 
-        
-    
 
     def openai_text_generator(self,messages_history:list,new_messages:dict):
         client = OpenAI()
@@ -268,14 +328,14 @@ class NLP():
 
 class RagMetrics():
     def __init__(self,test_data_path:str):
-        from services import hybrid_search
+        from chat.services import hybrid_search
         self.hybrid_search = hybrid_search
 
         # Initialzing an instance of NLP class
-        nlp = NLP()
+        self.nlp = NLP()
 
         # loading test data as a pandas dataframe
-        self.df = nlp.jsonl_reader(path=test_data_path)
+        self.df = self.nlp.jsonl_reader(path=test_data_path)
 
     def recall(self):
         """
@@ -292,28 +352,33 @@ class RagMetrics():
         for all queries (prompts) in the dataframe hybrid search will be activated
         """
         k = 5 # top k document
+        all_categories = 0
         all_correct = 0
         for index, row in self.df.iterrows():
             query = row['query']
             query_category = row['category']
             result = self.hybrid_search(
-                user_query=query,
-                input_text=query,
+                search_keyword=query,
+                input_text_embedding=self.nlp.embedder(
+                model=constants.HF_EMBEDDING_MODEL,
+                chunks=[query]
+                )[0],
                 k=k
                 )
             
-            categories = result.values_list('category')
+            categories = list(result.values_list('category',flat=True))
+            all_categories+=categories.__len__()
+
             correct_categories = 0
             for category in categories:
-                for i in category:
-                    if i==query_category:
-                        correct_categories+=1 
+                if category==query_category:
+                    correct_categories+=1 
             all_correct+=correct_categories
-            
-        print(f"all correct: {all_correct}")
+
+            print(categories , query_category , '\n----\n')
+
         """
         note: this is basically wrong, because you have to count the document numbers and not the number of chunks
         
-        
         """
-        print(f"Precission@{k} (Relevant/Total Retrieved): {all_correct/self.df.__len__()}")
+        print(f"Precission@{k} (Relevant/Total Retrieved): {all_correct/all_categories}")

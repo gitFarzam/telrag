@@ -163,7 +163,6 @@ class TestTelegramFileDownload(TestCase):
         self.assertTrue(result,"An output for the file is existed")
 
 
-
 class TestInsertData(TestCase):
     def setUp(self):
         self.data_dir = constants.data_path("telmart")["initial"]
