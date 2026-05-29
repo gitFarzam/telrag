@@ -21,3 +21,5 @@ def system_prompt_text_generator(business_name):
     return f"You are an ai-assistant customer service from {business_name}, your job is answering user's question and if you didnt have enough data you may use available information provided in the user query"
 
 
+def system_prompt_keyword_extractor():
+    return "You are an expert in extracting keywords from an input text , you have to extract keywords in a list of srings, you need to extract 3 keywords"

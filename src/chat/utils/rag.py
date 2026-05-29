@@ -51,102 +51,56 @@ class KeywordModel(BaseModel):
         max_length=5
     )
 
-class HuggingFaceModel:
-    def __init__(self, hf_model: str, hf_token: str):
-        self.hf_model = hf_model
-        self.hf_token = hf_token
 
-        self.client = InferenceClient(
-            model=self.hf_model,
-            token=self.hf_token
-        )
-
-class HuggingFaceModel:
-    def __init__(self, hf_model: str, hf_token: str):
-        self.hf_model = hf_model
-        self.hf_token = hf_token
-
-        self.client = InferenceClient(
-            model=self.hf_model,
-            token=self.hf_token
-        )
-
-    def setup_hf_detector(self, system_prompt: str, user_prompt: str):
-
-        prompt = f"""
-                {system_prompt}
-
-                User:
-                {user_prompt}
-
-                Return ONLY valid JSON in this exact format:
-                {{
-                    "result": [
-                        "keyword1",
-                        "keyword2",
-                        "keyword3",
-                        "keyword4",
-                        "keyword5"
-                    ]
-                }}
-                """
-
-        completion = self.client.text_generation(
-            prompt=prompt,
-            max_new_tokens=120,
-            temperature=0.1,
-            return_full_text=False
-        )
-
-        # Parse JSON string
-        data = json.loads(completion)
-
-        # Validate with Pydantic
-        validated = KeywordModel(**data)
-
-        return validated.result
-
-
-class RetrievalToolKit():
+class LLM():
     """
     This is a class for using openai chat completion
     """
     # in-use: for intializing openai model
-    def __init__(self,hf_model=None,hf_token=None,openai_model=None):
-        self.hf_model = hf_model
-        self.hf_token = hf_token
-        self.openai_model = openai_model
+    def __init__(self,model):
+        self.model = model
         return super().__init__()
     
 
-    def setUp_hf_detector(self,system_prompt,user_prompt):
-        client = InferenceClient(model=self.hf_model,token=self.hf_token)
+    # def setUp_hf_detector(self,system_prompt,user_prompt):
+    #     client = InferenceClient(model=self.hf_model,token=self.hf_token)
 
-        completion = client.chat_completion(
-            model="meta-llama/Llama-3.1-8B-Instruct",  # or another compatible model
-            messages=[
-                {"role": "system", "content": system_prompt},
-                {"role" : "user" , "content" : user_prompt}
-            ],
-            response_format={
-                "type": "json_schema",
-                "json_schema": {
-                    "name": "TrueFalseResponse",
-                    "strict": True,
-                    "schema": CategorzingModel.model_json_schema()
-                }
-            }
-    )
-        return CategorzingModel.model_validate_json(completion.choices[0].message.content).result
+    #     completion = client.chat_completion(
+    #         model="meta-llama/Llama-3.1-8B-Instruct",  # or another compatible model
+    #         messages=[
+    #             {"role": "system", "content": system_prompt},
+    #             {"role" : "user" , "content" : user_prompt}
+    #         ],
+    #         response_format={
+    #             "type": "json_schema",
+    #             "json_schema": {
+    #                 "name": "TrueFalseResponse",
+    #                 "strict": True,
+    #                 "schema": CategorzingModel.model_json_schema()
+    #             }
+    #         }
+    # )
+    #     return CategorzingModel.model_validate_json(completion.choices[0].message.content).result
 
     
     # in-use: for setting up openai model
-    def setUp_openai_detector(self,system_prompt,user_prompt):
+    def setUp_openai_detector(self,system_prompt,user_prompt,job):
         client = OpenAI()
 
+        if job == 'categorizing':
+            schema = CategorzingModel.model_json_schema
+            validator = CategorzingModel.model_validate_json
+            json_schema_name = "CategorizingResponse"
+
+        elif job == 'summarizing':
+            schema = KeywordModel.model_json_schema
+            validator = KeywordModel.model_validate_json
+            json_schema_name = "KeywordResponse"
+
+        print(f"job: {job}")
         try:
             completion = client.chat.completions.create(
-                model=self.openai_model,
+                model=self.model,
                 messages=[
                     {"role": "system", "content": system_prompt},
                     {"role": "user", "content": user_prompt}
@@ -154,15 +108,15 @@ class RetrievalToolKit():
                 response_format={
                     "type": "json_schema",
                     "json_schema": {
-                        "name": "CategorizingResponse",
-                        "schema": CategorzingModel.model_json_schema()
+                        "name": json_schema_name,
+                        "schema": schema()
                     }
                 },
                 temperature=0
             )
 
             content = completion.choices[0].message.content
-            result = CategorzingModel.model_validate_json(content).result
+            result = validator(content).result
             return result
         
         except openai.RateLimitError as error:
@@ -188,12 +142,18 @@ class RetrievalToolKit():
 
         
     # in-use: for categorzing message
-    def message_categorizer(self,content) -> int:
-        system_prompt = prompts.system_prompt_message_categorizer(
-            business_name=constants.BUSINESS_NAME,
-            business_description=constants.BUSINESS_DESCRIPTION
-            )
-        result = self.setUp_openai_detector(system_prompt, content)
+    def openai_response(self,content,job):
+
+        if job == 'categorizing':
+            system_prompt = prompts.system_prompt_message_categorizer(
+                business_name=constants.BUSINESS_NAME,
+                business_description=constants.BUSINESS_DESCRIPTION
+                )
+        elif job == 'summarizing':
+            system_prompt = prompts.system_prompt_keyword_extractor()
+
+
+        result = self.setUp_openai_detector(system_prompt, content,job)
         return result
     
 

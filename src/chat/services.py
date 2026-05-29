@@ -29,7 +29,7 @@ import chat.constants as constants
 import chat.prompts as prompts
 from .models import Conversation, Message,DocumentSource , TelegramMessage,Document, Chunk, Embedding, TextContent,AudioContent
 from .utils.telegram import send_message,telegram_message_parser,telegram_downloader
-from .utils.rag import NLPToolKit,RetrievalToolKit,NLP
+from .utils.rag import NLPToolKit,LLM,NLP
 
 # loading env variables
 load_dotenv()
@@ -246,7 +246,7 @@ def agent_message_sender(user_message:Message,context):
     print('-- user question --' , user_message.content)
     print('-- context --' , context)
 
-    ragtoolkit = RetrievalToolKit(openai_model=constants.OPENAI_CHAT_MODEL)
+    ragtoolkit = LLM(model=constants.OPENAI_CHAT_MODEL)
     new_messages = {'role':'user','content':f"{user_message.content} \n\n available information:{context}"}
 
     response = ragtoolkit.openai_text_generator(message_history,new_messages)
@@ -336,13 +336,13 @@ def user_message_categorizer(message:Message):
         context = similar_text
 
     # Check if the question is related
-    retreival_instance = RetrievalToolKit(openai_model=constants.OPENAI_CHAT_MODEL)
+    retreival_instance = LLM(model=constants.OPENAI_CHAT_MODEL)
 
     user_prompt = f"""
         User Question: {content}\n\n
         Available Information: {context}
     """
-    result = retreival_instance.message_categorizer(user_prompt)
+    result = retreival_instance.openai_response(user_prompt,job='categorizing')
     logger.info(f"result from message_categorizer: {result}")
     return context,result
 
@@ -359,7 +359,7 @@ def process_user_message(message:Message):
     if result in [0,1]:
         logger.info("Question can be answered with available information")
         # Enough context / context not required to answer
-        nlptoolkit = RetrievalToolKit(openai_model=constants.OPENAI_CHAT_MODEL)
+        nlptoolkit = LLM(model=constants.OPENAI_CHAT_MODEL)
         new_messages = {'role':'user','content':f"User question: {content}\n\nAvailable information: {context}"}
 
         response = nlptoolkit.openai_text_generator(message_history,new_messages)

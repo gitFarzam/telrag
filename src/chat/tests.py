@@ -8,11 +8,14 @@ from http import HTTPStatus
 import os
 from django.conf import settings
 from .services import process_telegram_object,hybrid_search,intial_data_db_insert,load_initial_documents
-from .utils.rag import NLP, RagMetrics
+from .utils.rag import NLP, RagMetrics, LLM
 from .utils.telegram import telegram_downloader
 from unittest.mock import patch
 import chat.constants as constants
 import pandas as pd
+from dotenv import load_dotenv
+
+load_dotenv()
 
 class TestWebhook(TestCase):
 
@@ -161,6 +164,21 @@ class TestTelegramFileDownload(TestCase):
         result = telegram_downloader(self.voice_data['data']['voice']['file_id'])
 
         self.assertTrue(result,"An output for the file is existed")
+
+
+class TestLLM(TestCase):
+    def setUp(self):
+        self.llm = LLM(
+            model=constants.OPENAI_CHAT_MODEL,
+        )
+    def test_text_summarization(self):
+        result = self.llm.openai_response(
+            content="my name is Farzam",
+            job='summarizing'
+        )
+        self.assertIsInstance(result,list)
+        self.assertGreaterEqual(result.__len__(),1)
+
 
 
 class TestInsertData(TestCase):
