@@ -6,7 +6,24 @@ HF_INFERENCE_MODEL="meta-llama/Llama-3.1-8B-Instruct"
 HF_TEXT_GENERATION_MODEL = "meta-llama/Llama-3.1-8B-Instruct"
 
 # OpenAI
+
 OPENAI_CHAT_MODEL="gpt-4.1-mini"
+
+# Cost
+# source: https://developers.openai.com/api/docs/pricing
+COST_PER_TOKEN={
+    OPENAI_CHAT_MODEL:{
+        "unit" : "1m",
+        "currency":"usd",
+        "input" : .4,
+        "output" : 1.6
+    },
+    HF_EMBEDDING_MODEL:{
+        "unit" : "1",
+        "currency":"usd",
+        "embedding" : 0,
+    },
+}
 
 # Chunking
 CHUNK_SIZE=200
@@ -42,3 +59,16 @@ def data_path(name:str):
 
     return path_dict
      
+
+# Pipeline
+
+RAG_COMPONENTS = {
+    "Message Categorizer" : "message_categorizer",
+    "Text Generator" : "text_generator",
+    "Embedder" : "embedder",
+    "Hybrid Search" : "hybrid_search"
+}
+
+RC_DETAILS = {
+    "message_categorizer" : {"type" : "classifier" , "job" : "Categorizing a message into preferred categories and returning the index number of the desired category."},
+}

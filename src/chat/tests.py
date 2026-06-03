@@ -14,6 +14,7 @@ from unittest.mock import patch
 import chat.constants as constants
 import pandas as pd
 from dotenv import load_dotenv
+from openai.types.chat import ChatCompletion
 
 load_dotenv()
 
@@ -179,7 +180,19 @@ class TestLLM(TestCase):
         self.assertIsInstance(result,list)
         self.assertGreaterEqual(result.__len__(),1)
 
+    def test_openai_text_genrator(self):
+        
+        messages_history = [
+            {"role" : "assistant" , "content" : "Hi! this is TelRag! How can I help you?"},
+            {"role" : "user" , "content" : "Hey! Do you know where can I find some good deals for groccery?"},
+            {"role" : "assistant" , "content" : "Yes! You can check Telmart website to find good groccery deals!"}
+        ]
 
+        new_messages = {"role" : "user" , "content" : "But I couldn't find that!"}
+        
+        result = self.llm.openai_text_generator(messages_history,new_messages)
+
+        print(result)
 
 class TestInsertData(TestCase):
     def setUp(self):

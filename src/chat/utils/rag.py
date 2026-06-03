@@ -3,6 +3,7 @@ from typing import List
 from huggingface_hub import InferenceClient
 import openai
 from openai import OpenAI
+from openai.types.chat import ChatCompletion
 from pydantic import BaseModel,Field
 from typing import Literal
 from dotenv import load_dotenv
@@ -15,6 +16,7 @@ import chat.prompts as prompts
 import numpy as np
 import logging
 import pandas as pd
+import time
 
 load_dotenv()
 logger = logging.getLogger(__name__)
@@ -59,6 +61,7 @@ class LLM():
     # in-use: for intializing openai model
     def __init__(self,model):
         self.model = model
+        self.client = OpenAI()
         return super().__init__()
     
 
@@ -124,6 +127,17 @@ class LLM():
 
 
     def openai_text_generator(self,messages_history:list,new_messages:dict):
+        """
+        result is an instance of ChatCompletion 
+
+        from openai.types.chat import ChatCompletion
+
+        result = ChatCompletion
+        content = result.choices[0].message.content
+        completion_tokens = result.usage.completion_tokens
+        prompt_tokens = result.usage.prompt_tokens
+        
+        """
         client = OpenAI()
         system_guideline = prompts.system_prompt_text_generator(business_name=constants.BUSINESS_NAME)
         system_message = {'role':'system','content':system_guideline}
@@ -131,17 +145,43 @@ class LLM():
         messages_history.append(new_messages)
 
         try:
-            result =  client.chat.completions.create(
-                model=self.openai_model,  # or another supported model
+            self.result =  client.chat.completions.create(
+                model=self.model,  # or another supported model
                 messages=messages_history
-            ).choices[0].message.content
-
-            return result
+            )
+            return self.result
         except openai.RateLimitError as error:
             logger.error(error)
+        except openai.BadRequestError as error:
+            logger.error(error)
 
+
+    def cost(self,cost_dict,completion_result):
+        completion_result = self.result
+        model_cost_dict:dict = cost_dict.get(self.model,{})
+        if model_cost_dict is None:
+            logger.error(f"Data is not available for {self.model}")
+            raise Exception
         
-    # in-use: for categorzing message
+        required_keys = ["unit", "currency", "input","output"]
+
+        for key in required_keys:
+            if model_cost_dict.get(key,{}) is None:
+                logger.error(f"key {key} is not existed in the dictionary")
+                raise Exception
+
+        prompt_tokens = completion_result.usage.prompt_tokens
+        completion_tokens = completion_result.usage.completion_tokens
+        input_cost = prompt_tokens * model_cost_dict["input"]
+        output_cost = completion_tokens * model_cost_dict["output"]
+
+        return {
+            "unit" : model_cost_dict["unit"],
+            "currency" : model_cost_dict["currency"],
+            "input_cost" : input_cost,
+            "output_cost" : output_cost
+            }
+
     def openai_response(self,content,job):
 
         if job == 'categorizing':
@@ -155,7 +195,28 @@ class LLM():
 
         result = self.setUp_openai_detector(system_prompt, content,job)
         return result
-    
+
+    def openai_text_rewriter(self):
+        """
+        Rewrites the provided text using OpenAI's API based on a specified tone/style.
+        """
+        tone_or_style = ""
+        original_text = ""
+        try:
+            # 2. Call the Responses API 
+            response = self.client.responses.create(
+                model="gpt-4.1-mini",  # Highly cost-efficient for text manipulation tasks
+                instructions=f"You are an expert editor. Rewrite the following text to make it sound {tone_or_style}. Maintain the core meaning but improve clarity, flow, and vocabulary.",
+                input=original_text
+            )
+            
+            # 3. Extract and return the final rewritten text
+            return response.output_text
+            
+        except Exception as e:
+            return f"An error occurred: {e}"
+
+            
 
 class NLP():
     """
@@ -287,8 +348,7 @@ class NLP():
 
 
 class RagMetrics():
-    def __init__(self,test_data_path:str,model,top_k:int):
-
+    def __init__(self,model):
         from chat.services import hybrid_search,similar_category
         self.hybrid_search = hybrid_search
         self.similar_category = similar_category
@@ -296,21 +356,25 @@ class RagMetrics():
         # Initialzing an instance of NLP class
         self.nlp = NLP()
 
-        # loading test data as a pandas dataframe
-        self.df = self.nlp.jsonl_reader(path=test_data_path)
-
         # openai keyword extractor
         self.llm = LLM(model)
-        self.keyword_extractor = self.llm.openai_response
+        
+    def llm_eval_df(self,test_data_path:str):
+        return self.nlp.jsonl_reader(path=test_data_path)
+    
+    def retrieval_eval_df(self,test_data_path:str):
+        # loading test data as a pandas dataframe
+        return self.nlp.jsonl_reader(path=test_data_path)
 
+    def recall(self,top_k:int):
         self.top_k = top_k
-
-    def recall(self):
         """
         Recall = Relevant Retrieved / Total Relevant
         """
 
-    def precision(self):
+    def precision(self,test_data_path:str,top_k:int):
+        self.top_k = top_k
+        self.df = self.retrieval_eval_df(test_data_path)
         """
         Precision = Relevant Retrieved / Total Retrieved
         """
@@ -319,20 +383,20 @@ class RagMetrics():
         I need to have hybrid_search here, hybrid search requires conversation object
         for all queries (prompts) in the dataframe hybrid search will be activated
         """
-        
-
 
         all_categories = 0
         all_correct = 0
         total_relevant = 0
-        for index, row in self.df.iterrows():
+        total_first_correct = 0
+        total_retrieval_iteration = 0
+        for i, (index, row ) in enumerate(self.df.iterrows()):
             query = row['query']
             query_category = row['category']
             relevant_categories = self.similar_category(query_category)
             total_relevant += relevant_categories.__len__()
             result = self.hybrid_search(
-                search_keyword=query, # alternatively: self.keyword_extractor(query,'keyword_extraction')[0] , # getting the first keyword
-                # search_keyword=self.keyword_extractor(query,'keyword_extraction')[0] ,
+                search_keyword=query, # alternatively: self.llm.openai_response(query,'keyword_extraction')[0] , # getting the first keyword
+                # search_keyword=self.llm.openai_response(query,'keyword_extraction')[0] ,
                 input_text_embedding=self.nlp.embedder(
                 model=constants.HF_EMBEDDING_MODEL,
                 chunks=[query]
@@ -341,13 +405,21 @@ class RagMetrics():
                 beta=0
                 )
             
-            categories = list(result.values_list('category',flat=True))
+            total_retrieval_iteration+=1
+            
+            categories = result.values_list('category',flat=True)
+            first_category = categories.first()
+
+            if query_category==first_category:
+                total_first_correct+=1
+
             all_categories+=categories.__len__()
 
             correct_categories = 0
             for category in categories:
                 if category==query_category:
                     correct_categories+=1 
+
 
             
             all_correct+=correct_categories
@@ -368,3 +440,55 @@ correct_categories : {correct_categories}
         print(f"Precission@{self.top_k} (Relevant/Total Retrieved): {all_correct/all_categories}")
 
         print(f"Recall@{self.top_k} (Relevant/Total Relevant): {all_correct/total_relevant}")
+
+        print(f"MAP@{self.top_k} (Total First Correct / Total Retrieval Iteration) : {total_first_correct/total_retrieval_iteration}")
+
+
+def latency_calculator(before):
+    after = time.time()
+    return after-before
+
+
+class Cost():
+    def __init__(self,model,cost_dict):
+        self.model = model
+        self.cost_dict = cost_dict
+    
+        required_keys = ["unit", "currency", "input","output"]
+        model_cost_dict:dict = self.cost_dict.get(model,{})
+        if model_cost_dict is None:
+            logger.error(f"Data is not available for {model}")
+            raise Exception
+
+        for key in required_keys:
+            if model_cost_dict.get(key,{}) is None:
+                logger.error(f"key {key} is not existed in the dictionary")
+                raise Exception
+        
+        self.model_cost_dict = model_cost_dict
+
+    def openai_text_generation_cost(self,completion_result:ChatCompletion):
+
+        prompt_tokens = completion_result.usage.prompt_tokens
+        completion_tokens = completion_result.usage.completion_tokens
+        input_cost = prompt_tokens * self.model_cost_dict["input"]
+        output_cost = completion_tokens * self.model_cost_dict["output"]
+
+        return {
+            "unit" : self.model_cost_dict["unit"],
+            "currency" : self.model_cost_dict["currency"],
+            "input_cost" : input_cost,
+            "output_cost" : output_cost
+            }
+
+    def embedding_cost(self):
+        embedding_cost = self.model_cost_dict["embedding"]
+        return {
+            "unit" : self.model_cost_dict["unit"],
+            "currency" : self.model_cost_dict["currency"],
+            "embedding_cost" : embedding_cost,
+            }
+
+
+
+    

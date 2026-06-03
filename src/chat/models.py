@@ -28,12 +28,31 @@ class Conversation(ExportModelOperationsMixin('conversation'), models.Model):
         return self.pk.__str__()
     
 
+class RAGPipeline(models.Model):
+    created_at = models.DateTimeField(auto_now_add=True)
+
+class RagComponent(models.Model):
+    ragpipeline=models.ForeignKey(RAGPipeline, on_delete=models.CASCADE)
+    component_name = models.CharField()
+    conversation = models.ForeignKey(Conversation , on_delete=models.SET_NULL , null=True)
+    prompt = models.CharField(null=True)
+    completion_content = models.CharField(null=True)
+    model = models.CharField()
+    unit = models.CharField()
+    currency = models.CharField()
+    input_cost = models.FloatField()
+    output_cost = models.FloatField()
+    latency = models.FloatField()
+
+    
+
 class Message(models.Model):
     content = models.CharField(max_length=20000)
     created_at = models.DateTimeField(auto_now_add=True)
     conversation = models.ForeignKey(Conversation, on_delete=models.CASCADE,related_name='messages')
     is_agent = models.BooleanField(default=False)
     tg_id = models.PositiveIntegerField(null=True,blank=True)
+
 
     def __str__(self):
         return self.content[:50]

@@ -6,6 +6,7 @@ from asgiref.sync import async_to_sync
 from typing import List
 from datetime import timedelta
 from pathlib import Path
+import time
 
 # Django imports
 from django.contrib.contenttypes.models import ContentType
@@ -28,9 +29,10 @@ from pgvector.django import L2Distance
 # Local imports
 import chat.constants as constants
 import chat.prompts as prompts
-from .models import Conversation, Message,DocumentSource , TelegramMessage,Document, Chunk, Embedding, TextContent,AudioContent
+from .models import Conversation, Message,DocumentSource , TelegramMessage,Document, Chunk, Embedding, TextContent,AudioContent, RagComponent,RAGPipeline
 from .utils.telegram import send_message,telegram_message_parser,telegram_downloader
-from .utils.rag import NLPToolKit,LLM,NLP
+from .utils.rag import NLPToolKit,LLM,NLP,latency_calculator,Cost
+from openai.types.chat import ChatCompletion
 
 # loading env variables
 load_dotenv()
@@ -260,21 +262,30 @@ def fetch_message_history(instance:Message):
     )
     )
 
-def agent_message_sender(user_message:Message,context):
+def agent_message_sender(user_message:Message,context,ragpipeline:RAGPipeline):
     print('Sending Context to AI to answer to the question')
     message_history = fetch_message_history(user_message)
 
     print('-- user question --' , user_message.content)
     print('-- context --' , context)
 
-    ragtoolkit = LLM(model=constants.OPENAI_CHAT_MODEL)
+    llm = LLM(model=constants.OPENAI_CHAT_MODEL)
     new_messages = {'role':'user','content':f"{user_message.content} \n\n available information:{context}"}
+    component_name = constants.RAG_COMPONENTS["Text Generator"]
+    before_time = time.time()
+    completion = llm.openai_text_generator(message_history,new_messages)
+    latency = latency_calculator(before_time)
 
-    response = ragtoolkit.openai_text_generator(message_history,new_messages)
+    # Calculate cost and saving in the database
+    cost_dict = constants.COST_PER_TOKEN
+    cost_result = cost(constants.OPENAI_CHAT_MODEL,cost_dict,completion)
 
+    completion_content = completion.choices[0].message.content
+
+    
     message_sender(
         conversation=user_message.conversation,
-        content=response,
+        content=completion_content,
         is_agent=True
     )
 
@@ -339,40 +350,42 @@ def entities_handling(message_data,chat_id):
                     user.delete()
                     send_message(chat_id=chat_id,text="Conversation has been deleted!")
 
-def user_message_categorizer(message:Message):
+def user_message_categorizer(message:Message, ragpipeline:RAGPipeline):
     logger.debug(user_message_categorizer.__name__)
+    dispatcher = Dispatcher()
 
-    content = message.content
+    content = message.content  
     conversation=message.conversation
 
-    # Fetch Context
-    nlp = NLP()
-    input_text_embedding = nlp.embedder([message.content])[0]
+    # RAG Component 
+    input_text_embedding = dispatcher.embedding_component(message)
 
-    similar_embeddings = hybrid_search(conversation=conversation,search_keyword=message.content,input_text_embedding=input_text_embedding , k=5)
+    # RAG Component 
+    similar_embeddings = dispatcher.hybrid_search_component(conversation,message,input_text_embedding, top_k=5)
 
     context =''
     if similar_embeddings:
         similar_text = "\n".join([embedding_obj.chunk.text for embedding_obj in similar_embeddings]) # instead of chunk text, it's better to provide the whole document
         context = similar_text
 
-    # Check if the question is related
-    retreival_instance = LLM(model=constants.OPENAI_CHAT_MODEL)
-
-    user_prompt = f"""
-        User Question: {content}\n\n
-        Available Information: {context}
-    """
-    result = retreival_instance.openai_response(user_prompt,job='categorizing')
-    logger.info(f"result from message_categorizer: {result}")
-    return context,result
+    # RAG Component
+    completion = dispatcher.message_categorizing_component('categorizing' ,content ,context)
+    logger.info(f"result from message_categorizer: {completion}")
+    return context,completion
 
 def process_user_message(message:Message):
     logger.debug(process_user_message.__name__)
 
+    # Creating an instance of dispatcher
+    dispatcher = Dispatcher()
+
+    # Creating an instance of RAGPipeline
+    ragpipeline = RAGPipeline.objects.create()
+
     content = message.content
     conversation=message.conversation
-    context,result = user_message_categorizer(message)
+    
+    context,result = user_message_categorizer(message,ragpipeline)
     
     # Fetch message history
     message_history = fetch_message_history(message)
@@ -380,14 +393,14 @@ def process_user_message(message:Message):
     if result in [0,1]:
         logger.info("Question can be answered with available information")
         # Enough context / context not required to answer
-        nlptoolkit = LLM(model=constants.OPENAI_CHAT_MODEL)
         new_messages = {'role':'user','content':f"User question: {content}\n\nAvailable information: {context}"}
 
-        response = nlptoolkit.openai_text_generator(message_history,new_messages)
+        completion = dispatcher.text_generation_component(message_history,new_messages)
+        completion_content = completion.choices[0].message.content
 
         message_sender(
                 conversation=conversation,
-                content=response,
+                content=completion_content,
                 is_agent=True
                 )
         
@@ -659,3 +672,106 @@ def intial_data_db_insert(data_dir)->QuerySet[Embedding]:
         return number_of_documents
     except Exception as e:
         logger.error(e)
+
+def rag_component_creator(
+        ragpipeline,
+        component_name,
+        conversation:Conversation,
+        context:str,
+        completion_content:ChatCompletion,
+        model:str,
+        unit:str,
+        currency:str,
+        input_cost:float,
+        output_cost:float,
+        latency:float
+):
+    ragcomponent = RagComponent.objects.create(
+        ragpipeline = ragpipeline,
+        component_name = component_name,
+        conversation = conversation,
+        prompt = context,
+        completion_content = completion_content,
+        model = model,
+        unit = unit,
+        currency = currency,
+        input_cost = input_cost,
+        output_cost = output_cost,
+        latency = latency
+    )
+
+    if ragcomponent:
+        return True
+    
+
+class Dispatcher():
+    """
+    getting the job name and distributing to the right function and then returning the output for adding to the database
+
+    jobs:
+        - message_categorizer
+        - embedder
+        - text_generator
+        - 
+    """
+    def __init__(self):
+        super().__init__()
+        self.cost_dict = constants.COST_PER_TOKEN
+
+    def save_to_db(self,model,start_time,data):
+        cost = Cost(model,self.cost_dict)
+        cost_result = cost.embedding_cost()
+        latency = latency_calculator(start_time)
+
+        # Saving to db
+
+    def embedding_component(self,message:Message):
+        # Set start time
+        start_time = time.time()
+        model = constants.HF_EMBEDDING_MODEL
+
+        nlp = NLP()
+        rag_component = constants.RAG_COMPONENTS["Embedder"]
+        input_text_embedding = nlp.embedder(model,chunks=[message.content])[0]
+
+        data = {}
+
+        self.save_to_db(model,start_time,data)
+
+        return input_text_embedding
+    
+    def hybrid_search_component(self,conversation:Conversation,message:Message,input_text_embedding,top_k):
+
+        similar_embeddings = hybrid_search(conversation=conversation,search_keyword=message.content,input_text_embedding=input_text_embedding , top_k=5)
+
+        return similar_embeddings
+
+    def message_categorizing_component(self,job,content,context):
+        # Set start time
+        start_time = time.time()
+        model = constants.OPENAI_CHAT_MODEL
+        llm = LLM(model)
+
+        user_prompt = f"""
+            User Question: {content}\n\n
+            Available Information: {context}
+        """
+        rag_component = constants.RAG_COMPONENTS["Message Categorizer"]
+        completion = llm.openai_response(user_prompt,job)
+        data = {}
+        self.save_to_db(model,start_time,data)
+
+        return completion
+
+        # Saving information into database
+    def text_generation_component(self,message_history,new_messages):
+        start_time = time.time()
+        model = constants.OPENAI_CHAT_MODEL
+        rag_component= constants.RAG_COMPONENTS["Text Generator"]
+        llm = LLM(model=model)
+        completion = llm.openai_text_generator(message_history,new_messages)
+        data = {}
+        self.save_to_db(model , start_time , data)
+
+        return completion
+        

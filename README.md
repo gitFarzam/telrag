@@ -117,34 +117,35 @@ chmod +x entrypoint.sh
 
 
 ## General
-- adding an admin with a custom login address
-- improve using openai
-- error handling
-- limiting voice length
-- Deleting option in chat view
-- WebSocket doesnt work in mobile view , using wss:// instead of ws:// (probably you can just test in online mode in https)
-- adding that, "or ask something irelevant, like I need to take a shower!, something which you can make sure AI agent can not answer to it!
-- avoid long voice
-- right about, if you just send a text/voice without replying it will be stored seprately as a context
-- edit the message which instanly sends after verification, (it should contain description)
-- fix message and response combination from user telegram message
-- add an additional guide, about if you open multiple browser, your messages will go to another conversation, click /refresh, to connect you to the current chat
-- adding contact form
-- writing about this demo may have problem in mobile view, please use desktop view
-- Cleaning: imports, redundant functions, constants, typos, logger, redundant files, gitignore, git cache
-- Making a niche app, a niche industry
-- log files for using in docker logs command
-- Prometheus metrics for docker containers (cAdvisor and Node Exporter)
-- handling loading initial data in an optimized way (having it ready in the database)
-- making production monitoring system limited to just django app and app metrics, by configurating alloy and loki (having a second alloy+/loki config file)
-- it looks service_name is already included in the alloy outputs, this have overlap with container_name label
-- Drawing Canvases for TelRAG
-- How to clean older data in log and metrics storage - Retention in Loki and prometheus
-- 'Keep my conversation' button - a functinality which if user wanted their conversation will remain, the user and pass will be retrieved for them as well.
-- add `ngrok` in documentaion, for using in dev mode
-- fixing `DOCKER` and `DEBUG` env variables and db connection issue in dev mode
-- add caching
-- change port from 8006 ro 8000!
+- Adding an admin with a custom login address.
+- Improving integration with OpenAI.
+- Enhancing error handling.
+- Limiting voice message length.
+- Added a delete option in the chat view.
+- Fixed WebSocket issues in mobile view by using wss:// instead of ws:// (testing can be done in online mode via HTTPS).
+- Added functionality to handle irrelevant questions, such as "I need to take a shower!", ensuring the AI agent cannot answer them.
+- Avoided long voice messages.
+- Clarified that if you send a text or voice message without replying, it will be stored separately as context.
+- Edited messages that are instantly sent after verification to include descriptions.
+- Fixed the combination of user Telegram messages and responses.
+- Added an additional guide explaining that if you open multiple browsers, your messages will go to different conversations; clicking /refresh connects you to the current chat.
+- Added a contact form.
+- Added a note that this demo may have issues in mobile view and recommends using desktop view.
+- Cleaned imports, removed redundant functions, constants, fixed typos, improved logger usage, removed redundant files, updated .gitignore, and cleared git cache.
+- Developed a niche app targeting a specific industry.
+- Added log files compatible with the Docker logs command.
+- Integrated Prometheus metrics for Docker containers (cAdvisor and Node Exporter).
+- Optimized loading of initial data by having it ready in the database.
+- Configured a production monitoring system limited to the Django app and app metrics using Alloy and Loki, including a secondary Alloy+/Loki config file.
+- Noted that service_name is already included in Alloy outputs, which overlaps with the container_name label.
+- Implemented drawing canvases for TelRAG.
+- Documented how to clean older data in log and metrics storage, including retention policies in Loki and Prometheus.
+- Adding a "Keep my conversation" button, allowing users to retain their conversations and retrieve their username and password.
+- Added documentation for using ngrok in development mode.
+- Fixing ‍`DOCKER‍‍` and `DEBUG` environment variables and database connection issues in development mode.
+- Adding caching.
+- Changing the port from 8006 to 8000!
+- RAG pipeline dispatcher
 
 
 ## Security
@@ -164,7 +165,7 @@ Copilot: command + control + i
 - Query Re-Writing
 - Caching
 - Check Ipad!
-- Streaming Large JsonL files in json reader
+- Streaming Large JsonL files in json reader (!Important to also explain it in linkedin!)
 
 ## SQL
 - Duplicated queries

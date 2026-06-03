@@ -17,10 +17,10 @@ class Command(BaseCommand):
 
     def handle(self,*args,**options):
         test_data_path = constants.data_path('telmart')['test_retrieval_question_jsonl']
-        ragmetrics = RagMetrics(test_data_path,model=constants.OPENAI_CHAT_MODEL,top_k=10)
+        ragmetrics = RagMetrics(model=constants.OPENAI_CHAT_MODEL)
 
         try:
-            precision = ragmetrics.precision()
+            precision = ragmetrics.precision(test_data_path, top_k=10)
 
         except Exception as e:
             raise CommandError(f"Error: {e}")
