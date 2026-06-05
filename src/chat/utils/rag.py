@@ -306,9 +306,10 @@ class NLP():
 
 class RagMetrics():
     def __init__(self,model,beta):
-        from chat.services import hybrid_search,similar_category
+        from chat.services import hybrid_search,similar_category,fetch_content_from_document
         self.hybrid_search = hybrid_search
         self.similar_category = similar_category
+        self.get_content = fetch_content_from_document
 
         self.beta = beta
 
@@ -326,6 +327,7 @@ class RagMetrics():
         return self.nlp.jsonl_reader(path=test_data_path)
     
     def llm_hallucination(self,test_data_path,top_k):
+        
         df = self.llm_eval_df(test_data_path)
 
         for i, (index, row ) in enumerate(df.iterrows()):
@@ -333,7 +335,7 @@ class RagMetrics():
             answer = row['answer']
             input_embedding = self.nlp.embedder(
                             model=constants.HF_EMBEDDING_MODEL,
-                            chunks=[question]
+                            text=[question]
                             )[0]
             hybrid_search_result = self.hybrid_search(
                             search_keyword=question, 
@@ -341,10 +343,11 @@ class RagMetrics():
                             top_k=top_k,
                             beta=self.beta
                             )
+            print(f"---\n\nHR: {hybrid_search_result}\n\n---")
             
             # have all chunks from retreival here available and then send with question to an LLM and ask LLM is the answer correct or its producing wrong or doing hallucination, this can be done with a more advanced model.
 
-            retrieval_context = "\n".join([embedding_obj.chunk.text for embedding_obj in hybrid_search_result])
+            retrieval_context = "\n".join([self.get_content(embedding_obj.chunk.document)for embedding_obj in hybrid_search_result])
             
             result = self.llm.openai_text_generator(
                 messages_history=[],

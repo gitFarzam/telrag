@@ -165,3 +165,7 @@ curl -X POST "https://api.telegram.org/bot${TELEGRAM_API_KEY}/setWebhook" \
 ```shell
 docker compose -f compose.yaml -f compose/compose.dev.yaml build --no-cache
 ```
+
+```shell
+docker compose -f ./compose.dev.yaml exec app bash
+```
