@@ -4,6 +4,7 @@ from huggingface_hub import InferenceClient
 import openai
 from openai import OpenAI
 from openai.types.chat import ChatCompletion
+from openai.types.responses.response import Response
 from pydantic import BaseModel,Field
 from typing import Literal
 from dotenv import load_dotenv
@@ -32,7 +33,7 @@ class NLPToolKit(RecursiveCharacterTextSplitter):
         embedding = client.feature_extraction(text=chunks)
         return embedding
 
-    def audio_to_text(self,file_path: str, model: str = "whisper-1") -> str:
+    def audio_to_text(self,file_path: str, model: str = constants.OPENAI_TRANSCRIPTION_MODEL) -> str:
         client = OpenAI()  # Make sure OPENAI_API_KEY is set in env
 
         with open(file_path, "rb") as audio_file:
@@ -53,6 +54,9 @@ class KeywordModel(BaseModel):
         max_length=5
     )
 
+class BooleanModel(BaseModel):
+    result : bool
+
 
 class LLM():
     """
@@ -63,42 +67,33 @@ class LLM():
         self.model = model
         self.client = OpenAI()
         return super().__init__()
-    
-
-    # def setUp_hf_detector(self,system_prompt,user_prompt):
-    #     client = InferenceClient(model=self.hf_model,token=self.hf_token)
-
-    #     completion = client.chat_completion(
-    #         model="meta-llama/Llama-3.1-8B-Instruct",  # or another compatible model
-    #         messages=[
-    #             {"role": "system", "content": system_prompt},
-    #             {"role" : "user" , "content" : user_prompt}
-    #         ],
-    #         response_format={
-    #             "type": "json_schema",
-    #             "json_schema": {
-    #                 "name": "TrueFalseResponse",
-    #                 "strict": True,
-    #                 "schema": CategorzingModel.model_json_schema()
-    #             }
-    #         }
-    # )
-    #     return CategorzingModel.model_validate_json(completion.choices[0].message.content).result
 
     
     # in-use: for setting up openai model
-    def setUp_openai_detector(self,system_prompt,user_prompt,job):
+    def setUp_openai_classifier(self,user_prompt,job):
         client = OpenAI()
 
         if job == 'categorizing':
+            system_prompt = prompts.system_prompt_message_categorizer(
+                            business_name=constants.BUSINESS_NAME,
+                            business_description=constants.BUSINESS_DESCRIPTION
+                            )
             schema = CategorzingModel.model_json_schema
             validator = CategorzingModel.model_validate_json
             json_schema_name = "CategorizingResponse"
 
         elif job == 'keyword_extraction':
+            system_prompt = prompts.system_prompt_keyword_extractor()
+
             schema = KeywordModel.model_json_schema
             validator = KeywordModel.model_validate_json
             json_schema_name = "KeywordResponse"
+
+        elif job == 'judge':
+            system_prompt = prompts.SYSTEM_PROMPT_LLM_AS_JUDGE
+            schema = BooleanModel.model_json_schema
+            validator = BooleanModel.model_validate_json
+            json_schema_name = "TrueFalseResponse"
 
         print(f"job: {job}")
         try:
@@ -155,63 +150,25 @@ class LLM():
         except openai.BadRequestError as error:
             logger.error(error)
 
-
-    def cost(self,cost_dict,completion_result):
-        completion_result = self.result
-        model_cost_dict:dict = cost_dict.get(self.model,{})
-        if model_cost_dict is None:
-            logger.error(f"Data is not available for {self.model}")
-            raise Exception
-        
-        required_keys = ["unit", "currency", "input","output"]
-
-        for key in required_keys:
-            if model_cost_dict.get(key,{}) is None:
-                logger.error(f"key {key} is not existed in the dictionary")
-                raise Exception
-
-        prompt_tokens = completion_result.usage.prompt_tokens
-        completion_tokens = completion_result.usage.completion_tokens
-        input_cost = prompt_tokens * model_cost_dict["input"]
-        output_cost = completion_tokens * model_cost_dict["output"]
-
-        return {
-            "unit" : model_cost_dict["unit"],
-            "currency" : model_cost_dict["currency"],
-            "input_cost" : input_cost,
-            "output_cost" : output_cost
-            }
-
-    def openai_response(self,content,job):
-
-        if job == 'categorizing':
-            system_prompt = prompts.system_prompt_message_categorizer(
-                business_name=constants.BUSINESS_NAME,
-                business_description=constants.BUSINESS_DESCRIPTION
-                )
-        elif job == 'keyword_extraction':
-            system_prompt = prompts.system_prompt_keyword_extractor()
-
-
-        result = self.setUp_openai_detector(system_prompt, content,job)
+    def openai_classifier(self,content,job):
+        result = self.setUp_openai_classifier(content,job)
         return result
 
-    def openai_text_rewriter(self):
+    def openai_text_rewriter(self,original_text:str):
         """
         Rewrites the provided text using OpenAI's API based on a specified tone/style.
+        original_text: User's input query
         """
-        tone_or_style = ""
-        original_text = ""
         try:
             # 2. Call the Responses API 
             response = self.client.responses.create(
-                model="gpt-4.1-mini",  # Highly cost-efficient for text manipulation tasks
-                instructions=f"You are an expert editor. Rewrite the following text to make it sound {tone_or_style}. Maintain the core meaning but improve clarity, flow, and vocabulary.",
+                model=self.model,  # Highly cost-efficient for text manipulation tasks
+                instructions=prompts.PROMPT_REWRITING_USER_QUERY,
                 input=original_text
             )
-            
+
             # 3. Extract and return the final rewritten text
-            return response.output_text
+            return response
             
         except Exception as e:
             return f"An error occurred: {e}"
@@ -273,9 +230,9 @@ class NLP():
             return False
 
 
-    def embedder(self,model,chunks:list):
+    def embedder(self,model,text:str):
         client = InferenceClient(model=model,token=os.getenv("HF_API_TOKEN")) 
-        embeddings = client.feature_extraction(text=chunks)
+        embeddings = client.feature_extraction(text=text)
         return embeddings
     
     def cosine_similarity(v1, array_of_vectors): 
@@ -348,10 +305,12 @@ class NLP():
 
 
 class RagMetrics():
-    def __init__(self,model):
+    def __init__(self,model,beta):
         from chat.services import hybrid_search,similar_category
         self.hybrid_search = hybrid_search
         self.similar_category = similar_category
+
+        self.beta = beta
 
         # Initialzing an instance of NLP class
         self.nlp = NLP()
@@ -365,6 +324,49 @@ class RagMetrics():
     def retrieval_eval_df(self,test_data_path:str):
         # loading test data as a pandas dataframe
         return self.nlp.jsonl_reader(path=test_data_path)
+    
+    def llm_hallucination(self,test_data_path,top_k):
+        df = self.llm_eval_df(test_data_path)
+
+        for i, (index, row ) in enumerate(df.iterrows()):
+            question = row['question']
+            answer = row['answer']
+            input_embedding = self.nlp.embedder(
+                            model=constants.HF_EMBEDDING_MODEL,
+                            chunks=[question]
+                            )[0]
+            hybrid_search_result = self.hybrid_search(
+                            search_keyword=question, 
+                            input_text_embedding=input_embedding,
+                            top_k=top_k,
+                            beta=self.beta
+                            )
+            
+            # have all chunks from retreival here available and then send with question to an LLM and ask LLM is the answer correct or its producing wrong or doing hallucination, this can be done with a more advanced model.
+
+            retrieval_context = "\n".join([embedding_obj.chunk.text for embedding_obj in hybrid_search_result])
+            
+            result = self.llm.openai_text_generator(
+                messages_history=[],
+                new_messages={"role" : "user" , "content" : question}
+            )
+
+            result_content = result.choices[0].message.content
+
+            # here an LLM as a Judge will compare 2 output with each other
+            user_prompt = f"""
+                - Question: {question}\n\n
+                - Information Chunks: {retrieval_context} \n\n
+                - Person Answer : {result_content}
+                """
+            judge_result = self.llm.openai_classifier(user_prompt,'judge')
+            print(f"""
+{user_prompt}\n
+👨🏼‍⚖️ : {judge_result}\n\n-------------------\n
+""")
+
+            if index == 10:
+                break
 
     def recall(self,top_k:int):
         self.top_k = top_k
@@ -374,7 +376,7 @@ class RagMetrics():
 
     def precision(self,test_data_path:str,top_k:int):
         self.top_k = top_k
-        self.df = self.retrieval_eval_df(test_data_path)
+        df = self.retrieval_eval_df(test_data_path)
         """
         Precision = Relevant Retrieved / Total Retrieved
         """
@@ -389,7 +391,7 @@ class RagMetrics():
         total_relevant = 0
         total_first_correct = 0
         total_retrieval_iteration = 0
-        for i, (index, row ) in enumerate(self.df.iterrows()):
+        for i, (index, row ) in enumerate(df.iterrows()):
             query = row['query']
             query_category = row['category']
             relevant_categories = self.similar_category(query_category)
@@ -402,7 +404,7 @@ class RagMetrics():
                 chunks=[query]
                 )[0],
                 k=self.top_k,
-                beta=0
+                beta=self.beta
                 )
             
             total_retrieval_iteration+=1
@@ -449,25 +451,46 @@ def latency_calculator(before):
     return after-before
 
 
-class Cost():
-    def __init__(self,model,cost_dict):
-        self.model = model
-        self.cost_dict = cost_dict
-    
-        required_keys = ["unit", "currency", "input","output"]
-        model_cost_dict:dict = self.cost_dict.get(model,{})
-        if model_cost_dict is None:
-            logger.error(f"Data is not available for {model}")
-            raise Exception
+class ModelCost():
+    def __init__(self,rag_component):
+        """
+        Costs are specified per model. By including the RAG component and its details, the pricing for the desired model can be retrieved.
 
-        for key in required_keys:
-            if model_cost_dict.get(key,{}) is None:
-                logger.error(f"key {key} is not existed in the dictionary")
-                raise Exception
+        if the model name is not defined in the `COST_PER_TOKEN` dictionary, or no model is available for that component (like hubrid search which has None for the model) , False will be returned to tell that, no cost information is available!
         
-        self.model_cost_dict = model_cost_dict
+        """
+        rc_details = constants.RC_DETAILS
+        self.cost_dict = constants.COST_PER_TOKEN
+        self.rag_component = rag_component
+        self.model = rc_details[rag_component]["model"]
+        self.model_cost_dict = self.model_cost_dict_check()
 
-    def openai_text_generation_cost(self,completion_result:ChatCompletion):
+    def cost_model_dispatcher(self):
+        if self.model_cost_dict:
+            if self.rag_component == constants.RAG_COMPONENTS["Text Generator"]:
+                self.openai_chat_completion_cost()
+            elif self.rag_component == constants.RAG_COMPONENTS["Query Rewriting"]:
+                self.openai_response_cost()
+            elif self.rag_component == constants.RAG_COMPONENTS["Message Categorizer"]:
+                self.openai_message_categorizer_cost()
+            elif self.rag_component == constants.RAG_COMPONENTS["Embedder"]:
+                self.hf_embedding_cost()
+        else:
+            return False
+
+    def model_cost_dict_check(self):
+        """
+        Check if cost data is available for the model or not
+        """
+        model_cost_dict:dict = self.cost_dict.get(self.model,{})
+        if model_cost_dict is None:
+            logger.error(f"Cost data is not available for {self.model}")
+            return False
+        
+        return model_cost_dict
+
+
+    def openai_chat_completion_cost(self,completion_result:ChatCompletion):
 
         prompt_tokens = completion_result.usage.prompt_tokens
         completion_tokens = completion_result.usage.completion_tokens
@@ -480,8 +503,24 @@ class Cost():
             "input_cost" : input_cost,
             "output_cost" : output_cost
             }
+    
+    def openai_message_categorizer_cost(self,completion_result:ChatCompletion):
+        pass
+    
+    def openai_response_cost(self,response:Response):
+        input_tokens = response.usage.input_tokens
+        output_tokens = response.usage.output_tokens
+        input_cost = input_tokens * self.model_cost_dict["input"]
+        output_cost = output_tokens * self.model_cost_dict["output"]
 
-    def embedding_cost(self):
+        return {
+            "unit" : self.model_cost_dict["unit"],
+            "currency" : self.model_cost_dict["currency"],
+            "input_cost" : input_cost,
+            "output_cost" : output_cost
+            }
+
+    def hf_embedding_cost(self):
         embedding_cost = self.model_cost_dict["embedding"]
         return {
             "unit" : self.model_cost_dict["unit"],

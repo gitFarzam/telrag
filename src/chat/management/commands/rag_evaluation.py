@@ -14,16 +14,17 @@ class Command(BaseCommand):
     Evaluating RAG system
     """
 
-
     def handle(self,*args,**options):
-        test_data_path = constants.data_path('telmart')['test_retrieval_question_jsonl']
-        ragmetrics = RagMetrics(model=constants.OPENAI_CHAT_MODEL)
+        ret_test_data_path = constants.data_path('telmart')['test_retrieval_question_jsonl']
+        llm_test_data_path = constants.data_path('telmart')['llm_eval_qa']
+        ragmetrics = RagMetrics(model=constants.OPENAI_CHAT_MODEL,beta=constants.BETA)
 
-        try:
-            precision = ragmetrics.precision(test_data_path, top_k=10)
+        # try:
+        # precision = ragmetrics.precision(ret_test_data_path, top_k=10)
+        hallucination = ragmetrics.llm_hallucination(llm_test_data_path,top_k=5)
 
-        except Exception as e:
-            raise CommandError(f"Error: {e}")
+        # except Exception as e:
+        #     raise CommandError(f"Error: {e}")
 
         self.stdout.write(
             self.style.SUCCESS(f"Done!!!")

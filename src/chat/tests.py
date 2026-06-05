@@ -15,6 +15,7 @@ import chat.constants as constants
 import pandas as pd
 from dotenv import load_dotenv
 from openai.types.chat import ChatCompletion
+from openai.types.responses.response import Response
 
 load_dotenv()
 
@@ -173,7 +174,7 @@ class TestLLM(TestCase):
             model=constants.OPENAI_CHAT_MODEL,
         )
     def test_text_summarization(self):
-        result = self.llm.openai_response(
+        result = self.llm.openai_classifier(
             content="my name is Farzam",
             job='keyword_extraction'
         )
@@ -183,7 +184,7 @@ class TestLLM(TestCase):
     def test_openai_text_genrator(self):
         
         messages_history = [
-            {"role" : "assistant" , "content" : "Hi! this is TelRag! How can I help you?"},
+            {"role" : "assistant" , "content" : "Hi! this is TelMart! How can I help you?"},
             {"role" : "user" , "content" : "Hey! Do you know where can I find some good deals for groccery?"},
             {"role" : "assistant" , "content" : "Yes! You can check Telmart website to find good groccery deals!"}
         ]
@@ -193,6 +194,13 @@ class TestLLM(TestCase):
         result = self.llm.openai_text_generator(messages_history,new_messages)
 
         print(result)
+
+    def test_text_rewriter(self):
+        original_text = "Yesterday, I went to your pharmacy and was unhappy with the behavior of your staff. One of your employees shouted at me, which is unacceptable."
+        result = self.llm.openai_text_rewriter(original_text)
+
+        self.assertIsInstance(result,Response)
+        self.assertIsNotNone(result.output_text)
 
 class TestInsertData(TestCase):
     def setUp(self):
@@ -257,13 +265,13 @@ class TestHybridSearch(TestCase):
             )[0]
 
         self.k = 5
-        return super().setUp()
     
     def test_hybrid_search(self):
         result = hybrid_search(
             self.search_keyword,
             self.input_text_embedding,
-            self.k
+            self.k,
+            beta=0
         )
 
         print(result)

@@ -97,3 +97,41 @@ Output:
 
 
 """
+
+PROMPT_REWRITING_USER_QUERY = """
+Rewrite the text for a retrieval system by removing emotional content and irrelevant information, retaining only a concise version of the core request.
+
+You must return the response in string format.
+
+Examples:
+
+Example 1: \n\n
+- original text : I don't know, I am frustrated. I need to talk to your customer service very soon.
+
+- rewrited version : customer service contact
+
+Example 2: \n\n
+- original text : Yesterday, my son bought a table and a chair from your store, but he didn't like them. We would like to return the items.
+
+- rewrited version : home appliance return and refund policy
+
+Example 3: \n\n
+- original text : Do you have tap-to-pay available in the store?
+
+- rewrited version : in-store payment methods
+
+"""
+
+SYSTEM_PROMPT_LLM_AS_JUDGE = """
+You are a reviser. Someone is given some chunks of information and asked a question. Using that information and the question, the person will provide an answer. Your job is to check if the person answered the question correctly based on the given information. If the answer is correct, you should return True. If the answer is wrong, fake, or hallucinated, you should return False.
+
+Example 1: \n\n
+
+- Question: "Where can customers find TelMart associates to help with purchases?" \n\n
+- Information Chunks: '- Ask any TelMart worker in the storefront for support in discovering a product. Employees are stationed all over the storefront and have training to assist buyers find goods.\nFinding Items at TelMart\nSupport Center:\nVisit TelMart.com/help to locate responses to regular questions, utilize online assistance, and examine support resources including:\n- Tracking orders and handling acquisitions\nProduct Grievances (General):\n- Navigate to TelMart.com/help and utilize the Chat with us choice to talk with a Client Help agent.\n- Ring 1-400-840-4060.\n- Mail help@telmart.com.\nFor precise product inquiries, visit TelMart.com, download the TelMart app, or phone your neighborhood TelMart outlet.'\n\n
+
+- Person Answer : "TelMart associates are available at staffed checkout lanes \n\n
+
+the correct output for this example is: True
+
+"""

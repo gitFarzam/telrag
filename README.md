@@ -156,6 +156,7 @@ chmod +x entrypoint.sh
 - Limit container memory usage
 - Limit receving messages in telegram for each chat id - maximum 100, increase 3 seconds waiting to 5 seconds
 - Where celery tasks results are stored in flower? they should not stack on the top of each other
+- Get containers memory and cpu usages from stats and then go for creating limits using docker compose : https://docs.docker.com/reference/compose-file/deploy/#cpus
 
 Copilot: command + control + i
 

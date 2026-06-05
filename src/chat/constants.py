@@ -6,8 +6,8 @@ HF_INFERENCE_MODEL="meta-llama/Llama-3.1-8B-Instruct"
 HF_TEXT_GENERATION_MODEL = "meta-llama/Llama-3.1-8B-Instruct"
 
 # OpenAI
-
 OPENAI_CHAT_MODEL="gpt-4.1-mini"
+OPENAI_TRANSCRIPTION_MODEL = "whisper-1"
 
 # Cost
 # source: https://developers.openai.com/api/docs/pricing
@@ -29,9 +29,12 @@ COST_PER_TOKEN={
 CHUNK_SIZE=200
 CHUNK_OVERLAP=20
 
+# Hybrid Search
+BETA=0
+
 # Business
-BUSINESS_NAME="TelBurger restaurant"
-BUSINESS_DESCRIPTION="TelBurger sells burgers, so the scope you can answer is about pricing, delivery of burgers, type of burgers, refunding, and anything related to a burger restaurant customer service.\n"
+BUSINESS_NAME="TelMart"
+BUSINESS_DESCRIPTION="You are an AI Assistant for a grocery store called TelMart. You help customers with questions about products, prices, promotions, store services, and policies. You can assist with finding items, checking product availability, tracking orders, and explaining returns, refunds, and gift cards. You provide fast, accurate, and friendly support at any time. When a request requires additional help, you guide the customer to the appropriate team or resource.\n"
 
 # Messages
 NO_INFORMATION_MESSAGE="I don't have enough info. I'll check with a human agent and get back to you soon!"
@@ -52,6 +55,7 @@ def data_path(name:str):
         "test_raw" : "test_data/raw",
         "test_retrieval_question_jsonl" : "test_data/jsonl/retrieval_eval_question.jsonl",
         "test_retrieval_declerative_jsonl" : "test_data/jsonl/retrieval_eval_declerative.jsonl",
+        "llm_eval_qa" :"test_data/jsonl/llm_eval_qa.jsonl"
     }
 
     for i in path_dict:
@@ -66,9 +70,21 @@ RAG_COMPONENTS = {
     "Message Categorizer" : "message_categorizer",
     "Text Generator" : "text_generator",
     "Embedder" : "embedder",
-    "Hybrid Search" : "hybrid_search"
+    "Hybrid Search" : "hybrid_search",
+    "Query Rewriting" : "query_rewriting",
+    "Audio Transcription" : "audio_transcription"
 }
 
 RC_DETAILS = {
-    "message_categorizer" : {"type" : "classifier" , "job" : "Categorizing a message into preferred categories and returning the index number of the desired category."},
+    RAG_COMPONENTS["Message Categorizer"] : {"model" : OPENAI_CHAT_MODEL ,"type" : "classifier" , "output" : "completion" , "job" : "Categorizing a message into preferred categories and returning the index number of the desired category."},
+
+    RAG_COMPONENTS["Text Generator"] : {"model" : OPENAI_CHAT_MODEL ,"type" : "generator" , "output" : "list", "job" : "Responding to user query"},
+
+    RAG_COMPONENTS["Embedder"] : {"model" : HF_EMBEDDING_MODEL ,"type" : "embedder" , "output" : "ndarray", "job" : "Converting a text to embeddings"},
+
+    RAG_COMPONENTS["Hybrid Search"] : {"model" : None ,"type" : "search" , "output" : "queryset", "job" : "Keyword and Semantic search inside pgvector database using django ORM"},
+
+    RAG_COMPONENTS["Query Rewriting"] : {"model" : OPENAI_CHAT_MODEL ,"type" : "rewriter" , "output" : "response", "job" : "Rewriting user query into an standard query for using in retrieval"},
+
+    RAG_COMPONENTS["Audio Transcription"] : {"model" : OPENAI_TRANSCRIPTION_MODEL ,"type" : "transciber" , "output" : "response", "job" : "transcribing a audio file to text"},
 }

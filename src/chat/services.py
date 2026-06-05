@@ -31,7 +31,7 @@ import chat.constants as constants
 import chat.prompts as prompts
 from .models import Conversation, Message,DocumentSource , TelegramMessage,Document, Chunk, Embedding, TextContent,AudioContent, RagComponent,RAGPipeline
 from .utils.telegram import send_message,telegram_message_parser,telegram_downloader
-from .utils.rag import NLPToolKit,LLM,NLP,latency_calculator,Cost
+from .utils.rag import NLPToolKit,LLM,NLP,latency_calculator,ModelCost
 from openai.types.chat import ChatCompletion
 
 # loading env variables
@@ -54,7 +54,7 @@ def similarity_search(conversation,input_text,num):
     similar_embeddings = Embedding.objects.filter(chunk__document__conversation=conversation).order_by(L2Distance('vector', input_text_embedding))[:num]
     return input_text_embedding,similar_embeddings
 
-def hybrid_search(search_keyword,input_text_embedding,k,beta,conversation=None)->QuerySet[Embedding]:
+def hybrid_search(search_keyword,input_text_embedding,top_k,beta,conversation=None)->QuerySet[Embedding]:
 
     """
     hybrid search in pgvector using django ORM
@@ -102,9 +102,9 @@ def hybrid_search(search_keyword,input_text_embedding,k,beta,conversation=None)-
     )
 
     if conversation:
-        result = result.filter(Q(chunk__document__conversation=conversation) | Q(chunk__document__is_initial=True))[:k]
+        result = result.filter(Q(chunk__document__conversation=conversation) | Q(chunk__document__is_initial=True))[:top_k]
     else:
-        result = result.filter(chunk__document__is_initial=True)[:k]
+        result = result.filter(chunk__document__is_initial=True)[:top_k]
 
 
     return result
@@ -278,7 +278,7 @@ def agent_message_sender(user_message:Message,context,ragpipeline:RAGPipeline):
 
     # Calculate cost and saving in the database
     cost_dict = constants.COST_PER_TOKEN
-    cost_result = cost(constants.OPENAI_CHAT_MODEL,cost_dict,completion)
+    # cost_result = cost(constants.OPENAI_CHAT_MODEL,cost_dict,completion)
 
     completion_content = completion.choices[0].message.content
 
@@ -351,17 +351,20 @@ def entities_handling(message_data,chat_id):
                     send_message(chat_id=chat_id,text="Conversation has been deleted!")
 
 def user_message_categorizer(message:Message, ragpipeline:RAGPipeline):
-    logger.debug(user_message_categorizer.__name__)
+    logger.info(user_message_categorizer.__name__)
     dispatcher = Dispatcher()
 
     content = message.content  
     conversation=message.conversation
 
-    # RAG Component 
-    input_text_embedding = dispatcher.embedding_component(message)
+    # RAG Component
+    rewrited_query = dispatcher.query_rewriter_component(content).output_text
 
     # RAG Component 
-    similar_embeddings = dispatcher.hybrid_search_component(conversation,message,input_text_embedding, top_k=5)
+    input_text_embedding = dispatcher.embedding_component(rewrited_query)
+
+    # RAG Component 
+    similar_embeddings = dispatcher.hybrid_search_component(conversation,content,input_text_embedding, top_k=5)
 
     context =''
     if similar_embeddings:
@@ -374,7 +377,7 @@ def user_message_categorizer(message:Message, ragpipeline:RAGPipeline):
     return context,completion
 
 def process_user_message(message:Message):
-    logger.debug(process_user_message.__name__)
+    logger.info(process_user_message.__name__)
 
     # Creating an instance of dispatcher
     dispatcher = Dispatcher()
@@ -483,7 +486,7 @@ def creating_document_object(document_source, category="user_input", conversatio
     return doc_object
 
 def transcriber(document_object:Document):
-    logger.debug(transcriber.__name__)
+    logger.info(transcriber.__name__)
     rag_toolkit = NLPToolKit()
     return rag_toolkit.audio_to_text(document_object.document_source.content_object.file.path)
 
@@ -494,14 +497,14 @@ def fetch_content_from_document(document_object:Document):
     logger.debug(fetch_content_from_document.__name__)
 
     if type(document_object.document_source.content_object) is TextContent:
-        logger.debug("Content type is TextContent")
+        logger.info("Content type is TextContent")
         return document_object.document_source.content_object.content
     elif type(document_object.document_source.content_object) is AudioContent:
-        logger.debug("Content type is AudioContent")
+        logger.info("Content type is AudioContent")
         if not document_object.document_source.content_object.trascription:
-            logger.debug(f"file path: {document_object.document_source.content_object.file.path}")
+            logger.info(f"file path: {document_object.document_source.content_object.file.path}")
             trascription = transcriber(document_object)
-            logger.debug(f"Transcription: {trascription}")
+            logger.info(f"Transcription: {trascription}")
 
             # saving in the database
             document_object.document_source.content_object.trascription = trascription
@@ -513,7 +516,7 @@ def fetch_content_from_document(document_object:Document):
         return False
 
 def creating_chunk_objects(document_object:Document) -> List[Chunk]:
-    logger.debug(creating_chunk_objects.__name__)
+    logger.info(creating_chunk_objects.__name__)
     content_for_chunk = fetch_content_from_document(document_object)
     
     if content_for_chunk:
@@ -529,7 +532,7 @@ def creating_chunk_objects(document_object:Document) -> List[Chunk]:
         return objects
 
 def creating_embedding_objects(chunks):
-    logger.debug(creating_embedding_objects.__name__)
+    logger.info(creating_embedding_objects.__name__)
     
     rag_toolkit = NLPToolKit()
 
@@ -677,11 +680,12 @@ def rag_component_creator(
         ragpipeline,
         component_name,
         conversation:Conversation,
-        context:str,
-        completion_content:ChatCompletion,
+        input_text:str,
+        output_text:str,
         model:str,
         unit:str,
         currency:str,
+        embedding_cost:float,
         input_cost:float,
         output_cost:float,
         latency:float
@@ -690,11 +694,12 @@ def rag_component_creator(
         ragpipeline = ragpipeline,
         component_name = component_name,
         conversation = conversation,
-        prompt = context,
-        completion_content = completion_content,
+        input_text = input_text,
+        output_text = output_text,
         model = model,
         unit = unit,
         currency = currency,
+        embedding_cost = embedding_cost,
         input_cost = input_cost,
         output_cost = output_cost,
         latency = latency
@@ -716,33 +721,39 @@ class Dispatcher():
     """
     def __init__(self):
         super().__init__()
-        self.cost_dict = constants.COST_PER_TOKEN
 
-    def save_to_db(self,model,start_time,data):
-        cost = Cost(model,self.cost_dict)
-        cost_result = cost.embedding_cost()
+
+    def save_to_db(self,rag_component,start_time,data):
+        """
+        data : {
+            'chat_completion' : chat_completion,
+            'response' : response,
+            'embedding' : embedding,
+        }
+        """
+        cost = ModelCost(rag_component)
         latency = latency_calculator(start_time)
 
         # Saving to db
 
-    def embedding_component(self,message:Message):
+    def embedding_component(self,content):
         # Set start time
         start_time = time.time()
         model = constants.HF_EMBEDDING_MODEL
 
         nlp = NLP()
         rag_component = constants.RAG_COMPONENTS["Embedder"]
-        input_text_embedding = nlp.embedder(model,chunks=[message.content])[0]
+        input_text_embedding = nlp.embedder(model,text=[content])[0]
 
         data = {}
 
-        self.save_to_db(model,start_time,data)
+        self.save_to_db(rag_component,start_time,data)
 
         return input_text_embedding
     
-    def hybrid_search_component(self,conversation:Conversation,message:Message,input_text_embedding,top_k):
+    def hybrid_search_component(self,conversation:Conversation|None,content:str,input_text_embedding,top_k):
 
-        similar_embeddings = hybrid_search(conversation=conversation,search_keyword=message.content,input_text_embedding=input_text_embedding , top_k=5)
+        similar_embeddings = hybrid_search(conversation=conversation,search_keyword=content,input_text_embedding=input_text_embedding ,beta=constants.BETA, top_k=top_k)
 
         return similar_embeddings
 
@@ -757,9 +768,9 @@ class Dispatcher():
             Available Information: {context}
         """
         rag_component = constants.RAG_COMPONENTS["Message Categorizer"]
-        completion = llm.openai_response(user_prompt,job)
+        completion = llm.openai_classifier(user_prompt,job)
         data = {}
-        self.save_to_db(model,start_time,data)
+        self.save_to_db(rag_component,start_time,data)
 
         return completion
 
@@ -771,7 +782,18 @@ class Dispatcher():
         llm = LLM(model=model)
         completion = llm.openai_text_generator(message_history,new_messages)
         data = {}
-        self.save_to_db(model , start_time , data)
+        self.save_to_db(rag_component , start_time , data)
 
         return completion
+    
+    def query_rewriter_component(self,original_text):
+        start_time = time.time()
+        model = constants.OPENAI_CHAT_MODEL
+        rag_component= constants.RAG_COMPONENTS["Query Rewriting"]
+        llm = LLM(model=model)
+        response = llm.openai_text_rewriter(original_text)
+        data = {}
+        self.save_to_db(rag_component , start_time , data)
+
+        return response
         
