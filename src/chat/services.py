@@ -257,26 +257,19 @@ def fetch_message_history(instance:Message):
     )
     )
 
-def agent_message_sender(user_message:Message,context,ragpipeline:RAGPipeline):
-    print('Sending Context to AI to answer to the question')
+def agent_message_sender(user_message:Message,context):
+    logger.info('Sending Context to AI to answer to the question')
     message_history = fetch_message_history(user_message)
 
-    print('-- user question --' , user_message.content)
-    print('-- context --' , context)
+    # Creating an instance of RAGPipeline
+    ragpipeline = RAGPipeline.objects.create()
 
-    llm = LLM(model=constants.OPENAI_CHAT_MODEL)
+    # Creating an instance of dispatcher
+    dispatcher = Dispatcher(ragpipeline)
+
     new_messages = {'role':'user','content':f"{user_message.content} \n\n available information:{context}"}
-    component_name = constants.RAG_COMPONENTS["Text Generator"]
-    before_time = time.time()
-    completion = llm.openai_text_generator(message_history,new_messages)
-    latency = latency_calculator(before_time)
 
-    # Calculate cost and saving in the database
-    cost_dict = constants.COST_PER_TOKEN
-    # cost_result = cost(constants.OPENAI_CHAT_MODEL,cost_dict,completion)
-
-    completion_content = completion.choices[0].message.content
-
+    completion_content = dispatcher.text_generation_component(message_history,new_messages)
     
     message_sender(
         conversation=user_message.conversation,
@@ -392,8 +385,8 @@ def process_user_message(message:Message):
         # Enough context / context not required to answer
         new_messages = {'role':'user','content':f"User question: {content}\n\nAvailable information: {context}"}
 
-        completion = dispatcher.text_generation_component(message_history,new_messages)
-        completion_content = completion.choices[0].message.content
+        # RAG Component
+        completion_content = dispatcher.text_generation_component(message_history,new_messages)
 
         message_sender(
                 conversation=conversation,
@@ -786,7 +779,7 @@ class Dispatcher():
         self.data['completion'] = completion
         self.save_to_db(rag_component , start_time , self.data)
 
-        return completion
+        return completion.choices[0].message.content
     
     def query_rewriter_component(self,original_text):
         start_time = time.time()

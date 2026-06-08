@@ -4,6 +4,10 @@ from .utils.telegram import send_message
 from .models import Document
 from asgiref.sync import async_to_sync
 from .models import Conversation
+import logging
+
+# Creating an instance of the logging object
+logger = logging.getLogger(__name__)
 
 @shared_task
 def task_new_message(transaction_type,json_content,chat_id,message_id):
@@ -18,7 +22,7 @@ def task_reply_message(transaction_type,json_content,chat_id,message_id):
     document_object = ingestion_process(transaction_type,json_content,chat_id,is_new=False)
     if document_object:
         send_message(chat_id,text=f"Document has been created, ID: {document_object.pk}",reply_to_message_id=message_id)
-        print('debug: --->',document_object.user_message.conversation,'<------ after dubug')
+        logger.info(f"{document_object.user_message.conversation}")
         agent_message_sender(document_object.user_message,context=fetch_content_from_document(document_object))
     else:
         send_message(chat_id,text=f"Creating Document was unsuccessfull",reply_to_message_id=message_id)

@@ -214,7 +214,7 @@ def telegram_webhook(request):
 
     try: 
         data = json.loads(request.body.decode("utf-8"))
-        logger.info(f"Data file frem telegram webhook:\n{data}")
+        logger.info(f"Data file from telegram webhook:\n{data}")
         telegram_message_processor(transaction_type=True , json_content = data)
         return JsonResponse({"result": "ok"},status=200)
 

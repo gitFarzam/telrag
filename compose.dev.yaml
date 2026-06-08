@@ -54,6 +54,10 @@ services:
       - redis
       - db
       - app
+    volumes:
+      - ./entrypoint.sh:/usr/src/app/entrypoint.sh
+      - ./src:/usr/src/app/src
+      - ./.env:/usr/src/app/.env
 
   flower:
     build: .
@@ -70,6 +74,10 @@ services:
       - db
       - app
       - celery
+    volumes:
+      - ./entrypoint.sh:/usr/src/app/entrypoint.sh
+      - ./src:/usr/src/app/src
+      - ./.env:/usr/src/app/.env
 
 
   celery_beat:
@@ -83,6 +91,10 @@ services:
       - redis
       - db
       - app
+    volumes:
+      - ./entrypoint.sh:/usr/src/app/entrypoint.sh
+      - ./src:/usr/src/app/src
+      - ./.env:/usr/src/app/.env
 
 
   alloy:
