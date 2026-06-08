@@ -13,13 +13,13 @@ OPENAI_TRANSCRIPTION_MODEL = "whisper-1"
 # source: https://developers.openai.com/api/docs/pricing
 COST_PER_TOKEN={
     OPENAI_CHAT_MODEL:{
-        "unit" : "1m",
+        "unit" : 1000000,
         "currency":"usd",
         "input" : .4,
         "output" : 1.6
     },
     HF_EMBEDDING_MODEL:{
-        "unit" : "1",
+        "unit" : 1,
         "currency":"usd",
         "embedding" : 0,
     },

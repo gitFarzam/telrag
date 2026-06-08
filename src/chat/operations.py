@@ -4,7 +4,6 @@ from .utils.telegram import telegram_message_parser
 
 def telegram_message_processor(transaction_type:bool , json_content:dict):
     
-    print(telegram_message_processor.__name__)
     parsed_data = telegram_message_parser(json_content)
     print(parsed_data)
     message_type = parsed_data['type']

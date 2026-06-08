@@ -38,7 +38,6 @@ class RagComponent(models.Model):
     input_text = models.CharField(null=True)
     output_text = models.CharField(null=True)
     model = models.CharField(null=True)
-    unit = models.CharField(null=True)
     currency = models.CharField(null=True)
     embedding_cost = models.FloatField(null=True)
     input_cost = models.FloatField(null=True)

@@ -5,7 +5,7 @@ import openai
 from openai import OpenAI
 from openai.types.chat import ChatCompletion
 from openai.types.responses.response import Response
-from pydantic import BaseModel,Field
+from pydantic import BaseModel,Field,ValidationError
 from typing import Literal
 from dotenv import load_dotenv
 from enum import IntEnum
@@ -67,7 +67,17 @@ class LLM():
         self.model = model
         self.client = OpenAI()
         return super().__init__()
+    
 
+    def get_validator(self,job):
+
+        if job == 'categorizing':
+            return CategorzingModel.model_validate_json
+        elif job == 'keyword_extraction':
+            return KeywordModel.model_validate_json
+        elif job == 'judge':
+            return BooleanModel.model_validate_json
+    
     
     # in-use: for setting up openai model
     def setUp_openai_classifier(self,user_prompt,job):
@@ -79,23 +89,19 @@ class LLM():
                             business_description=constants.BUSINESS_DESCRIPTION
                             )
             schema = CategorzingModel.model_json_schema
-            validator = CategorzingModel.model_validate_json
             json_schema_name = "CategorizingResponse"
 
         elif job == 'keyword_extraction':
             system_prompt = prompts.system_prompt_keyword_extractor()
 
             schema = KeywordModel.model_json_schema
-            validator = KeywordModel.model_validate_json
             json_schema_name = "KeywordResponse"
 
         elif job == 'judge':
             system_prompt = prompts.SYSTEM_PROMPT_LLM_AS_JUDGE
             schema = BooleanModel.model_json_schema
-            validator = BooleanModel.model_validate_json
             json_schema_name = "TrueFalseResponse"
 
-        print(f"job: {job}")
         try:
             completion = client.chat.completions.create(
                 model=self.model,
@@ -112,12 +118,11 @@ class LLM():
                 },
                 temperature=0
             )
-
-            content = completion.choices[0].message.content
-            result = validator(content).result
-            return result
+            return completion
         
         except openai.RateLimitError as error:
+            logger.error(error)
+        except ValidationError as error:
             logger.error(error)
 
 
@@ -468,16 +473,16 @@ class ModelCost():
         self.model = rc_details[rag_component]["model"]
         self.model_cost_dict = self.model_cost_dict_check()
 
-    def cost_model_dispatcher(self):
+    def cost_model_dispatcher(self,data):
         if self.model_cost_dict:
             if self.rag_component == constants.RAG_COMPONENTS["Text Generator"]:
-                self.openai_chat_completion_cost()
+                return self.openai_chat_completion_cost(data['completion'])
             elif self.rag_component == constants.RAG_COMPONENTS["Query Rewriting"]:
-                self.openai_response_cost()
+                return self.openai_response_cost(data['response'])
             elif self.rag_component == constants.RAG_COMPONENTS["Message Categorizer"]:
-                self.openai_message_categorizer_cost()
+                return self.openai_chat_completion_cost(data['completion'])
             elif self.rag_component == constants.RAG_COMPONENTS["Embedder"]:
-                self.hf_embedding_cost()
+                return self.hf_embedding_cost()
         else:
             return False
 
@@ -487,7 +492,7 @@ class ModelCost():
         """
         model_cost_dict:dict = self.cost_dict.get(self.model,{})
         if model_cost_dict is None:
-            logger.error(f"Cost data is not available for {self.model}")
+            logger.error(f"Cost data is not available for {self.rag_component}")
             return False
         
         return model_cost_dict
@@ -497,27 +502,25 @@ class ModelCost():
 
         prompt_tokens = completion_result.usage.prompt_tokens
         completion_tokens = completion_result.usage.completion_tokens
-        input_cost = prompt_tokens * self.model_cost_dict["input"]
-        output_cost = completion_tokens * self.model_cost_dict["output"]
+        input_cost = prompt_tokens * (self.model_cost_dict["input"]/self.model_cost_dict["unit"])
+        output_cost = completion_tokens * (self.model_cost_dict["output"]/self.model_cost_dict["unit"])
+
 
         return {
-            "unit" : self.model_cost_dict["unit"],
             "currency" : self.model_cost_dict["currency"],
             "input_cost" : input_cost,
             "output_cost" : output_cost
             }
     
-    def openai_message_categorizer_cost(self,completion_result:ChatCompletion):
-        pass
-    
     def openai_response_cost(self,response:Response):
         input_tokens = response.usage.input_tokens
         output_tokens = response.usage.output_tokens
-        input_cost = input_tokens * self.model_cost_dict["input"]
-        output_cost = output_tokens * self.model_cost_dict["output"]
+        input_cost = input_tokens * (self.model_cost_dict["input"]/self.model_cost_dict["unit"])
+        output_cost = output_tokens * (self.model_cost_dict["output"]/self.model_cost_dict["unit"])
+
+        logger.info(f"response cost --><-->: {input_cost}")
 
         return {
-            "unit" : self.model_cost_dict["unit"],
             "currency" : self.model_cost_dict["currency"],
             "input_cost" : input_cost,
             "output_cost" : output_cost
@@ -526,7 +529,6 @@ class ModelCost():
     def hf_embedding_cost(self):
         embedding_cost = self.model_cost_dict["embedding"]
         return {
-            "unit" : self.model_cost_dict["unit"],
             "currency" : self.model_cost_dict["currency"],
             "embedding_cost" : embedding_cost,
             }

@@ -23,11 +23,11 @@
 
     <style>
       :root {
-        --bg-page: #f5f5f5;
-        --bg-surface: #ffffff;
-        --border-subtle: #dddddd;
-        --text-main: #111111;
-        --text-muted: #555555;
+        --bg-page: #1e1e1e;
+        --bg-surface: #000000;
+        --border-subtle: #1d1d1d;
+        --text-main: #ffffff;
+        --text-muted: #b8b8b8;
       }
 
       *,
@@ -92,7 +92,7 @@
       }
 
       h1 a:visited{
-        color: #000000;
+        color: #ffffff;
       }
 
       .conversation {
@@ -144,8 +144,8 @@
       }
 
       .chat-input input[type="text"]:disabled {
-        background-color: #f0f0f0;
-        border-color: #cccccc;
+        background-color: #121212;
+        border-color: #393939;
         color: #888888;
         cursor: not-allowed;
       }
@@ -153,23 +153,23 @@
       .chat-input button {
         padding: 0 18px;
         border-radius: 6px;
-        border: 1px solid #000000;
-        background-color: #000000;
-        color: #ffffff;
+        border: 1px solid #ffffff;
+        background-color: #ffffff;
+        color: #000000;
         font-size: 0.95rem;
         cursor: pointer;
         white-space: nowrap;
       }
 
       .chat-input button:hover {
-        background-color: #222222;
+        background-color: #e3e3e3;
       }
 
 
 
       .chat-input button:disabled {
-        background-color: #444444;
-        border-color: #444444;
+        background-color: #c7c7c7;
+        border-color: #c5c5c5;
         cursor: not-allowed;
         opacity: 0.6;
       }
@@ -183,7 +183,7 @@
       }
 
       .chat-container::-webkit-scrollbar-thumb {
-        background: #cccccc;
+        background: #252525;
         border-radius: 3px;
       }
 
@@ -204,15 +204,15 @@
       .help-toggle {
         padding: 4px 10px;
         border-radius: 6px;
-        border: 1px solid #ffffff;
-        background-color: #daffe0;
+        border: 1px solid #000000;
+        background-color: #242a25;
         color: var(--text-muted);
         font-size: 0.85rem;
         cursor: pointer;
       }
 
       .help-toggle:hover {
-        border-color: #999999;
+        border-color: #787878;
         color: var(--text-main);
       }
 
@@ -222,7 +222,7 @@
 
       .help {
         max-width: 100%;
-        background-color: #eefff0;
+        background-color: #131413;
         padding: 8px 10px;
         border-radius: 8px;
         margin: 0;
@@ -245,18 +245,18 @@
 
       .message.agent {
         align-self: flex-start;
-        background-color: #f0f0f0;
+        background-color: #161616;
       }
 
       .message.user {
         align-self: flex-end;
-        background-color: #ffffff;
+        background-color: #000000;
         text-align: left;
       }
 
       .message.telegram {
         align-self: flex-end;
-        background-color: #d4f3ff;
+        background-color: #111415;
         text-align: left;
       }
 
@@ -279,7 +279,7 @@
       }
 
       .message a:hover {
-        color: #3bb2e6;
+        color: #113342;
       }
 
       #messages {
@@ -296,14 +296,14 @@
       }
 
       .home-card {
-        background: #ffffff;
+        background: #000000;
         width: 100%;
         max-width: 420px;
         padding: 40px 30px;
         border-radius: 16px;
         box-shadow: 0 15px 35px rgba(0, 0, 0, 0.08);
         text-align: center;
-        border: 1px solid #e0e0e0;
+        border: 1px solid #252525;
       }
 
       .home-card h1 {
@@ -317,15 +317,15 @@
         padding: 14px;
         font-size: 16px;
         border-radius: 10px;
-        border: 1px solid #d0d0d0;
+        border: 1px solid #2e2e2e;
         margin-bottom: 20px;
         transition: border 0.2s ease, box-shadow 0.2s ease;
       }
 
       .home-card input[type="text"]:focus {
         outline: none;
-        border-color: #000000;
-        box-shadow: 0 0 0 3px rgba(0, 0, 0, 0.12);
+        border-color: #ffffff;
+        box-shadow: 0 0 0 3px rgba(255, 255, 255, 0.12);
       }
 
       .home-card button[type="submit"] {
@@ -334,15 +334,15 @@
         font-size: 16px;
         font-weight: 500;
         border-radius: 10px;
-        border: 1px solid #000000;
-        background: #000000;
-        color: #ffffff;
+        border: 1px solid #ffffff;
+        background: #ffffff;
+        color: #000000;
         cursor: pointer;
         transition: background 0.2s ease, transform 0.05s ease;
       }
 
       .home-card button[type="submit"]:hover {
-        background: #222222;
+        background: #e1e1e1;
       }
 
       .home-card button[type="submit"]:active {

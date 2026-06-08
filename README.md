@@ -146,6 +146,7 @@ chmod +x entrypoint.sh
 - Adding caching.
 - Changing the port from 8006 to 8000!
 - RAG pipeline dispatcher
+- if models json output is not valid, what should be retreived?
 
 
 ## Security

@@ -155,7 +155,6 @@ class ChatSendMessageView(UpdateView):
 
 @csrf_exempt
 def telegram_webhook(request):
-    print(telegram_webhook.__name__)
     if not request.body:
         error = "Request body is required"
         logger.info(error)

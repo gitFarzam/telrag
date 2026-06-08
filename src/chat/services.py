@@ -149,7 +149,6 @@ def ingestion_process(transaction_type , json_content,chat_id,is_new) -> Documen
             return False
     
 def process_telegram_object(telegram_object:TelegramMessage,is_new=True):
-    print(process_telegram_object.__name__)
 
     conversation = Conversation.objects.get(chat_id=telegram_object.chat_id )
     doc_object = Document.objects.create(conversation=conversation,telegram_message=telegram_object)
@@ -222,8 +221,6 @@ def message_sender(conversation:Conversation,content,is_agent):
     """
     For sending message in the conversation
     """
-    logger.debug(message_sender.__name__)
-
     message = Message.objects.create(
             conversation=conversation,
             content=content
@@ -246,8 +243,6 @@ def message_sender(conversation:Conversation,content,is_agent):
     return message
 
 def fetch_message_history(instance:Message):
-    logger.debug(fetch_message_history.__name__)
-    
     return list(
         (
         instance.conversation.messages
@@ -324,7 +319,6 @@ def message_sender_custom(conversation:Conversation,message):
     return True
 
 def entities_handling(message_data,chat_id):
-    print(entities_handling.__name__)
     for entity in message_data['entities']:
         if entity['type'] == 'bot_command':
             command = message_data['text'][entity['offset']:entity['length']]
@@ -351,14 +345,13 @@ def entities_handling(message_data,chat_id):
                     send_message(chat_id=chat_id,text="Conversation has been deleted!")
 
 def user_message_categorizer(message:Message, ragpipeline:RAGPipeline):
-    logger.info(user_message_categorizer.__name__)
-    dispatcher = Dispatcher()
+    dispatcher = Dispatcher(ragpipeline)
 
     content = message.content  
     conversation=message.conversation
 
     # RAG Component
-    rewrited_query = dispatcher.query_rewriter_component(content).output_text
+    rewrited_query = dispatcher.query_rewriter_component(content)
 
     # RAG Component 
     input_text_embedding = dispatcher.embedding_component(rewrited_query)
@@ -372,23 +365,24 @@ def user_message_categorizer(message:Message, ragpipeline:RAGPipeline):
         context = similar_text
 
     # RAG Component
-    completion = dispatcher.message_categorizing_component('categorizing' ,content ,context)
-    logger.info(f"result from message_categorizer: {completion}")
-    return context,completion
+    result = dispatcher.message_categorizing_component('categorizing' ,content ,context)
+    logger.info(f"result from message_categorizer: {result}")
+    return context,result
 
 def process_user_message(message:Message):
-    logger.info(process_user_message.__name__)
-
-    # Creating an instance of dispatcher
-    dispatcher = Dispatcher()
 
     # Creating an instance of RAGPipeline
     ragpipeline = RAGPipeline.objects.create()
+
+    # Creating an instance of dispatcher
+    dispatcher = Dispatcher(ragpipeline)
 
     content = message.content
     conversation=message.conversation
     
     context,result = user_message_categorizer(message,ragpipeline)
+
+    logger.info(f"Message Categorizer Result: {result}")
     
     # Fetch message history
     message_history = fetch_message_history(message)
@@ -444,12 +438,10 @@ def process_user_message(message:Message):
 
 
 def creating_text_content_object(content:str):
-    logger.debug(creating_chunk_objects.__name__)
     model_object = TextContent.objects.create(content = content)
     return model_object
 
 def creating_document_source(model_object):
-    logger.debug(creating_document_source.__name__)
     content_type_obj = ContentType.objects.get_for_model(model_object.__class__)
 
     doc_source_obj = DocumentSource.objects.create(
@@ -460,7 +452,6 @@ def creating_document_source(model_object):
     return doc_source_obj
 
 def creating_document_object(document_source, category="user_input", conversation=None, is_initial=False, caption=None,user_message=None,telegram_message=None) -> Document:
-    logger.debug(creating_document_object.__name__)
     doc_object = Document.objects.create(document_source = document_source)
 
     if conversation:
@@ -486,7 +477,6 @@ def creating_document_object(document_source, category="user_input", conversatio
     return doc_object
 
 def transcriber(document_object:Document):
-    logger.info(transcriber.__name__)
     rag_toolkit = NLPToolKit()
     return rag_toolkit.audio_to_text(document_object.document_source.content_object.file.path)
 
@@ -494,7 +484,6 @@ def fetch_content_from_document(document_object:Document):
     """
     This function is for getting content from document object, as document object uses content type object, it should detect which type of content is and then going for getting each content in it's own way
     """
-    logger.debug(fetch_content_from_document.__name__)
 
     if type(document_object.document_source.content_object) is TextContent:
         logger.info("Content type is TextContent")
@@ -516,7 +505,6 @@ def fetch_content_from_document(document_object:Document):
         return False
 
 def creating_chunk_objects(document_object:Document) -> List[Chunk]:
-    logger.info(creating_chunk_objects.__name__)
     content_for_chunk = fetch_content_from_document(document_object)
     
     if content_for_chunk:
@@ -532,7 +520,6 @@ def creating_chunk_objects(document_object:Document) -> List[Chunk]:
         return objects
 
 def creating_embedding_objects(chunks):
-    logger.info(creating_embedding_objects.__name__)
     
     rag_toolkit = NLPToolKit()
 
@@ -588,7 +575,6 @@ def regex_for_get_verification_code(data:dict , from_id):
             return JsonResponse({"error": "Forbidden"}, status=200) # returning 200 is crucial, otherwise requests will repeadedly be send through webhook again and again!
         
 def add_initial_documents(conversation):
-    logger.debug(f"{add_initial_documents.__name__}")
     """
     This function is for adding initial data in demo mode
     """
@@ -677,18 +663,17 @@ def intial_data_db_insert(data_dir)->QuerySet[Embedding]:
         logger.error(e)
 
 def rag_component_creator(
-        ragpipeline,
-        component_name,
-        conversation:Conversation,
-        input_text:str,
-        output_text:str,
-        model:str,
-        unit:str,
-        currency:str,
-        embedding_cost:float,
-        input_cost:float,
-        output_cost:float,
-        latency:float
+        ragpipeline:RAGPipeline,
+        component_name:str,
+        latency:float,
+        conversation:Conversation=None,
+        input_text:str=None,
+        output_text:str=None,
+        model:str=None,
+        currency:str=None,
+        embedding_cost:float=None,
+        input_cost:float=None,
+        output_cost:float=None
 ):
     ragcomponent = RagComponent.objects.create(
         ragpipeline = ragpipeline,
@@ -697,7 +682,6 @@ def rag_component_creator(
         input_text = input_text,
         output_text = output_text,
         model = model,
-        unit = unit,
         currency = currency,
         embedding_cost = embedding_cost,
         input_cost = input_cost,
@@ -719,7 +703,13 @@ class Dispatcher():
         - text_generator
         - 
     """
-    def __init__(self):
+    def __init__(self,rag_pipeline:RAGPipeline):
+        self.rag_pipeline = rag_pipeline
+        self.data = {
+            'completion' : None,
+            'response' : None,
+            'embedding' : None,
+        }
         super().__init__()
 
 
@@ -731,10 +721,19 @@ class Dispatcher():
             'embedding' : embedding,
         }
         """
-        cost = ModelCost(rag_component)
+        costmodel = ModelCost(rag_component)
+        cost = costmodel.cost_model_dispatcher(data)
         latency = latency_calculator(start_time)
 
+        
+
+        # Merging 2 dictionary
+        rag_component_dict = {'ragpipeline':self.rag_pipeline,'component_name' : rag_component , 'latency' : latency} | cost
+
+        logger.info(f"Rag Component Details: {rag_component_dict}")
+
         # Saving to db
+        rag_component_creator(**rag_component_dict)
 
     def embedding_component(self,content):
         # Set start time
@@ -745,16 +744,14 @@ class Dispatcher():
         rag_component = constants.RAG_COMPONENTS["Embedder"]
         input_text_embedding = nlp.embedder(model,text=[content])[0]
 
-        data = {}
-
-        self.save_to_db(rag_component,start_time,data)
+        self.save_to_db(rag_component,start_time,self.data)
 
         return input_text_embedding
     
     def hybrid_search_component(self,conversation:Conversation|None,content:str,input_text_embedding,top_k):
 
         similar_embeddings = hybrid_search(conversation=conversation,search_keyword=content,input_text_embedding=input_text_embedding ,beta=constants.BETA, top_k=top_k)
-
+        data = {}
         return similar_embeddings
 
     def message_categorizing_component(self,job,content,context):
@@ -769,10 +766,15 @@ class Dispatcher():
         """
         rag_component = constants.RAG_COMPONENTS["Message Categorizer"]
         completion = llm.openai_classifier(user_prompt,job)
-        data = {}
-        self.save_to_db(rag_component,start_time,data)
+        self.data['completion'] = completion
+        self.save_to_db(rag_component,start_time,self.data)
 
-        return completion
+        content = completion.choices[0].message.content
+        # Check if validator fails what to return
+        validator = llm.get_validator(job)
+        result = validator(content).result
+
+        return result
 
         # Saving information into database
     def text_generation_component(self,message_history,new_messages):
@@ -781,8 +783,8 @@ class Dispatcher():
         rag_component= constants.RAG_COMPONENTS["Text Generator"]
         llm = LLM(model=model)
         completion = llm.openai_text_generator(message_history,new_messages)
-        data = {}
-        self.save_to_db(rag_component , start_time , data)
+        self.data['completion'] = completion
+        self.save_to_db(rag_component , start_time , self.data)
 
         return completion
     
@@ -792,8 +794,9 @@ class Dispatcher():
         rag_component= constants.RAG_COMPONENTS["Query Rewriting"]
         llm = LLM(model=model)
         response = llm.openai_text_rewriter(original_text)
-        data = {}
-        self.save_to_db(rag_component , start_time , data)
+        result = response.output_text
+        self.data['response'] = response
+        self.save_to_db(rag_component , start_time , self.data)
 
-        return response
+        return result
         
