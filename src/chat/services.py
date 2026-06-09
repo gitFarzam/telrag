@@ -164,7 +164,7 @@ def process_telegram_object(telegram_object:TelegramMessage,is_new=True):
         if i == 'caption':
             doc_object.caption = metadata[i]
             doc_object.save()
-        if user_original_message_tg_id:
+        if not is_new:
             user_message = Message.objects.filter(tg_id = metadata[i]).first() # it will get the message which is related to the original message which contains user question (the question we actually are going to answer)
             if user_message:
                 doc_object.user_message = user_message
@@ -175,11 +175,12 @@ def process_telegram_object(telegram_object:TelegramMessage,is_new=True):
 
     for data in message_data:
         if data == 'text':
+            original_message_content = ''
             if not is_new:
                 user_original_message = Message.objects.filter(tg_id=user_original_message_tg_id).first()
                 if user_original_message:
-                    original_message_content = user_original_message.content
-            model_object = creating_text_content_object(content = f"{original_message_content}: {message_data[data]}")
+                    original_message_content = user_original_message.content + ': '
+            model_object = creating_text_content_object(content = f"{original_message_content} {message_data[data]}")
             doc_source_obj = creating_document_source(model_object)
             doc_object.document_source = doc_source_obj
             doc_object.save()
