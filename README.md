@@ -159,6 +159,8 @@ chmod +x entrypoint.sh
 - Limit receving messages in telegram for each chat id - maximum 100, increase 3 seconds waiting to 5 seconds
 - Where celery tasks results are stored in flower? they should not stack on the top of each other
 - Get containers memory and cpu usages from stats and then go for creating limits using docker compose : https://docs.docker.com/reference/compose-file/deploy/#cpus
+- when conversation is not verified for telegram, just text input should be accpeted and be processed for regex detection
+- for all functions add try , except block!
 
 Copilot: command + control + i
 

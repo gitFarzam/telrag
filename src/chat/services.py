@@ -157,23 +157,29 @@ def process_telegram_object(telegram_object:TelegramMessage,is_new=True):
     metadata = parsed_data['metadata']
     message_data = parsed_data['data']
 
+    if not is_new:
+        user_original_message_tg_id = metadata.get('reply_message_id',{})
+
     for i in metadata:
         if i == 'caption':
             doc_object.caption = metadata[i]
             doc_object.save()
-        if not is_new: # it means that it is a reply message from telegram
-            if i == 'reply_message_id':
-                user_message = Message.objects.filter(tg_id = metadata[i]).first() # it will get the message which is related to the original message which contains user question (the question we actually are going to answer)
-                if user_message:
-                    doc_object.user_message = user_message
-                    doc_object.save()
-                else:
-                    print('This telegram message is a reply to a message, but the message is not in the database, shows that it might be replying to a telegram client message or any other message')
+        if user_original_message_tg_id:
+            user_message = Message.objects.filter(tg_id = metadata[i]).first() # it will get the message which is related to the original message which contains user question (the question we actually are going to answer)
+            if user_message:
+                doc_object.user_message = user_message
+                doc_object.save()
+            else:
+                print('This telegram message is a reply to a message, but the message is not in the database, shows that it might be replying to a telegram client message or any other message')
 
 
     for data in message_data:
         if data == 'text':
-            model_object = creating_text_content_object(content = message_data[data])
+            if not is_new:
+                user_original_message = Message.objects.filter(tg_id=user_original_message_tg_id).first()
+                if user_original_message:
+                    original_message_content = user_original_message.content
+            model_object = creating_text_content_object(content = f"{original_message_content}: {message_data[data]}")
             doc_source_obj = creating_document_source(model_object)
             doc_object.document_source = doc_source_obj
             doc_object.save()
@@ -350,12 +356,9 @@ def user_message_categorizer(message:Message, ragpipeline:RAGPipeline):
     input_text_embedding = dispatcher.embedding_component(rewrited_query)
 
     # RAG Component 
-    similar_embeddings = dispatcher.hybrid_search_component(conversation,content,input_text_embedding, top_k=5)
+    context = dispatcher.hybrid_search_component(conversation,content,input_text_embedding, top_k=5)
 
-    context =''
-    if similar_embeddings:
-        similar_text = "\n".join([embedding_obj.chunk.text for embedding_obj in similar_embeddings]) # instead of chunk text, it's better to provide the whole document
-        context = similar_text
+    logger.info(f"Similar Documents from Hybrid Search: {context}")
 
     # RAG Component
     result = dispatcher.message_categorizing_component('categorizing' ,content ,context)
@@ -745,7 +748,13 @@ class Dispatcher():
 
         similar_embeddings = hybrid_search(conversation=conversation,search_keyword=content,input_text_embedding=input_text_embedding ,beta=constants.BETA, top_k=top_k)
         data = {}
-        return similar_embeddings
+
+        context =''
+        if similar_embeddings:
+            similar_text = "\n\n--------------------\n\n".join([embedding_obj.chunk.text for embedding_obj in similar_embeddings])
+            context = similar_text
+
+        return context
 
     def message_categorizing_component(self,job,content,context):
         # Set start time

@@ -201,8 +201,12 @@ def telegram_webhook(request):
 
     if not conversation:
         logger.info("Regex for detecting verificatin code")
-        regex_for_get_verification_code(data,from_id)
-        return JsonResponse({"result": "ok"},status=200)
+        try:
+            regex_for_get_verification_code(data,from_id)
+            return JsonResponse({"result": "ok"},status=200)
+        except Exception as e:
+            logger.error(e)
+            return JsonResponse({"result": 'ok'} , status=200)
 
     last_message = TelegramMessage.objects.filter(chat_id=from_id).last()
     if last_message:
@@ -219,5 +223,5 @@ def telegram_webhook(request):
         return JsonResponse({"result": "ok"},status=200)
 
     except Exception as e:
-            logger.critical()
+            logger.error(e)
             return JsonResponse({"result": 'ok'} , status=200)
