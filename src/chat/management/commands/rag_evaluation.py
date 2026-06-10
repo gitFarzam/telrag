@@ -13,11 +13,13 @@ class Command(BaseCommand):
     def handle(self,*args,**options):
         ret_test_data_path = constants.data_path('telmart')['test_retrieval_question_jsonl']
         llm_test_data_path = constants.data_path('telmart')['llm_eval_qa']
-        ragmetrics = RagMetrics(model=constants.OPENAI_CHAT_MODEL,beta=constants.BETA)
+        ragmetrics = RagMetrics(model=constants.OPENAI_CHAT_MODEL,beta=0)
 
         # try:
-        retrieveal_metrics = ragmetrics.retrieveal_metrics(ret_test_data_path, top_k=10) # this should find the same document and not the same category (or maybe both)
+        # retrieveal_metrics = ragmetrics.retrieveal_metrics(ret_test_data_path, top_k=10) # this should find the same document and not the same category (or maybe both)
         # hallucination = ragmetrics.llm_hallucination(llm_test_data_path,top_k=5)
+
+        visualization = ragmetrics.visualization('telmart')
 
         # except Exception as e:
         #     raise CommandError(f"Error: {e}")

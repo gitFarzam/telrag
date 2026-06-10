@@ -57,7 +57,7 @@ def data_path(name:str):
         "test_retrieval_declerative_jsonl" : "test_data/jsonl/retrieval_eval_declerative.jsonl",
         "llm_eval_qa" :"test_data/jsonl/llm_eval_qa.jsonl",
         "result" :"result/result.jsonl",
-        "h_parameter" :"result/hp.jsonl",
+        "hp" :"result/hp.jsonl",
     }
 
     for i in path_dict:

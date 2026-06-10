@@ -248,6 +248,15 @@ class RagMetrics():
     def retrieval_eval_df(self,test_data_path:str):
         # loading test data as a pandas dataframe
         return self.utils.jsonl_reader(path=test_data_path)
+    
+    def result_df(self,name:str):
+        
+        dfs = {
+            'result_df':self.utils.jsonl_reader(path=constants.data_path(name)['result']),
+            'hp_df' : self.utils.jsonl_reader(path=constants.data_path(name)['hp'])
+        }
+
+        return dfs
 
     def retrieveal_metrics(self,test_data_path:str,top_k:int):
         from chat.services import hybrid_search,similar_category
@@ -270,10 +279,10 @@ class RagMetrics():
         total_retrieval_iteration = 0
 
         result_file_path = constants.data_path('telmart')['result']
-        hp_file_path = constants.data_path('telmart')['h_parameter']
+        hp_file_path = constants.data_path('telmart')['hp']
         hp_data = {
             'top_k':self.top_k,
-            'beta' : constants.BETA,
+            'beta' : self.beta ,
             }
         
         try:
@@ -361,7 +370,6 @@ class RagMetrics():
         print(f"MAP@{self.top_k} (Total First Correct / Total Retrieval Iteration) : {map_at}")
 
 
-
     def llm_hallucination(self,test_data_path,top_k):
         from chat.services import hybrid_search,fetch_content_from_document
 
@@ -407,6 +415,15 @@ class RagMetrics():
 
             if index == 10:
                 break
+    def visualization(self,name):
+        try:
+            dfs = self.result_df(name)
+            print(f"HyperParameters:\n{dfs['hp_df']} \n\n-----\n\n Result:\n{dfs['result_df']}")
+        except Exception as e:
+            message = f"Error in creating dataframes for {name} : {e}"
+            logger.error(message)
+            print(message)
+
 
 
 class ModelCost():
