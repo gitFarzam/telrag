@@ -15,6 +15,7 @@ import pandas as pd
 import time
 from .pydantic_classes import CategorzingModel,KeywordModel,BooleanModel
 
+
 load_dotenv()
 logger = logging.getLogger(__name__)
 
@@ -233,11 +234,6 @@ class Utils():
 
 class RagMetrics():
     def __init__(self,model,beta):
-        from chat.services import hybrid_search,similar_category,fetch_content_from_document
-        self.hybrid_search = hybrid_search
-        self.similar_category = similar_category
-        self.get_content = fetch_content_from_document
-
         self.beta = beta
 
         # Initialzing an instance of utils class
@@ -252,9 +248,123 @@ class RagMetrics():
     def retrieval_eval_df(self,test_data_path:str):
         # loading test data as a pandas dataframe
         return self.utils.jsonl_reader(path=test_data_path)
-    
-    def llm_hallucination(self,test_data_path,top_k):
+
+    def retrieveal_metrics(self,test_data_path:str,top_k:int):
+        from chat.services import hybrid_search,similar_category
+        import os
+
+        self.top_k = top_k
+        df = self.retrieval_eval_df(test_data_path)
+        """
+        Precision = Relevant Retrieved / Total Retrieved
+        Recall = Relevant Retrieved / Total Relevant
+        MAP@ : Number of correct returns at the first rank
+
+        This method iterate through all of the rows in the dataframe, and check the `category` value with the detected categories from retrieval and count the number of corrected matches
+        """
+
+        all_categories = 0 # Overall categories were retrieved from retreival
+        all_correct = 0 # Overall correct matches between test query category and retrieval queruies categories
+        total_relevant = 0 # Number of all of the documents which have same value for the category with the user test queries category
+        total_first_correct = 0
+        total_retrieval_iteration = 0
+
+        result_file_path = constants.data_path('telmart')['result']
+        hp_file_path = constants.data_path('telmart')['h_parameter']
+        hp_data = {
+            'top_k':self.top_k,
+            'beta' : constants.BETA,
+            }
         
+        try:
+            # deleting previous version before creating the new one
+
+            if os.path.isfile(result_file_path):
+                os.remove(result_file_path)
+                logger.info(f"Current result file: {result_file_path} has been removed!")
+            if os.path.isfile(hp_file_path):
+                os.remove(hp_file_path)
+                logger.info(f"Current hyper parameter file: {hp_file_path} has been removed!")
+
+            # Creating hyper parameter file
+            with open(hp_file_path,"a",encoding="utf-8") as hf_file:
+                hf_file.write(json.dumps(hp_data))
+
+            logger.info("New hyperparamter file has been created!")
+        except OSError as e:
+            print(e)
+
+        with open(result_file_path, "a", encoding="utf-8") as file:
+            for i, (index, row ) in enumerate(df.iterrows()):
+                query = row['query'] # test query value (user query simulation, like a question)
+                query_category = row['category'] # the corrected category for test query
+                relevant_categories = similar_category(query_category) # number of all the documents in the database which have same category with test query category
+                total_relevant += relevant_categories.__len__() # adding number of all relevant categories in each iteration to total number of relevant categories
+                result = hybrid_search(
+                    search_keyword=query, # alternatively: self.llm.openai_response(query,'keyword_extraction')[0] , # getting the first keyword
+                    # search_keyword=self.llm.openai_response(query,'keyword_extraction')[0] ,
+                    input_text_embedding=embedder(
+                    model=constants.HF_EMBEDDING_MODEL,
+                    text=[query]
+                    )[0],
+                    top_k=self.top_k,
+                    beta=self.beta
+                    ) # result from hybrid search, total number of similar embeddings
+                
+                total_retrieval_iteration+=1 # counting number of all retrievals
+                
+                categories = result.values_list('category',flat=True) # getting the category value for all retrieval outputs
+                first_category = categories.first() # getting the category value for the first ranked output from retrieval
+
+                if query_category==first_category:
+                    total_first_correct+=1  # Counting the number of first correct prediction
+
+                all_categories+=categories.__len__() # adding the number of all retrieved categories to all_categories variable
+
+                # Counting the number of correct categories from the retriever output for each query insertion. The total number of available categories equals the top_k value in the retriever.
+                correct_categories = 0
+                for category in categories:
+                    if category==query_category:
+                        correct_categories+=1 
+
+                all_correct+=correct_categories # adding the number of all correct categories matches to all_correct variabe
+
+                print(f"""
+                        Query Category: {query_category}
+                        Categories: {categories}
+                        total_relevant: {relevant_categories}({relevant_categories.__len__()})
+                        correct_categories : {correct_categories}
+                        \n------------------\n
+                        """)
+
+                if index==30:
+                    break
+
+                precision = all_correct/all_categories
+                recall = all_correct/total_relevant
+                map_at = total_first_correct/total_retrieval_iteration
+
+                data = {'recall':recall,'precision':precision,'map':map_at}
+                file.write(json.dumps(data) + "\n")
+        """
+        note: this is basically wrong, because you have to count the document numbers and not the number of chunks
+        
+        """
+        precision = all_correct/all_categories
+        recall = all_correct/total_relevant
+        map_at = total_first_correct/total_retrieval_iteration
+
+        print(f"Precission@{self.top_k} (Relevant/Total Retrieved): {precision}")
+
+        print(f"Recall@{self.top_k} (Relevant/Total Relevant): {recall}")
+
+        print(f"MAP@{self.top_k} (Total First Correct / Total Retrieval Iteration) : {map_at}")
+
+
+
+    def llm_hallucination(self,test_data_path,top_k):
+        from chat.services import hybrid_search,fetch_content_from_document
+
         df = self.llm_eval_df(test_data_path)
 
         for i, (index, row ) in enumerate(df.iterrows()):
@@ -264,7 +374,7 @@ class RagMetrics():
                             model=constants.HF_EMBEDDING_MODEL,
                             text=[question]
                             )[0]
-            hybrid_search_result = self.hybrid_search(
+            hybrid_search_result = hybrid_search(
                             search_keyword=question, 
                             input_text_embedding=input_embedding,
                             top_k=top_k,
@@ -274,7 +384,7 @@ class RagMetrics():
             
             # have all chunks from retreival here available and then send with question to an LLM and ask LLM is the answer correct or its producing wrong or doing hallucination, this can be done with a more advanced model.
 
-            retrieval_context = "\n".join([self.get_content(embedding_obj.chunk.document)for embedding_obj in hybrid_search_result])
+            retrieval_context = "\n".join([fetch_content_from_document(embedding_obj.chunk.document)for embedding_obj in hybrid_search_result])
             
             result = self.llm.openai_text_generator(
                 messages_history=[],
@@ -297,83 +407,6 @@ class RagMetrics():
 
             if index == 10:
                 break
-
-    def recall(self,top_k:int):
-        self.top_k = top_k
-        """
-        Recall = Relevant Retrieved / Total Relevant
-        """
-
-    def precision(self,test_data_path:str,top_k:int):
-        self.top_k = top_k
-        df = self.retrieval_eval_df(test_data_path)
-        """
-        Precision = Relevant Retrieved / Total Retrieved
-
-        This method iterate through all of the rows in the dataframe, and check the `category` value with the detected categories from retrieval and count the number of corrected matches
-        """
-
-
-        all_categories = 0
-        all_correct = 0
-        total_relevant = 0
-        total_first_correct = 0
-        total_retrieval_iteration = 0
-        for i, (index, row ) in enumerate(df.iterrows()):
-            query = row['query']
-            query_category = row['category']
-            relevant_categories = self.similar_category(query_category)
-            total_relevant += relevant_categories.__len__()
-            result = self.hybrid_search(
-                search_keyword=query, # alternatively: self.llm.openai_response(query,'keyword_extraction')[0] , # getting the first keyword
-                # search_keyword=self.llm.openai_response(query,'keyword_extraction')[0] ,
-                input_text_embedding=embedder(
-                model=constants.HF_EMBEDDING_MODEL,
-                text=[query]
-                )[0],
-                top_k=self.top_k,
-                beta=self.beta
-                )
-            
-            total_retrieval_iteration+=1
-            
-            categories = result.values_list('category',flat=True)
-            first_category = categories.first()
-
-            if query_category==first_category:
-                total_first_correct+=1
-
-            all_categories+=categories.__len__()
-
-            # Counting the number of correct categories from the retriever output for each query insertion. The total number of available categories equals the top_k value in the retriever.
-            correct_categories = 0
-            for category in categories:
-                if category==query_category:
-                    correct_categories+=1 
-
-
-            
-            all_correct+=correct_categories
-            print(f"""
-Query Category: {query_category}
-Categories: {categories}
-total_relevant: {relevant_categories}({relevant_categories.__len__()})
-correct_categories : {correct_categories}
-\n------------------\n
-                    """)
-
-            if index==3:
-                break
-        """
-        note: this is basically wrong, because you have to count the document numbers and not the number of chunks
-        
-        """
-        print(f"Precission@{self.top_k} (Relevant/Total Retrieved): {all_correct/all_categories}")
-
-        print(f"Recall@{self.top_k} (Relevant/Total Relevant): {all_correct/total_relevant}")
-
-        print(f"MAP@{self.top_k} (Total First Correct / Total Retrieval Iteration) : {total_first_correct/total_retrieval_iteration}")
-
 
 
 class ModelCost():
