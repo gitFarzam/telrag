@@ -31,7 +31,7 @@ import chat.constants as constants
 import chat.prompts as prompts
 from .models import Conversation, Message,DocumentSource , TelegramMessage,Document, Chunk, Embedding, TextContent,AudioContent, RagComponent,RAGPipeline
 from .utils.telegram import send_message,telegram_message_parser,telegram_downloader
-from .utils.rag import NLPToolKit,LLM,NLP,latency_calculator,ModelCost
+from .utils.rag import LLM,Utils,latency_calculator,ModelCost,audio_to_text,embedder,NLPToolKit
 from openai.types.chat import ChatCompletion
 
 # loading env variables
@@ -45,8 +45,8 @@ def similarity_search(conversation,input_text,num):
     This function search for top num of similar text to input text
     """
 
-    rag_toolkit = NLPToolKit()
-    input_text_embedding = rag_toolkit.embedder([input_text])[0]
+    utils = Utils()
+    input_text_embedding = embedder([input_text])[0]
 
     # if we are in demo we have to filter similar embeddings to just use default documents and the documents which are created for the current conversation
     # each Chunk object has a document field, each Document model object may have a user_message field or not, if there is not user message it is considered a general document and its ok, if not it should check the Message object from user_message and get the conversation field, if Conversation model object was the same it's ok and can be passed.
@@ -474,8 +474,7 @@ def creating_document_object(document_source, category="user_input", conversatio
     return doc_object
 
 def transcriber(document_object:Document):
-    rag_toolkit = NLPToolKit()
-    return rag_toolkit.audio_to_text(document_object.document_source.content_object.file.path)
+    return audio_to_text(document_object.document_source.content_object.file.path)
 
 def fetch_content_from_document(document_object:Document):
     """
@@ -506,8 +505,8 @@ def creating_chunk_objects(document_object:Document) -> List[Chunk]:
     
     if content_for_chunk:
 
-        rag_toolkit = NLPToolKit()
-        chunks = rag_toolkit.split_text(text=content_for_chunk)
+        nlp_toolkit = NLPToolKit()
+        chunks = nlp_toolkit.split_text(text=content_for_chunk)
 
         objects = Chunk.objects.bulk_create(
             [
@@ -517,11 +516,9 @@ def creating_chunk_objects(document_object:Document) -> List[Chunk]:
         return objects
 
 def creating_embedding_objects(chunks):
-    
-    rag_toolkit = NLPToolKit()
 
     chunks_text = [chunk.text for chunk in chunks]
-    embeddings = rag_toolkit.embedder(chunks=chunks_text)
+    embeddings = embedder(text=chunks_text)
 
     objects = Embedding.objects.bulk_create(
         [
@@ -737,9 +734,9 @@ class Dispatcher():
         start_time = time.time()
         model = constants.HF_EMBEDDING_MODEL
 
-        nlp = NLP()
+        utils = Utils()
         rag_component = constants.RAG_COMPONENTS["Embedder"]
-        input_text_embedding = nlp.embedder(model,text=[content])[0]
+        input_text_embedding = embedder(model,text=[content])[0]
 
         self.save_to_db(rag_component,start_time,self.data)
 

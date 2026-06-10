@@ -8,7 +8,7 @@ from http import HTTPStatus
 import os
 from django.conf import settings
 from .services import process_telegram_object,hybrid_search,intial_data_db_insert,load_initial_documents
-from .utils.rag import NLP, RagMetrics, LLM
+from .utils.rag import utils, RagMetrics, LLM,audio_to_text,embedder
 from .utils.telegram import telegram_downloader
 from unittest.mock import patch
 import chat.constants as constants
@@ -110,19 +110,19 @@ class TestRAGToolKit(TestCase):
         audio_file_relative_dir = "chat/sample_data/sample.oga"
         self.audio_file_dir = os.path.join(settings.BASE_DIR , audio_file_relative_dir)
 
-        self.rt = RAGToolKit()
+        self.utils = Utils()
 
     # Test if the embedder works correctly
     def test_embedding_function(self):
-        result = self.rt.embedder(chunks=["Hello How Are You?"])
+        result = embedder(text=["Hello How Are You?"])
         self.assertEqual(len(result[0]), 384)
 
     def test_text_generator_function(self):
-        result = self.rt.text_generator(messages=[{'role':'user','content':'Talk about Iran'}])
+        result = self.utils.text_generator(messages=[{'role':'user','content':'Talk about Iran'}])
         print(result)
 
     def audio_transcriber(self):
-        result = self.rt.audio_to_text(file_path=self.audio_file_dir)
+        result = audio_to_text(file_path=self.audio_file_dir)
         print(result)
 
 
@@ -219,21 +219,21 @@ class TestInsertData(TestCase):
 class TestJsonlReader(TestCase):
     def setUp(self):
         self.jsonl_path = os.path.join(settings.BASE_DIR,constants.data_path("telmart")["test_retrieval_question_jsonl"])
-        self.nlp = NLP()
+        self.utils = Utils()
         
     def test_jsonl_reader(self):
-        result = self.nlp.jsonl_reader(path=self.jsonl_path)
+        result = self.utils.jsonl_reader(path=self.jsonl_path)
         assert isinstance(result, pd.DataFrame)
 
 
 class TestEmbedder(TestCase):
     def setUp(self):
         jsonl_path = os.path.join(settings.BASE_DIR,constants.data_path("telmart")["test_retrieval_question_jsonl"])
-        self.nlp = NLP()
-        self.df = self.nlp.jsonl_reader(path=jsonl_path)
+        self.utils = Utils()
+        self.df = self.utils.jsonl_reader(path=jsonl_path)
 
     def test_embedder(self):
-        embeddings = self.nlp.embedder(
+        embeddings = embedder(
             model=constants.HF_EMBEDDING_MODEL,
             chunks=self.df['query'].tolist()[:5]
             )
@@ -245,11 +245,11 @@ class TestValueChecker(TestCase):
     def setUp(self):
         jsonl_path = os.path.join(settings.BASE_DIR,constants.data_path("telmart")["test_retrieval_question_jsonl"])
         self.test_raw_source = os.path.join(settings.BASE_DIR,constants.data_path("telmart")["test_raw"])
-        self.nlp = NLP()
-        self.df = self.nlp.jsonl_reader(path=jsonl_path)
+        self.utils = Utils()
+        self.df = self.utils.jsonl_reader(path=jsonl_path)
 
     def test_value_checker(self):
-        result = self.nlp.value_checker(self.df,self.test_raw_source)
+        result = self.utils.value_checker(self.df,self.test_raw_source)
         self.assertTrue(result)
 
 class TestHybridSearch(TestCase):
@@ -258,8 +258,8 @@ class TestHybridSearch(TestCase):
         self.search_keyword = "telmart"
 
         input_text = "what does telmart do?"
-        nlp = NLP()
-        self.input_text_embedding = nlp.embedder(
+        utils = Utils()
+        self.input_text_embedding = embedder(
             model=constants.HF_EMBEDDING_MODEL,
             chunks=[input_text]
             )[0]

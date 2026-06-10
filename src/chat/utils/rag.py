@@ -1,61 +1,58 @@
 from langchain_text_splitters import RecursiveCharacterTextSplitter
-from typing import List
 from huggingface_hub import InferenceClient
 import openai
 from openai import OpenAI
 from openai.types.chat import ChatCompletion
 from openai.types.responses.response import Response
-from pydantic import BaseModel,Field,ValidationError
-from typing import Literal
+from pydantic import ValidationError
 from dotenv import load_dotenv
-from enum import IntEnum
 import os
 import json
-from django.conf import settings
 import chat.constants as constants
 import chat.prompts as prompts
-import numpy as np
 import logging
 import pandas as pd
 import time
+from .pydantic_classes import CategorzingModel,KeywordModel,BooleanModel
 
 load_dotenv()
 logger = logging.getLogger(__name__)
+
+
+def latency_calculator(before):
+    after = time.time()
+    return after-before
+
+
+def audio_to_text(self,file_path: str, model: str = constants.OPENAI_TRANSCRIPTION_MODEL) -> str:
+    client = OpenAI()  # Make sure OPENAI_API_KEY is set in env
+
+    with open(file_path, "rb") as audio_file:
+        response = client.audio.transcriptions.create(
+            model=model,
+            file=audio_file
+        )
+    return response.text
+
+
+def embedder(model,text:str):
+    # Turning of INFO level log for hugging face
+    info_logging = False
+
+    if not info_logging:
+        # 1. Suppress HTTP request and Hub logging
+        logging.getLogger("httpx").setLevel(logging.ERROR)
+        logging.getLogger("huggingface_hub").setLevel(logging.ERROR)
+
+    client = InferenceClient(model=model,token=os.getenv("HF_API_TOKEN")) 
+    embeddings = client.feature_extraction(text=text)
+    return embeddings
+
 
 class NLPToolKit(RecursiveCharacterTextSplitter):
     def __init__(self, separators = None, keep_separator = True, is_separator_regex = False, text=None, **kwargs):
         super().__init__(separators, keep_separator, is_separator_regex,  chunk_size = constants.CHUNK_SIZE,
         chunk_overlap = constants.CHUNK_OVERLAP,**kwargs)
-
-    # in-use: for generating embedding for sentences
-    def embedder(self,chunks:list,model=constants.HF_EMBEDDING_MODEL):
-        client = InferenceClient(model=model,token=os.getenv("HF_API_TOKEN")) 
-        embedding = client.feature_extraction(text=chunks)
-        return embedding
-
-    def audio_to_text(self,file_path: str, model: str = constants.OPENAI_TRANSCRIPTION_MODEL) -> str:
-        client = OpenAI()  # Make sure OPENAI_API_KEY is set in env
-
-        with open(file_path, "rb") as audio_file:
-            response = client.audio.transcriptions.create(
-                model=model,
-                file=audio_file
-            )
-        return response.text
-
-
-class CategorzingModel(BaseModel):
-    result: Literal[0, 1, 2, 3]
-
-class KeywordModel(BaseModel):
-    result: List[str] = Field(
-        ...,
-        min_length=2,
-        max_length=5
-    )
-
-class BooleanModel(BaseModel):
-    result : bool
 
 
 class LLM():
@@ -180,7 +177,7 @@ class LLM():
 
             
 
-class NLP():
+class Utils():
     """
     This class if made for evaluating retrieval performance, it gets multiple test query and will compare them with oberserved query, both queryies belong to a unique category, if categories were matched together, it means that retrieval worked properly with providing right documents @k
 
@@ -234,90 +231,6 @@ class NLP():
                     )
             return False
 
-
-    def embedder(self,model,text:str):
-
-        # Turning of INFO level log for hugging face
-        info_logging = False
-
-        if not info_logging:
-            # 1. Suppress HTTP request and Hub logging
-            logging.getLogger("httpx").setLevel(logging.ERROR)
-            logging.getLogger("huggingface_hub").setLevel(logging.ERROR)
-
-        client = InferenceClient(model=model,token=os.getenv("HF_API_TOKEN")) 
-        embeddings = client.feature_extraction(text=text)
-        return embeddings
-    
-    def cosine_similarity(v1, array_of_vectors): 
-        """
-        Cosine similarity between a vector and either a single vector (1D) or an array of vectors (2D).
-        Returns a float for 1D input, or a list of floats for 2D input.
-        """
-        v1 = np.asarray(v1, dtype=np.float32).ravel() # ravel converts multi dimensional into 1 dimensional
-
-        A = np.asarray(array_of_vectors, dtype=np.float32)
-
-        if A.ndim == 1:
-            A = A.ravel()
-            denom = np.linalg.norm(v1) * np.linalg.norm(A)
-            return float(0.0 if denom == 0 else np.dot(v1, A) / denom)
-
-        # 2D case: compute similarities for each row in A
-        A = np.atleast_2d(A)
-        v1_norm = np.linalg.norm(v1)
-        A_norms = np.linalg.norm(A, axis=1)
-        denom = v1_norm * A_norms
-        with np.errstate(divide='ignore', invalid='ignore'):
-            sims = (A @ v1) / np.where(denom == 0, 1.0, denom)
-        sims[denom == 0] = 0.0
-        return sims.tolist()
-
-
-    def top_k_greatest_indices(lst, k):
-        """
-        Get the indices of the top k greatest items in a list.
-
-        Parameters:
-        lst (list): The list of elements to evaluate.
-        k (int): The number of top elements to retrieve by index.
-
-        Returns:
-        list: A list of indices corresponding to the top k greatest elements in lst.
-        """
-        # Enumerate the list to keep track of indices
-        indexed_list = list(enumerate(lst))
-        # Sort by element values in descending order
-        sorted_by_value = sorted(indexed_list, key=lambda x: x[1], reverse=True)
-        # Extract the top k indices
-        top_k_indices = [index for index, value in sorted_by_value[:k]]
-        return top_k_indices
-
-
-
-    def metrics_computation(self,k):
-        # Normalize all embeddings to NumPy once (input is conidered as tensors, if not, just create array from list)
-        embeddings = self.embedder()
-        np_embeddings = []
-        for x in embeddings:
-            if hasattr(x, "detach"):  # torch tensor
-                x = x.detach().cpu().numpy()
-            np_embeddings.append(np.asarray(x, dtype=np.float32).ravel())
-
-        E = np.vstack(np_embeddings) #flatenning all embeddings
-
-        for i in self.input_queries:
-            query = self.text_strip(i['query'])
-            category = i['category']
-
-            query_embedding = self.embedder([query])[0]
-
-            # Cosine Similarity
-            cosine_scores = self.cosine_similarity(query_embedding,E)
-            top_results = self.top_k_greatest_indices(cosine_scores,k)
-
-
-
 class RagMetrics():
     def __init__(self,model,beta):
         from chat.services import hybrid_search,similar_category,fetch_content_from_document
@@ -327,18 +240,18 @@ class RagMetrics():
 
         self.beta = beta
 
-        # Initialzing an instance of NLP class
-        self.nlp = NLP()
+        # Initialzing an instance of utils class
+        self.utils = Utils()
 
         # openai keyword extractor
         self.llm = LLM(model)
         
     def llm_eval_df(self,test_data_path:str):
-        return self.nlp.jsonl_reader(path=test_data_path)
+        return self.utils.jsonl_reader(path=test_data_path)
     
     def retrieval_eval_df(self,test_data_path:str):
         # loading test data as a pandas dataframe
-        return self.nlp.jsonl_reader(path=test_data_path)
+        return self.utils.jsonl_reader(path=test_data_path)
     
     def llm_hallucination(self,test_data_path,top_k):
         
@@ -347,7 +260,7 @@ class RagMetrics():
         for i, (index, row ) in enumerate(df.iterrows()):
             question = row['question']
             answer = row['answer']
-            input_embedding = self.nlp.embedder(
+            input_embedding = embedder(
                             model=constants.HF_EMBEDDING_MODEL,
                             text=[question]
                             )[0]
@@ -414,7 +327,7 @@ class RagMetrics():
             result = self.hybrid_search(
                 search_keyword=query, # alternatively: self.llm.openai_response(query,'keyword_extraction')[0] , # getting the first keyword
                 # search_keyword=self.llm.openai_response(query,'keyword_extraction')[0] ,
-                input_text_embedding=self.nlp.embedder(
+                input_text_embedding=embedder(
                 model=constants.HF_EMBEDDING_MODEL,
                 text=[query]
                 )[0],
@@ -461,10 +374,6 @@ correct_categories : {correct_categories}
 
         print(f"MAP@{self.top_k} (Total First Correct / Total Retrieval Iteration) : {total_first_correct/total_retrieval_iteration}")
 
-
-def latency_calculator(before):
-    after = time.time()
-    return after-before
 
 
 class ModelCost():
@@ -542,5 +451,3 @@ class ModelCost():
             }
 
 
-
-    
