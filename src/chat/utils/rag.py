@@ -13,6 +13,7 @@ import chat.prompts as prompts
 import logging
 import pandas as pd
 import time
+from datetime import datetime
 from .pydantic_classes import CategorzingModel,KeywordModel,BooleanModel
 
 
@@ -253,7 +254,7 @@ class RagMetrics():
         
         dfs = {
             'result_df':self.utils.jsonl_reader(path=constants.data_path(name)['result']),
-            'hp_df' : self.utils.jsonl_reader(path=constants.data_path(name)['hp'])
+            'result_history_df' : self.utils.jsonl_reader(path=constants.data_path(name)['result_history'])
         }
 
         return dfs
@@ -279,11 +280,6 @@ class RagMetrics():
         total_retrieval_iteration = 0
 
         result_file_path = constants.data_path('telmart')['result']
-        hp_file_path = constants.data_path('telmart')['hp']
-        hp_data = {
-            'top_k':self.top_k,
-            'beta' : self.beta ,
-            }
         
         try:
             # deleting previous version before creating the new one
@@ -291,15 +287,6 @@ class RagMetrics():
             if os.path.isfile(result_file_path):
                 os.remove(result_file_path)
                 logger.info(f"Current result file: {result_file_path} has been removed!")
-            if os.path.isfile(hp_file_path):
-                os.remove(hp_file_path)
-                logger.info(f"Current hyper parameter file: {hp_file_path} has been removed!")
-
-            # Creating hyper parameter file
-            with open(hp_file_path,"a",encoding="utf-8") as hf_file:
-                hf_file.write(json.dumps(hp_data))
-
-            logger.info("New hyperparamter file has been created!")
         except OSError as e:
             print(e)
 
@@ -359,6 +346,23 @@ class RagMetrics():
         note: this is basically wrong, because you have to count the document numbers and not the number of chunks
         
         """
+        result_history_file_path = constants.data_path('telmart')['result_history']
+        
+        result_history = {
+            'top_k':self.top_k,
+            'beta' : self.beta ,
+            'precision' : precision,
+            'recall' : recall,
+            'map_at' : map_at,
+            'time' : datetime.now().replace(microsecond=0).__str__()
+            }
+
+        # Creating new result history file
+        with open(result_history_file_path,"a",encoding="utf-8") as file:
+            file.write(json.dumps(result_history) +'\n')
+
+        logger.info("New result history file has been created!")
+
         precision = all_correct/all_categories
         recall = all_correct/total_relevant
         map_at = total_first_correct/total_retrieval_iteration
@@ -418,12 +422,18 @@ class RagMetrics():
     def visualization(self,name):
         try:
             dfs = self.result_df(name)
-            print(f"HyperParameters:\n{dfs['hp_df']} \n\n-----\n\n Result:\n{dfs['result_df']}")
+            result_df = dfs['result_df']
+            result_history_df = dfs['result_history_df']
+            
+            print(f"Result:\n{result_df}\n\n---\n\nResult History:\n{result_history_df} ")
+
+
+
+
+
         except Exception as e:
             message = f"Error in creating dataframes for {name} : {e}"
             logger.error(message)
-            print(message)
-
 
 
 class ModelCost():

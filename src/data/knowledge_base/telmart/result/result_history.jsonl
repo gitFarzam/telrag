@@ -1,0 +1,8 @@
+{"top_k": 10, "beta": 0, "precision": 0.3, "recall": 0.75, "map_at": 1.0, "time": "2026-06-10 21:06:15"}
+{"top_k": 10, "beta": 0, "precision": 0.3, "recall": 0.75, "map_at": 1.0, "time": "2026-06-10 21:06:58"}
+{"top_k": 10, "beta": 0, "precision": 0.3, "recall": 0.75, "map_at": 1.0, "time": "2026-06-10 21:07:16"}
+{"top_k": 10, "beta": 0, "precision": 0.3, "recall": 0.75, "map_at": 1.0, "time": "2026-06-10 21:07:25"}
+{"top_k": 10, "beta": 0, "precision": 0.3, "recall": 0.75, "map_at": 1.0, "time": "2026-06-10 21:07:27"}
+{"top_k": 10, "beta": 0, "precision": 0.3, "recall": 0.75, "map_at": 1.0, "time": "2026-06-10 21:07:56"}
+{"top_k": 10, "beta": 0, "precision": 0.3, "recall": 0.75, "map_at": 1.0, "time": "2026-06-10 21:18:14"}
+{"top_k": 10, "beta": 0, "precision": 0.31666666666666665, "recall": 0.7916666666666666, "map_at": 0.43333333333333335, "time": "2026-06-10 21:18:35"}

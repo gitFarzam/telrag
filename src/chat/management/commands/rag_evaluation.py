@@ -11,6 +11,15 @@ class Command(BaseCommand):
     """
 
     def handle(self,*args,**options):
+        """
+        add arguments:
+        calculating new values: yes / no
+            - passing hyper parameters
+        showing numeric result : yes / no
+        showing full result (visualization + numeric)
+        
+        
+        """
         ret_test_data_path = constants.data_path('telmart')['test_retrieval_question_jsonl']
         llm_test_data_path = constants.data_path('telmart')['llm_eval_qa']
         ragmetrics = RagMetrics(model=constants.OPENAI_CHAT_MODEL,beta=0)
