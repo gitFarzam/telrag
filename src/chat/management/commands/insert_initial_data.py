@@ -1,16 +1,13 @@
 from django.core.management.base import BaseCommand, CommandError
-from chat.models import Conversation
-from django.db import transaction
 from django.conf import settings
-from chat.services import creating_text_content_object, creating_document_source,creating_document_object,creating_chunk_objects,creating_embedding_objects,intial_data_db_insert,load_initial_documents
+from chat.services import intial_data_db_insert
 import os
-from pathlib import Path
 import chat.constants as constants
 
 class Command(BaseCommand):
 
     help = f"""
-    Running command: uv run manage.py insert_data <document_indices>
+    Running command: python manage.py insert_data <document_indices>
     Check initial_data directory, each text document is related to 1 sample
     In case you need to store documents for a beauty shop simply run this command:
     Running command: uv run manage.py insert_data 0 1 2 3

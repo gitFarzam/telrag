@@ -121,25 +121,22 @@ chmod +x entrypoint.sh
 - Improving integration with OpenAI.
 - Enhancing error handling.
 - Limiting voice message length.
-- Added a delete option in the chat view.
 - Fixed WebSocket issues in mobile view by using wss:// instead of ws:// (testing can be done in online mode via HTTPS).
-- Added functionality to handle irrelevant questions, such as "I need to take a shower!", ensuring the AI agent cannot answer them.
-- Avoided long voice messages.
+- Add functionality to handle irrelevant questions, such as "I need to take a shower!", ensuring the AI agent cannot answer them.
 - Clarified that if you send a text or voice message without replying, it will be stored separately as context.
-- Edited messages that are instantly sent after verification to include descriptions.
-- Fixed the combination of user Telegram messages and responses.
-- Added an additional guide explaining that if you open multiple browsers, your messages will go to different conversations; clicking /refresh connects you to the current chat.
-- Added a contact form.
-- Added a note that this demo may have issues in mobile view and recommends using desktop view.
-- Cleaned imports, removed redundant functions, constants, fixed typos, improved logger usage, removed redundant files, updated .gitignore, and cleared git cache.
-- Developed a niche app targeting a specific industry.
-- Added log files compatible with the Docker logs command.
-- Integrated Prometheus metrics for Docker containers (cAdvisor and Node Exporter).
-- Optimized loading of initial data by having it ready in the database.
-- Configured a production monitoring system limited to the Django app and app metrics using Alloy and Loki, including a secondary Alloy+/Loki config file.
-- Noted that service_name is already included in Alloy outputs, which overlaps with the container_name label.
-- Implemented drawing canvases for TelRAG.
-- Documented how to clean older data in log and metrics storage, including retention policies in Loki and Prometheus.
+- Edit messages that are instantly sent after verification to include descriptions.
+- Add an additional guide explaining that if you open multiple browsers, your messages will go to different conversations; clicking /refresh connects you to the current chat.
+- Add a contact form.
+- Add a note that this demo may have issues in mobile view and recommends using desktop view.
+- Clean imports, remove redundant functions, constants, fix typos, improv logger usage, remove redundant files, update .gitignore, and clear git cache.
+- Develop a niche app targeting a specific industry.
+- Add log files compatible with the Docker logs command.
+- Integrat Prometheus metrics for Docker containers (cAdvisor and Node Exporter).
+- Optimize loading of initial data by having it ready in the database.
+- Configure a production monitoring system limited to the Django app and app metrics using Alloy and Loki, including a secondary Alloy+/Loki config file.
+- Note that service_name is already included in Alloy outputs, which overlaps with the container_name label.
+- Implement drawing canvases for TelRAG.
+- Documente how to clean older data in log and metrics storage, including retention policies in Loki and Prometheus.
 - Adding a "Keep my conversation" button, allowing users to retain their conversations and retrieve their username and password.
 - Added documentation for using ngrok in development mode.
 - Fixing ‍`DOCKER‍‍` and `DEBUG` environment variables and database connection issues in development mode.
@@ -147,12 +144,12 @@ chmod +x entrypoint.sh
 - Changing the port from 8006 to 8000!
 - RAG pipeline dispatcher
 - if models json output is not valid, what should be retreived?
-- including agent message reply back into rag pipeline from user message
+- merging agent message (which comes from telegram) into reply back into rag pipeline from user message
 
 
 ## Security
 - Opening ports for grafana and flower panels can be closed probably, as caddy is using internal network for exposing
-- Safe db quieris
+- Safe db queries
 - managing log storage in loki! Alloy scraping and prometheus!
 - Create Alert in grafana
 - Limit container memory usage
@@ -174,3 +171,35 @@ Copilot: command + control + i
 
 ## SQL
 - Duplicated queries
+
+## Refactoring
+- try blocks
+- cleaning git cache
+- avoiding repetitive line of codes
+- function and variable names
+- libraries import order
+- non-used functions and methods in the classes
+
+## Main Version Creation
+- adopting the demo version with the production version
+- removing telegram verification pipeline, using default chat id values
+- modifying models, search among all data not just bounded to a conversation
+- modify celery and celery beat
+
+## Documentation
+- writing document for the main version
+- having help.md files for monitoring, tests, evaluations, etc..
+- creating diagrams and animations, if its possible
+
+## Repo
+- creating plan for start to finish and all checkpoints for creating the final project
+- including some of the nice commits which I had as using for showing some changes
+- having an md file which shows the steps of creation
+
+## Video
+- Writing code based on repo plan and commits
+- recording transcript and then finalizing
+- creating nice video about how the demo works and usage of this app
+
+## Linkedin
+- creating animations and showing different part of the project

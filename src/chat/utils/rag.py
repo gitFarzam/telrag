@@ -236,6 +236,15 @@ class NLP():
 
 
     def embedder(self,model,text:str):
+
+        # Turning of INFO level log for hugging face
+        info_logging = False
+
+        if not info_logging:
+            # 1. Suppress HTTP request and Hub logging
+            logging.getLogger("httpx").setLevel(logging.ERROR)
+            logging.getLogger("huggingface_hub").setLevel(logging.ERROR)
+
         client = InferenceClient(model=model,token=os.getenv("HF_API_TOKEN")) 
         embeddings = client.feature_extraction(text=text)
         return embeddings
@@ -387,12 +396,10 @@ class RagMetrics():
         df = self.retrieval_eval_df(test_data_path)
         """
         Precision = Relevant Retrieved / Total Retrieved
+
+        This method iterate through all of the rows in the dataframe, and check the `category` value with the detected categories from retrieval and count the number of corrected matches
         """
 
-        """
-        I need to have hybrid_search here, hybrid search requires conversation object
-        for all queries (prompts) in the dataframe hybrid search will be activated
-        """
 
         all_categories = 0
         all_correct = 0
@@ -409,9 +416,9 @@ class RagMetrics():
                 # search_keyword=self.llm.openai_response(query,'keyword_extraction')[0] ,
                 input_text_embedding=self.nlp.embedder(
                 model=constants.HF_EMBEDDING_MODEL,
-                chunks=[query]
+                text=[query]
                 )[0],
-                k=self.top_k,
+                top_k=self.top_k,
                 beta=self.beta
                 )
             
@@ -425,6 +432,7 @@ class RagMetrics():
 
             all_categories+=categories.__len__()
 
+            # Counting the number of correct categories from the retriever output for each query insertion. The total number of available categories equals the top_k value in the retriever.
             correct_categories = 0
             for category in categories:
                 if category==query_category:
@@ -441,8 +449,8 @@ correct_categories : {correct_categories}
 \n------------------\n
                     """)
 
-            # if index==20:
-            #     break
+            if index==3:
+                break
         """
         note: this is basically wrong, because you have to count the document numbers and not the number of chunks
         
