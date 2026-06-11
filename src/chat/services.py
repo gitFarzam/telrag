@@ -424,6 +424,7 @@ def process_user_message(message:Message):
             message_sender_custom(conversation=message.conversation,message=constants.DEMO_TELEGRAM_HUMAN_ROLE_MESSAGE)
             message_sender_custom(conversation=message.conversation,message=constants.demo_telegram_verify_messsage(code))
 
+
     elif result in [3]:
         logger.info("Question is out of scope of answering")
         # send and aswer which you can not respond to this matter

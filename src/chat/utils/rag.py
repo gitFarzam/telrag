@@ -234,7 +234,9 @@ class Utils():
             return False
 
 class RagMetrics():
-    def __init__(self,model,beta):
+    def __init__(self,model,top_k,beta):
+
+        self.top_k=top_k
         self.beta = beta
 
         # Initialzing an instance of utils class
@@ -259,11 +261,10 @@ class RagMetrics():
 
         return dfs
 
-    def retrieveal_metrics(self,test_data_path:str,top_k:int):
+    def retrieveal_metrics(self,test_data_path:str):
         from chat.services import hybrid_search,similar_category
         import os
 
-        self.top_k = top_k
         df = self.retrieval_eval_df(test_data_path)
         """
         Precision = Relevant Retrieved / Total Retrieved
@@ -282,7 +283,6 @@ class RagMetrics():
         result_file_path = constants.data_path('telmart')['result']
         
         try:
-            # deleting previous version before creating the new one
 
             if os.path.isfile(result_file_path):
                 os.remove(result_file_path)
@@ -363,9 +363,6 @@ class RagMetrics():
 
         logger.info("New result history file has been created!")
 
-        precision = all_correct/all_categories
-        recall = all_correct/total_relevant
-        map_at = total_first_correct/total_retrieval_iteration
 
         print(f"Precission@{self.top_k} (Relevant/Total Retrieved): {precision}")
 
@@ -374,67 +371,129 @@ class RagMetrics():
         print(f"MAP@{self.top_k} (Total First Correct / Total Retrieval Iteration) : {map_at}")
 
 
-    def llm_hallucination(self,test_data_path,top_k):
+    def llm_hallucination(self,test_data_path):
+        """
+        This method is for checking if the the llm hallucinates or no. test dataset includes lines of question-answer pairs plus category name and the related document, an example:
+
+        {"question": "Where can customers find TelMart associates to help with purchases?", "answer": "TelMart associates are available at staffed checkout lanes throughout the store to assist customers with their purchases.", "category": "checkout_support", "file_name": "cashier_help.txt"}
+
+        each embedding
+        """
         from chat.services import hybrid_search,fetch_content_from_document
 
         df = self.llm_eval_df(test_data_path)
 
-        for i, (index, row ) in enumerate(df.iterrows()):
-            question = row['question']
-            answer = row['answer']
-            input_embedding = embedder(
-                            model=constants.HF_EMBEDDING_MODEL,
-                            text=[question]
-                            )[0]
-            hybrid_search_result = hybrid_search(
-                            search_keyword=question, 
-                            input_text_embedding=input_embedding,
-                            top_k=top_k,
-                            beta=self.beta
-                            )
-            print(f"---\n\nHR: {hybrid_search_result}\n\n---")
-            
-            # have all chunks from retreival here available and then send with question to an LLM and ask LLM is the answer correct or its producing wrong or doing hallucination, this can be done with a more advanced model.
+        # Number of total queryies which is passed to the llm
+        total_query = 0
 
-            retrieval_context = "\n".join([fetch_content_from_document(embedding_obj.chunk.document)for embedding_obj in hybrid_search_result])
-            
-            result = self.llm.openai_text_generator(
-                messages_history=[],
-                new_messages={"role" : "user" , "content" : question}
-            )
+        # number of all True responses from Judge LLM
+        total_true = 0
 
-            result_content = result.choices[0].message.content
+        llm_result_file_path = constants.data_path('telmart')['llm_result']
+        
 
-            # here an LLM as a Judge will compare 2 output with each other
-            user_prompt = f"""
-                - Question: {question}\n\n
-                - Information Chunks: {retrieval_context} \n\n
-                - Person Answer : {result_content}
-                """
-            judge_result = self.llm.openai_classifier(user_prompt,'judge')
-            print(f"""
-{user_prompt}\n
-👨🏼‍⚖️ : {judge_result}\n\n-------------------\n
-""")
-
-            if index == 10:
-                break
-    def visualization(self,name):
         try:
-            dfs = self.result_df(name)
-            result_df = dfs['result_df']
-            result_history_df = dfs['result_history_df']
-            
-            print(f"Result:\n{result_df}\n\n---\n\nResult History:\n{result_history_df} ")
 
+            if os.path.isfile(llm_result_file_path):
+                os.remove(llm_result_file_path)
+                logger.info(f"Current result file: {llm_result_file_path} has been removed!")
+        except OSError as e:
+            print(e)
 
+        with open(llm_result_file_path, "a", encoding="utf-8") as file:
+            for i, (index, row ) in enumerate(df.iterrows()):
+                question = row['question']
+                answer = row['answer']
+                input_embedding = embedder(
+                                model=constants.HF_EMBEDDING_MODEL,
+                                text=[question]
+                                )[0]
+                hybrid_search_result = hybrid_search(
+                                search_keyword=question, 
+                                input_text_embedding=input_embedding,
+                                top_k=self.top_k,
+                                beta=self.beta
+                                )
+                print(f"---\n\nHR: {hybrid_search_result}\n\n---")
+                
+                # have all chunks from retreival here available and then send with question to an LLM and ask LLM is the answer correct or its producing wrong or doing hallucination, this can be done with a more advanced model.
 
+                retrieval_context = "\n".join([fetch_content_from_document(embedding_obj.chunk.document)for embedding_obj in hybrid_search_result])
+                
+                # Passing test query to llm which is used for rag system
+                result = self.llm.openai_text_generator(
+                    messages_history=[],
+                    new_messages={"role" : "user" , "content" : question}
+                )
 
+                result_content = result.choices[0].message.content
 
-        except Exception as e:
-            message = f"Error in creating dataframes for {name} : {e}"
-            logger.error(message)
+                # here an LLM as a Judge will compare 2 output with each other
+                user_prompt = f"""
+                    - Question: {question}\n\n
+                    - Information Chunks: {retrieval_context} \n\n
+                    - Person Answer : {result_content}
+                    """
+                judge_result = self.llm.openai_classifier(user_prompt,'judge')
+                validator = self.llm.get_validator('judge')
+                judge_result  = validator(judge_result.choices[0].message.content).result
+                print(f"""\n
+                        👨🏼‍⚖️ : {judge_result}\n\n-------------------\n
+                    """)
+                
 
+                total_query+=1
+                if judge_result:
+                    total_true+=1
+
+                accuracy = total_true/total_query
+
+                data = {'accuracy':accuracy}
+                file.write(json.dumps(data) + "\n")
+
+                if index == 2:
+                    break
+
+        result_llm_history_file_path = constants.data_path('telmart')['result_llm_history']
+        
+        data_history = {
+            'top_k':self.top_k,
+            'beta' : self.beta ,
+            'accuracy' : accuracy,
+            'time' : datetime.now().replace(microsecond=0).__str__()
+            }
+
+        # Creating new result history file
+        with open(result_llm_history_file_path,"a",encoding="utf-8") as file:
+            file.write(json.dumps(data_history) +'\n')
+
+        return accuracy
+    
+    def visualization(self,name):
+        import matplotlib.pyplot as plt
+
+        # try:
+        dfs = self.result_df(name)
+        result_df = dfs['result_df']
+        result_history_df = dfs['result_history_df']
+        print(f"Result:\n{result_df}\n\n---\n\nResult History:\n{result_history_df} ")
+
+        plot_path = constants.data_path('telmart')['result_plots']
+        if not os.path.exists(plot_path):
+            os.mkdir(plot_path)
+
+        # plots:
+        plot_keys = ['recall','precision','map']
+        for plot_key in plot_keys:
+            plt.plot(result_df[plot_key])
+
+        plt.savefig(f"{plot_path}/retrieval.png", dpi=300, bbox_inches='tight')
+
+        # recall plot
+
+        # except Exception as e:
+        #     message = f"Error in creating dataframes for {name} : {e}"
+        #     logger.error(message)
 
 class ModelCost():
     def __init__(self,rag_component):

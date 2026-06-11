@@ -58,6 +58,9 @@ def data_path(name:str):
         "llm_eval_qa" :"test_data/jsonl/llm_eval_qa.jsonl",
         "result" :"result/result.jsonl",
         "result_history" :"result/result_history.jsonl",
+        "result_plots" :"result/plots",
+        "llm_result" : "result/result_llm.jsonl",
+        "result_llm_history" :"result/result_llm_history.jsonl",
     }
 
     for i in path_dict:
