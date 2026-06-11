@@ -483,10 +483,8 @@ def fetch_content_from_document(document_object:Document):
     """
 
     if type(document_object.document_source.content_object) is TextContent:
-        logger.info("Content type is TextContent")
         return document_object.document_source.content_object.content
     elif type(document_object.document_source.content_object) is AudioContent:
-        logger.info("Content type is AudioContent")
         if not document_object.document_source.content_object.trascription:
             logger.info(f"file path: {document_object.document_source.content_object.file.path}")
             trascription = transcriber(document_object)

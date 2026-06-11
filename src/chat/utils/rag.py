@@ -254,12 +254,12 @@ class RagMetrics():
     
     def result_df(self,name:str):
         
-        dfs = {
-            'result_df':self.utils.jsonl_reader(path=constants.data_path(name)['result']),
-            'result_history_df' : self.utils.jsonl_reader(path=constants.data_path(name)['result_history'])
+        return {
+            'ret_result_df':self.utils.jsonl_reader(path=constants.data_path(name)['result']),
+            'ret_result_history_df' : self.utils.jsonl_reader(path=constants.data_path(name)['result_history']),
+            'llm_result_df':self.utils.jsonl_reader(path=constants.data_path(name)['llm_result']),
+            'llm_result_history_df' : self.utils.jsonl_reader(path=constants.data_path(name)['result_llm_history'])
         }
-
-        return dfs
 
     def retrieveal_metrics(self,test_data_path:str):
         from chat.services import hybrid_search,similar_category
@@ -414,7 +414,7 @@ class RagMetrics():
                                 top_k=self.top_k,
                                 beta=self.beta
                                 )
-                print(f"---\n\nHR: {hybrid_search_result}\n\n---")
+                # print(f"---\n\nHR: {hybrid_search_result}\n\n---")
                 
                 # have all chunks from retreival here available and then send with question to an LLM and ask LLM is the answer correct or its producing wrong or doing hallucination, this can be done with a more advanced model.
 
@@ -437,9 +437,7 @@ class RagMetrics():
                 judge_result = self.llm.openai_classifier(user_prompt,'judge')
                 validator = self.llm.get_validator('judge')
                 judge_result  = validator(judge_result.choices[0].message.content).result
-                print(f"""\n
-                        👨🏼‍⚖️ : {judge_result}\n\n-------------------\n
-                    """)
+                print(f"""👨🏼‍⚖️ : {judge_result}""")
                 
 
                 total_query+=1
@@ -451,7 +449,7 @@ class RagMetrics():
                 data = {'accuracy':accuracy}
                 file.write(json.dumps(data) + "\n")
 
-                if index == 2:
+                if index == 10:
                     break
 
         result_llm_history_file_path = constants.data_path('telmart')['result_llm_history']
@@ -474,18 +472,24 @@ class RagMetrics():
 
         # try:
         dfs = self.result_df(name)
-        result_df = dfs['result_df']
-        result_history_df = dfs['result_history_df']
-        print(f"Result:\n{result_df}\n\n---\n\nResult History:\n{result_history_df} ")
+        ret_result_df = dfs['ret_result_df']
+        ret_result_history_df = dfs['ret_result_history_df']
+        llm_result_df = dfs['llm_result_df']
+        llm_result_history_df = dfs['llm_result_history_df']
+
+
+        print(f"Result:\n{ret_result_df}\n\n---\n\nResult History:\n{ret_result_history_df} ")
 
         plot_path = constants.data_path('telmart')['result_plots']
         if not os.path.exists(plot_path):
             os.mkdir(plot_path)
 
-        # plots:
-        plot_keys = ['recall','precision','map']
-        for plot_key in plot_keys:
-            plt.plot(result_df[plot_key])
+
+        for colum in ret_result_df.columns.to_list():
+            plt.plot(ret_result_df[colum.__str__()])
+
+        for colum in llm_result_df.columns.to_list():
+            plt.plot(llm_result_df[colum.__str__()])
 
         plt.savefig(f"{plot_path}/retrieval.png", dpi=300, bbox_inches='tight')
 

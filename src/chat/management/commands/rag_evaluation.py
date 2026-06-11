@@ -26,9 +26,9 @@ class Command(BaseCommand):
 
         # try:
         # retrieveal_metrics = ragmetrics.retrieveal_metrics(ret_test_data_path, top_k=10) # this should find the same document and not the same category (or maybe both)
-        hallucination = ragmetrics.llm_hallucination(llm_test_data_path)
+        # hallucination = ragmetrics.llm_hallucination(llm_test_data_path)
 
-        # visualization = ragmetrics.visualization('telmart')
+        visualization = ragmetrics.visualization('telmart')
 
         # except Exception as e:
         #     raise CommandError(f"Error: {e}")
