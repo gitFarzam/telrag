@@ -8,7 +8,7 @@ from http import HTTPStatus
 import os
 from django.conf import settings
 from .services import process_telegram_object,hybrid_search,intial_data_db_insert,load_initial_documents
-from .utils.rag import utils, RagMetrics, LLM,audio_to_text,embedder
+from .utils.rag import RagMetrics, LLM,audio_to_text,embedder
 from .utils.telegram import telegram_downloader
 from unittest.mock import patch
 import chat.constants as constants
@@ -16,6 +16,7 @@ import pandas as pd
 from dotenv import load_dotenv
 from openai.types.chat import ChatCompletion
 from openai.types.responses.response import Response
+from chat.utils.utils import Utils,Markdown
 
 load_dotenv()
 
@@ -277,3 +278,24 @@ class TestHybridSearch(TestCase):
         print(result)
 
         self.assertEqual(result.__len__(),self.k)
+
+
+class TestMarkdown(TestCase):
+    import pandas as pd
+
+    def setUp(self):
+        md = Markdown()
+        self.table_creator = md.table_creator
+        self.df = pd.DataFrame({
+            'col_1':['value_1_1','value_1_2'],
+            'col_2':['value_2_1','value_2_2'],
+            'col_3':['value_3_1','value_3_2'],
+        })
+
+    def test_table_creator(self):
+        result = self.table_creator(self.df)
+        answer = """| col_1 | col_2 | col_3 |
+| ---- | ---- | ---- |"""
+        
+        # self.assertEqual(result,answer.strip(),msg=f"Generated string is not equal to answer value: {answer}")
+

@@ -15,6 +15,7 @@ import pandas as pd
 import time
 from datetime import datetime
 from .pydantic_classes import CategorzingModel,KeywordModel,BooleanModel
+from .utils import Utils
 
 
 load_dotenv()
@@ -179,59 +180,7 @@ class LLM():
 
             
 
-class Utils():
-    """
-    This class if made for evaluating retrieval performance, it gets multiple test query and will compare them with oberserved query, both queryies belong to a unique category, if categories were matched together, it means that retrieval worked properly with providing right documents @k
 
-    test_query : jsonl file, will compite to dict: sample: {"query": "TelBurger submits refund requests immediately after approval", "category": "crm_support"}
-    observed_query : fetches from database by retrieval and compiles as a dictionary like above
-    k : a positive integer number will determine how many documents have to be retrieved from database
-
-    Steps:
-        1. Assigning an embedding model
-        2. having the path for input_queries ready
-        3. creating {'query':'embedding','category':'value'} for oberserved_query, by annotating Embedding model object
-        4. seprating vector embeddings from Embedding model as an numpy 2D array from categories as a different list
-        5. creating an embedding and category from test data as well, storing in the database
-        6. measuring hybrid search function by considering these values
-    """
-    def __init__(self):
-        return super().__init__()
-
-    def text_strip(text:str):
-        return text.strip()
-    
-    def jsonl_reader(self,path)->pd.DataFrame:
-        """
-        jsonL works fine with large data, as its possible to stream it and no need to load all at once. (for big size using yield for streaming)
-        """
-
-        with open(path) as f:
-            return pd.DataFrame([json.loads(line) for line in f])
-        
-
-    def value_checker(self,df:pd.DataFrame,test_raw_path):
-        """
-        This method will check are all keys from source data (category and file_name) existed in the dataframe or not
-        """
-        unique_categories = sorted(df['category'].unique().tolist())
-        unique_files = sorted(df['file_name'].unique().tolist())
-        
-        categories = sorted([dir.name for dir in os.scandir(test_raw_path) if dir.is_dir()])
-        files=[]
-        for category in categories:
-            files +=[f for f in os.listdir(os.path.join(test_raw_path,category)) if f.endswith('.txt')]
-        
-        files = sorted(files)
-
-        
-        if unique_files == files and unique_categories == categories:
-            return True
-        else:
-            print("there is a mismatch: unique_categories, categories , unique_files , files -> \n\n" , 
-                        f"{unique_categories}\n\n{categories}\n\n{unique_files}\n\n{files}"
-                    )
-            return False
 
 class RagMetrics():
     def __init__(self,model,top_k,beta):
@@ -472,21 +421,21 @@ class RagMetrics():
 
         # try:
         dfs = self.result_df(name)
-        ret_result_df = dfs['ret_result_df']
+        self.ret_result_df = dfs['ret_result_df']
         ret_result_history_df = dfs['ret_result_history_df']
         llm_result_df = dfs['llm_result_df']
         llm_result_history_df = dfs['llm_result_history_df']
 
 
-        print(f"Result:\n{ret_result_df}\n\n---\n\nResult History:\n{ret_result_history_df} ")
+        print(f"Result:\n{self.ret_result_df}\n\n---\n\nResult History:\n{ret_result_history_df} ")
 
         plot_path = constants.data_path('telmart')['result_plots']
         if not os.path.exists(plot_path):
             os.mkdir(plot_path)
 
 
-        for colum in ret_result_df.columns.to_list():
-            plt.plot(ret_result_df[colum.__str__()])
+        for colum in self.ret_result_df.columns.to_list():
+            plt.plot(self.ret_result_df[colum.__str__()])
 
         for colum in llm_result_df.columns.to_list():
             plt.plot(llm_result_df[colum.__str__()])
@@ -498,6 +447,16 @@ class RagMetrics():
         # except Exception as e:
         #     message = f"Error in creating dataframes for {name} : {e}"
         #     logger.error(message)
+
+
+
+
+
+
+            
+        
+
+
 
 class ModelCost():
     def __init__(self,rag_component):

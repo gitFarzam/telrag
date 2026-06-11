@@ -31,7 +31,8 @@ import chat.constants as constants
 import chat.prompts as prompts
 from .models import Conversation, Message,DocumentSource , TelegramMessage,Document, Chunk, Embedding, TextContent,AudioContent, RagComponent,RAGPipeline
 from .utils.telegram import send_message,telegram_message_parser,telegram_downloader
-from .utils.rag import LLM,Utils,latency_calculator,ModelCost,audio_to_text,embedder,NLPToolKit
+from .utils.rag import LLM,latency_calculator,ModelCost,audio_to_text,embedder,NLPToolKit
+from .utils.utils import Utils
 from openai.types.chat import ChatCompletion
 
 # loading env variables
