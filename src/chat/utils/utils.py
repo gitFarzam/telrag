@@ -1,6 +1,7 @@
 import pandas as pd
 import json
 import os
+import chat.constants as constants
 
 def telegram_input_filter(text:str)->bool:
     if len(text) < 10:
@@ -62,37 +63,51 @@ class Utils():
         
 class Markdown():
     def __init__(self):
-        pass
+        ut = Utils()
+        path = constants.data_path('telmart')
 
-    def markdown_file_creator(self):
-        result = "Evaluation result"
+        # Retrieval
+        self.df_ret = ut.jsonl_reader(path['result'])
+        self.df_ret_history = ut.jsonl_reader(path['result_history'])
 
-        table = self.md_table_creator(self.ret_result_df)
+        # LLM
+        self.df_llm = ut.jsonl_reader(path['llm_result'])
+        self.df_llm__history = ut.jsonl_reader(path['result_llm_history'])
+
+        # Plots
+        self.ret_plot = path['ret_plot']
+        self.llm_plot = path['llm_plot']
+
+        # Report file
+        self.report_file = path['evaluation_report']
+
+    def save_file(self,content):
+        with open(self.report_file,'w',encoding='utf-8') as file:
+            file.write(content)
+
+    def markdown_creator(self):
+
+        intro = "Evaluation result: \n"
+
+        # Retrieval Result
+        retrieval_table = f"## Retrieval Evaluation{self.table_creator(self.df_ret)}"
+        retrieval_plot = self.image_creator(self.ret_plot)
+
+
+        ending = "Thank you for reviewing this information"
+
+        content = f"""{intro}{retrieval_table}{retrieval_plot}{ending}"""
+
+        self.save_file(content)
 
 
     def table_creator(self,df:pd.DataFrame):
-        print(df.to_markdown())
-        # columns = df.columns
-        # values = df.values
-        # """
-        # sample:
+        table = df.to_markdown()
+        table = f"\n\n{table}\n\n"
+        return table
+    
+    def image_creator(self,image_path):
+        image = f"![](plots/retrieval.png)"
+        image = f"\n\n{image}\n\n"
 
-        # | col1 | col2 | col3 |
-        # | ---- | ---- | ---- |
-        # | val1 | val2 | val3 |
-        # | val4 | val5 | val6 |
-        # """
-        # table = "|"
-        # for column in columns:
-        #     table+= ' '+ column+' |' 
-
-        # divider = "\n" +"| ---- "*columns.__len__() + "|"
-
-        # table += divider
-
-        # for
-
-        # # print(table)
-        # print(values[1])
-
-        # return table
+        return image
