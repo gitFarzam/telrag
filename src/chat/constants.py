@@ -31,6 +31,7 @@ CHUNK_OVERLAP=20
 
 # Hybrid Search
 BETA=0
+TOP_K=10
 
 # Business
 BUSINESS_NAME="TelMart"

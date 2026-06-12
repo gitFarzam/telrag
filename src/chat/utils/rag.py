@@ -185,14 +185,39 @@ class LLM():
 class RagMetrics():
     def __init__(self,model,top_k,beta):
 
-        self.top_k=top_k
-        self.beta = beta
+        self.beta = self.beta_validator(beta)
+        self.top_k= self.top_k_validator(top_k)
 
         # Initialzing an instance of utils class
         self.utils = Utils()
 
         # openai keyword extractor
         self.llm = LLM(model)
+
+    def beta_validator(self,beta):
+        """
+        This method checks the values for beta hyperparameter
+        """
+        if isinstance(beta, (int, float)):
+            if beta >= 0 and beta <=1:
+                return beta
+            else:
+                raise ValueError('Beta value should be between 0 and 1')
+        else:
+            raise ValueError('Beta value should be integer or float')
+
+    def top_k_validator(self,top_k):
+        """
+        This method checks the values for top_k hyperparameter
+        """
+        if isinstance(top_k, (int)):
+            if top_k >= 0 and top_k <=50:
+                return top_k
+            else:
+                raise ValueError('top_k value should be between 1 and 50')
+        else:
+            raise ValueError('top_k value should be an integer')
+
         
     def llm_eval_df(self,test_data_path:str):
         return self.utils.jsonl_reader(path=test_data_path)

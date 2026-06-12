@@ -33,9 +33,18 @@ class Utils():
         """
         jsonL works fine with large data, as its possible to stream it and no need to load all at once. (for big size using yield for streaming)
         """
+        try:
+            with open(path) as f:
+                output = [json.loads(line) for line in f]
+                try:
+                    return pd.DataFrame(output)
+                except ValueError as e :
+                    print(f"Data creatio failed: {e}")
+                except TypeError as e :
+                    print(f"Wrong data type in the jsonl file: {e}")
+        except json.decoder.JSONDecodeError as e:
+            print(f'Error in decoding json file: {e}')
 
-        with open(path) as f:
-            return pd.DataFrame([json.loads(line) for line in f])
         
 
     def value_checker(self,df:pd.DataFrame,test_raw_path):
@@ -66,6 +75,7 @@ class Markdown():
         ut = Utils()
         path = constants.data_path('telmart')
 
+        
         # Retrieval
         self.df_ret = ut.jsonl_reader(path['result'])
         self.df_ret_history = ut.jsonl_reader(path['result_history'])
@@ -111,3 +121,21 @@ class Markdown():
         image = f"\n\n{image}\n\n"
 
         return image
+
+
+
+class TerminalColor():
+    def __init__(self):
+        pass
+
+    def red(self,text):
+        return f"\033[1;31m{text}\033[0m"
+    
+    def blue(self,text):
+        return f"\033[1;34m{text}\033[0m"
+    
+    def green(self,text):
+        return f"\033[1;32m{text}\033[0m"
+    
+    def yellow(self,text):
+        return f"\033[1;33m{text}\033[0m"
