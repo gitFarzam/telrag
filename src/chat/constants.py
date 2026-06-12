@@ -37,6 +37,7 @@ TOP_K=10
 BUSINESS_NAME="TelMart"
 BUSINESS_DESCRIPTION="You are an AI Assistant for a grocery store called TelMart. You help customers with questions about products, prices, promotions, store services, and policies. You can assist with finding items, checking product availability, tracking orders, and explaining returns, refunds, and gift cards. You provide fast, accurate, and friendly support at any time. When a request requires additional help, you guide the customer to the appropriate team or resource.\n"
 
+
 # Messages
 NO_INFORMATION_MESSAGE="I don't have enough info. I'll check with a human agent and get back to you soon!"
 DEMO_TELEGRAM_HUMAN_ROLE_MESSAGE="The AI Agent doesn't have enough information to answer to this question, So now is trying to send a message to a human agent on Telegram. Since this is a <strong>demo</strong>, you'll play the role of the human agent yourself."
@@ -49,29 +50,51 @@ def telegram_message_support(firstname,content):
 def demo_telegram_verify_messsage(code):
     return f"""<br>Please link your Telegram account to this conversation.\n<br><br>Send number below to <ahref="https://t.me/telrag_bot">@telrag_bot</a><br><br><center><b>{code}</b></center>"""
 
-def data_path(name:str):
+def data_path(name:str,key_path:'str'):
     main_path = f"data/knowledge_base/{name}/"
     path_dict =  {
+
+        # Initial Data
         "initial" : "initial_data",
+
+        # Test Files
         "test_raw" : "test_data/raw",
-        "test_retrieval_question_jsonl" : "test_data/jsonl/retrieval_eval_question.jsonl",
-        "test_retrieval_declerative_jsonl" : "test_data/jsonl/retrieval_eval_declerative.jsonl",
+        "test_retrieval_question" : "test_data/jsonl/retrieval_eval_question.jsonl",
+        "test_retrieval_declerative" : "test_data/jsonl/retrieval_eval_declerative.jsonl",
         "llm_eval_qa" :"test_data/jsonl/llm_eval_qa.jsonl",
-        "result" :"result/result.jsonl",
-        "result_history" :"result/result_history.jsonl",
-        "llm_result" : "result/result_llm.jsonl",
-        "result_llm_history" :"result/result_llm_history.jsonl",
-        "evaluation_report" :"result/evaluation_report.md", 
+
+        # Result files
+        "ret_result" :"result/ret_result.jsonl",
+        "ret_result_history" :"result/ret_result_history.jsonl",
+        "llm_result" : "result/llm_result.jsonl",
+        "llm_result_history" :"result/llm_result_history.jsonl",
+
+        # Mardkdown Report
+        "evaluation_report" :f"result/{name}_evaluation_report.md",
+
+        # Plots 
         "result_plots" :"result/plots",
         "ret_plot" :"result/plots/retrieval.png",
+        "ret_history_plot" :"result/plots/retrieval.png",
         "llm_plot" :"result/plots/llm.png",
+        "llm_history_plot" :"result/plots/llm.png",
+        "ret_plot_md" : "plots/retrieval.png",
+        "llm_plot_md" : "plots/llm.png",
+        "ret_history_plot_md" : "plots/retrieval.png",
+        "llm_history_plot_md" : "plots/llm.png",
     }
 
     for i in path_dict:
         path_dict[i] = main_path + path_dict[i]
 
-    return path_dict
+    try:
+        return path_dict[key_path]
+    except KeyError as e :
+        print(f"Key Error in constant.data_path : The is no such a key in the dictionary : {key_path}\n")
+    except FileNotFoundError as e :
+        print(f"Path {main_path} is not existed\n")
      
+BUSINESS_NAME_FOR_DATA = "telmart"
 
 # Pipeline
 

@@ -1,4 +1,5 @@
 import pandas as pd
+import matplotlib.pyplot as plt
 import json
 import os
 import chat.constants as constants
@@ -42,8 +43,10 @@ class Utils():
                     print(f"Data creatio failed: {e}")
                 except TypeError as e :
                     print(f"Wrong data type in the jsonl file: {e}")
+
         except json.decoder.JSONDecodeError as e:
             print(f'Error in decoding json file: {e}')
+
 
         
 
@@ -71,51 +74,103 @@ class Utils():
             return False
         
 class Markdown():
-    def __init__(self):
-        ut = Utils()
-        path = constants.data_path('telmart')
+    def __init__(self,name):
+        self.ut = Utils()
+        self.color = TerminalColor()
 
-        
-        # Retrieval
-        self.df_ret = ut.jsonl_reader(path['result'])
-        self.df_ret_history = ut.jsonl_reader(path['result_history'])
+        try:
+            # Retrieval
+            self.df_ret = self.ut.jsonl_reader(constants.data_path(name,'ret_result'))
+            self.df_ret_history = self.ut.jsonl_reader(constants.data_path(name,'ret_result_history'))
 
-        # LLM
-        self.df_llm = ut.jsonl_reader(path['llm_result'])
-        self.df_llm__history = ut.jsonl_reader(path['result_llm_history'])
+            # LLM
+            self.df_llm = self.ut.jsonl_reader(constants.data_path(name,'llm_result'))
+            self.df_llm__history = self.ut.jsonl_reader(constants.data_path(name,'llm_result_history'))
 
-        # Plots
-        self.ret_plot = path['ret_plot']
-        self.llm_plot = path['llm_plot']
+            # Plots
+            self.ret_plot = constants.data_path(name,'ret_plot')
+            self.ret_history_plot = constants.data_path(name,'ret_history_plot')
+            self.llm_plot = constants.data_path(name,'ret_plot')
+            self.llm_history_plot = constants.data_path(name,'llm_history_plot')
 
-        # Report file
-        self.report_file = path['evaluation_report']
+            # Report file
+            self.report_file = constants.data_path(name,'evaluation_report')
+            self.ret_history_plot_md = constants.data_path(name,'ret_history_plot_md')
+            self.llm_history_plot_md = constants.data_path(name,'llm_history_plot_md')
+
+
+        except FileNotFoundError as e :
+
+            # Turning of traceback message
+            import sys
+            sys.tracebacklimit = 0
+
+            # raising exception at init level to avoid running program to the end of the process.
+            raise FileNotFoundError(f"Can not initializae Markdown class and create markdown report, because of lack of some the files.\nmake sure use {self.color.yellow('--new')} flag to run the evaluator and generate necessary outputs (jsonl outputs and plots)\nError: {e}\n")
+            
+
+
+
 
     def save_file(self,content):
         with open(self.report_file,'w',encoding='utf-8') as file:
             file.write(content)
+        return self.report_file
 
     def markdown_creator(self):
 
-        intro = "Evaluation result: \n"
+        # Creating Visualizations
+        try:
+            visualization = self.visualization()
+        except Exception as e:
+            print(f"An error in visualization: {e}\n")
 
-        # Retrieval Result
-        retrieval_table = f"## Retrieval Evaluation{self.table_creator(self.df_ret)}"
-        retrieval_plot = self.image_creator(self.ret_plot)
+        try:
+            if visualization:
 
+                intro = "# Evaluation result: \n"
 
-        ending = "Thank you for reviewing this information"
+                # Retrieval Result
+                retrieval_table = f"## Retrieval Evaluation{self.table_creator(self.df_ret)}"
+                retrieval_plot = self.image_creator(self.ret_plot)
 
-        content = f"""{intro}{retrieval_table}{retrieval_plot}{ending}"""
+                ending = "Thank you for reviewing this information"
 
-        self.save_file(content)
+                # Shaping final content
+                content = f"""{intro}{retrieval_table}{retrieval_plot}{ending}"""
+
+                report_file = self.save_file(content)
+
+                return report_file
+        except UnboundLocalError as e :
+            print(f"UnboundLocalError in markdown_creator method : {e}\n")
 
 
     def table_creator(self,df:pd.DataFrame):
         table = df.to_markdown()
         table = f"\n\n{table}\n\n"
         return table
-    
+
+
+    def visualization(self):
+        # Making sure the path is existed
+        plot_path = constants.data_path('telmart','result_plots')
+        if not os.path.exists(plot_path):
+            os.mkdir(plot_path)
+
+        # Creating line plot for retriever metrics (evaluation process)
+        for col in self.df_ret.columns.to_list():
+            plt.plot(self.df_ret[col.__str__()])
+        plt.savefig(self.ret_plot , dpi=300, bbox_inches='tight')
+
+        # Creating line plot for llm metrics (evaluation process)
+        for col in self.df_llm.columns.to_list():
+            plt.plot(self.df_llm[col.__str__()])
+        plt.savefig(self.llm_plot, dpi=300, bbox_inches='tight')
+
+
+        return True
+
     def image_creator(self,image_path):
         image = f"![](plots/retrieval.png)"
         image = f"\n\n{image}\n\n"

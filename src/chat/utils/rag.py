@@ -183,7 +183,7 @@ class LLM():
 
 
 class RagMetrics():
-    def __init__(self,model,top_k,beta):
+    def __init__(self,name,model,top_k,beta):
 
         self.beta = self.beta_validator(beta)
         self.top_k= self.top_k_validator(top_k)
@@ -193,6 +193,16 @@ class RagMetrics():
 
         # openai keyword extractor
         self.llm = LLM(model)
+        self.name = name
+
+        # result path
+        self.ret_result = constants.data_path(name,'ret_result')
+        self.ret_result_history = constants.data_path(name,'ret_result_history')
+        self.llm_result = constants.data_path(name,'llm_result')
+        self.llm_result_history = constants.data_path(name,'llm_result_history')
+
+        self.ret_test_data_path = constants.data_path(name,'test_retrieval_question')
+        self.llm_test_data_path = constants.data_path(name,'llm_eval_qa')
 
     def beta_validator(self,beta):
         """
@@ -219,27 +229,43 @@ class RagMetrics():
             raise ValueError('top_k value should be an integer')
 
         
-    def llm_eval_df(self,test_data_path:str):
-        return self.utils.jsonl_reader(path=test_data_path)
-    
-    def retrieval_eval_df(self,test_data_path:str):
-        # loading test data as a pandas dataframe
-        return self.utils.jsonl_reader(path=test_data_path)
-    
-    def result_df(self,name:str):
-        
-        return {
-            'ret_result_df':self.utils.jsonl_reader(path=constants.data_path(name)['result']),
-            'ret_result_history_df' : self.utils.jsonl_reader(path=constants.data_path(name)['result_history']),
-            'llm_result_df':self.utils.jsonl_reader(path=constants.data_path(name)['llm_result']),
-            'llm_result_history_df' : self.utils.jsonl_reader(path=constants.data_path(name)['result_llm_history'])
-        }
+    def llm_eval_df(self:str):
+        file_path = self.llm_test_data_path
+        try:
+            return self.utils.jsonl_reader(path=file_path)
+        except FileNotFoundError as e:
+            # Turning of traceback message
+            import sys
+            sys.tracebacklimit = 0
 
-    def retrieveal_metrics(self,test_data_path:str):
+            raise FileNotFoundError(f"File is not existed at this path: {file_path}\nError: {e}\n")
+    
+    def retrieval_eval_df(self):
+        file_path = self.ret_test_data_path
+        try:
+            return self.utils.jsonl_reader(path=file_path)
+        except FileNotFoundError as e:
+            # Turning of traceback message
+            import sys
+            sys.tracebacklimit = 0
+
+            raise FileNotFoundError(f"File is not existed at this path: {file_path}\nError: {e}\n")
+        
+    # def result_df(self,name:str):
+        
+    #     return {
+    #         'ret_result_df':self.utils.jsonl_reader(path=constants.data_path(name)['result']),
+    #         'ret_result_history_df' : self.utils.jsonl_reader(path=constants.data_path(name)['result_history']),
+    #         'llm_result_df':self.utils.jsonl_reader(path=constants.data_path(name)['llm_result']),
+    #         'llm_result_history_df' : self.utils.jsonl_reader(path=constants.data_path(name)['result_llm_history'])
+    #     }
+
+    def retrieveal_metrics(self):
         from chat.services import hybrid_search,similar_category
         import os
 
-        df = self.retrieval_eval_df(test_data_path)
+        # Retrieval Evaluation Test dataset
+        df = self.retrieval_eval_df()
         """
         Precision = Relevant Retrieved / Total Retrieved
         Recall = Relevant Retrieved / Total Relevant
@@ -254,18 +280,18 @@ class RagMetrics():
         total_first_correct = 0
         total_retrieval_iteration = 0
 
-        result_file_path = constants.data_path('telmart')['result']
-        
         try:
 
-            if os.path.isfile(result_file_path):
-                os.remove(result_file_path)
-                logger.info(f"Current result file: {result_file_path} has been removed!")
+            if os.path.isfile(self.ret_result):
+                os.remove(self.ret_result)
+                logger.info(f"Current result file: {self.ret_result} has been removed!")
         except OSError as e:
             print(e)
 
-        with open(result_file_path, "a", encoding="utf-8") as file:
+        with open(self.ret_result, "a", encoding="utf-8") as file:
+            print(df)
             for i, (index, row ) in enumerate(df.iterrows()):
+                # try except block for key error check!
                 query = row['query'] # test query value (user query simulation, like a question)
                 query_category = row['category'] # the corrected category for test query
                 relevant_categories = similar_category(query_category) # number of all the documents in the database which have same category with test query category
@@ -307,7 +333,7 @@ class RagMetrics():
                         \n------------------\n
                         """)
 
-                if index==30:
+                if index==10:
                     break
 
                 precision = all_correct/all_categories
@@ -320,7 +346,6 @@ class RagMetrics():
         note: this is basically wrong, because you have to count the document numbers and not the number of chunks
         
         """
-        result_history_file_path = constants.data_path('telmart')['result_history']
         
         result_history = {
             'top_k':self.top_k,
@@ -332,7 +357,7 @@ class RagMetrics():
             }
 
         # Creating new result history file
-        with open(result_history_file_path,"a",encoding="utf-8") as file:
+        with open(self.ret_result_history,"a",encoding="utf-8") as file:
             file.write(json.dumps(result_history) +'\n')
 
         logger.info("New result history file has been created!")
@@ -345,7 +370,7 @@ class RagMetrics():
         print(f"MAP@{self.top_k} (Total First Correct / Total Retrieval Iteration) : {map_at}")
 
 
-    def llm_hallucination(self,test_data_path):
+    def llm_hallucination(self):
         """
         This method is for checking if the the llm hallucinates or no. test dataset includes lines of question-answer pairs plus category name and the related document, an example:
 
@@ -355,7 +380,8 @@ class RagMetrics():
         """
         from chat.services import hybrid_search,fetch_content_from_document
 
-        df = self.llm_eval_df(test_data_path)
+        # Retrieval Evaluation Test dataset
+        df = self.llm_eval_df()
 
         # Number of total queryies which is passed to the llm
         total_query = 0
@@ -363,18 +389,15 @@ class RagMetrics():
         # number of all True responses from Judge LLM
         total_true = 0
 
-        llm_result_file_path = constants.data_path('telmart')['llm_result']
-        
 
         try:
-
-            if os.path.isfile(llm_result_file_path):
-                os.remove(llm_result_file_path)
-                logger.info(f"Current result file: {llm_result_file_path} has been removed!")
+            if os.path.isfile(self.llm_result):
+                os.remove(self.llm_result)
+                logger.info(f"Current result file: {self.llm_result} has been removed!")
         except OSError as e:
             print(e)
 
-        with open(llm_result_file_path, "a", encoding="utf-8") as file:
+        with open(self.llm_result, "a", encoding="utf-8") as file:
             for i, (index, row ) in enumerate(df.iterrows()):
                 question = row['question']
                 answer = row['answer']
@@ -426,7 +449,6 @@ class RagMetrics():
                 if index == 10:
                     break
 
-        result_llm_history_file_path = constants.data_path('telmart')['result_llm_history']
         
         data_history = {
             'top_k':self.top_k,
@@ -436,42 +458,10 @@ class RagMetrics():
             }
 
         # Creating new result history file
-        with open(result_llm_history_file_path,"a",encoding="utf-8") as file:
+        with open(self.llm_result_history,"a",encoding="utf-8") as file:
             file.write(json.dumps(data_history) +'\n')
 
         return accuracy
-    
-    def visualization(self,name):
-        import matplotlib.pyplot as plt
-
-        # try:
-        dfs = self.result_df(name)
-        self.ret_result_df = dfs['ret_result_df']
-        ret_result_history_df = dfs['ret_result_history_df']
-        llm_result_df = dfs['llm_result_df']
-        llm_result_history_df = dfs['llm_result_history_df']
-
-
-        print(f"Result:\n{self.ret_result_df}\n\n---\n\nResult History:\n{ret_result_history_df} ")
-
-        plot_path = constants.data_path('telmart')['result_plots']
-        if not os.path.exists(plot_path):
-            os.mkdir(plot_path)
-
-
-        for colum in self.ret_result_df.columns.to_list():
-            plt.plot(self.ret_result_df[colum.__str__()])
-
-        for colum in llm_result_df.columns.to_list():
-            plt.plot(llm_result_df[colum.__str__()])
-
-        plt.savefig(f"{plot_path}/retrieval.png", dpi=300, bbox_inches='tight')
-
-        # recall plot
-
-        # except Exception as e:
-        #     message = f"Error in creating dataframes for {name} : {e}"
-        #     logger.error(message)
 
 
 
