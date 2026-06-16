@@ -411,8 +411,11 @@ def process_user_message(message:Message):
 
         if conversation.chat_id:
             chat_id = conversation.chat_id
-            print('chat id: ',chat_id)
-            telegram_message_id = send_message(chat_id=chat_id,text=constants.telegram_message_support(message.conversation.user.first_name,content))
+            
+            firstname = message.conversation.user.first_name
+            text = constants.telegram_message_support.format(firstname=firstname , content=content)
+
+            telegram_message_id = send_message(chat_id=chat_id,text=text)
 
             # Updating instance (message object) with telegram id
             message.tg_id = telegram_message_id
@@ -421,9 +424,13 @@ def process_user_message(message:Message):
         else:
             code = message.conversation.pk
             conversation.code = code
+
             conversation.save()
+
             message_sender_custom(conversation=message.conversation,message=constants.DEMO_TELEGRAM_HUMAN_ROLE_MESSAGE)
-            message_sender_custom(conversation=message.conversation,message=constants.demo_telegram_verify_messsage(code))
+
+            message = constants.demo_telegram_verify_messsage.format(code=code)
+            message_sender_custom(conversation=message.conversation,message=message)
 
 
     elif result in [3]:

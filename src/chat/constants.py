@@ -43,12 +43,9 @@ NO_INFORMATION_MESSAGE="I don't have enough info. I'll check with a human agent 
 DEMO_TELEGRAM_HUMAN_ROLE_MESSAGE="The AI Agent doesn't have enough information to answer to this question, So now is trying to send a message to a human agent on Telegram. Since this is a <strong>demo</strong>, you'll play the role of the human agent yourself."
 CANT_ANSWER_MESSAGE="Sorry! I can't answer to this question!"
 
-def telegram_message_support(firstname,content):
-    return f"""💬 A customer named <b>{firstname}</b> asked the following question:\n\n<blockquote>{content}</blockquote>\n\n🔻 I don't have enough information to answer it. Please reply to this message with your response so I can answer it correctly.
-    """
+telegram_message_support ="""💬 A customer named <b>{firstname}</b> asked the following question:\n\n<blockquote>{content}</blockquote>\n\n🔻 I don't have enough information to answer it. Please reply to this message with your response so I can answer it correctly."""
 
-def demo_telegram_verify_messsage(code):
-    return f"""<br>Please link your Telegram account to this conversation.\n<br><br>Send number below to <ahref="https://t.me/telrag_bot">@telrag_bot</a><br><br><center><b>{code}</b></center>"""
+demo_telegram_verify_messsage = """<br>Please link your Telegram account to this conversation.\n<br><br>Send number below to <ahref="https://t.me/telrag_bot">@telrag_bot</a><br><br><center><b>{code}</b></center>"""
 
 def data_path(name:str,key_path:'str'):
     """
@@ -118,13 +115,13 @@ RAG_COMPONENTS = {
 }
 
 RC_DETAILS = {
-    RAG_COMPONENTS["Message Categorizer"] : {"model" : OPENAI_CHAT_MODEL ,"type" : "classifier" , "output" : "completion" , "job" : "Categorizing a message into preferred categories and returning the index number of the desired category."},
+    RAG_COMPONENTS["Message Categorizer"] : {"model" : OPENAI_CHAT_MODEL ,"type" : "classifier" , "output" : "completion" , "job" : "Categorizing a message into preferred categories and returning the index number of the selected category."},
 
-    RAG_COMPONENTS["Text Generator"] : {"model" : OPENAI_CHAT_MODEL ,"type" : "generator" , "output" : "list", "job" : "Responding to user query"},
+    RAG_COMPONENTS["Text Generator"] : {"model" : OPENAI_CHAT_MODEL ,"type" : "generator" , "output" : "list", "job" : "Responding to user query."},
 
-    RAG_COMPONENTS["Embedder"] : {"model" : HF_EMBEDDING_MODEL ,"type" : "embedder" , "output" : "ndarray", "job" : "Converting a text to embeddings"},
+    RAG_COMPONENTS["Embedder"] : {"model" : HF_EMBEDDING_MODEL ,"type" : "embedder" , "output" : "ndarray", "job" : "Converting a text to embeddings."},
 
-    RAG_COMPONENTS["Hybrid Search"] : {"model" : None ,"type" : "search" , "output" : "queryset", "job" : "Keyword and Semantic search inside pgvector database using django ORM"},
+    RAG_COMPONENTS["Hybrid Search"] : {"model" : None ,"type" : "search" , "output" : "queryset", "job" : "Keyword and Semantic search within a pgvector database using django ORM"},
 
     RAG_COMPONENTS["Query Rewriting"] : {"model" : OPENAI_CHAT_MODEL ,"type" : "rewriter" , "output" : "response", "job" : "Rewriting user query into an standard query for using in retrieval"},
 
