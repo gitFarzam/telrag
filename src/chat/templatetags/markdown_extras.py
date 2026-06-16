@@ -6,6 +6,9 @@ register = template.Library()
 
 @register.filter(name='convert_markdown')
 def convert_markdown(value):
+	"""
+	This template tag is used for showing markdown properly in the conversations
+	"""
 	if value is None:
 		return ''
 	

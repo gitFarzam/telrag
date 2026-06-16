@@ -1,3 +1,17 @@
+# Standard libraries imports
+import os
+import json
+import time
+from datetime import datetime
+import logging
+
+# Local imports
+from .pydantic_classes import CategorzingModel,KeywordModel,BooleanModel
+from .utils import Utils
+import chat.constants as constants
+import chat.prompts as prompts
+
+# Installed libraries
 from langchain_text_splitters import RecursiveCharacterTextSplitter
 from huggingface_hub import InferenceClient
 import openai
@@ -6,29 +20,28 @@ from openai.types.chat import ChatCompletion
 from openai.types.responses.response import Response
 from pydantic import ValidationError
 from dotenv import load_dotenv
-import os
-import json
-import chat.constants as constants
-import chat.prompts as prompts
-import logging
 import pandas as pd
-import time
-from datetime import datetime
-from .pydantic_classes import CategorzingModel,KeywordModel,BooleanModel
-from .utils import Utils
 
-
+# Loading .env file variables
 load_dotenv()
+
+# Creating an instance of logging object
 logger = logging.getLogger(__name__)
 
 
 def latency_calculator(before):
+    """
+    This method is for detecting the duraction between 2 times, mostly for detecting llm models latency
+    """
     after = time.time()
     return after-before
 
 
-def audio_to_text(self,file_path: str, model: str = constants.OPENAI_TRANSCRIPTION_MODEL) -> str:
-    client = OpenAI()  # Make sure OPENAI_API_KEY is set in env
+def audio_to_text(file_path: str, model: str = constants.OPENAI_TRANSCRIPTION_MODEL) -> str:
+    """
+    Converting audio to text
+    """
+    client = OpenAI() 
 
     with open(file_path, "rb") as audio_file:
         response = client.audio.transcriptions.create(
@@ -39,7 +52,10 @@ def audio_to_text(self,file_path: str, model: str = constants.OPENAI_TRANSCRIPTI
 
 
 def embedder(model,text:str):
-    # Turning of INFO level log for hugging face
+    """
+    Text embedder function
+    """
+    # Turning of INFO level log for hugging face logs
     info_logging = False
 
     if not info_logging:
@@ -53,6 +69,9 @@ def embedder(model,text:str):
 
 
 class NLPToolKit(RecursiveCharacterTextSplitter):
+    """
+    Inheriting from langchain RecursiveCharacterTextSplitter, more methods can be added to this parent class
+    """
     def __init__(self, separators = None, keep_separator = True, is_separator_regex = False, text=None, **kwargs):
         super().__init__(separators, keep_separator, is_separator_regex,  chunk_size = constants.CHUNK_SIZE,
         chunk_overlap = constants.CHUNK_OVERLAP,**kwargs)
@@ -60,7 +79,7 @@ class NLPToolKit(RecursiveCharacterTextSplitter):
 
 class LLM():
     """
-    This is a class for using openai chat completion
+    This is a class for using LLM (openai) chat completion and responses
     """
     # in-use: for intializing openai model
     def __init__(self,model):
@@ -70,6 +89,9 @@ class LLM():
     
 
     def get_validator(self,job):
+        """
+        Getting the right class object for the corresponding job
+        """
 
         if job == 'categorizing':
             return CategorzingModel.model_validate_json
@@ -79,8 +101,10 @@ class LLM():
             return BooleanModel.model_validate_json
     
     
-    # in-use: for setting up openai model
     def setUp_openai_classifier(self,user_prompt,job):
+        """
+        Setting up openai chat completion model which responsed are validated using schemas and pydantic classes
+        """
         client = OpenAI()
 
         if job == 'categorizing':
@@ -128,15 +152,7 @@ class LLM():
 
     def openai_text_generator(self,messages_history:list,new_messages:dict):
         """
-        result is an instance of ChatCompletion 
-
-        from openai.types.chat import ChatCompletion
-
-        result = ChatCompletion
-        content = result.choices[0].message.content
-        completion_tokens = result.usage.completion_tokens
-        prompt_tokens = result.usage.prompt_tokens
-        
+        regular openai chat completion model, without pydantic class, just for outputing pure text.
         """
         client = OpenAI()
         system_guideline = prompts.system_prompt_text_generator(business_name=constants.BUSINESS_NAME)
@@ -156,13 +172,15 @@ class LLM():
             logger.error(error)
 
     def openai_classifier(self,content,job):
+        """
+        This method calls openai classifier and passes the job value
+        """
         result = self.setUp_openai_classifier(content,job)
         return result
 
     def openai_text_rewriter(self,original_text:str):
         """
-        Rewrites the provided text using OpenAI's API based on a specified tone/style.
-        original_text: User's input query
+        Rewrites the provided text using OpenAI
         """
         try:
             # 2. Call the Responses API 
@@ -180,11 +198,10 @@ class LLM():
 
             
 
-
-
 class RagMetrics():
     def __init__(self,name,model,top_k,beta):
 
+        # Beta and Top K have a range, so they should be validated beforehand
         self.beta = self.beta_validator(beta)
         self.top_k= self.top_k_validator(top_k)
 
@@ -229,7 +246,11 @@ class RagMetrics():
             raise ValueError('top_k value should be an integer')
 
         
-    def llm_eval_df(self:str):
+    def llm_eval_df(self):
+        """
+        Getting LLM test dataset as a dataframe
+        """
+        self.llm_test_data_path
         file_path = self.llm_test_data_path
         try:
             return self.utils.jsonl_reader(path=file_path)
@@ -241,6 +262,9 @@ class RagMetrics():
             raise FileNotFoundError(f"File is not existed at this path: {file_path}\nError: {e}\n")
     
     def retrieval_eval_df(self):
+        """
+        Getting retrieval test dataset as a dataframe
+        """
         file_path = self.ret_test_data_path
         try:
             return self.utils.jsonl_reader(path=file_path)
@@ -251,28 +275,25 @@ class RagMetrics():
 
             raise FileNotFoundError(f"File is not existed at this path: {file_path}\nError: {e}\n")
         
-    # def result_df(self,name:str):
-        
-    #     return {
-    #         'ret_result_df':self.utils.jsonl_reader(path=constants.data_path(name)['result']),
-    #         'ret_result_history_df' : self.utils.jsonl_reader(path=constants.data_path(name)['result_history']),
-    #         'llm_result_df':self.utils.jsonl_reader(path=constants.data_path(name)['llm_result']),
-    #         'llm_result_history_df' : self.utils.jsonl_reader(path=constants.data_path(name)['result_llm_history'])
-    #     }
 
     def retrieveal_metrics(self):
-        from chat.services import hybrid_search,similar_category
-        import os
 
-        # Retrieval Evaluation Test dataset
-        df = self.retrieval_eval_df()
         """
+        Evaluating Retrieval component in RAG system.
+
         Precision = Relevant Retrieved / Total Retrieved
         Recall = Relevant Retrieved / Total Relevant
         MAP@ : Number of correct returns at the first rank
 
         This method iterate through all of the rows in the dataframe, and check the `category` value with the detected categories from retrieval and count the number of corrected matches
         """
+
+        from chat.services import hybrid_search,similar_category
+        import os
+
+        # Retrieval Evaluation Test dataset
+        df = self.retrieval_eval_df()
+
 
         all_categories = 0 # Overall categories were retrieved from retreival
         all_correct = 0 # Overall correct matches between test query category and retrieval queruies categories
@@ -462,14 +483,6 @@ class RagMetrics():
             file.write(json.dumps(data_history) +'\n')
 
         return accuracy
-
-
-
-
-
-
-            
-        
 
 
 

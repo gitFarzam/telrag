@@ -5,34 +5,34 @@
     "date": 1770574680,
     "text": "This is a reply",
     "from": {
-      "id": 120358726,
+      "id": 119716302,
       "is_bot": false,
-      "first_name": "F",
-      "username": "Farzam91",
+      "first_name": "Jack",
+      "username": "YourTelegramUsername",
       "language_code": "en"
     },
     "chat": {
-      "id": 120358726,
+      "id": 119716302,
       "type": "private",
-      "first_name": "F",
-      "username": "Farzam91"
+      "first_name": "Jack",
+      "username": "YourTelegramUsername"
     },
     "reply_to_message": {
       "message_id": 49,
       "date": 1770521006,
       "text": "This is a test from my phone",
       "from": {
-        "id": 120358726,
+        "id": 119716302,
         "is_bot": false,
-        "first_name": "F",
-        "username": "Farzam91",
+        "first_name": "Jack",
+        "username": "YourTelegramUsername",
         "language_code": "en"
       },
       "chat": {
-        "id": 120358726,
+        "id": 119716302,
         "type": "private",
-        "first_name": "F",
-        "username": "Farzam91"
+        "first_name": "Jack",
+        "username": "YourTelegramUsername"
       }
     }
   }

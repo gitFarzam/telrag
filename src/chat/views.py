@@ -1,5 +1,4 @@
-# Standard Library Imports
-import os
+# Standard libraries imports
 import time
 import logging
 import hmac
@@ -29,10 +28,9 @@ from .utils.telegram import send_message
 logger = logging.getLogger(__name__)
 
 
-# Redirecting all not found pages to home page
+# Redirecting all 'Not Found' pages to the home page
 def redirect_404(request, exception):
     return redirect('/')
-
 
 
 # HomeView: Handling first page view and post view for creating a new conversation
@@ -84,12 +82,6 @@ class HomeView(TemplateView):
                     conversation = Conversation.objects.create(user=user)
                     conversation.refresh_from_db()
                     conversation.save()
-
-                    # I'm gonna delete this
-                    # result = add_initial_documents(conversation=conversation)
-                    # if not result:
-                    #     logger.error("Error in adding initial data for user")
-                    #     return render(request=request,template_name='home.html')
                     return redirect('chat-detail', pk=conversation.pk)
             
             return HttpResponse("Name is required", status=400)
@@ -112,7 +104,6 @@ class DeleteConversationUserView(LoginRequiredMixin, UserPassesTestMixin, View):
         return redirect("home")
 
 
-# Create your views here.
 class ChatView(LoginRequiredMixin , UserPassesTestMixin , DetailView):
     model = Conversation
     template_name = 'chat.html'
@@ -150,8 +141,6 @@ class ChatSendMessageView(UpdateView):
 
         return HttpResponse("")
     
-
-
 
 @csrf_exempt
 def telegram_webhook(request):

@@ -1,8 +1,11 @@
-import pandas as pd
-import matplotlib.pyplot as plt
 import json
 import os
+
 import chat.constants as constants
+
+import pandas as pd
+import matplotlib.pyplot as plt
+
 
 def telegram_input_filter(text:str)->bool:
     if len(text) < 10:
@@ -47,8 +50,6 @@ class Utils():
         except json.decoder.JSONDecodeError as e:
             print(f'Error in decoding json file: {e}')
 
-
-        
 
     def value_checker(self,df:pd.DataFrame,test_raw_path):
         """

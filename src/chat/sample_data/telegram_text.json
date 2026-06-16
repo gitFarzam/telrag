@@ -3,19 +3,19 @@
   "message": {
     "message_id": 49,
     "from": {
-      "id": 120358726,
+      "id": 119716302,
       "is_bot": false,
-      "first_name": "F",
-      "username": "Farzam91",
+      "first_name": "Jack",
+      "username": "YourTelegramUsername",
       "language_code": "en"
     },
     "chat": {
-      "id": 120358726,
-      "first_name": "F",
-      "username": "Farzam91",
+      "id": 119716302,
+      "first_name": "Jack",
+      "username": "YourTelegramUsername",
       "type": "private"
     },
-    "date": 1770521006,
-    "text": "First of all, this table is available in two sizes: 10 × 15 inches and 8 × 7 inches. Both sizes are currently in stock. The larger size (10 × 15 inches) is available only in black and white, while the smaller size (8 × 7 inches) is available only in red. The prices listed on the website are accurate and up to date."
+    "date": 119716302,
+    "text": "This is a sample text from a user sent through the Telegram application."
   }
 }
