@@ -51,8 +51,10 @@ def demo_telegram_verify_messsage(code):
     return f"""<br>Please link your Telegram account to this conversation.\n<br><br>Send number below to <ahref="https://t.me/telrag_bot">@telrag_bot</a><br><br><center><b>{code}</b></center>"""
 
 def data_path(name:str,key_path:'str'):
+    """
+    This method is for managing data files and their output paths in one place.
+    """
     main_path = f"data/knowledge_base/{name}/"
-
 
     # this path are used in creation markdown files, they are relative to markdown report file
     markdown_path = {
