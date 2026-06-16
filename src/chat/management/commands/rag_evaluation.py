@@ -67,8 +67,8 @@ class Command(BaseCommand):
                             new_values = f"\n{'-'*10}\nbeta: {beta} \ntop_k: {top_k}\n{'-'*10}\n"
                             print(f"\nNew values: {new_values}\n")
 
-                            # instantiate rag metrics with updated values
-                            ragmetrics = RagMetrics(model=constants.OPENAI_CHAT_MODEL,top_k=top_k,beta=beta)
+                            # re-instantiate rag metrics with updated values
+                            ragmetrics = RagMetrics(name=name,model=constants.OPENAI_CHAT_MODEL,top_k=top_k,beta=beta)
 
                             # Retrieval Metrics
                             retrieveal_metrics = ragmetrics.retrieveal_metrics()
@@ -122,4 +122,3 @@ class Command(BaseCommand):
             # python manage.py rag_evaluation
         except TypeError as e :
             print(f"Type Error in rag_evaluation.py : {e}")
-            raise e

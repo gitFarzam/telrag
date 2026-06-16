@@ -75,28 +75,37 @@ class Utils():
         
 class Markdown():
     def __init__(self,name):
+        self.name:str = name
         self.ut = Utils()
         self.color = TerminalColor()
 
         try:
             # Retrieval
             self.df_ret = self.ut.jsonl_reader(constants.data_path(name,'ret_result'))
-            self.df_ret_history = self.ut.jsonl_reader(constants.data_path(name,'ret_result_history'))
+            self.df_ret_history= self.ut.jsonl_reader(constants.data_path(name,'ret_result_history'))
 
             # LLM
             self.df_llm = self.ut.jsonl_reader(constants.data_path(name,'llm_result'))
             self.df_llm__history = self.ut.jsonl_reader(constants.data_path(name,'llm_result_history'))
 
-            # Plots
-            self.ret_plot = constants.data_path(name,'ret_plot')
-            self.ret_history_plot = constants.data_path(name,'ret_history_plot')
-            self.llm_plot = constants.data_path(name,'ret_plot')
-            self.llm_history_plot = constants.data_path(name,'llm_history_plot')
+            # Plots Directory
+            self.plot_path = constants.data_path('telmart','result_plots')
 
-            # Report file
+            # Retireval Plots
+            self.ret_plot = constants.data_path(name,'ret_plot')
+
+            # LLM Plots
+            self.llm_plot = constants.data_path(name,'llm_plot')
+
+            # Markdown file: Report
             self.report_file = constants.data_path(name,'evaluation_report')
-            self.ret_history_plot_md = constants.data_path(name,'ret_history_plot_md')
-            self.llm_history_plot_md = constants.data_path(name,'llm_history_plot_md')
+
+            # Markdown plots path - Retrieval
+            self.ret_plot_md = constants.data_path(name,'ret_plot_md')
+
+            # Markdown plots path - LLM
+            self.llm_plot_md = constants.data_path(name,'llm_plot_md')
+
 
 
         except FileNotFoundError as e :
@@ -109,8 +118,9 @@ class Markdown():
             raise FileNotFoundError(f"Can not initializae Markdown class and create markdown report, because of lack of some the files.\nmake sure use {self.color.yellow('--new')} flag to run the evaluator and generate necessary outputs (jsonl outputs and plots)\nError: {e}\n")
             
 
-
-
+    def path_creation(self):
+        if not os.path.exists(self.plot_path):
+            os.mkdir(self.plot_path)
 
     def save_file(self,content):
         with open(self.report_file,'w',encoding='utf-8') as file:
@@ -119,65 +129,62 @@ class Markdown():
 
     def markdown_creator(self):
 
-        # Creating Visualizations
-        try:
-            visualization = self.visualization()
-        except Exception as e:
-            print(f"An error in visualization: {e}\n")
+        # Creating required directories
+        self.path_creation()
 
-        try:
-            if visualization:
+        # Retrieval Plot Creation
+        self.plot_creator(self.df_ret,self.ret_plot)
 
-                intro = "# Evaluation result: \n"
+        # LLM Plot Creation
+        self.plot_creator(self.df_llm,self.llm_plot)
 
-                # Retrieval Result
-                retrieval_table = f"## Retrieval Evaluation{self.table_creator(self.df_ret)}"
-                retrieval_plot = self.image_creator(self.ret_plot)
+        # Intro
+        intro = constants.REPORT_INTRO.format(name=self.name.capitalize())
 
-                ending = "Thank you for reviewing this information"
+        # Retrieval Result
+        ret_intro = constants.RET_REPORT_INTRO
+        ret_table = f"{self.table_creator(self.df_ret)}"
+        ret_plot = self.image_creator(self.ret_plot_md)
+        ret_history_table = f"### History\n{self.table_creator(self.df_ret_history)}"
 
-                # Shaping final content
-                content = f"""{intro}{retrieval_table}{retrieval_plot}{ending}"""
+        # LLM Result
+        llm_intro = constants.LLM_REPORT_INTRO
+        llm_table = f"{self.table_creator(self.df_llm)}"
+        llm_plot = self.image_creator(self.llm_plot_md)
+        llm_history_table = f"### History\n{self.table_creator(self.df_llm__history)}"
 
-                report_file = self.save_file(content)
+        # Ending
+        ending = constants.REPORT_ENDING
 
-                return report_file
-        except UnboundLocalError as e :
-            print(f"UnboundLocalError in markdown_creator method : {e}\n")
+        # Shaping final content
+        content = self.template_creator([intro,ret_intro,ret_table,ret_plot,ret_history_table,llm_intro,llm_table,llm_plot,llm_history_table,ending])
 
-
+        report_file = self.save_file(content)
+        return report_file
+    
     def table_creator(self,df:pd.DataFrame):
         table = df.to_markdown()
         table = f"\n\n{table}\n\n"
         return table
 
-
-    def visualization(self):
-        # Making sure the path is existed
-        plot_path = constants.data_path('telmart','result_plots')
-        if not os.path.exists(plot_path):
-            os.mkdir(plot_path)
-
-        # Creating line plot for retriever metrics (evaluation process)
-        for col in self.df_ret.columns.to_list():
-            plt.plot(self.df_ret[col.__str__()])
-        plt.savefig(self.ret_plot , dpi=300, bbox_inches='tight')
-
-        # Creating line plot for llm metrics (evaluation process)
-        for col in self.df_llm.columns.to_list():
-            plt.plot(self.df_llm[col.__str__()])
-        plt.savefig(self.llm_plot, dpi=300, bbox_inches='tight')
-
-
-        return True
+    def plot_creator(self,df:pd.DataFrame,path:str):
+        for col in df.columns:
+            plt.plot(df[col],label=col)
+        plt.legend()
+        plt.savefig(path , dpi=300, bbox_inches='tight')
+        plt.close()
 
     def image_creator(self,image_path):
-        image = f"![](plots/retrieval.png)"
+        image = f"![]({image_path})"
         image = f"\n\n{image}\n\n"
 
         return image
 
-
+    def template_creator(self,content_list:list):
+        """
+        This functions adds a \n between each content item to make sure of no disorder in the markdown file
+        """
+        return "\n\n".join(content_list)
 
 class TerminalColor():
     def __init__(self):

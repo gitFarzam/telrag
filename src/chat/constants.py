@@ -52,6 +52,17 @@ def demo_telegram_verify_messsage(code):
 
 def data_path(name:str,key_path:'str'):
     main_path = f"data/knowledge_base/{name}/"
+
+
+    # this path are used in creation markdown files, they are relative to markdown report file
+    markdown_path = {
+        # Retrieval Markdown 
+        "ret_plot_md" : "plots/retrieval.png",
+
+        # LLM Markdown
+        "llm_plot_md" : "plots/llm.png",
+        }
+
     path_dict =  {
 
         # Initial Data
@@ -74,19 +85,16 @@ def data_path(name:str,key_path:'str'):
 
         # Plots 
         "result_plots" :"result/plots",
-        "ret_plot" :"result/plots/retrieval.png",
-        "ret_history_plot" :"result/plots/retrieval.png",
-        "llm_plot" :"result/plots/llm.png",
-        "llm_history_plot" :"result/plots/llm.png",
-        "ret_plot_md" : "plots/retrieval.png",
-        "llm_plot_md" : "plots/llm.png",
-        "ret_history_plot_md" : "plots/retrieval.png",
-        "llm_history_plot_md" : "plots/llm.png",
+        "ret_plot" :f"result/{markdown_path["ret_plot_md"]}",
+        "llm_plot" :f"result/{markdown_path["llm_plot_md"]}",
     }
 
     for i in path_dict:
         path_dict[i] = main_path + path_dict[i]
 
+
+    # adding markdown_path dict to path_dict 
+    path_dict = path_dict | markdown_path
     try:
         return path_dict[key_path]
     except KeyError as e :
@@ -120,3 +128,9 @@ RC_DETAILS = {
 
     RAG_COMPONENTS["Audio Transcription"] : {"model" : OPENAI_TRANSCRIPTION_MODEL ,"type" : "transciber" , "output" : "response", "job" : "transcribing a audio file to text"},
 }
+
+# Report File
+REPORT_INTRO = "# {name} RAG System Evaluation"
+RET_REPORT_INTRO = "## Retrieval Evaluation"
+LLM_REPORT_INTRO = "## LLM Evaluation"
+REPORT_ENDING = "Thank you for reviewing this report."
