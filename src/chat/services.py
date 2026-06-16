@@ -429,8 +429,8 @@ def process_user_message(message:Message):
 
             message_sender_custom(conversation=message.conversation,message=constants.DEMO_TELEGRAM_HUMAN_ROLE_MESSAGE)
 
-            message = constants.demo_telegram_verify_messsage.format(code=code)
-            message_sender_custom(conversation=message.conversation,message=message)
+            code_message = constants.demo_telegram_verify_messsage.format(code=code)
+            message_sender_custom(conversation=message.conversation,message=code_message)
 
 
     elif result in [3]:
@@ -525,7 +525,7 @@ def creating_chunk_objects(document_object:Document) -> List[Chunk]:
 def creating_embedding_objects(chunks):
 
     chunks_text = [chunk.text for chunk in chunks]
-    embeddings = embedder(text=chunks_text)
+    embeddings = embedder(model=constants.HF_EMBEDDING_MODEL,text=chunks_text)
 
     objects = Embedding.objects.bulk_create(
         [

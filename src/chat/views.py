@@ -62,13 +62,11 @@ class HomeView(TemplateView):
                     logger.info("Try: Creating  new conversation")
                     try:
                         conversation = Conversation.objects.create(user=user)
-                        result = add_initial_documents(conversation=conversation)
-                        
-                        if result:
+                        if conversation:
                             logger.info("Conversation has been created, redirecting to chat page...")
                             return redirect('chat-detail', pk=conversation.pk)
                         else:
-                            logger.error("Error in adding initial data for user")
+                            logger.error("Error in creating conversation object")
                             return render(request=request,template_name='home.html')
                     except DatabaseError:
                         logger.exception("Failed to create conversation object")

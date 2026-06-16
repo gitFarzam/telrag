@@ -16,7 +16,7 @@ class Command(BaseCommand):
 
     def handle(self,*args,**options):
         try:
-            data_dir = os.path.join(settings.BASE_DIR,constants.data_path("telmart")["initial"])
+            data_dir = os.path.join(settings.BASE_DIR,constants.data_path("telmart","initial"))
             
             intial_data_db_insert(data_dir)
 
