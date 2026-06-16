@@ -4,6 +4,7 @@ from django.db import models
 from django.contrib.contenttypes.models import ContentType
 from django.contrib.contenttypes.fields import GenericForeignKey
 from django.conf import settings
+from django.core.exceptions import ValidationError
 
 from django_prometheus.models import ExportModelOperationsMixin
 from pgvector.django import VectorField
@@ -44,7 +45,6 @@ class RagComponent(models.Model):
     output_cost = models.FloatField(null=True)
     latency = models.FloatField()
 
-    
 
 class Message(models.Model):
     content = models.CharField(max_length=20000)
@@ -78,7 +78,11 @@ class TextContent(models.Model):
     file = models.FileField(upload_to="texts",null=True,blank=True)
     content = models.TextField(null=True,blank=True)
 
-
+    class Meta: 
+        constraints = [
+            models.UniqueConstraint(fields=["content"] , name="unique_content_per_textcontent"),
+        ]
+        
 class AudioContent(models.Model):
     file = models.FileField(upload_to='voices')
     trascription = models.TextField(null=True,blank=True)

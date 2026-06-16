@@ -20,6 +20,7 @@ from django.utils import timezone
 from django.contrib.postgres.search import SearchVector, SearchQuery, SearchRank
 from django.core.files import File
 from django.db.models.expressions import ExpressionWrapper
+from django.db import IntegrityError
 
 # Other libraries import
 from dotenv import load_dotenv
@@ -444,8 +445,14 @@ def process_user_message(message:Message):
 
 
 def creating_text_content_object(content:str):
-    model_object = TextContent.objects.create(content = content)
-    return model_object
+    try:
+        model_object = TextContent.objects.create(content = content)
+        return model_object
+    except IntegrityError as e:
+        raise IntegrityError(f"IntegrityError: Unique content violation, content object should be unique, you probably are inserting similar documents into the database, Error description:\n\n\n{e}")
+    
+    
+    
 
 def creating_document_source(model_object):
     content_type_obj = ContentType.objects.get_for_model(model_object.__class__)
@@ -651,13 +658,20 @@ def intial_data_db_insert(data_dir)->QuerySet[Embedding]:
                     with open(file_path,'r') as text_file:
                         text_string = text_file.read()
                     text_content_object = creating_text_content_object(content=text_string)
-                    doc_source_object = creating_document_source(model_object=text_content_object)
-                    doc_object = creating_document_object(document_source=doc_source_object,category=category , is_initial=True)
-                    chunk_objects = creating_chunk_objects(document_object=doc_object)
-                    embedding_objects = creating_embedding_objects(chunks=chunk_objects)
-
-                    print(f"Embedding has been created for: {category}")
-                    number_of_documents+=1
+                    if text_content_object:
+                        doc_source_object = creating_document_source(model_object=text_content_object)
+                        if doc_source_object:
+                            doc_object = creating_document_object(document_source=doc_source_object,category=category , is_initial=True)
+                            if doc_object:
+                                chunk_objects = creating_chunk_objects(document_object=doc_object)
+                                if chunk_objects:
+                                    embedding_objects = creating_embedding_objects(chunks=chunk_objects)
+                                    if embedding_objects:
+                                        print(f"Embedding has been created for: {category}")
+                                        number_of_documents+=1
+                    else:
+                        return False
+                    
         print(number_of_documents)
         return number_of_documents
     except Exception as e:
