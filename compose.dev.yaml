@@ -6,8 +6,6 @@ services:
     restart: always
     ports:
       - "5434:5432"
-    volumes:
-      - telrag-pgvector-volume:/var/lib/postgresql/data
     env_file:
       - .env
 
@@ -22,7 +20,6 @@ services:
     container_name: telrag_app
     working_dir: /usr/src/app
     restart: always
-    entrypoint: ["/usr/src/app/entrypoint.sh"]
     command: daphne -b 0.0.0.0 -p 8006 django_project.asgi:application
     volumes:
       - ./entrypoint.sh:/usr/src/app/entrypoint.sh

@@ -174,13 +174,13 @@ USE_TZ = True
 # https://docs.djangoproject.com/en/6.0/howto/static-files/
 
 # Static files (CSS, JavaScript, Images)  
-STATIC_URL = '/static/'  
-STATIC_ROOT = BASE_DIR/ 'static_cdn'  
+STATIC_URL = '/static/'
+STATIC_ROOT = 'staticfiles'
 STATICFILES_DIRS = [BASE_DIR / "static"]  
   
 # Media files (Uploaded by users)  
 MEDIA_URL = '/media/'  
-MEDIA_ROOT = BASE_DIR / 'media_cdn'
+MEDIA_ROOT = BASE_DIR / 'media'
 
 # User settings
 AUTH_USER_MODEL = 'core.user'

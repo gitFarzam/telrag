@@ -1,6 +1,7 @@
-from django.core.management.base import BaseCommand, CommandError
-import os
 from pathlib import Path
+
+from django.core.management.base import BaseCommand, CommandError
+
 import chat.constants as constants
 from chat.utils.rag import RagMetrics
 from chat.utils.utils import TerminalColor,Markdown
@@ -12,6 +13,9 @@ class Command(BaseCommand):
     """
 
     def add_arguments(self, parser):
+        """
+        This method will add arguments to the command
+        """
         # Positional arguments
         # parser.add_argument("iterations", nargs="+", type=int) # this is mandatory
 
@@ -23,6 +27,9 @@ class Command(BaseCommand):
         ) # this is not mandatory
 
     def markdown_creation(self,name):
+        """
+        This method is for creating markdown file
+        """
         md = Markdown(name)
         report_file = md.markdown_creator()
         if report_file:
@@ -32,12 +39,7 @@ class Command(BaseCommand):
 
     def handle(self,*args,**options):
         """
-        add arguments:
-        calculating new values: yes / no
-            - passing hyper parameters
-        showing numeric result : yes / no
-        showing full result (visualization + numeric)
-        
+        This method is for handling django command
         
         """
         try:

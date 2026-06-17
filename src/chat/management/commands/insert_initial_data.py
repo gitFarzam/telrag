@@ -7,11 +7,7 @@ import chat.constants as constants
 class Command(BaseCommand):
 
     help = f"""
-    Running command: python manage.py insert_data <document_indices>
-    Check initial_data directory, each text document is related to 1 sample
-    In case you need to store documents for a beauty shop simply run this command:
-    Running command: uv run manage.py insert_data 0 1 2 3
-    (this inserts all documents from all indices, not that you should add a white space for each argument)
+    Running command: python manage.py insert_data
     """
 
     def handle(self,*args,**options):

@@ -2,7 +2,7 @@ import json
 
 from django.db import models
 from django.contrib.contenttypes.models import ContentType
-from django.contrib.contenttypes.fields import GenericForeignKey
+from django.contrib.contenttypes.fields import GenericForeignKey,GenericRelation
 from django.conf import settings
 from django.core.exceptions import ValidationError
 
@@ -69,7 +69,7 @@ class TelegramMessage(models.Model):
 
 
 class DocumentSource(models.Model):
-    content_type = models.ForeignKey(ContentType, on_delete=models.PROTECT)
+    content_type = models.ForeignKey(ContentType, on_delete=models.CASCADE)
     object_id = models.PositiveIntegerField()
     content_object = GenericForeignKey()
 
@@ -77,6 +77,7 @@ class DocumentSource(models.Model):
 class TextContent(models.Model):
     file = models.FileField(upload_to="texts",null=True,blank=True)
     content = models.TextField(null=True,blank=True)
+
 
     class Meta: 
         constraints = [
@@ -88,10 +89,11 @@ class AudioContent(models.Model):
     trascription = models.TextField(null=True,blank=True)
 
 
+
 class Document(models.Model):
     conversation = models.ForeignKey(Conversation,on_delete=models.CASCADE,related_name="conv_documents",null=True,blank=True) 
     caption = models.TextField(null=True , blank=True)
-    document_source = models.ForeignKey(DocumentSource , on_delete=models.CASCADE,null=True)
+    document_source = models.ForeignKey(DocumentSource , on_delete=models.CASCADE,null=True,related_name="documents")
     user_message = models.ForeignKey(Message , on_delete=models.CASCADE , null=True , blank=True, related_name='documents')
     telegram_message = models.ForeignKey(TelegramMessage,on_delete=models.CASCADE,null=True)
     is_initial = models.BooleanField(default=False)

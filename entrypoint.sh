@@ -2,30 +2,21 @@
 
 # Exit on error
 set -e
-
+ 
 echo "🧱 Collecting static files..."
 
 # Ensure we're in the Django project directory where manage.py lives
 # Change to directory where manage.py is
 cd /usr/src/app/src || exit 1
-
-
-
-echo "Current Directory After cd"
-pwd
-
-echo "-> ls"
-ls -a
-
 python manage.py collectstatic --noinput
 
+# Migrations
 echo "📦 Running migrations..."
 python manage.py makemigrations
 python manage.py migrate
 
-# echo "Initial Command For Inserting Data"
-# python manage.py insert_data
+# Fininshing message
+echo "Finishing entrypint execution"
 
-echo "finighsing entrypint"
 
 exec "$@"  # executes CMD from Dockerfile or Compose

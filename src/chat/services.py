@@ -192,7 +192,7 @@ def process_telegram_object(telegram_object:TelegramMessage,is_new=True):
             """
             sample of parsed data:
 
-            {'metadata': {}, 'data': {'voice': {'duration': 8, 'mime_type': 'audio/ogg', 'file_id': 'AwACAgQAAxkBAAOgaZe-d0yP3eul-peB6j1HGdD3pssAAlsaAAKYusFQlwt-Nvvor0M6BA', 'file_unique_id': 'AgADWxoAApi6wVA', 'file_size': 33935}}}
+            {'metadata': {}, 'data': {'voice': {'duration': 8, 'mime_type': 'audio/ogg', 'file_id': 'dgDeAgQAAxkBAAOgaZe-d0eu5eul-rrtwj1HGdD3pssAAlsaAAKYusFQlwt-Nvvor0M6BA', 'file_unique_id': 'AgADWxoAApi6wVA', 'file_size': 33935}}}
             
             """
             # download using telegram
@@ -204,7 +204,7 @@ def process_telegram_object(telegram_object:TelegramMessage,is_new=True):
                 file_data = telegram_downloader(message_data['voice']['file_id'])
                 django_content_file = ContentFile(file_data)
                 audio_obj = AudioContent()
-                audio_obj.file.save(name=f"name.oga",content=django_content_file)
+                audio_obj.file.save(name=f"voice.oga",content=django_content_file)
                 doc_source_obj = creating_document_source(audio_obj)
                 doc_object.document_source = doc_source_obj
                 doc_object.save()

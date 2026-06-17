@@ -118,7 +118,6 @@ chmod +x entrypoint.sh
 
 ## General
 - Adding an admin with a custom login address.
-- Improving integration with OpenAI.
 - Enhancing error handling.
 - Limiting voice message length.
 - Fixed WebSocket issues in mobile view by using wss:// instead of ws:// (testing can be done in online mode via HTTPS).
@@ -144,7 +143,9 @@ chmod +x entrypoint.sh
 - Changing the port from 8006 to 8000!
 - RAG pipeline dispatcher
 - if models json output is not valid, what should be retreived?
-- merging agent message (which comes from telegram) into reply back into rag pipeline from user message
+- Merging agent message (which comes from telegram) into reply back into rag pipeline from user message
+- Adding django command for initializing dataset at the start
+- fixing delete all TextContent and AudioContent while deleting Document and sources
 
 
 ## Security
@@ -203,3 +204,9 @@ Copilot: command + control + i
 
 ## Linkedin
 - creating animations and showing different part of the project
+
+## Initialization
+- Applying database tables creation
+- Static files migrations
+- Creating admin user
+- Adding initial data 
