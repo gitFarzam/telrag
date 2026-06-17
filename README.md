@@ -146,6 +146,7 @@ chmod +x entrypoint.sh
 - Merging agent message (which comes from telegram) into reply back into rag pipeline from user message
 - Adding django command for initializing dataset at the start
 - fixing delete all TextContent and AudioContent while deleting Document and sources
+- PyLance install in devmode
 
 
 ## Security

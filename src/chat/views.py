@@ -19,7 +19,7 @@ from django.db import DatabaseError
 # Local imports
 from core.models import User
 from .models import Conversation,TelegramMessage
-from .services import message_sender,process_user_message,regex_for_get_verification_code,add_initial_documents
+from .services import message_sender,process_user_message,regex_for_get_verification_code
 from .operations import telegram_message_processor
 from .utils.telegram import send_message
 
