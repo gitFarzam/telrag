@@ -133,3 +133,7 @@ REPORT_INTRO = "# {name} RAG System Evaluation"
 RET_REPORT_INTRO = "## Retrieval Evaluation"
 LLM_REPORT_INTRO = "## LLM Evaluation"
 REPORT_ENDING = "Thank you for reviewing this report."
+
+# Thresholds
+
+VOICE_DURAITION_THRESHOLD = 60

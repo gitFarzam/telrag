@@ -5,8 +5,8 @@ import numpy as np
 from asgiref.sync import async_to_sync
 from typing import List
 from datetime import timedelta
-from pathlib import Path
 import time
+import re
 
 # Django imports
 from django.contrib.contenttypes.models import ContentType
@@ -18,7 +18,6 @@ from django.http import JsonResponse
 from django.template.loader import render_to_string
 from django.utils import timezone
 from django.contrib.postgres.search import SearchVector, SearchQuery, SearchRank
-from django.core.files import File
 from django.db.models.expressions import ExpressionWrapper
 from django.db import IntegrityError
 
@@ -29,12 +28,10 @@ from pgvector.django import L2Distance
 
 # Local imports
 import chat.constants as constants
-import chat.prompts as prompts
 from .models import Conversation, Message,DocumentSource , TelegramMessage,Document, Chunk, Embedding, TextContent,AudioContent, RagComponent,RAGPipeline
 from .utils.telegram import send_message,telegram_message_parser,telegram_downloader
 from .utils.rag import LLM,latency_calculator,ModelCost,audio_to_text,embedder,NLPToolKit
 from .utils.utils import Utils
-from openai.types.chat import ChatCompletion
 
 # loading env variables
 load_dotenv()
@@ -42,29 +39,16 @@ load_dotenv()
 # Creating an instance of logging object
 logger = logging.getLogger(__name__)
 
-def similarity_search(conversation,input_text,num):
-    """
-    This function search for top num of similar text to input text
-    """
 
-    utils = Utils()
-    input_text_embedding = embedder([input_text])[0]
-
-    # if we are in demo we have to filter similar embeddings to just use default documents and the documents which are created for the current conversation
-    # each Chunk object has a document field, each Document model object may have a user_message field or not, if there is not user message it is considered a general document and its ok, if not it should check the Message object from user_message and get the conversation field, if Conversation model object was the same it's ok and can be passed.
-    #.filter(chunk__document__user_message__conversation = conversation)
-    similar_embeddings = Embedding.objects.filter(chunk__document__conversation=conversation).order_by(L2Distance('vector', input_text_embedding))[:num]
-    return input_text_embedding,similar_embeddings
-
-def hybrid_search(search_keyword,input_text_embedding,top_k,beta,conversation=None)->QuerySet[Embedding]:
+def hybrid_search(search_keyword:str,input_text_embedding,top_k:int,beta:float,conversation:Conversation=None)->QuerySet[Embedding]:
 
     """
-    hybrid search in pgvector using django ORM
-
+    hybrid search using pgvector library in postgresql database, both keyword and semantic search
+    - search_keyword : The query for performing a keyword (lexical) search within the database.
+    - input_text_embedding : The embedded input text used by the retriever for semantic search.
+    - top_k : Number of documents to be retrieved
+    - beta : a value between 0 and 1 determines the ratio between 2 kind of search, beta=0, 100% result comes from semantic search, beta=1 , 100% comes from keyword search
     - conversation: the conversatin object for the chat: Demo usage
-    - search_keyword : the query for searching inside the database for keyword search
-    - input_text_embedding : the embedded input text for embedding which retriever uses for semantic search
-    - k : number of document which should be retrieved
     """
 
     # converting user text keyword to -> PostgreSQL search query
@@ -114,7 +98,7 @@ def hybrid_search(search_keyword,input_text_embedding,top_k,beta,conversation=No
 
 def similar_category(category:str):
     """
-    This function will explore the database and will find number of all documents with the same category
+    This function query the database and will find number of all documents with the same category
     """
 
     result = Document.objects.filter(
@@ -123,12 +107,16 @@ def similar_category(category:str):
 
     return result
 
+def ingestion_process(transaction_type:bool , json_content,chat_id:int,is_new:bool) -> Document:
+    """
+    This function handles ingestion process for the messages which come from telegram. and returns a Document object, if ingestion process be valid.
 
-def similarity_score(input_embedding : np , similar_embeddings : List[Embedding]):
-    embeddings = np.array([embedding.vector for embedding in similar_embeddings])
-    return np.dot(input_embedding.reshape(1,384),embeddings.T)
-
-def ingestion_process(transaction_type , json_content,chat_id,is_new) -> Document:
+    Arguments
+    - transaction_type: determines the direction of the message, Send (send from app) -> False , Receive (send from user) -> True
+    - json_content: the json output from telegram webhook
+    - chat_id: user chat id
+    - is_new: is the message a new message or a reply to another message
+    """
     with transaction.atomic():
         telegram_object = TelegramMessage.objects.create(transaction_type=transaction_type , json_content = json_content) # True means receving (False is for sending)
         # print('telegram object has been created' , telegram_object)
@@ -151,6 +139,10 @@ def ingestion_process(transaction_type , json_content,chat_id,is_new) -> Documen
             return False
     
 def process_telegram_object(telegram_object:TelegramMessage,is_new=True):
+    """
+    This method will process the telegram object, which is stored in the database and returns Document object
+    
+    """
 
     conversation = Conversation.objects.get(chat_id=telegram_object.chat_id )
     doc_object = Document.objects.create(conversation=conversation,telegram_message=telegram_object)
@@ -195,10 +187,7 @@ def process_telegram_object(telegram_object:TelegramMessage,is_new=True):
             {'metadata': {}, 'data': {'voice': {'duration': 8, 'mime_type': 'audio/ogg', 'file_id': 'dgDeAgQAAxkBAAOgaZe-d0eu5eul-rrtwj1HGdD3pssAAlsaAAKYusFQlwt-Nvvor0M6BA', 'file_unique_id': 'AgADWxoAApi6wVA', 'file_size': 33935}}}
             
             """
-            # download using telegram
-            # (note: if its not large use memory, if not use streaming.)
-            # print('data: ',message_data['voice']['file_id'])
-            duration_threshold = 60
+            duration_threshold = constants.VOICE_DURAITION_THRESHOLD
             duration = message_data.get('voice',{}).get('duration',{})
             if duration < duration_threshold:
                 file_data = telegram_downloader(message_data['voice']['file_id'])
@@ -213,6 +202,9 @@ def process_telegram_object(telegram_object:TelegramMessage,is_new=True):
             return False
     
 def message_operation( message):
+    """
+    returning proper html code with div tags
+    """
     html = render_to_string(
         "message.html",
         {"message": message}
@@ -228,7 +220,7 @@ def message_operation( message):
 
 def message_sender(conversation:Conversation,content,is_agent):
     """
-    For sending message in the conversation
+    For sending message in the conversation, using django channel consumer
     """
     message = Message.objects.create(
             conversation=conversation,
@@ -252,6 +244,9 @@ def message_sender(conversation:Conversation,content,is_agent):
     return message
 
 def fetch_message_history(instance:Message):
+    """
+    Fetching all messages related to 1 specific conversation, to provide context history for AI asasistant
+    """
     return list(
         (
         instance.conversation.messages
@@ -267,6 +262,10 @@ def fetch_message_history(instance:Message):
     )
 
 def agent_message_sender(user_message:Message,context):
+    """
+    Sending messages to conversation, by ai assistant
+    
+    """
     logger.info('Sending Context to AI to answer to the question')
     message_history = fetch_message_history(user_message)
 
@@ -287,6 +286,10 @@ def agent_message_sender(user_message:Message,context):
     )
 
 def fetch_conversation_documents(instance:Conversation):
+    """
+    getting all documents related to 1 specific conversation: Demo Usage
+    
+    """
     all_messages: QuerySet[Message] = instance.messages.all()
 
     documents = []
@@ -306,6 +309,10 @@ def fetch_conversation_documents(instance:Conversation):
         return False
     
 def message_sender_custom(conversation:Conversation,message):
+    """
+    Sending customized message to user through consumer
+    
+    """
     channel_layer = get_channel_layer()
     html = render_to_string("telegram.html",{"chat_id_request": message})
 
@@ -321,6 +328,10 @@ def message_sender_custom(conversation:Conversation,message):
     return True
 
 def entities_handling(message_data,chat_id):
+    """
+    This function is for handling entities input from telegram messages, entities are telegram commands, this function job is detecting the command and respond as it required
+    
+    """
     for entity in message_data['entities']:
         if entity['type'] == 'bot_command':
             command = message_data['text'][entity['offset']:entity['length']]
@@ -347,6 +358,11 @@ def entities_handling(message_data,chat_id):
                     send_message(chat_id=chat_id,text="Conversation has been deleted!")
 
 def user_message_categorizer(message:Message, ragpipeline:RAGPipeline):
+    """
+    This method is for categorizing user messages in the conversation, like of the message is in the knowledge scope of AI assistant or not.
+
+    the output is providing both context and the result, context comes from hybrid search (inputing user query), so instead of re-searching this context will be return alongside the result which is an integer, which ranges from 0 to 3 and each of them leads to a different flow.
+    """
     dispatcher = Dispatcher(ragpipeline)
 
     content = message.content  
@@ -369,6 +385,9 @@ def user_message_categorizer(message:Message, ragpipeline:RAGPipeline):
     return context,result
 
 def process_user_message(message:Message):
+    """
+    This function is for processing user message in the conversation
+    """
 
     # Creating an instance of RAGPipeline
     ragpipeline = RAGPipeline.objects.create()
@@ -445,6 +464,9 @@ def process_user_message(message:Message):
 
 
 def creating_text_content_object(content:str):
+    """
+    This method is for creating text context object, for using as a document source
+    """
     try:
         model_object = TextContent.objects.create(content = content)
         return model_object
@@ -455,6 +477,9 @@ def creating_text_content_object(content:str):
     
 
 def creating_document_source(model_object):
+    """
+    This method is for creating document source object
+    """
     content_type_obj = ContentType.objects.get_for_model(model_object.__class__)
 
     doc_source_obj = DocumentSource.objects.create(
@@ -465,6 +490,12 @@ def creating_document_source(model_object):
     return doc_source_obj
 
 def creating_document_object(document_source, category="user_input", conversation=None, is_initial=False, caption=None,user_message=None,telegram_message=None) -> Document:
+
+    """
+    This method is for creating document object
+    
+    """
+
     doc_object = Document.objects.create(document_source = document_source)
 
     if conversation:
@@ -490,6 +521,9 @@ def creating_document_object(document_source, category="user_input", conversatio
     return doc_object
 
 def transcriber(document_object:Document):
+    """
+    This method is for converting voices to trasciption from user telegram messages which are not pure text and are voices.
+    """
     return audio_to_text(document_object.document_source.content_object.file.path)
 
 def fetch_content_from_document(document_object:Document):
@@ -515,6 +549,9 @@ def fetch_content_from_document(document_object:Document):
         return False
 
 def creating_chunk_objects(document_object:Document) -> List[Chunk]:
+    """
+    This method is for creating chunk object from Document
+    """
     content_for_chunk = fetch_content_from_document(document_object)
     
     if content_for_chunk:
@@ -530,6 +567,9 @@ def creating_chunk_objects(document_object:Document) -> List[Chunk]:
         return objects
 
 def creating_embedding_objects(chunks):
+    """
+    Creating Embedding objects from chunk objects
+    """
 
     chunks_text = [chunk.text for chunk in chunks]
     embeddings = embedder(model=constants.HF_EMBEDDING_MODEL,text=chunks_text)
@@ -544,7 +584,10 @@ def creating_embedding_objects(chunks):
     return objects
 
 def regex_for_get_verification_code(data:dict , from_id):
-    import re
+    """
+    This function is for detecting numbers in the telegram messages from user
+    """
+    
     text = data.get("message", {}).get("text", {})
     numbers = re.findall(r"\b[1-9]\d*\b", text)
     numbers = [int(n) for n in numbers]
@@ -582,33 +625,12 @@ def regex_for_get_verification_code(data:dict , from_id):
             # it should be checked if user telegram account is verified or no
             return JsonResponse({"error": "Forbidden"}, status=200) # returning 200 is crucial, otherwise requests will repeadedly be send through webhook again and again!
         
-def add_initial_documents(conversation):
-    """
-    This function is for adding initial data in demo mode
-    """
-    document_indices = ['1']
-    dir = os.path.join(settings.BASE_DIR,constants.INITIAL_DATA_DIR)
-    for document_index in document_indices:
-        try:
-            file_path = os.path.join(dir,f'{document_index}.txt')
-            with open(file_path) as text_file:
-                text_string = text_file.read()
-                logger.info(f"Inital data text first 50 chars: {text_string[:50]}")
-                with transaction.atomic():
-                    text_content_object = creating_text_content_object(content=text_string)
-                    doc_source_object = creating_document_source(model_object=text_content_object)
-                    doc_object = creating_document_object(conversation=conversation,document_source=doc_source_object)
-                    chunk_objects = creating_chunk_objects(document_object=doc_object)
-                    embedding_objects = creating_embedding_objects(chunks=chunk_objects)
-                    logger.debug(f"Embedding has been created: {embedding_objects}")
 
-                    return True
-
-        except FileNotFoundError:
-            logger.exception("File not found")
 
 def delete_unused_conversation():
-
+    """
+    Deleting unused conversation by User
+    """
     #getting conversations
     threshold = timezone.now() - timedelta(minutes=30)
     conversations = Conversation.objects.annotate(
@@ -623,15 +645,20 @@ def delete_unused_conversation():
         conversation.delete()
 
 
+
 def load_initial_documents(abs_data_dir):
     """
+
     this function returns a dictionary which have category name as a key and file path as value, for example:
 
-    {'crm_refund' : 'chat/management/commands/initial_data/telburger/crm/refund.txt',
-    'general_general' : 'chat/management/commands/initial_data/telburger/general/general.txt',
-    ...,
-    } 
+    {'crm_refund' : 'chat/management/commands/initial_data/telmart/crm/refund.txt',
+    'general_general' : 'chat/management/commands/initial_data/telmart/general/general.txt',
+    ...,}
+
+    This method is used for intial_data_db_insert function
+
     """
+
     txt_files_dict = {}
     dirs = os.listdir(abs_data_dir)
     for dir in dirs:
@@ -690,6 +717,10 @@ def rag_component_creator(
         input_cost:float=None,
         output_cost:float=None
 ):
+    """
+    
+    This method is for creating rag component
+    """
     ragcomponent = RagComponent.objects.create(
         ragpipeline = ragpipeline,
         component_name = component_name,

@@ -211,3 +211,7 @@ Copilot: command + control + i
 - Static files migrations
 - Creating admin user
 - Adding initial data 
+
+## Issues
+
+- Using streaming instead of saving long audio recordings in memory.
