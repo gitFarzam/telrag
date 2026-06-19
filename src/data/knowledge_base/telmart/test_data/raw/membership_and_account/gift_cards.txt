@@ -1,0 +1,37 @@
+TelMart Gift Cards
+
+Types of Gift Cards:
+- TelMart Gift Cards (physical and eGift cards)
+- TelMart eGift Cards (sent digitally by email)
+- Third-party gift cards (e.g., Visa, Mastercard, Apple, Google, PlayStation, Starbucks, etc.) are available for purchase at TelMart but are not TelMart gift cards.
+
+Using a TelMart Gift Card:
+- Use a TelMart Gift Card in-store or on TelMart.com.
+- For physical cards, scratch off the silver coating on the back to reveal the last four digits of the card and the PIN number.
+- For eGift cards, find the PIN in the confirmation email.
+
+Adding a TelMart Gift Card to Your Account:
+1. Open the TelMart app or go to TelMart.com.
+2. Select Account.
+3. Select the Settings gear icon at the top right.
+4. Select Wallet.
+5. Select Add new payment method.
+6. Select Gift Card.
+7. Enter the card number, PIN, and optional gift card nickname.
+8. Select Save card.
+
+Checking Your Gift Card Balance:
+With the 16-digit card number and PIN, check the balance in one of three ways:
+1. Check the balance on TelMart.com/help.
+2. Call 1-400-880-4080.
+3. Go to a checkout at a TelMart store.
+
+If you have a gift card without a PIN, you will need to exchange it for one with a PIN at any TelMart store.
+
+Sending eGift Cards:
+- You can send multiple TelMart eGift cards to up to five recipients per transaction.
+- If you want to attach a message to the eGift card, the same message will apply to all eGift cards in the transaction.
+
+Restrictions:
+- TelMart Cash cannot be redeemed for third-party gift cards or network-branded gift cards (Visa, Mastercard, AMEX gift cards).
+- TelMart+ annual membership gift and e-gift cards can no longer be used to purchase a TelMart+ membership.

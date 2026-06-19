@@ -1,5 +1,6 @@
 realtime_chat
 .DS_Store
+<<<<<<< HEAD
 sample
 src_cursor
 __pycache__/
@@ -10,3 +11,54 @@ src/db.sqlite3
 *.sqlite3
 .venv
 .pyc
+||||||| 6d2c1b6
+=======
+sample
+src_cursor
+__pycache__/
+*.pyc
+db_sqlite3
+/src/voices/
+src/db.sqlite3
+*.sqlite3
+.venv
+venv
+__pycache__
+devcontainer-lock.json
+
+# Python packaging / tooling
+.pytest_cache/
+.mypy_cache/
+.ruff_cache/
+.coverage
+coverage.xml
+htmlcov/
+dist/
+build/
+*.egg-info/
+
+# Django
+*.log
+local_settings.py
+staticfiles/
+media/
+src/media_cdn/
+src/static_cdn/
+src/voices
+
+# Environment / secrets
+.env
+.env.*
+
+# Celery / Celery Beat (generated runtime files)
+src/celerybeat-schedule
+src/celerybeat-schedule.*
+celerybeat-schedule
+celerybeat-schedule.*
+celerybeat.pid
+celeryd.pid
+
+# Other trashy stuff
+src/dump.rdb
+replacements.txt
+>>>>>>> demo

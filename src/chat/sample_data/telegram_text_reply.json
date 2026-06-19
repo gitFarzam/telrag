@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 {
   "update_id": 472343951,
   "message": {
@@ -37,3 +38,45 @@
     }
   }
 }
+||||||| 6d2c1b6
+=======
+{
+  "update_id": 472343951,
+  "message": {
+    "message_id": 51,
+    "date": 1770574680,
+    "text": "This is a reply",
+    "from": {
+      "id": 119716302,
+      "is_bot": false,
+      "first_name": "Jack",
+      "username": "YourTelegramUsername",
+      "language_code": "en"
+    },
+    "chat": {
+      "id": 119716302,
+      "type": "private",
+      "first_name": "Jack",
+      "username": "YourTelegramUsername"
+    },
+    "reply_to_message": {
+      "message_id": 49,
+      "date": 1770521006,
+      "text": "This is a test from my phone",
+      "from": {
+        "id": 119716302,
+        "is_bot": false,
+        "first_name": "Jack",
+        "username": "YourTelegramUsername",
+        "language_code": "en"
+      },
+      "chat": {
+        "id": 119716302,
+        "type": "private",
+        "first_name": "Jack",
+        "username": "YourTelegramUsername"
+      }
+    }
+  }
+}
+>>>>>>> demo

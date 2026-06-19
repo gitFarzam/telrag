@@ -1,0 +1,129 @@
+services:
+
+  db:
+    image: pgvector/pgvector:pg16
+    container_name: telrag_pgvector
+    restart: always
+    volumes:
+      - telrag-pgvector-volume:/var/lib/postgresql/data
+    env_file:
+      - .env
+
+  redis:
+    image: redis:7
+    container_name: telrag_redis
+    restart: always
+
+  app:
+    # the dir which DockerFile is located
+    build: .
+    container_name: telrag_app
+    working_dir: /usr/src/app
+    restart: always
+    entrypoint: ["/usr/src/app/entrypoint.sh"]
+    command: daphne -b 0.0.0.0 -p 8006 django_project.asgi:application
+    volumes:
+      - ./entrypoint.sh:/usr/src/app/entrypoint.sh
+    ports:
+      - "127.0.0.1:8000:8006"
+    depends_on:
+      - db
+      - redis
+    env_file:
+      - .env
+    expose:
+      - "8006"
+    networks:
+      - caddy-network
+
+  celery:
+  # the same dir for the app, as celery uses the app for running and installed inside the django app
+    build: .
+    container_name: telrag_celery
+    working_dir: /usr/src/app
+    command: celery -A django_project worker -l info
+    restart: always
+    depends_on:
+      - redis
+      - db
+      - app
+
+
+  flower:
+    build: .
+    container_name: telrag_flower
+    working_dir: /usr/src/app
+    command: celery -A django_project flower
+    restart: always
+    env_file:
+      - .env
+    ports:
+      - "5555:5555"
+    depends_on:
+      - redis
+      - db
+      - app
+      - celery
+    networks:
+      - caddy-network
+
+  celery_beat:
+  # the same dir for the app, as celery uses the app for running and installed inside the django app
+    build: .
+    container_name: telrag_celery_beat
+    working_dir: /usr/src/app
+    command: sh -c "rm -f celerybeat-schedule && celery -A django_project beat -l info"
+    restart: always
+    depends_on:
+      - redis
+      - db
+      - app
+
+
+  alloy:
+    image: grafana/alloy:latest
+    container_name: telrag_alloy
+    volumes:
+      - ./.config/alloy.hcl:/etc/alloy/config.hcl
+      - /var/run/docker.sock:/var/run/docker.sock
+    command: ["run", "/etc/alloy/config.hcl"]
+
+  loki:
+    image: grafana/loki:latest
+    container_name: telrag_loki
+
+  prometheus:
+    image: prom/prometheus:latest
+    container_name: telrag_prometheus
+    volumes:
+      - "./.config/prometheus.yml:/etc/prometheus/prometheus.yml" #prometheus configuration file
+      - "prometheus-data:/prometheus" # prometheus data
+    depends_on:
+      - app
+
+  grafana:
+    image: grafana/grafana:latest
+    container_name: telrag_grafana
+    ports:
+      - "3000:3000"
+    env_file:
+      - .env
+    environment:
+      - GF_USERS_ALLOW_SIGN_UP=false
+    volumes:
+      - grafana_data:/var/lib/grafana
+    depends_on:
+      - loki
+    networks:
+      caddy-network
+
+volumes:
+  telrag-pgvector-volume:
+  prometheus-data:
+  grafana_data:
+
+networks:
+  caddy-network:
+    external: true
+
+

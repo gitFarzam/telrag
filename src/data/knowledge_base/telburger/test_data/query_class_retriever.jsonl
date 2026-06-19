@@ -1,0 +1,32 @@
+{"query": "What level of assistance is your support team dedicated to delivering?", "category": "crm_support"}
+{"query": "What are the operating hours for TelBurger customer service?", "category": "crm_support"}
+{"query": "How are customer complaints evaluated and handled by your support staff?", "category": "crm_support"}
+{"query": "How can customers submit refund requests?", "category": "crm_support"}
+{"query": "Will approved refunds be returned to the original payment method used for the order?", "category": "crm_support"}
+{"query": "How quickly does TelBurger process refund requests once they are approved?", "category": "crm_support"}
+{"query": "What are the three main service options provided by TelBurger?", "category": "delivery_delivery"}
+{"query": "What is the environment like for customers dining in the TelBurger lobby?", "category": "delivery_delivery"}
+{"query": "What are the daily operating hours for the TelBurger dine-in lobby?", "category": "delivery_delivery"}
+{"query": "What is the purpose of the TelBurger drive-thru service?", "category": "delivery_delivery"}
+{"query": "What are the daily operating hours for the TelBurger drive-thru?", "category": "delivery_delivery"}
+{"query": "How can customers use the counter pickup option?", "category": "delivery_delivery"}
+{"query": "What is the benefit of using counter pickup at TelBurger?", "category": "delivery_delivery"}
+{"query": "Which delivery platforms does TelBurger partner with?", "category": "delivery_delivery"}
+{"query": "Can customers track their orders when using delivery applications?", "category": "delivery_delivery"}
+{"query": "How does TelBurger provide flexible customer experiences?", "category": "delivery_delivery"}
+{"query": "What is the focus of the TelBurger burger restaurant brand?", "category": "general_general"}
+{"query": "When was TelBurger founded, and what is its mission?", "category": "general_general"}
+{"query": "What is TelBurger's philosophy regarding delicious meals and healthy eating?", "category": "general_general"}
+{"query": "What standards does TelBurger follow when preparing its burgers and sandwiches?", "category": "general_general"}
+{"query": "What is TelBurger's commitment regarding the ingredients it uses?", "category": "general_general"}
+{"query": "In which major U.S. cities does TelBurger currently serve customers?", "category": "general_operating_cities"}
+{"query": "Are there TelBurger locations in cities like San Francisco, Seattle, Denver, Portland, and Las Vegas?", "category": "general_operating_cities"}
+{"query": "In which other U.S. cities does TelBurger operate?", "category": "general_operating_cities"}
+{"query": "Has TelBurger expanded its restaurant presence to cities such as Miami, Atlanta, Boston, Washington, and Nashville?", "category": "general_operating_cities"}
+{"query": "In which communities nationwide can customers find TelBurger locations?", "category": "general_operating_cities"}
+{"query": "What are the three burger options available on the TelBurger menu?", "category": "menu_menu"}
+{"query": "What patty size options are available for TelBurger burgers?", "category": "menu_menu"}
+{"query": "What ingredients are included in the classic TelBurger hamburger?", "category": "menu_menu"}
+{"query": "What ingredients make up the TelBurger cheeseburger?", "category": "menu_menu"}
+{"query": "What are the components of the TelBurger veggie burger?", "category": "menu_menu"}
+{"query": "How can customers customize their meals at TelBurger?", "category": "menu_menu"}

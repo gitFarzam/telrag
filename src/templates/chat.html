@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 {% extends "base.html" %}
 
 {% block title %}Chat Detail{% endblock %}
@@ -54,3 +55,201 @@ document.body.addEventListener('htmx:wsAfterMessage', function() {
 </div>
 
 {% endblock %}
+||||||| 6d2c1b6
+=======
+{% extends "base.html" %}
+
+{% block title %}Chat Detail{% endblock %}
+
+{% block content %}
+
+<div class="conversation" id="conversation" hx-ext="ws" ws-connect="/ws/chat/{{ conversation.id }}/" >
+
+  <h2>Chat with {{user.first_name}}</h2>
+    <form
+        method="post"
+        action="{% url 'chat-delete-user' conversation.pk %}"
+        class="delete-conversation-user"
+      >
+        {% csrf_token %}
+        <button type="submit" style="background-color: #dc3545; color: #fff; border: none; padding: 8px 14px; border-radius: 4px; cursor: pointer;">
+          Delete This Chat!
+        </button>
+    </form>
+
+  <!-- SCROLLABLE MESSAGES -->
+  <div id="messages" 
+       class="chat-container">
+
+
+
+
+  <div class="help-section" id="help-section">
+    <div class="help-toolbar">
+      <button
+        type="button"
+        class="help-toggle"
+        id="help-toggle"
+        aria-expanded="true"
+        aria-controls="help-body"
+      >
+        Hide help
+      </button>
+    </div>
+    <div class="help" id="help-body">
+<p>
+Hi! This is a demo. There is an imaginary store called 🛍️<strong>TelMart</strong>, and you are a customer chatting with a customer service AI agent. You can ask questions for which answers are already available to the AI agent, such as:
+</p>
+
+<ul>
+  <li>What is your customer service phone number?</li>
+  <li>What are your working hours?</li>
+  <li>What is your refund policy?</li>
+</ul>
+
+<p>
+The AI agent will most likely be able to answer these questions using its stored knowledge and RAG system.
+</p>
+
+<hr>
+
+<p>
+Later, you may ask questions that are not necessarily covered in the database, and the AI agent may not be able to answer them. For example:
+</p>
+
+<ul>
+  <li>Do you have any special discounts for 2026?</li>
+  <li>How can I obtain a membership card?</li>
+  <li>Do you have a floral section where customers can come and buy in person?</li>
+</ul>
+
+<p>
+In that case, the AI agent will try to contact a human agent via Telegram. Once the human agent responds (by replying to the message), the answer will be delivered to you.
+</p>
+
+  </div></div>
+
+
+
+    {% for message in messages %}
+      {% include "message.html" %}
+    {% endfor %}
+
+  </div>
+
+  <!-- FIXED INPUT -->
+  <form
+    class="chat-input"
+    hx-post="{% url 'chat-send' conversation.pk %}"
+    hx-on="htmx:afterRequest: this.reset()"
+    hx-disabled-elt="input, button"
+  >
+    {% csrf_token %}
+    <input
+      type="text"
+      name="content"
+      required
+      autocomplete="off"
+      placeholder="Type your message..."
+    />
+
+    <button type="submit">Send</button>
+  </form>
+
+<script>
+
+
+(function () {
+  var conv = document.getElementById('conversation');
+  if (!conv) return;
+
+  // Track the HTMX-managed socket so we can reconnect after mobile suspend / idle drops
+  // without leaking duplicate connections. Path-only ws-connect lets the HTMX ws extension
+  // choose ws: vs wss: from location.protocol (see ext/ws.js).
+  var origCreate = htmx.createWebSocket;
+  htmx.createWebSocket = function (url) {
+    if (window.__telragChatWs) {
+      try {
+        window.__telragChatWs.close();
+      } catch (e) {}
+    }
+    var sock = origCreate(url);
+    window.__telragChatWs = sock;
+    return sock;
+  };
+
+  function reconnectHtmxWsIfDead() {
+    var ws = window.__telragChatWs;
+    if (!ws || ws.readyState !== WebSocket.CLOSED) {
+      return;
+    }
+    htmx.process(conv);
+  }
+
+  document.addEventListener('visibilitychange', function () {
+    if (document.visibilityState === 'visible') {
+      reconnectHtmxWsIfDead();
+    }
+  });
+  window.addEventListener('pageshow', function () {
+    reconnectHtmxWsIfDead();
+  });
+  window.addEventListener('online', reconnectHtmxWsIfDead);
+  window.addEventListener('focus', reconnectHtmxWsIfDead);
+})();
+
+
+
+
+
+
+
+// demo hide help
+(function () {
+  var STORAGE_KEY = 'telrag_chat_help_collapsed';
+  var section = document.getElementById('help-section');
+  var toggle = document.getElementById('help-toggle');
+  if (!section || !toggle) return;
+
+  function applyCollapsed(collapsed) {
+    section.classList.toggle('is-collapsed', collapsed);
+    toggle.setAttribute('aria-expanded', collapsed ? 'false' : 'true');
+    toggle.textContent = collapsed ? '🍔 Show help' : 'Hide help';
+    try {
+      localStorage.setItem(STORAGE_KEY, collapsed ? '1' : '0');
+    } catch (e) {}
+  }
+
+  try {
+    var savedCollapsed = localStorage.getItem(STORAGE_KEY);
+    applyCollapsed(savedCollapsed === null ? true : savedCollapsed === '1');
+  } catch (e) {
+    applyCollapsed(true);
+  }
+  toggle.addEventListener('click', function () {
+    applyCollapsed(!section.classList.contains('is-collapsed'));
+  });
+})();
+
+
+
+
+// scroll bar adjustment
+document.body.addEventListener('htmx:wsAfterMessage', function() {
+  setTimeout(function() {
+    var el = document.getElementById('messages');
+    if (el) {
+      el.scrollTo({
+        top: el.scrollHeight,
+        behavior: 'smooth'
+      });
+    }
+  }, 0);
+});
+</script>
+
+
+</div>
+
+{% endblock %}
+>>>>>>> demo

@@ -1,0 +1,37 @@
+TelMart Payment Issues
+
+TelMart accepts a wide variety of payment methods in-store and online.
+
+Accepted Payment Methods:
+- Credit cards (Visa, Mastercard, American Express, Discover)
+- Debit cards
+- TelMart Pay (mobile payment via the TelMart app)
+- EBT/SNAP cards
+- TelMart Gift Cards and eGift Cards
+- TelMart Cash (redeemable as an e-gift card at checkout)
+- HSA/FSA cards (for eligible items, entered as a credit card)
+- Bank account (connect via online banking at TelMart.com checkout; up to three bank accounts can be saved)
+- PayPal
+- Buy Now, Pay Later with OnePay Later
+
+TelMart Pay:
+At the register or self-checkout, scan the on-screen QR code to connect your account. You may scan using the scanner in the TelMart app located in the search bar, TelMart Pay, or your native phone camera if you have the TelMart app downloaded. All TelMart policies for in-store sales apply to purchases made through TelMart Pay.
+
+TelMart Cash Redemption:
+Tap "Use TelMart Cash" to redeem your current balance for a TelMart e-gift card to be applied against the purchase price. If your TelMart Cash balance is less than your basket total, your full TelMart Cash balance will be redeemed and applied towards your basket total. If your TelMart Cash balance is greater than your basket total, only the necessary portion will be applied.
+
+TelMart Cash cannot be redeemed for: financial services offered through TelMart Money Centers (money transfers, money orders, bill payments), third-party gift cards, network-branded gift cards, re-loadable prepaid cards, or prescription-related products.
+
+Adding a Payment Method to Your Account:
+1. Open the TelMart app or go to TelMart.com.
+2. Select Account.
+3. Select the Settings gear icon at the top right.
+4. Select Wallet.
+5. Select Add new payment method.
+6. Choose your payment type and enter required details.
+7. Select Save card.
+
+If you experience issues with a payment method, verify the card number, security code, expiration date, and billing address. If problems persist, contact Customer Care via the Chat with us button on TelMart.com.
+
+Authorization Holds:
+A temporary authorization hold may be placed on your payment method when placing an online order. Once your final total is confirmed, any leftover amount will be refunded. The bank will remove the hold based on their policies, which can take up to 10 days after the order is complete.

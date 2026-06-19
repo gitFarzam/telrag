@@ -1,0 +1,32 @@
+TelMart Delivery Orders
+
+TelMart offers delivery of groceries and other items directly to your door through local, third-party delivery drivers.
+
+How Delivery Works:
+- After the driver picks up your order, you will get a notification letting you know the driver is on their way.
+- In some cases, the delivery can take up to two hours to get to you.
+- If you select "I'll sign for my order," this will require you to provide a pin or signature when the driver delivers your order.
+- A pin may also be required for certain orders or high-value items. You will be notified at checkout if this is required.
+- Once the order is out for delivery, the four-digit passcode will show under the tracking status bar under Order Details. You can also view the pin when selecting Track Order.
+- If your order is being delivered to someone else, you will need to provide the recipient with the pin for a successful delivery.
+
+Changing Delivery Details:
+- You may be able to change your Delivery address for a brief time after you place your order.
+- You will have up to three hours before the Delivery window to update the order (express orders excluded).
+- You can only change the address once per order.
+- If you try to change to an address outside of the Delivery area, you will see a message that the order cannot be delivered to that address.
+
+Guided Delivery Instructions:
+You can add delivery instructions to your order to help drivers locate your address correctly. Be sure your Rooftop Pin is correctly set in your account for accurate delivery.
+
+Delivery Delays:
+If there is a delay in your scheduled delivery, you may get a text message or push notification inviting you to change your delivery order to a pickup order. You can choose a pickup time slot within the next 24 hours. If you pick up your order, TelMart will refund your delivery fees and tip.
+
+Drone Delivery:
+TelMart offers drone delivery in select areas. Availability may vary by location.
+
+Undeliverable Orders:
+If your order cannot be delivered, TelMart will provide options for what to do next. Contact customer care via the Chat with us button on TelMart.com if you need assistance.
+
+For InHome Delivery (TelMart+ InHome members):
+InHome associates deliver directly inside your home or garage. You will receive a notification before the associate arrives. If there is a delay in your InHome delivery, you may receive an email, text message, or push notification with options to update your order.

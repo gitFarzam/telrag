@@ -1,0 +1,25 @@
+TelMart Missing Items
+
+If Items Are Missing from Your Order:
+
+TelMart may ship orders with multiple items from different warehouses. These items may arrive in different boxes on different dates. Each package will have its own tracking number.
+
+Steps to Take:
+1. Go to your order tracking page.
+2. Check the number of packages for your order.
+3. Verify if all packages have been delivered.
+4. If you have received all packages from your order and are still missing items, select the Contact us button on TelMart.com.
+
+If Your Package Shows Delivered But You Cannot Find It:
+- Look around the delivery location.
+- Check the delivery confirmation photo (if available). Do you recognize the doorway in the image?
+- Ask your household and neighbors.
+- Review the address saved in your TelMart.com account. Make sure it does not have any spelling errors or numerical mistakes.
+- Wait two business days to see if it arrives. It is rare, but sometimes carriers may mark packages as delivered before they actually arrive.
+- If your address rooftop pin is set incorrectly in Google Maps, check and update it in your TelMart account.
+
+If you still have not received your items after two business days, select the Chat with us button on TelMart.com to contact customer care.
+
+For delivery orders where the Purchase History shows the package was delivered but you cannot find it, check the delivery confirmation photo. Contact customer care if the delivery appears to have been made to the wrong address.
+
+Use the optional delivery instructions to verify your information before checking out in order to help prevent delivery issues.

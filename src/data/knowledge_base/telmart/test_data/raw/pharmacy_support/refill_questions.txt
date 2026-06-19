@@ -1,0 +1,35 @@
+TelMart Pharmacy Prescription Refills
+
+How to Refill Prescriptions Using the TelMart App:
+1. Sign into your TelMart account.
+2. Select Services.
+3. Select Pharmacy.
+4. Verify your 4-digit PIN (or use biometrics, if available).
+5. Select Refill Prescriptions.
+6. Select the checkbox next to any available prescription.
+7. Select Continue.
+8. Review the Pickup location.
+9. Review the order and make changes if needed. To change the payment type, select Edit in the Payment field.
+10. Select Place Order to submit your refill order.
+
+Scan to Refill:
+To use the Scan to Refill option in the TelMart app:
+1. Sign into your TelMart account.
+2. Select Services, then select Pharmacy.
+3. Verify your 4-digit PIN (or use biometrics, if available).
+4. Select Refill Prescriptions.
+5. Select the Scan to Refill option and scan the barcode on your prescription bottle.
+
+Prescription Status:
+- You can check the status of your prescription refill order through Purchase History in the TelMart app or on TelMart.com.
+- TelMart will notify you when your prescription is ready for pickup or delivery.
+
+Prescription Refill Eligibility:
+- Not all prescriptions are available for refill at all times. Refill eligibility depends on the prescription type and the date of the last fill.
+- Contact your TelMart Pharmacy directly if you have questions about refill eligibility.
+
+TelMart Pharmacy Contact:
+- Find your pharmacy store phone number on your prescription bottle or label.
+- You can also use the TelMart Store Finder on TelMart.com to locate your pharmacy and its contact information.
+
+For questions about estimated prescription refill costs, visit the help article on Estimated Prescription Refill Costs at TelMart.com/help.

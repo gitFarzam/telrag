@@ -1,0 +1,24 @@
+TelMart Order Substitutions
+
+If an item you ordered is out of stock, TelMart will offer a similar item as a substitution. You have the choice to accept, decline, or return substituted items. TelMart will charge you the price of any substituted item(s).
+
+Temporary Authorization Hold:
+There will be a temporary authorization hold on your payment method. This is the amount TelMart authorizes to cover weighted items, replacements, and any bag fees in your state.
+
+Substitution Notification:
+If your ordered item is not available, TelMart will send an email and offer a similar item. There is a limited amount of time to respond. The email will give you time to accept or refuse the substitution(s). If you do not accept or decline the item offered, TelMart will substitute it.
+
+If you are unhappy with the substitution, you can start a return from Purchase History on the TelMart app or TelMart.com.
+
+Managing Substitutions Before Your Order:
+Before placing your order, you can choose which items you do not want substituted. You can also select the items you prefer as a substitution.
+
+If an item on your order is out of stock and you picked a substitution, TelMart will replace it with the one you chose. If the item is not in stock and you indicated you do not want a substitution, TelMart will remove it from your order.
+
+SNAP/EBT Orders and Substitutions:
+For orders placed with SNAP/EBT, TelMart will charge you the price of the item based on the price of the item and the payment method.
+
+- If you do not select a backup method of payment but allow for substitutions: TelMart will substitute with an item that is the same or lower priced as the original item. If an alternate item is not available, the original item will be canceled, and TelMart will refund your SNAP/EBT card.
+- If you select a backup method of payment and TelMart must substitute with an item of higher price: Any difference in cost for your substitution will be charged to the alternate payment method. Amounts charged to non-SNAP/EBT payment methods are subject to sales tax.
+
+If you do not want the substitution, simply let the associate at the store know, and they will remove it from your order. Delivery drivers cannot remove the item from your order and return it to the store.

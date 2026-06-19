@@ -1,0 +1,25 @@
+TelMart Pickup Orders
+
+When your order is ready, TelMart will send a Ready for Pickup email if you have chosen to pick up from your local store.
+
+Checking In for Pickup:
+- When you arrive at the store, check in using the TelMart app or follow the instructions in your Ready for Pickup email.
+- A TelMart associate will bring your order to the designated pickup area.
+
+Pickup Person:
+- During checkout, you can select or edit the Pickup person.
+- Select Checkout all items, then select Edit next to Pickup person.
+- Add the Pickup person's name and email address, then select Save.
+- To change the Pickup person after placing your order, go to Purchase History, navigate to the order, and select Edit next to Pickup person.
+
+Changing or Rescheduling Pickup:
+- You may be able to change your Pickup location for a brief time after placing your order.
+- You will have up to three hours before the Delivery/Pickup window to update the order (express orders excluded).
+- You can only change the location once per order.
+- You can reschedule the time slot once.
+- You cannot change the fulfillment type (e.g., from Pickup to Delivery) after checkout, except if you receive a text message about a delayed scheduled delivery that provides this option. To switch, you must cancel and place a new order.
+
+Late Pickup:
+- If you are late to your scheduled Pickup, and the Pickup window is prior to 8 p.m., you can still check in by 8 p.m. local time on the Pickup date.
+- If you are late to check in after 8 p.m., you should reschedule or cancel and reorder.
+- Frozen and perishable items such as produce are stored at the correct temperature until you pick up your order. If you do not pick up the order by the end of the day, the store cancels your order the next day.

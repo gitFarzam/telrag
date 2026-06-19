@@ -1,0 +1,31 @@
+TelMart Account Help
+
+Creating an Account:
+- Visit TelMart.com or open the TelMart app.
+- Select Sign in or create account.
+- Follow the prompts to create a new account with your email address and a password.
+- You can also use Passkeys as a sign-in method for added security.
+
+Managing Your Account:
+- Sign in to your TelMart account to manage your personal information, payment methods, order history, and preferences.
+- To edit your account information, select Account, then the Settings gear icon.
+
+Purchase History:
+- Sign into your account and select Purchase History to view past orders, track shipments, and start returns.
+
+Payment Methods:
+- Add, edit, or remove payment methods by going to Account, then the Settings gear icon, then Wallet.
+- TelMart accepts credit cards, debit cards, PayPal, gift cards, HSA/FSA cards, and bank accounts.
+
+Account Security:
+- TelMart recommends using a strong, unique password for your account.
+- If you suspect unauthorized activity on your account, change your password immediately and contact Customer Care.
+- Enable two-factor authentication if available.
+
+Tax-Exempt Purchases:
+- If you are a tax-exempt organization, visit TelMart.com/help for information on setting up a tax-exempt account.
+
+Pharmacy Access:
+- To add pharmacy access to your account, visit the Pharmacy section in the app or on TelMart.com and follow the identity verification steps.
+
+For account-related issues, visit TelMart.com/help or contact Customer Care via the Chat with us button, phone at 1-400-840-4060, or email at help@telmart.com.

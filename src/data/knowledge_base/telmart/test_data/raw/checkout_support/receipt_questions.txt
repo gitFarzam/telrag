@@ -1,0 +1,21 @@
+TelMart Receipt Information
+
+TelMart provides receipts in paper and digital formats for in-store and online purchases.
+
+Digital Receipts (eReceipts):
+TelMart offers eReceipts for in-store purchases. At the register or self-checkout, you can choose to receive a digital receipt. Information provided to TelMart by users of the TelMart eReceipts service is subject to the TelMart Privacy Policy. TelMart may alter, suspend, or terminate your use of eReceipts at any time at its discretion. Requesting an eReceipt at the register will not automatically submit your eReceipt.
+
+Viewing Store Purchases and Finding Receipts:
+- Sign into your TelMart account on TelMart.com or the TelMart app.
+- Go to Purchase History to view recent purchases and access receipts for orders placed online or in-store when using a linked payment method.
+
+Receipts for Returns:
+- For in-store returns, bring your receipt to the Customer Service Desk.
+- If you do not have your receipt, show a valid government-issued photo identification. Without a receipt, the refund may be processed onto a TelMart shopping card or gift card.
+- If your purchase was made with a debit or credit card, TelMart can often look up the purchase using the card.
+
+Receipt for Online Orders:
+- Order confirmation and receipt information are sent to the email address associated with your TelMart account.
+- You can also access order details and receipts through Purchase History in your TelMart account.
+
+If you have questions about a specific charge on your receipt or need a copy of a receipt, visit the Customer Service Desk in-store or contact Customer Care via Chat on TelMart.com.

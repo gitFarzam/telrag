@@ -1,0 +1,24 @@
+#!/bin/sh
+
+# Exit on error
+set -e
+
+
+# Setting webhook
+source ./.env
+
+echo ".................... Setting Production Webhook ....................."
+echo $ONLINE_WEBHOOK_ADDRESS
+echo ".........................................."
+
+curl -X POST "https://api.telegram.org/bot${TELEGRAM_API_KEY}/setWebhook" \
+  -d "url=${ONLINE_WEBHOOK_ADDRESS}" \
+  -d "secret_token=${TELEGRAM_WEBHOOK_SECRET}"
+
+echo "Webhook has been set"
+
+
+
+
+exit "$@"
+

@@ -1,4 +1,17 @@
+<<<<<<< HEAD
 .venv
 __pycache__
 .git
 .gitignore
+||||||| 6d2c1b6
+=======
+.venv
+venv
+__pycache__
+.git
+.gitignore
+celerybeat-schedule
+celerybeat-schedule.*
+
+**/.git
+>>>>>>> demo

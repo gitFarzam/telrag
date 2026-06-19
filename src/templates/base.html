@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 {% load static %}
 <!DOCTYPE html>
 <html lang="en">
@@ -293,3 +294,385 @@
     </footer>
   </body>
 </html>
+||||||| 6d2c1b6
+=======
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+
+    <!-- Google tag (gtag.js) -->
+    <script async src="https://www.googletagmanager.com/gtag/js?id=G-XL7XD36BJC"></script>
+    <script>
+      window.dataLayer = window.dataLayer || [];
+      function gtag(){dataLayer.push(arguments);}
+      gtag('js', new Date());
+
+      gtag('config', 'G-XL7XD36BJC');
+    </script>
+
+
+
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+
+    <script src="https://unpkg.com/htmx.org@1.9.12"></script>
+    <script src="https://unpkg.com/htmx.org@1.9.12/dist/ext/ws.js"></script>
+
+    <style>
+      :root {
+        --bg-page: #1e1e1e;
+        --bg-surface: #000000;
+        --border-subtle: #1d1d1d;
+        --text-main: #ffffff;
+        --text-muted: #b8b8b8;
+      }
+
+      *,
+      *::before,
+      *::after {
+        box-sizing: border-box;
+      }
+
+      html,
+      body {
+        margin: 0;
+        padding: 0;
+        height: 100%;
+      }
+
+      body {
+        font-family: system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI",
+          Roboto, sans-serif;
+        background-color: var(--bg-page);
+        color: var(--text-main);
+        display: flex;
+        flex-direction: column;
+        min-height: 100vh;
+      }
+
+      header,
+      footer,
+      main {
+        max-width: 960px;
+        width: 100%;
+        margin: 0 auto;
+        padding: 16px 20px;
+      }
+
+      header,
+      footer {
+        background: var(--bg-surface);
+        border-bottom: 1px solid var(--border-subtle);
+      }
+
+      footer {
+        border-top: 1px solid var(--border-subtle);
+        border-bottom: none;
+        font-size: 0.85rem;
+        color: var(--text-muted);
+      }
+
+      main {
+        flex: 1;
+        width: 100%;
+      }
+
+      header h1 {
+        margin: 0;
+        font-size: 1.1rem;
+        letter-spacing: 0.08em;
+        text-transform: uppercase;
+      }
+
+      h1 a{
+        text-decoration: none;
+      }
+
+      h1 a:visited{
+        color: #ffffff;
+      }
+
+      .conversation {
+        margin: 0 auto;
+        padding: 16px;
+        width: 100%;
+        background-color: var(--bg-surface);
+        border-radius: 12px;
+        border: 1px solid var(--border-subtle);
+        display: flex;
+        flex-direction: column;
+        gap: 12px;
+        height: calc(100vh - 170px);
+      }
+
+      .conversation h2 {
+        margin: 0 0 8px;
+        font-size: 1rem;
+        font-weight: 600;
+      }
+
+      .chat-container {
+        display: flex;
+        flex-direction: column;
+        width: 100%;
+        flex: 1;
+        overflow-y: auto;
+        padding-right: 4px;
+      }
+
+      .chat-input {
+        display: flex;
+        gap: 8px;
+        padding-top: 8px;
+        border-top: 1px solid var(--border-subtle);
+      }
+
+      .chat-input input[type="text"] {
+        flex: 1;
+        padding: 10px 12px;
+        border-radius: 6px;
+        border: 1px solid var(--border-subtle);
+        font-size: 1rem;
+        outline: none;
+      }
+
+      .chat-input input[type="text"]:focus {
+        border-color: #000000;
+      }
+
+      .chat-input input[type="text"]:disabled {
+        background-color: #121212;
+        border-color: #393939;
+        color: #888888;
+        cursor: not-allowed;
+      }
+
+      .chat-input button {
+        padding: 0 18px;
+        border-radius: 6px;
+        border: 1px solid #ffffff;
+        background-color: #ffffff;
+        color: #000000;
+        font-size: 0.95rem;
+        cursor: pointer;
+        white-space: nowrap;
+      }
+
+      .chat-input button:hover {
+        background-color: #e3e3e3;
+      }
+
+
+
+      .chat-input button:disabled {
+        background-color: #c7c7c7;
+        border-color: #c5c5c5;
+        cursor: not-allowed;
+        opacity: 0.6;
+      }
+
+      .chat-container::-webkit-scrollbar {
+        width: 6px;
+      }
+
+      .chat-container::-webkit-scrollbar-track {
+        background: transparent;
+      }
+
+      .chat-container::-webkit-scrollbar-thumb {
+        background: #252525;
+        border-radius: 3px;
+      }
+
+      .help-section {
+        width: 100%;
+        margin: 0 0 12px;
+        display: flex;
+        flex-direction: column;
+        gap: 6px;
+        align-self: stretch;
+      }
+
+      .help-toolbar {
+        display: flex;
+        justify-content: flex-start;
+      }
+
+      .help-toggle {
+        padding: 4px 10px;
+        border-radius: 6px;
+        border: 1px solid #000000;
+        background-color: #242a25;
+        color: var(--text-muted);
+        font-size: 0.85rem;
+        cursor: pointer;
+      }
+
+      .help-toggle:hover {
+        border-color: #787878;
+        color: var(--text-main);
+      }
+
+      .help-section.is-collapsed .help {
+        display: none;
+      }
+
+      .help {
+        max-width: 100%;
+        background-color: #131413;
+        padding: 8px 10px;
+        border-radius: 8px;
+        margin: 0;
+        justify-content: left;
+      }
+
+      .message {
+        max-width: 70%;
+        margin: 6px 0;
+        padding: 8px 10px;
+        border-radius: 8px;
+        border: 1px solid var(--border-subtle);
+        background-color: var(--bg-surface);
+        word-wrap: break-word;
+        display: flex;
+        flex-direction: column;
+        gap: 4px;
+        font-size: 0.95rem;
+      }
+
+      .message.agent {
+        align-self: flex-start;
+        background-color: #161616;
+      }
+
+      .message.user {
+        align-self: flex-end;
+        background-color: #000000;
+        text-align: left;
+      }
+
+      .message.telegram {
+        align-self: flex-end;
+        background-color: #111415;
+        text-align: left;
+      }
+
+
+      .message strong {
+        font-size: 0.75rem;
+        text-transform: uppercase;
+        letter-spacing: 0.06em;
+        color: var(--text-muted);
+      }
+
+      .message b {
+        font-size: 32px;
+        font-weight: 800;
+      }
+
+      .message a {
+        text-decoration: none;
+        color: #005d8b;
+      }
+
+      .message a:hover {
+        color: #113342;
+      }
+
+      #messages {
+        scroll-behavior: smooth;
+      }
+
+      /* Home page layout */
+      .home-view {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        min-height: calc(100vh - 160px);
+        padding: 20px;
+      }
+
+      .home-card {
+        background: #000000;
+        width: 100%;
+        max-width: 420px;
+        padding: 40px 30px;
+        border-radius: 16px;
+        box-shadow: 0 15px 35px rgba(0, 0, 0, 0.08);
+        text-align: center;
+        border: 1px solid #252525;
+      }
+
+      .home-card h1 {
+        margin: 0 0 30px 0;
+        font-size: 22px;
+        font-weight: 600;
+      }
+
+      .home-card input[type="text"] {
+        width: 100%;
+        padding: 14px;
+        font-size: 16px;
+        border-radius: 10px;
+        border: 1px solid #2e2e2e;
+        margin-bottom: 20px;
+        transition: border 0.2s ease, box-shadow 0.2s ease;
+      }
+
+      .home-card input[type="text"]:focus {
+        outline: none;
+        border-color: #ffffff;
+        box-shadow: 0 0 0 3px rgba(255, 255, 255, 0.12);
+      }
+
+      .home-card button[type="submit"] {
+        width: 100%;
+        padding: 14px;
+        font-size: 16px;
+        font-weight: 500;
+        border-radius: 10px;
+        border: 1px solid #ffffff;
+        background: #ffffff;
+        color: #000000;
+        cursor: pointer;
+        transition: background 0.2s ease, transform 0.05s ease;
+      }
+
+      .home-card button[type="submit"]:hover {
+        background: #e1e1e1;
+      }
+
+      .home-card button[type="submit"]:active {
+        transform: scale(0.98);
+      }
+
+      @media (max-width: 600px) {
+        header,
+        footer,
+        main {
+          padding: 12px 12px;
+        }
+
+        .conversation {
+          padding: 12px;
+          height: calc(100vh - 150px);
+        }
+      }
+    </style>
+
+    <title>{% block title %}TelRAG{% endblock %}</title>
+  </head>
+  <body>
+    <header>
+      <h1><a href="https://telrag.site">TelRAG</a></h1>
+    </header>
+    <main>
+      {% block content %}{% endblock %}
+    </main>
+    <footer>
+      <p>&copy; 2025 TelRAG</p>
+    </footer>
+  </body>
+</html>
+>>>>>>> demo
