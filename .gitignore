@@ -47,3 +47,4 @@ celeryd.pid
 
 # Other trashy stuff
 src/dump.rdb
+replacements.txt
