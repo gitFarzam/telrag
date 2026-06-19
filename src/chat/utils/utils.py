@@ -1,9 +1,3 @@
-<<<<<<< HEAD
-def telegram_input_filter(text:str)->bool:
-    if len(text) < 10:
-        return False
-||||||| 6d2c1b6
-=======
 import json
 import os
 
@@ -198,4 +192,3 @@ class TerminalColor():
     
     def yellow(self,text):
         return f"\033[1;33m{text}\033[0m"
->>>>>>> demo
