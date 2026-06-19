@@ -4,6 +4,8 @@ services:
     image: pgvector/pgvector:pg16
     container_name: telrag_pgvector
     restart: always
+    volumes:
+      - telrag-pgvector-volume:/var/lib/postgresql/data
     ports:
       - "5434:5432"
     env_file:
@@ -20,7 +22,7 @@ services:
     container_name: telrag_app
     working_dir: /usr/src/app
     restart: always
-    command: daphne -b 0.0.0.0 -p 8006 django_project.asgi:application
+    command: daphne -b 0.0.0.0 -p 8000 django_project.asgi:application
     volumes:
       - ./entrypoint.sh:/usr/src/app/entrypoint.sh
       - ./src:/usr/src/app/src
@@ -30,8 +32,9 @@ services:
       - ./README.md:/usr/src/app/README.md
       - ./requirements.txt:/usr/src/app/requirements.txt
       - ./prompts.md:/usr/src/app/prompts.md
+      # - ./eval_result:/usr/src/app/src/data/knowledge_base/telmart/result
     ports:
-      - "127.0.0.1:8000:8006"
+      - "127.0.0.1:8000:8000"
     depends_on:
       - db
       - redis
@@ -77,22 +80,6 @@ services:
       - ./.env:/usr/src/app/.env
 
 
-  celery_beat:
-  # the same dir for the app, as celery uses the app for running and installed inside the django app
-    build: .
-    container_name: telrag_celery_beat
-    working_dir: /usr/src/app
-    command: sh -c "rm -f celerybeat-schedule && celery -A django_project beat -l info"
-    restart: always
-    depends_on:
-      - redis
-      - db
-      - app
-    volumes:
-      - ./entrypoint.sh:/usr/src/app/entrypoint.sh
-      - ./src:/usr/src/app/src
-      - ./.env:/usr/src/app/.env
-
 
   alloy:
     image: grafana/alloy:latest
@@ -132,11 +119,31 @@ services:
       - loki
 
 
+  caddy:
+    image: caddy:latest
+    container_name: telrag_caddy
+    restart: unless-stopped
+
+    ports:
+      - "80:80"
+      - "443:443"
+
+    environment:
+      DOMAIN: ${DOMAIN}
+
+    volumes:
+      - ./src/static_cdn:/srv/telrag/static:ro
+      - ./src/media_cdn:/srv/telrag/media:ro
+      - caddy_data:/data
+      - caddy_config:/config
+
+    depends_on:
+      - app
+      - db
+
 volumes:
   telrag-pgvector-volume:
   prometheus-data:
   grafana_data:
-
-
-
-
+  caddy_data:
+  caddy_config:
