@@ -1,0 +1,21 @@
+{
+  "update_id": 472498923,
+  "message": {
+    "message_id": 49,
+    "from": {
+      "id": 119336675,
+      "is_bot": false,
+      "first_name": "Jack",
+      "username": "YourTelegramUsername",
+      "language_code": "en"
+    },
+    "chat": {
+      "id": 119336675,
+      "first_name": "Jack",
+      "username": "YourTelegramUsername",
+      "type": "private"
+    },
+    "date": 119336675,
+    "text": "This is a sample text from a user sent through the Telegram application."
+  }
+}
