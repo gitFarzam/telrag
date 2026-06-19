@@ -40,7 +40,6 @@ class Command(BaseCommand):
     def handle(self,*args,**options):
         """
         This method is for handling django command
-        
         """
         try:
             name = constants.BUSINESS_NAME_FOR_DATA

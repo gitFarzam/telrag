@@ -1,12 +1,17 @@
+import logging
+
 from .tasks import task_new_message,task_reply_message,task_entities_handling,task_button_handling
 from .utils.telegram import telegram_message_parser
-import logging
+
 
 # Creating an instance of the logging object
 logger = logging.getLogger(__name__)
 
 
 def telegram_message_processor(transaction_type:bool , json_content:dict):
+    """
+    This function is for calling the right celery task for each type of message from
+    """
     
     parsed_data = telegram_message_parser(json_content)
     message_type = parsed_data['type']

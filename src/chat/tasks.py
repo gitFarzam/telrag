@@ -11,6 +11,9 @@ logger = logging.getLogger(__name__)
 
 @shared_task
 def task_new_message(transaction_type,json_content,chat_id,message_id):
+    """
+    Task for handling new messages from telegram webhook in the background
+    """
     document_object = ingestion_process(transaction_type,json_content,chat_id,is_new=True)
     if document_object:
         send_message(chat_id,text=f"Document has been created, ID: {document_object.pk}",reply_to_message_id=message_id)
@@ -19,6 +22,9 @@ def task_new_message(transaction_type,json_content,chat_id,message_id):
 
 @shared_task
 def task_reply_message(transaction_type,json_content,chat_id,message_id):
+    """
+    Task for handling reply messages from telegram webhook in the background
+    """
     document_object = ingestion_process(transaction_type,json_content,chat_id,is_new=False)
     if document_object:
         send_message(chat_id,text=f"Document has been created, ID: {document_object.pk}",reply_to_message_id=message_id)
@@ -29,6 +35,9 @@ def task_reply_message(transaction_type,json_content,chat_id,message_id):
 
 @shared_task
 def task_entities_handling(message_data,chat_id):
+    """
+    Task for handling command messages from telegram webhook in the background
+    """
     # getting document in normal mode, is for all docs, in demo mode is just for a specific hat
     result = entities_handling(message_data,chat_id)
     if result:
@@ -37,6 +46,9 @@ def task_entities_handling(message_data,chat_id):
 
 @shared_task
 def task_button_handling(message_data,chat_id):
+    """
+    Task for handling command messages from telegram webhook in the background
+    """
     del_document_id = message_data.get('del_document_id')
     obj = Document.objects.filter(pk=del_document_id).first()
     
@@ -50,5 +62,8 @@ def task_button_handling(message_data,chat_id):
 
 @shared_task
 def task_delete_unused_conversation():
+    """
+    Task for handling deleting unused conversations in demo mode
+    """
     result = delete_unused_conversation()
     print(result)

@@ -215,3 +215,5 @@ Copilot: command + control + i
 ## Issues
 
 - Using streaming instead of saving long audio recordings in memory.
+- Saving report file output of the container
+- Commands help description

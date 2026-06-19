@@ -104,7 +104,6 @@ def data_path(name:str,key_path:'str'):
 BUSINESS_NAME_FOR_DATA = "telmart"
 
 # Pipeline
-
 RAG_COMPONENTS = {
     "Message Categorizer" : "message_categorizer",
     "Text Generator" : "text_generator",
@@ -135,5 +134,4 @@ LLM_REPORT_INTRO = "## LLM Evaluation"
 REPORT_ENDING = "Thank you for reviewing this report."
 
 # Thresholds
-
 VOICE_DURAITION_THRESHOLD = 60

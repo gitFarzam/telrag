@@ -6,27 +6,14 @@ import chat.constants as constants
 import pandas as pd
 import matplotlib.pyplot as plt
 
-
 def telegram_input_filter(text:str)->bool:
     if len(text) < 10:
         return False
-    
+
 class Utils():
-    """
-    This class if made for evaluating retrieval performance, it gets multiple test query and will compare them with oberserved query, both queryies belong to a unique category, if categories were matched together, it means that retrieval worked properly with providing right documents @k
 
-    test_query : jsonl file, will compite to dict: sample: {"query": "TelBurger submits refund requests immediately after approval", "category": "crm_support"}
-    observed_query : fetches from database by retrieval and compiles as a dictionary like above
-    k : a positive integer number will determine how many documents have to be retrieved from database
+    """This class includes some functions for some generic purposes"""
 
-    Steps:
-        1. Assigning an embedding model
-        2. having the path for input_queries ready
-        3. creating {'query':'embedding','category':'value'} for oberserved_query, by annotating Embedding model object
-        4. seprating vector embeddings from Embedding model as an numpy 2D array from categories as a different list
-        5. creating an embedding and category from test data as well, storing in the database
-        6. measuring hybrid search function by considering these values
-    """
     def __init__(self):
         return super().__init__()
 
@@ -188,6 +175,9 @@ class Markdown():
         return "\n\n".join(content_list)
 
 class TerminalColor():
+    """
+    This class is for colorizing texts in the terminal output.
+    """
     def __init__(self):
         pass
 

@@ -1,15 +1,16 @@
-# telegram_app/telegram.py
 import requests
 import logging
-from dotenv import load_dotenv
 import os
-import json
+
 from django.conf import settings
+
+from dotenv import load_dotenv
+
 load_dotenv()
 
 logger = logging.getLogger(__name__)
 
-# https://api.telegram.org/bot8536509873:BAFG4ILMA39Iuhj8SQhy6hks5RspmDRs_6D/getUpdates
+# 
 
 # https://api.telegram.org/bot8536509873:BAFG4ILMA39Iuhj8SQhy6hks5RspmDRs_6D/deleteWebhook
 
@@ -37,9 +38,16 @@ def set_telegram_webhook_secret():
     print(f"Setting New Webhook on: {address}",response.content, response.status_code)
 
 
-# set_telegram_webhook_secret()
+def info_telegram_webhook():
+    url = f"https://api.telegram.org/bot{telegram_api_key}/getUpdates"
+    response = requests.post(url)
+    print(f"Response content: {response.content}")
 
 
+def delete_telegram_webhook():
+    url = f"https://api.telegram.org/bot{telegram_api_key}/deleteWebhook"
+    response = requests.post(url)
+    print(f"Response content: {response.content}")
 
 
 def send_message(chat_id, text=None,document_id=None,reply_to_message_id=None,command=False):
