@@ -1,5 +1,0 @@
-# add this to config files for github repo
-Host github.com-repo-telrag
-	Hostname github.com
-	user git
-	IdentityFile ~/.ssh/id_telrag
