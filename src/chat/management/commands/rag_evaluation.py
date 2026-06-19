@@ -1,6 +1,4 @@
-from pathlib import Path
-
-from django.core.management.base import BaseCommand, CommandError
+from django.core.management.base import BaseCommand
 
 import chat.constants as constants
 from chat.utils.rag import RagMetrics
@@ -41,16 +39,17 @@ class Command(BaseCommand):
         """
         This method is for handling django command
         """
+        name = constants.BUSINESS_NAME_FOR_DATA
+        success = False
+        beta = constants.BETA
+        top_k = constants.TOP_K
+        ragmetrics = RagMetrics(name=name,model=constants.OPENAI_CHAT_MODEL,top_k=top_k,beta=beta)
+        color = TerminalColor()
+        # iterations = options["iterations"] #list
+        div ='\n' + '-'*40 + '\n'
+
         try:
-            name = constants.BUSINESS_NAME_FOR_DATA
-            success = False
-            color = TerminalColor()
-            beta = constants.BETA
-            top_k = constants.TOP_K
-            
-            ragmetrics = RagMetrics(name=name,model=constants.OPENAI_CHAT_MODEL,top_k=top_k,beta=beta)
-            # iterations = options["iterations"] #list
-            div ='\n' + '-'*40 + '\n'
+
             if options['new']:
                 try:
                     print(f"{div}You have selected to re-evaluate the RAG system, available Evaluations:\n- Retrieval: Recall, Precision, Map@top \n- LLM: LLM Hallucination{div}")
@@ -97,20 +96,6 @@ class Command(BaseCommand):
                 """
                 success = self.markdown_creation(name)
 
-
-
-            # print(iterations)
-
-
-            # try:
-            # retrieveal_metrics = ragmetrics.retrieveal_metrics(ret_test_data_path, top_k=10) # this should find the same document and not the same category (or maybe both)
-            # hallucination = ragmetrics.llm_hallucination(llm_test_data_path)
-
-            # visualization = ragmetrics.visualization('telmart')
-
-            # except Exception as e:
-            #     raise CommandError(f"Error: {e}")
-
             if success:
                 self.stdout.write(
                     self.style.SUCCESS(f"Done!")
@@ -123,3 +108,6 @@ class Command(BaseCommand):
             # python manage.py rag_evaluation
         except TypeError as e :
             print(f"Type Error in rag_evaluation.py : {e}")
+
+        except ZeroDivisionError as e:
+            print(f"Evaluation does not work. Make sure there is at least one document in the database, then re-run the evaluation. Use {color.yellow("make insert_data")} to insert initial data into the database. Error:\n{e}")
