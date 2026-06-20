@@ -31,7 +31,7 @@ class Command(BaseCommand):
         md = Markdown(name)
         report_file = md.markdown_creator()
         if report_file:
-            print(f"Markdown file is generated based on stored data, file path: {report_file}")
+            print(f"Markdown file is generated based on stored data, and it is available at your host machine in {self.color.green("report_result")} directory")
             success = True
             return success
 
@@ -44,7 +44,7 @@ class Command(BaseCommand):
         beta = constants.BETA
         top_k = constants.TOP_K
         ragmetrics = RagMetrics(name=name,model=constants.OPENAI_CHAT_MODEL,top_k=top_k,beta=beta)
-        color = TerminalColor()
+        self.color = TerminalColor()
         # iterations = options["iterations"] #list
         div ='\n' + '-'*40 + '\n'
 
@@ -78,7 +78,7 @@ class Command(BaseCommand):
 
                             success = self.markdown_creation(name)
                         except ValueError as e:
-                            print(f"{color.red('Error')} \nValueError : {e}\n")
+                            print(f"{self.color.red('Error')} \nValueError : {e}\n")
                     else:
                         retrieveal_metrics = ragmetrics.retrieveal_metrics()
                         hallucination = ragmetrics.llm_hallucination()
@@ -110,4 +110,4 @@ class Command(BaseCommand):
             print(f"Type Error in rag_evaluation.py : {e}")
 
         except ZeroDivisionError as e:
-            print(f"Evaluation does not work. Make sure there is at least one document in the database, then re-run the evaluation. Use {color.yellow("make insert_data")} to insert initial data into the database. Error:\n{e}")
+            print(f"Evaluation does not work. Make sure there is at least one document in the database, then re-run the evaluation. Use {self.color.yellow("make insert_data")} to insert initial data into the database. Error:\n{e}")
