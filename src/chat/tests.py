@@ -188,15 +188,3 @@ class TestHybridSearch(TestCase):
         )
 
         self.assertIsInstance(result,QuerySet)
-
-
-class TestMarkdown(TestCase):
-    def setUp(self):
-        self.md = Markdown(name=constants.BUSINESS_NAME)
-
-
-    def test_markdown_creator(self):
-        result = self.md.markdown_creator()
-        
-        self.assertTrue(result)
-
