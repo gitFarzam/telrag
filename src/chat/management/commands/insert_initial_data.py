@@ -20,7 +20,7 @@ class Command(BaseCommand):
             
             number_of_docs, embeddings = intial_data_db_insert(data_dir)
             if number_of_docs > 0:
-                self.stdout.write(self.style.NOTICE(f"{str(number_of_docs)} initial documents were added into database."))
+                self.stdout.write(self.style.SUCCESS(f"{str(number_of_docs)} initial documents were added into database."))
                 success = True
 
         except TypeError as e:
