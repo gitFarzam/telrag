@@ -103,7 +103,7 @@ class Markdown():
             sys.tracebacklimit = 0
 
             # raising exception at init level to avoid running program to the end of the process.
-            raise FileNotFoundError(f"Can not initializae Markdown class and create markdown report, because of lack of some the files.\nmake sure use {self.color.yellow('--new')} flag to run the evaluator and generate necessary outputs (jsonl outputs and plots)\nError: {e}\n")
+            raise FileNotFoundError(f"Can not initializae Markdown class and create markdown report, because of lack of some the files.\nmake sure run {self.color.yellow('make rag_eval_new')} to run the evaluator and generate necessary outputs (jsonl outputs and plots)\nError: {e}\n")
             
 
     def path_creation(self):
