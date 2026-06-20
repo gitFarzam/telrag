@@ -31,11 +31,11 @@ rag_eval:
 rag_eval_new:
 	docker compose exec app bash -c "cd src && python manage.py rag_evaluation --new"
 
-dev_webhook:
-	./.sh/dev_webhook_setup.sh
-
-pro_webhook:
+set_webhook:
 	./.sh/pro_webhook_setup.sh
+
+dev_set_webhook:
+	./.sh/dev_webhook_setup.sh
 
 
 	
