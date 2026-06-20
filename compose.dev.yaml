@@ -32,7 +32,7 @@ services:
       - ./README.md:/usr/src/app/README.md
       - ./requirements.txt:/usr/src/app/requirements.txt
       - ./prompts.md:/usr/src/app/prompts.md
-      # - ./eval_result:/usr/src/app/src/data/knowledge_base/telmart/result
+      - ./report_result:/usr/src/app/src/data/knowledge_base/telmart/result
     ports:
       - "127.0.0.1:8000:8000"
     depends_on:

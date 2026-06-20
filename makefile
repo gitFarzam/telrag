@@ -21,6 +21,7 @@ del_data:
 	docker compose -f ./compose.dev.yaml exec app bash -c "cd src && python manage.py del_initial_data"
 rag_eval:
 	docker compose -f ./compose.dev.yaml exec app bash -c "cd src && python manage.py rag_evaluation"
+
 rag_eval_new:
 	docker compose -f ./compose.dev.yaml exec app bash -c "cd src && python manage.py rag_evaluation --new"
 

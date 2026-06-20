@@ -55,3 +55,6 @@ replacements.txt
 # ignoring temp
 src/chat/temp
 src/data/knowledge_base/telmart/result
+
+# markdown result
+report_result
