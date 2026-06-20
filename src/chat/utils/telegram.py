@@ -4,6 +4,8 @@ import os
 
 from django.conf import settings
 
+import chat.constants as constants
+
 from dotenv import load_dotenv
 
 load_dotenv()
@@ -152,7 +154,12 @@ def telegram_downloader(file_id):
     file_url = f"https://api.telegram.org/file/bot{telegram_api_key}/{file_path}"
     file_data = requests.get(file_url).content
 
-    with open("sample.oga", "wb") as f:
+    storage_path = settings.BASE_DIR/constants.VOICE_PATH_TEMP
+
+    if not os.path.exists(storage_path):
+        os.mkdir(storage_path)
+
+    with open(storage_path/"temp.oga", "wb") as f:
         f.write(file_data)
 
 

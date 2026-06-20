@@ -135,3 +135,4 @@ REPORT_ENDING = "Thank you for reviewing this report."
 
 # Thresholds
 VOICE_DURAITION_THRESHOLD = 60
+VOICE_PATH_TEMP = "chat/temp/"

@@ -51,3 +51,6 @@ celeryd.pid
 src/dump.rdb
 replacements.txt
 .python-version
+
+# ignoring temp
+src/chat/temp
