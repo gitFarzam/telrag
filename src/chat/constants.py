@@ -1,3 +1,8 @@
+import os
+from django.conf import settings
+
+BASE_DIR = settings.BASE_DIR
+
 INITIAL_DATA_DIR="chat/management/commands/initial_data"
 
 # Hugging face
@@ -52,6 +57,21 @@ def data_path(name:str,key_path:'str'):
     This method is for managing data files and their output paths in one place.
     """
     main_path = f"data/knowledge_base/{name}/"
+
+
+    # Creatin paths
+
+
+    if not os.path.exists(BASE_DIR/main_path):
+        os.mkdir(BASE_DIR/main_path)
+
+
+    if not os.path.exists(BASE_DIR/main_path/"result"):
+        os.mkdir(BASE_DIR/main_path/"result")
+
+    if not os.path.exists(BASE_DIR/main_path/"result"/"plot"):
+        os.mkdir(BASE_DIR/main_path/"result"/"plot")
+
 
     # this path are used in creation markdown files, they are relative to markdown report file
     markdown_path = {
@@ -135,4 +155,8 @@ REPORT_ENDING = "Thank you for reviewing this report."
 
 # Thresholds
 VOICE_DURAITION_THRESHOLD = 60
+
 VOICE_PATH_TEMP = "chat/temp/"
+VOICE_PATH_TEMP = BASE_DIR/VOICE_PATH_TEMP
+if not os.path.exists(VOICE_PATH_TEMP):
+    os.mkdir(VOICE_PATH_TEMP)
