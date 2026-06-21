@@ -225,30 +225,23 @@ class RagMetrics():
         """
         This method checks the values for beta hyperparameter
         """
-        try:
-            beta = float(beta)
         # if isinstance(beta, (int, float)):
-            if beta >= 0 and beta <=1:
-                return beta
-            else:
-                raise ValueError('Beta value should be between 0 and 1')
-        except ValueError as e:
-            raise ValueError(f'Beta value should be integer or float:\n{e}')
+        if beta >= 0 and beta <=1:
+            return beta
+        else:
+            raise ValueError('Beta value should be between 0 and 1')
+
 
     def top_k_validator(self,top_k):
         """
         This method checks the values for top_k hyperparameter
         """
-        try:
-            top_k=int(top_k)
-            if top_k >= 0 and top_k <=50:
-                return top_k
-            else:
-                raise ValueError('top_k value should be between 1 and 50')
-        except ValueError as e:
-            raise ValueError(f'top_k value should be an integer:\n{e}')
+        if top_k >= 0 and top_k <=50:
+            return top_k
+        else:
+            raise ValueError('top_k value should be between 1 and 50')
 
-        
+
     def llm_eval_df(self):
         """
         Getting LLM test dataset as a dataframe
