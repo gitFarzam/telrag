@@ -13,7 +13,7 @@ run:
 		./.sh/run.sh; \
 	else \
 		echo "Error: Incorrect Values | DEBUG = $(DEBUG) PUBLIC = $(PUBLIC)"; \
-		echo "The correct values for DEBUG and PUBLIC are 0 or 1."; \
+	echo "The correct values for DEBUG and PUBLIC are 0 or 1."; \
 	fi
 
 down:
@@ -28,6 +28,7 @@ down:
 		docker compose down; \
 	else \
 		echo "Error: Incorrect Values | DEBUG = $(DEBUG) PUBLIC = $(PUBLIC)"; \
+	fi
 		
 
 # Creating an admin user
@@ -52,5 +53,3 @@ set_webhook:
 dev_set_webhook:
 	./.sh/dev_webhook_setup.sh
 
-echo "The correct values for DEBUG and PUBLIC are 0 or 1."; \
-	fi
