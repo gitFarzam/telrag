@@ -140,6 +140,22 @@ services:
       - app
       - db
 
+  # Ngrok sidecar service
+  ngrok:
+    image: ngrok/ngrok:latest
+    restart: always
+    environment:
+      NGROK_AUTHTOKEN: ${NGROK_AUTHTOKEN}
+    command:
+      - "http"
+      - "app:8000"
+    profiles:
+      - public
+    ports:
+      - "4040:4040"
+    depends_on:
+      - app
+
 volumes:
   telrag-pgvector-volume:
   prometheus-data:
