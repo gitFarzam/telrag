@@ -13,6 +13,6 @@ echo "Docker | Building"
 docker compose -f ./compose.dev.yaml build 
 docker compose -f ./compose.dev.yaml --profile public up -d
 
-echo "⚠️ Your app is now publicly accessible on the internet through ngrok tunneling. ⚠️"
+echo "⚠️ App is now publicly accessible on the internet through ngrok tunneling. ⚠️"
 
 exit "$@"
