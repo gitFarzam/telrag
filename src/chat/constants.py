@@ -1,5 +1,8 @@
 import os
 from django.conf import settings
+from dotenv import load_dotenv
+
+load_dotenv()
 
 BASE_DIR = settings.BASE_DIR
 
@@ -35,8 +38,11 @@ CHUNK_SIZE=200
 CHUNK_OVERLAP=20
 
 # Hybrid Search
-BETA=0
-TOP_K=10
+TOP_K=os.getenv("TOP_K")
+BETA=os.getenv("BETA")
+
+# Test (Limiting number of iteration over test dataset)
+TEST_LIMIT=os.getenv("TEST_LIMIT")
 
 # Business
 BUSINESS_NAME="TelMart"
