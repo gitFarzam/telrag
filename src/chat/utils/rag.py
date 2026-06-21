@@ -225,25 +225,28 @@ class RagMetrics():
         """
         This method checks the values for beta hyperparameter
         """
-        if isinstance(beta, (int, float)):
+        try:
+            beta = float(beta)
+        # if isinstance(beta, (int, float)):
             if beta >= 0 and beta <=1:
                 return beta
             else:
                 raise ValueError('Beta value should be between 0 and 1')
-        else:
-            raise ValueError('Beta value should be integer or float')
+        except ValueError as e:
+            raise ValueError(f'Beta value should be integer or float:\n{e}')
 
     def top_k_validator(self,top_k):
         """
         This method checks the values for top_k hyperparameter
         """
-        if isinstance(top_k, (int)):
+        try:
+            top_k=int(top_k)
             if top_k >= 0 and top_k <=50:
                 return top_k
             else:
                 raise ValueError('top_k value should be between 1 and 50')
-        else:
-            raise ValueError('top_k value should be an integer')
+        except ValueError as e:
+            raise ValueError(f'top_k value should be an integer:\n{e}')
 
         
     def llm_eval_df(self):
@@ -354,7 +357,7 @@ class RagMetrics():
                         \n------------------\n
                         """)
 
-                if index==10:
+                if index==constants.TEST_LIMIT:
                     break
 
                 precision = all_correct/all_categories
@@ -467,7 +470,7 @@ class RagMetrics():
                 data = {'accuracy':accuracy}
                 file.write(json.dumps(data) + "\n")
 
-                if index == 10:
+                if index == constants.TEST_LIMIT:
                     break
 
         
