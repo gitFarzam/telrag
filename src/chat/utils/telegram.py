@@ -18,7 +18,6 @@ logger = logging.getLogger(__name__)
 
 telegram_api_key = os.getenv('TELEGRAM_API_KEY')
 if settings.DEBUG:
-    logger.info("Getting Telegram API key for Dev mode")
     telegram_api_key = os.getenv('TELEGRAM_DEV_API_KEY')
 
 
@@ -33,7 +32,7 @@ def set_telegram_webhook_secret():
 
     address = os.getenv('ONLINE_WEBHOOK_ADDRESS')
     if settings.DEBUG:
-        address = os.getenv('LOCAL_WEBHOOK_ADDRESS')
+        address = os.getenv('DEV_WEBHOOK_ADDRESS')
     
     url = f"https://api.telegram.org/bot{telegram_api_key}/setWebhook?url={address}&secret_token={tg_secret_key}"
     response = requests.post(url)
