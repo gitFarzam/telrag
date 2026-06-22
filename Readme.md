@@ -97,6 +97,10 @@ Commands which are covered in the `makefile`
 - Huggingface API
 - ngrok API (Just for development mode)
 
+## Development
+
+Search for **Dev Containers: Rebuild Without Cache and Reopen in Container** in the VSCode command palette, and use the devcontainer for development mode. Make sure you have the VSCode Dev Containers extension installed on your device.
+
 ## Installation
 
 1. Clone the repository
