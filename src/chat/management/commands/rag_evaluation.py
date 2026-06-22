@@ -43,6 +43,7 @@ class Command(BaseCommand):
         success = False
         beta = constants.BETA
         top_k = constants.TOP_K
+        test_limit = constants.TEST_LIMIT
         ragmetrics = RagMetrics(name=name,model=constants.OPENAI_CHAT_MODEL,top_k=top_k,beta=beta)
         self.color = TerminalColor()
         # iterations = options["iterations"] #list
@@ -52,7 +53,7 @@ class Command(BaseCommand):
 
             if options['new']:
                 try:
-                    print(f"{div}You have selected to re-evaluate the RAG system, available Evaluations:\n- Retrieval: Recall, Precision, Map@top \n- LLM: LLM Hallucination{div}")
+                    print(f"{div}You have selected to re-evaluate the RAG system, available Evaluations:\n- Retrieval: Recall, Precision, Map@top \n- LLM: LLM Hallucination{div}Note: The test iteration will stop at index={str(test_limit)} (Change it by modifying the TEST_LIMIT value in the .env file.) {div}")
                     change_value = input(f'Here are the default values for hyperpramteres:\n{'-'*10}\nbeta: {beta} \ntop_k: {top_k}\n{'-'*10}\nif you like to change these values, type yes: ')
 
                     if 'yes' in change_value.strip():
