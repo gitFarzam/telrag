@@ -1,5 +1,5 @@
 from django.core.management.base import BaseCommand, CommandError
-from utils.telegram import set_telegram_webhook_secret,delete_telegram_webhook,info_telegram_webhook
+from chat.utils.telegram import set_telegram_webhook_secret,delete_telegram_webhook,info_telegram_webhook
 
 class Command(BaseCommand):
 
@@ -35,6 +35,7 @@ class Command(BaseCommand):
     def handle(self,*args,**options):
         error_message = self.style.ERROR(f"Error!")
         success_message = self.style.SUCCESS(f"Done!!!")
+        
         try:
             if options['set']:
                 success = set_telegram_webhook_secret()
@@ -45,6 +46,7 @@ class Command(BaseCommand):
             elif options['del']:
                 success = delete_telegram_webhook()
 
+            success = True
 
         except Exception as e:
             success = False
