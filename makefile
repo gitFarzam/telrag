@@ -16,6 +16,7 @@ run:
 	echo "The correct values for DEBUG and PUBLIC are 0 or 1."; \
 	fi
 
+
 down:
 	@if [ "$(DEBUG)" = "1" ] && [ "$(PUBLIC)" = "0" ]; then \
 		echo "DEBUG=1 PUBLIC=0 | Stopping compose.dev.yaml"; \
@@ -31,25 +32,81 @@ down:
 	fi
 		
 
-# Creating an admin user
 create_admin:
-	docker compose exec app bash -c "python ./src/manage.py createsuperuser --noinput || true"
+	@if [ "$(DEBUG)" = "1" ]; then \
+		echo "DEBUG=1 | using compose.dev.yaml"; \
+		docker compose -f ./compose.dev.yaml exec app bash -c "python ./src/manage.py createsuperuser --noinput || true"; \
+	elif [ "$(DEBUG)" = "0" ]; then \
+		echo "DEBUG=0 | using docker-compose.yaml"; \
+		docker compose exec app bash -c "python ./src/manage.py createsuperuser --noinput || true"; \
+	fi
+
 
 test:
-	docker compose exec app bash -c "cd src && python manage.py test"
+	@if [ "$(DEBUG)" = "1" ]; then \
+		echo "DEBUG=1 | using compose.dev.yaml"; \
+		docker compose -f ./compose.dev.yaml exec app bash -c "cd src && python manage.py test"; \
+	elif [ "$(DEBUG)" = "0" ]; then \
+		echo "DEBUG=0 | using docker-compose.yaml"; \
+		docker compose exec app bash -c "cd src && python manage.py test"; \
+	fi
+
+
 insert_data:
-	docker compose exec app bash -c "cd src && python manage.py insert_initial_data"
-del_data:
-	docker compose exec app bash -c "cd src && python manage.py del_initial_data"
+	@if [ "$(DEBUG)" = "1" ]; then \
+		echo "DEBUG=1 | using compose.dev.yaml"; \
+		docker compose -f ./compose.dev.yaml exec app bash -c "cd src && python manage.py insert_initial_data"; \
+	elif [ "$(DEBUG)" = "0" ]; then \
+		echo "DEBUG=0 | using docker-compose.yaml"; \
+		docker compose exec app bash -c "cd src && python manage.py insert_initial_data"; \
+	fi
+
+
 rag_eval:
-	docker compose exec app bash -c "cd src && python manage.py rag_evaluation"
+	@if [ "$(DEBUG)" = "1" ]; then \
+		echo "DEBUG=1 | using compose.dev.yaml"; \
+		docker compose -f ./compose.dev.yaml exec app bash -c "cd src && python manage.py rag_evaluation"; \
+	elif [ "$(DEBUG)" = "0" ]; then \
+		echo "DEBUG=0 | using docker-compose.yaml"; \
+		docker compose exec app bash -c "cd src && python manage.py rag_evaluation"; \
+	fi
+
 
 rag_eval_new:
-	docker compose exec app bash -c "cd src && python manage.py rag_evaluation --new"
+	@if [ "$(DEBUG)" = "1" ]; then \
+		echo "DEBUG=1 | using compose.dev.yaml"; \
+		docker compose -f ./compose.dev.yaml exec app bash -c "cd src && python manage.py rag_evaluation --new"; \
+	elif [ "$(DEBUG)" = "0" ]; then \
+		echo "DEBUG=0 | using docker-compose.yaml"; \
+		docker compose exec app bash -c "cd src && python manage.py rag_evaluation --new"; \
+	fi
+
 
 set_webhook:
-	./.sh/pro_webhook_setup.sh
+	@if [ "$(DEBUG)" = "1" ]; then \
+		echo "DEBUG=1 | Setting Dev webhook (ngrok)"; \
+		docker compose -f ./compose.dev.yaml exec app bash -c "cd src && python manage.py tg_webhook --set"; \
+	elif [ "$(DEBUG)" = "0" ]; then \
+		echo "DEBUG=0 | Setting Production webhook"; \
+		docker compose exec app bash -c "cd src && python manage.py tg_webhook --set"; \
+	fi
 
-dev_set_webhook:
-	./.sh/dev_webhook_setup.sh
 
+info_webhook:
+	@if [ "$(DEBUG)" = "1" ]; then \
+		echo "DEBUG=1 | Setting Dev webhook (ngrok)"; \
+		docker compose -f ./compose.dev.yaml exec app bash -c "cd src && python manage.py tg_webhook --info"; \
+	elif [ "$(DEBUG)" = "0" ]; then \
+		echo "DEBUG=0 | Setting Production webhook"; \
+		docker compose exec app bash -c "cd src && python manage.py tg_webhook --info"; \
+	fi
+
+
+del_webhook:
+	@if [ "$(DEBUG)" = "1" ]; then \
+		echo "DEBUG=1 | Setting Dev webhook (ngrok)"; \
+		docker compose -f ./compose.dev.yaml exec app bash -c "cd src && python manage.py tg_webhook --del"; \
+	elif [ "$(DEBUG)" = "0" ]; then \
+		echo "DEBUG=0 | Setting Production webhook"; \
+		docker compose exec app bash -c "cd src && python manage.py tg_webhook --del"; \
+	fi
