@@ -37,7 +37,6 @@ src/voices
 
 # Environment / secrets
 .env
-.env.*
 
 # Celery / Celery Beat (generated runtime files)
 src/celerybeat-schedule
