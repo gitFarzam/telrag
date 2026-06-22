@@ -1,7 +1,7 @@
 -include .env
 export
 
-run:
+up:
 	@if [ "$(DEBUG)" = "1" ] && [ "$(PUBLIC)" = "0" ]; then \
 		echo "DEBUG=1 PUBLIC=0 | Development Version | compose.dev.yaml will be used to run the program. | Some features, such as receiving messages from Telegram, may not work."; \
 		./.sh/run_dev.sh; \
