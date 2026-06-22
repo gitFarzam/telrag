@@ -42,16 +42,20 @@ TOP_K=os.getenv("TOP_K")
 try:
     TOP_K=int(TOP_K)
 except ValueError as e:
-    raise ValueError(f'top_k value should be an integer:\n{e}')
+    raise ValueError(f'TOP_K value should be an integer:\n{e}')
 
 BETA=os.getenv("BETA")
 try:
     BETA=float(BETA)
 except ValueError as e:
-    raise ValueError(f'beta value should be an integer or float:\n{e}')
+    raise ValueError(f'BETA value should be an integer or float:\n{e}')
 
 # Test (Limiting number of iteration over test dataset)
 TEST_LIMIT=os.getenv("TEST_LIMIT")
+try:
+    TEST_LIMIT=int(TEST_LIMIT)
+except ValueError as e:
+    raise ValueError(f'TEST_LIMIT value should be an integer:\n{e}')
 
 # Business
 BUSINESS_NAME="TelMart"
