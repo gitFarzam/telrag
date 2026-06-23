@@ -25,7 +25,7 @@ class RAGPipeline(models.Model):
     created_at = models.DateTimeField(auto_now_add=True)
 
 class RagComponent(models.Model):
-    ragpipeline=models.ForeignKey(RAGPipeline, on_delete=models.CASCADE)
+    ragpipeline=models.ForeignKey(RAGPipeline, on_delete=models.CASCADE,related_name="ragcomponents")
     component_name = models.CharField()
     conversation = models.ForeignKey(Conversation , on_delete=models.SET_NULL , null=True)
     input_text = models.CharField(null=True)
