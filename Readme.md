@@ -276,6 +276,8 @@ Some of the issues in this project
 | Duplicated Versions of Compose Files | The development mode Docker Compose file should be removed just using devcontainer as a development works fine. |
 | Duplicated Labels in Log Files | The alloy config file need to be edited to remove `container_<containername>` labels, as there is a similar label with the `service_` prefix. |
 | Large Files Handling | Streaming large files received from Telegram, as well as streaming large JSONL files during RAG evaluation. |
+| Securing Log Inputs | Handling Personally identifiable information (PII), sanitizing logs before injecting storing in the loki storage  |
+| Conversation Q&A Quality| Improving prompts and prompt engineering and system messages, fixing issues regarding using new (non-reply) messages in telegram as a document for the database|
 
 
 ## Future
