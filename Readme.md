@@ -63,7 +63,10 @@ Commands which are covered in the `makefile`
 - Grafana
 - Loki
 - Alloy
-- Pronmetheus
+- Prometheus
+- Telegram Bot
+- Docker
+- Caddy
 
 ## Project Tree
 
