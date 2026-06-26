@@ -147,7 +147,7 @@ make insert_data
 
 If your domain is `http://example.com`, your webhook address would be `ONLINE_WEBHOOK_ADDRESS="http://example.com/webhook/"`.
 
-If you are in development mode, you need to choose a tool like `ngrok` to publish your app publicly through a secure server, Make sure to set `PUBLIC=1` before running the program. Then, open your browser and go to `http://localhost:4040`. On the homepage, click on the custom domain that ngrok generates for you to publish your app. Finally, use this URL and set it as `DEV_WEBHOOK_ADDRESS`.
+If you are in development mode, you need to choose a tool like `ngrok` to publish your app publicly through a secure server, Make sure to set `PUBLIC=1` before running the program. Then, open your browser and go to `http://localhost:4040`. On the homepage, click on the custom domain that ngrok generates for you to publish your app. Finally, use this URL and set it as `NGROK_URL`.
 
 If you cannot find your custom ngrok URL, open `http://localhost:4040` in your browser. Then, click on **Status** at the top. There, under the **command_line** section, you can find the **URL** value.
 
@@ -188,6 +188,7 @@ If you cannot find your custom ngrok URL, open `http://localhost:4040` in your b
 |`DOCKER`| binary ({0,1}) | `1`: the app is running in Docker, `0`: it is running directly on the host machine.
 |`DEBUG`| binary ({0,1}) | `1`: debug mode is on, `0`: debug mode is off.
 |`DEBUG`| binary ({0,1}) | `1`: The ngrok service is running and publishing the app through the internt, `0`: The ngrok service is not running
+|`SECRET_KEY`| random value | Django secret key: a random combination of digits and characters.
 | `ALLOWED_HOSTS` |  comma seprated string  |  Django allowed hosts
 |  `TELEGRAM_API_KEY` | -  |  the telegram bot api key, you can obtain from `@botfather` in telegram
 | `TELEGRAM_WEBHOOK_SECRET` |  - |  A random, custom, user-defined value for securing the Telegram webhook can be any combination of numbers and characters
@@ -219,9 +220,9 @@ If you cannot find your custom ngrok URL, open `http://localhost:4040` in your b
 
 | Variable Name | Note | Description
 | --- | --- | --- |
-|  `TELEGRAM_DEV_API_KEY` | -  |  the same as `TELEGRAM_API_KEY` , another bot api for development
+| `TELEGRAM_DEV_API_KEY` | -  |  the same as `TELEGRAM_API_KEY` , another bot api for development
 | `TELEGRAM_WEBHOOK_SECRET` |  - |  the same as `TELEGRAM_WEBHOOK_SECRET` , another webhook secret for development
-| `DEV_WEBHOOK_ADDRESS` |  - |  The ngrok service **URL**, works the same as `ONLINE_WEBHOOK_ADDRESS` , but for development mode
+| `NGROK_URL` |  - |  The ngrok service **URL**, works the same as `ONLINE_WEBHOOK_ADDRESS` , but for development mode (Do not add "/webhook/" at the end of the URL path.)
 | `NGROK_AUTHTOKEN` |  - |  Ngrok authentication API (get from [ngrok.com](http://ngrok.com))
 
 
@@ -253,10 +254,16 @@ The report results are accessible outside the container on your host machine in 
 
 > If you have already completed a test and only want to generate a markdown file, use `make rag_eval`.
 
-## Errors Handling
+## Troubleshooting
 
 - `make` issues
 If your containers are not stopping properly, or the network is not being stopped, it may be because another container, such as ngrok, is still running. This issue can occur if you use one command to run the compose file and a different command to stop it. Make sure you do not modify the `DEBUG` and `PUBLIC` variables in `.env` file while the program is running.
+
+- API key leaks
+If your OpenAI, Hugging Face, or Ngrok API keys are leaked, you can simply log in to your account, revoke (delete) the old key, and generate a new one.
+
+- Ngrok domain leaks
+In the Free plan, ngrok provides a pre-assigned domain for you. It is advisable not to share this domain with others, as it is intended for development purposes and receiving responses from a Telegram bot. If this domain is leaked, since it cannot be deleted in the Free plan, the only option is to delete your ngrok account and create a new Free plan.
 
 ## License
 
