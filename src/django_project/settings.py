@@ -26,7 +26,7 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 # See https://docs.djangoproject.com/en/6.0/howto/deployment/checklist/
 
 # SECURITY WARNING: keep the secret key used in production secret!
-SECRET_KEY = 'django-insecure-%tikckhl@8hyq3$m)aswe4avl+*x^=nc!e-8s0tdoicv-s!j1!'
+SECRET_KEY = os.getenv("SECRET_KEY")
 
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True if int(os.getenv("DEBUG")) == 1 else False
@@ -209,7 +209,7 @@ CELERY_WORKER_PREFETCH_MULTIPLIER = 1  # Limits each worker to fetch 1 task at a
 
 
 # CSRF trusted origins for production 
-ngrok_csrf_trusted = 'https://secluded-noncongregative-noelle.ngrok-free.dev'
+ngrok_csrf_trusted = os.getenv("NGROK_URL")
 
 csrf_origins = os.getenv('CSRF_TRUSTED_ORIGINS', '')
 CSRF_TRUSTED_ORIGINS = [origin.strip() for origin in csrf_origins.split(',') if origin.strip()]
