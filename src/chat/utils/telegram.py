@@ -33,7 +33,7 @@ def set_telegram_webhook_secret():
     address = os.getenv('ONLINE_WEBHOOK_ADDRESS')
     if settings.DEBUG:
         tg_secret_key = os.getenv('TELEGRAM_DEV_WEBHOOK_SECRET')
-        address = os.getenv('DEV_WEBHOOK_ADDRESS')
+        address = os.getenv('NGROK_URL') + "/webhook/"
     
     url = f"https://api.telegram.org/bot{telegram_api_key}/setWebhook?url={address}&secret_token={tg_secret_key}"
     response = requests.post(url)
