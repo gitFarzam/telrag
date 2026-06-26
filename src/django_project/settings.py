@@ -30,6 +30,7 @@ SECRET_KEY = os.getenv("SECRET_KEY")
 
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True if int(os.getenv("DEBUG")) == 1 else False
+PUBLIC = True if int(os.getenv("PUBLIC")) == 1 else False
 DOCKER = True if int(os.getenv("DOCKER")) == 1 else False
 
 
@@ -208,13 +209,15 @@ CELERY_WORKER_MAX_TASKS_PER_CHILD = 50  # Restarts worker process after 50 tasks
 CELERY_WORKER_PREFETCH_MULTIPLIER = 1  # Limits each worker to fetch 1 task at a time (reduces memory spikes and improves fairness across workers)
 
 
-# CSRF trusted origins for production 
-ngrok_csrf_trusted = os.getenv("NGROK_URL")
+# CSRF trusted origins for production
+
 
 csrf_origins = os.getenv('CSRF_TRUSTED_ORIGINS', '')
 CSRF_TRUSTED_ORIGINS = [origin.strip() for origin in csrf_origins.split(',') if origin.strip()]
 
-CSRF_TRUSTED_ORIGINS.append(ngrok_csrf_trusted)
+if PUBLIC:
+    ngrok_csrf_trusted = os.getenv("NGROK_URL")
+    CSRF_TRUSTED_ORIGINS.append(ngrok_csrf_trusted)
 
 # Logging Configuration for alloy
 # When we send output using the console, it means we do not need to mount any log files. We can read the logs directly by accessing the shell environment of the running Docker container.
