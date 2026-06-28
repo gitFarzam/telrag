@@ -2,6 +2,7 @@ import logging
 
 from .tasks import task_new_message,task_reply_message,task_entities_handling,task_button_handling
 from .utils.telegram import telegram_message_parser
+from chat.utils.redact import Redact
 
 
 # Creating an instance of the logging object
@@ -12,6 +13,8 @@ def telegram_message_processor(transaction_type:bool , json_content:dict):
     """
     This function is for calling the right celery task for each type of message from
     """
+
+    redact = Redact()
     
     parsed_data = telegram_message_parser(json_content)
     message_type = parsed_data['type']
@@ -20,7 +23,7 @@ def telegram_message_processor(transaction_type:bool , json_content:dict):
     message_id = parsed_data['metadata']['message_id']
     chat_id = metadata['chat_id']
 
-    logger.info(f"Parsed Data: {parsed_data}")
+    logger.info(f"Telegram Message Processor: message_type:{message_type} | message_id: {redact.redact_id(message_id)}")
     
     if message_type == 'new':
         task_new_message.delay(transaction_type,json_content,chat_id,message_id)
