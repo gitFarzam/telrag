@@ -20,6 +20,7 @@ from core.models import User
 from .models import Conversation
 from .services import message_sender,process_user_message
 from .operations import telegram_message_processor
+from chat.utils.redact import Redact
 
 from dotenv import load_dotenv
 
@@ -29,6 +30,7 @@ load_dotenv()
 
 # Creating an instance of the logging object
 logger = logging.getLogger(__name__)
+redact = Redact()
 
 
 # Redirecting all 'Not Found' pages to the home page
@@ -56,11 +58,12 @@ class HomeView(TemplateView):
                     user.set_unusable_password()
                     user.first_name = name
                     user.save()
-                    logger.debug(f"{user.username} -  has been created")
 
-                    logger.debug(f"{user.username} - loggin in")
+                    logger.info(f"The user with username: {redact.redact_id(user.username)} -  has been created")
+
                     login(self.request, user, backend="django.contrib.auth.backends.ModelBackend")
-                    logger.debug(f"{user.username} - logged in")
+
+                    logger.debug(f"The user: {redact.redact_id(user.username)} - logged in")
                     
                     logger.info("Try: Creating  new conversation")
                     try:
@@ -102,7 +105,7 @@ class ChatView(LoginRequiredMixin , UserPassesTestMixin , DetailView):
 
         # admins can access any conversation
         if self.request.user.is_staff:
-            logger.debug("Staff user login")
+            logger.info("Staff user login")
             return True
         return conversation.user == self.request.user
 
@@ -175,7 +178,7 @@ def telegram_webhook(request):
     if from_id is None:
         from_id = data.get("callback_query", {}).get("from", {}).get("id")
 
-    logger.info(f'Telegram message from ID: {from_id}')
+    logger.info(f'Telegram message from ID: {redact.redact_id(from_id)}')
 
     # Get all allowed telegram IDS (Only allowed ids can respond to user message)
     allowed_id = os.getenv('TELEGRAM_ALLOWED_USER_IDS')
@@ -184,7 +187,7 @@ def telegram_webhook(request):
     try: 
         if from_id == int(allowed_id):
             data = json.loads(request.body.decode("utf-8"))
-            logger.info(f"Data file from telegram webhook:\n{data}")
+            logger.info(f"Data file from telegram webhook:\n{redact.redact_text(data)}")
             telegram_message_processor(transaction_type=True , json_content = data)
             return JsonResponse({"result": "ok"},status=200)
 
