@@ -13,7 +13,7 @@ discovery.relabel "add_container_label" {
     regex         = "/(.*)" 
     // This captures only the part after the slash
     replacement   = "$1"    
-    target_label  = "container_name"
+    target_label  = "service_name"
   }
 }
 
