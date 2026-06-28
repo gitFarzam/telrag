@@ -30,12 +30,14 @@ from .models import Conversation, Message,DocumentSource , TelegramMessage,Docum
 from .utils.telegram import send_message,telegram_message_parser,telegram_downloader
 from .utils.rag import LLM,latency_calculator,ModelCost,audio_to_text,embedder,NLPToolKit
 from .utils.utils import Utils
+from chat.utils.redact import Redact
 
 # loading env variables
 load_dotenv()
 
 # Creating an instance of logging object
 logger = logging.getLogger(__name__)
+redact = Redact()
 
 
 def hybrid_search(search_keyword:str,input_text_embedding,top_k:int,beta:float)->QuerySet[Embedding]:
@@ -361,7 +363,7 @@ def user_message_categorizer(message:Message, ragpipeline:RAGPipeline):
     # RAG Component 
     context = dispatcher.hybrid_search_component(content,input_text_embedding, top_k=5)
 
-    logger.info(f"Similar Documents from Hybrid Search: {context}")
+    logger.info(f"Similar Documents from Hybrid Search: {redact.redact_text(context)}")
 
     # RAG Component
     result = dispatcher.message_categorizing_component('categorizing' ,content ,context)
@@ -505,7 +507,7 @@ def fetch_content_from_document(document_object:Document):
         if not document_object.document_source.content_object.trascription:
             logger.info(f"file path: {document_object.document_source.content_object.file.path}")
             trascription = transcriber(document_object)
-            logger.info(f"Transcription: {trascription}")
+            logger.info(f"Transcription: {redact.redact_text(trascription)}")
 
             # saving in the database
             document_object.document_source.content_object.trascription = trascription
@@ -699,7 +701,6 @@ class Dispatcher():
         cost = costmodel.cost_model_dispatcher(data)
         latency = latency_calculator(start_time)
 
-        
 
         # Merging 2 dictionary
         rag_component_dict = {'ragpipeline':self.rag_pipeline,'component_name' : rag_component , 'latency' : latency} | cost
