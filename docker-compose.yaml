@@ -25,15 +25,11 @@ services:
     volumes:
       - ./entrypoint.sh:/usr/src/app/entrypoint.sh
       - ./report_result:/usr/src/app/src/data/knowledge_base/telmart/result
-    ports:
-      - "127.0.0.1:8000:8000"
     depends_on:
       - db
       - redis
     env_file:
       - .env
-    expose:
-      - "8000"
 
   celery:
   # the same dir for the app, as celery uses the app for running and installed inside the django app
@@ -89,8 +85,6 @@ services:
   grafana:
     image: grafana/grafana:latest
     container_name: telrag_grafana
-    ports:
-      - "3000:3000"
     env_file:
       - .env
     environment:
@@ -112,6 +106,7 @@ services:
 
     environment:
       DOMAIN: ${DOMAIN}
+      GF_DOMAIN: ${GF_DOMAIN}
 
     volumes:
       - ./src/static_cdn:/srv/telrag/static:ro
