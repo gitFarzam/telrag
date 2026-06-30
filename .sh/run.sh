@@ -5,6 +5,10 @@ set -e
 
 echo "Docker | Pruning"
 docker compose down
+
+echo "Deleting app, celery, flower images"
+docker rmi telrag-app telrag-celery telrag-flower
+
 docker builder prune --all
 docker image prune -a
 
