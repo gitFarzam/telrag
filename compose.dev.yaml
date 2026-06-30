@@ -127,6 +127,7 @@ services:
 
     environment:
       DOMAIN: ${DOMAIN}
+      GF_DOMAIN: ${GF_DOMAIN}
 
     volumes:
       - ./src/static_cdn:/srv/telrag/static:ro
