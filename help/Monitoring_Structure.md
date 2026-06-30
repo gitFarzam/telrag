@@ -10,13 +10,12 @@ For metrics, **Prometheus** is used, while visualization is done through Grafana
 These 4 component, which each of them are being used as a service in docker compose file are the main architecture of TelRag project monitoring system.
 
 ```mermaid
-flowchart LR
+flowchart TD
     CT[Each Container]-->|Docker Socket|AL[Alloy]
     AL-->|Loki Port: 3100|LK[Loki]
     LK-->|As a data source|GF[Grafana]
     DK[Django App]-->|django_prometheus extenstion|PM[Prometheus]
     PM-->|As a data source|GF
-
 ```
 
 ## Logs Configuration
@@ -33,7 +32,7 @@ Here is the path for configuring the log:
 5. `loki.write` is used for storing logs. The Loki service endpoint for writing logs is `http://loki:3100/loki/api/v1/push` (Loki runs on port `3100` by default).
 6. Passing `alloy.hcl` as a volume for **alloy** service
 
-### Lables
+### Labels
 
 Log display can be filtered by label. There are three labels in this configuration:
 
