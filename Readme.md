@@ -208,6 +208,7 @@ If you cannot find your custom ngrok URL, open `http://localhost:4040` in your b
 | `DJANGO_LOG_LEVEL` |  `INFO,DEBUG,ERROR,WARNING` |  Django log level
 | `GF_SECURITY_ADMIN_USER` |  - |  Grafana admin username
 | `GF_SECURITY_ADMIN_PASSWORD` |  - |  Grafana admin password
+| `GF_DOMAIN` |  - |  Grafana domain (can be a subdomain of your main domain)
 | `FLOWER_BASIC_AUTH` |  `<username>:<password>` |  Flower username and password
 | `DJANGO_SUPERUSER_USERNAME` |  - |  Django admin username
 | `DJANGO_SUPERUSER_EMAIL` |  - |  Django admin email
