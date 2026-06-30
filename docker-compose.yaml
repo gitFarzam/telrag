@@ -72,6 +72,8 @@ services:
   loki:
     image: grafana/loki:latest
     container_name: telrag_loki
+    volumes:
+      - "loki-data:/loki"
 
   prometheus:
     image: prom/prometheus:latest
@@ -123,6 +125,7 @@ services:
 
 volumes:
   telrag-pgvector-volume:
+  loki-data:
   prometheus-data:
   grafana_data:
   caddy_data:
