@@ -17,7 +17,7 @@ Also, your Telegram account can function as an alert tool to call a human agent 
 - Using Django Channels, and Daphne to handle WebSocket connections.
 - Using HTMX to Handle Requests in the Frontend
 - ORM-based native RAG system designed for Django.
-- Mathematical Evaluations for RAG Systems Without Using Libraries
+- Manual Evaluations for RAG Systems Without Using Libraries
 
 ## Commands
 
@@ -227,6 +227,8 @@ If you cannot find your custom ngrok URL, open `http://localhost:4040` in your b
 
 
 ## Monitoring
+
+> Help: [Monitoring Structure in TelRag Project](/help/Monitoring_Structure.md)
 
 1. Use `localhost:3000` to access the Grafana Admin panel.
 2. Use the username and password you have defined in the `.env` file.
