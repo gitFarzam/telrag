@@ -3,7 +3,7 @@ discovery.docker "containers" {
   host = "unix:///var/run/docker.sock"
 }
 
-// 2. REWRITE the targets (this is where we create container_name)
+// 2. Adding service_name as a label
 discovery.relabel "add_container_label" {
   targets = discovery.docker.containers.targets
 
