@@ -17,6 +17,8 @@ discovery.relabel "add_container_label" {
   }
 }
 
+
+
 // 3. Collect logs using the NEW targets
 loki.source.docker "django_logs" {
   host    = "unix:///var/run/docker.sock"
@@ -24,6 +26,7 @@ loki.source.docker "django_logs" {
   targets = discovery.relabel.add_container_label.output
   forward_to = [loki.process.django_process.receiver]
 }
+
 
 // 4. Process the log content (JSON parsing)
 loki.process "django_process" {
@@ -35,6 +38,11 @@ loki.process "django_process" {
       msg    = "msg",
       logger = "logger",
     }
+  }
+
+  # Dropping prometheus get requests logs
+  stage.drop {
+    expression = "GET /metrics"
   }
 
   stage.labels {
