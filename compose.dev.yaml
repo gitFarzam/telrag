@@ -22,7 +22,7 @@ services:
     container_name: telrag_app
     working_dir: /usr/src/app
     restart: always
-    command: daphne -b 0.0.0.0 -p 8000 django_project.asgi:application
+    command: daphne -v 0 -b 0.0.0.0 -p 8000 django_project.asgi:application
     volumes:
       - ./entrypoint.sh:/usr/src/app/entrypoint.sh
       - ./src:/usr/src/app/src
