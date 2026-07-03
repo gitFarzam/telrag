@@ -40,11 +40,6 @@ loki.process "django_process" {
     }
   }
 
-  # Dropping prometheus get requests logs
-  stage.drop {
-    expression = "GET /metrics"
-  }
-
   stage.labels {
     values = {
       level  = "level",
