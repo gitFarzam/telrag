@@ -21,7 +21,7 @@ services:
     working_dir: /usr/src/app
     restart: always
     entrypoint: ["/usr/src/app/entrypoint.sh"]
-    command: daphne -b 0.0.0.0 -p 8000 django_project.asgi:application
+    command: daphne -v 0 -b 0.0.0.0 -p 8000 django_project.asgi:application
     volumes:
       - ./entrypoint.sh:/usr/src/app/entrypoint.sh
       - ./report_result:/usr/src/app/src/data/knowledge_base/telmart/result
