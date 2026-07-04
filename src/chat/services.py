@@ -363,11 +363,10 @@ def user_message_categorizer(message:Message, ragpipeline:RAGPipeline):
     # RAG Component 
     context = dispatcher.hybrid_search_component(content,input_text_embedding, top_k=5)
 
-    logger.info(f"Similar Documents from Hybrid Search: {redact.redact_text(context)}")
+    logger.info(f"Relevant Documents from Hybrid Search: {redact.redact_text(context)}")
 
     # RAG Component
     result = dispatcher.message_categorizing_component('categorizing' ,content ,context)
-    logger.info(f"result from message_categorizer: {result}")
     return context,result
 
 def process_user_message(message:Message):
@@ -386,10 +385,12 @@ def process_user_message(message:Message):
     
     context,result = user_message_categorizer(message,ragpipeline)
 
-    logger.info(f"Message Categorizer Result: {result}")
+    
     
     # Fetch message history
     message_history = fetch_message_history(message)
+
+    logger.info("Message Categorizer Result",{'category_number':result})
 
     if result in [0,1]:
         logger.info("Question can be answered with available information")
@@ -438,7 +439,7 @@ def process_user_message(message:Message):
                 is_agent=True
                 )
 
-
+    
 def creating_text_content_object(content:str):
     """
     This method is for creating text context object, for using as a document source
@@ -705,7 +706,9 @@ class Dispatcher():
         # Merging 2 dictionary
         rag_component_dict = {'ragpipeline':self.rag_pipeline,'component_name' : rag_component , 'latency' : latency} | cost
 
-        logger.info(f"Rag Component Details: {rag_component_dict}")
+        rag_c_dict_logging = rag_component_dict.copy()
+        rag_c_dict_logging["ragpipeline"] = self.rag_pipeline.pk
+        logger.info(msg="RAG Component",extra=rag_c_dict_logging)
 
         # Saving to db
         rag_component_creator(**rag_component_dict)
