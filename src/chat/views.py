@@ -59,17 +59,17 @@ class HomeView(TemplateView):
                     user.first_name = name
                     user.save()
 
-                    logger.info(f"The user with username: {redact.redact_id(user.username)} -  has been created")
+                    logger.info(f"The user with username: {redact.redact_id(user.username)} -  has been created",extra={'user_id':user.pk})
 
                     login(self.request, user, backend="django.contrib.auth.backends.ModelBackend")
 
-                    logger.debug(f"The user: {redact.redact_id(user.username)} - logged in")
+                    logger.debug(f"The user: {redact.redact_id(user.username)} - logged in",)
                     
                     logger.info("Try: Creating  new conversation")
                     try:
                         conversation = Conversation.objects.create(user=user)
                         if conversation:
-                            logger.info("Conversation has been created, redirecting to chat page...")
+                            logger.info("Conversation has been created, redirecting to chat page...",extra={'conversation_id':conversation.pk})
                             return redirect('chat-detail', pk=conversation.pk)
                         else:
                             logger.error("Error in creating conversation object")
