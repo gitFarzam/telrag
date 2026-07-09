@@ -215,6 +215,7 @@ If you cannot find your custom ngrok URL, open `http://localhost:4040` in your b
 | `TOP_K` |  - |  Top k value in retrieval
 | `BETA` |  - |  Beta value in retrieval (semantic vs. keyword search ratio)
 | `TEST_LIMIT` |  - |  The stop index for RAG evaluation (determines how many test data points should be used for evaluation.)
+|`NOTEBOOK`| binary ({0,1}) | `1`: The database configuration in the Django app uses "localhost" as the host and port 5434 as the port., `0`: default configuration, the time you need to work with databases in jupyter notebook set it as `1`, otherwise this should always be `0` , Because the app service's connection to the db service will be interrupted.
 
 ### Development specific variables
 
