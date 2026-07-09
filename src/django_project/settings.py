@@ -116,8 +116,17 @@ CHANNEL_LAYERS = {
 }
 
 
+
+
 POSTGRES_PORT = os.getenv("POSTGRES_PORT",5432)
 HOST = os.getenv("HOST")
+
+# Note: If you want to connect to the database in Jupyter notebooks, the published host and port will be used as the database host and port. When this happens, the app service can no longer communicate with the db service. Therefore, when working with the notebook, make sure to set DEBUG=1 and NOTEBOOK=1.
+NOTEBOOK = True if int(os.getenv("NOTEBOOK")) == 1 else False
+if NOTEBOOK:
+    POSTGRES_PORT = 5434
+    HOST = "127.0.0.1"
+
 
 DATABASES = {
     'old': {
