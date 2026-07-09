@@ -541,8 +541,6 @@ class ModelCost():
         input_cost = input_tokens * (self.model_cost_dict["input"]/self.model_cost_dict["unit"])
         output_cost = output_tokens * (self.model_cost_dict["output"]/self.model_cost_dict["unit"])
 
-        logger.info(f"response cost --><-->: {input_cost}")
-
         return {
             "currency" : self.model_cost_dict["currency"],
             "input_cost" : input_cost,
