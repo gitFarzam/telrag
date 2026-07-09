@@ -185,7 +185,6 @@ If you cannot find your custom ngrok URL, open `http://localhost:4040` in your b
 
 | Variable Name | Note | Description
 | --- | --- | --- |
-|`DOCKER`| binary ({0,1}) | `1`: the app is running in Docker, `0`: it is running directly on the host machine.
 |`DEBUG`| binary ({0,1}) | `1`: debug mode is on, `0`: debug mode is off.
 |`DEBUG`| binary ({0,1}) | `1`: The ngrok service is running and publishing the app through the internt, `0`: The ngrok service is not running
 |`SECRET_KEY`| random value | Django secret key: a random combination of digits and characters.
