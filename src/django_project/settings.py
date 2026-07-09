@@ -98,7 +98,7 @@ INTERNAL_IPS += [ip[:-1] + "1" for ip in ips]
 
 ASGI_APPLICATION = 'django_project.asgi.application'
 
-REDIS_HOST_NAME = "localhost" if DEBUG else os.getenv("REDIS_HOST_NAME")
+REDIS_HOST_NAME = os.getenv("REDIS_HOST_NAME")
 
 CHANNEL_LAYERS = {
     # In-memory backend
@@ -116,8 +116,8 @@ CHANNEL_LAYERS = {
 }
 
 
-POSTGRES_PORT =  5434 if DEBUG else os.getenv("POSTGRES_PORT",5432)
-HOST = "localhost" if DEBUG else os.getenv("HOST")
+POSTGRES_PORT = os.getenv("POSTGRES_PORT",5432)
+HOST = os.getenv("HOST")
 
 DATABASES = {
     'old': {
