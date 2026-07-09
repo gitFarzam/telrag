@@ -226,7 +226,14 @@ LOGGING = {
     "disable_existing_loggers": False,
     "formatters": {
         "json": {
-            "format": '{"level": "%(levelname)s", "msg": "%(message)s", "logger": "%(name)s", "time": "%(asctime)s"}',
+            "()": "pythonjsonlogger.jsonlogger.JsonFormatter", # Using json formatter as main json formatting class, this is neccessary to be able to parse valid json in a tool like grafana and using logql commands.
+            "format": "%(levelname)s %(message)s %(name)s %(asctime)s",
+            "rename_fields": {
+                "levelname": "level",
+                "message": "msg",
+                "name": "logger",
+                "asctime": "time",
+            },
         },
     },
     "handlers": {
