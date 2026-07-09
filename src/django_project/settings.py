@@ -31,7 +31,6 @@ SECRET_KEY = os.getenv("SECRET_KEY")
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True if int(os.getenv("DEBUG")) == 1 else False
 PUBLIC = True if int(os.getenv("PUBLIC")) == 1 else False
-DOCKER = True if int(os.getenv("DOCKER")) == 1 else False
 
 
 ALLOWED_HOSTS = os.getenv("ALLOWED_HOSTS").split(',')
@@ -99,7 +98,7 @@ INTERNAL_IPS += [ip[:-1] + "1" for ip in ips]
 
 ASGI_APPLICATION = 'django_project.asgi.application'
 
-REDIS_HOST_NAME = os.getenv("REDIS_HOST_NAME") if DOCKER else "localhost"
+REDIS_HOST_NAME = os.getenv("REDIS_HOST_NAME") if DEBUG else "localhost"
 
 CHANNEL_LAYERS = {
     # In-memory backend
@@ -117,8 +116,8 @@ CHANNEL_LAYERS = {
 }
 
 
-POSTGRES_PORT =  os.getenv("POSTGRES_PORT",5432) if DOCKER else 5433
-HOST = os.getenv("HOST") if DOCKER else "localhost"
+POSTGRES_PORT =  os.getenv("POSTGRES_PORT",5432) if DEBUG else 5434
+HOST = os.getenv("HOST") if DEBUG else "localhost"
 
 DATABASES = {
     'old': {
